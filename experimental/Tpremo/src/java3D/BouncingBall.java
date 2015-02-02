@@ -1,3 +1,7 @@
+/**
+ * http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138252.html
+ * http://www.java3d.org/animationinteraction.html
+ */
 package java3D;
 import java.applet.Applet;
 
