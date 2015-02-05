@@ -1,6 +1,9 @@
 /**
  * http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138252.html
  * http://www.java3d.org/animationinteraction.html
+ * 
+ * A simple example of animation, and 3d rendering.
+ * Fairly easy to follow by reading the code.
  */
 package java3D;
 import java.applet.Applet;
