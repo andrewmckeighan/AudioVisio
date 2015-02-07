@@ -4,3 +4,10 @@
 
 # Java
 *.class
+
+nbproject/private
+build
+dit
+*.dll
+*.so
+/AudioVisio/nbproject/private/
