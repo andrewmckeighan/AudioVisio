@@ -1,5 +1,9 @@
 package userInteraction;
 
+
+
+import java.util.ArrayList;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -43,6 +47,7 @@ public class Main extends SimpleApplication implements ActionListener{
   private CharacterControl player;
   private Vector3f walkDirection = new Vector3f();
   private boolean up = false, down = false, left = false, right = false;
+  private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
 
   //vectors that will be updated each frame,
   //so we dont have to make a new vector each frame.
@@ -114,6 +119,27 @@ public class Main extends SimpleApplication implements ActionListener{
   shootables = new Node("Shootables");
   rootNode.attachChild(shootables);
   shootables.attachChild(buttonGeometry);
+
+  //create a door
+  Box door = new Box(2,4,2);
+  Geometry doorGeometry = new Geometry("button", door);
+  doorGeometry.setMaterial(pondMat);
+  rootNode.attachChild(doorGeometry);
+
+  //position
+  doorGeometry.setLocalTranslation(new Vector3f(20f,10f,20f));
+
+  //make physics
+  RigidBodyControl doorPhysics = new RigidBodyControl(2f);
+
+  //add physics to space
+  doorGeometry.addControl(doorPhysics);
+  bulletAppState.getPhysicsSpace().add(doorPhysics);
+
+
+  doorList.add(doorGeometry);
+
+
 
 	// Attach the scene and the player to the root and physics space so they show up in our world.
 	rootNode.attachChild(sceneModel);
@@ -197,6 +223,24 @@ public class Main extends SimpleApplication implements ActionListener{
         // Let's interact - we mark the hit with a red dot.
         mark.setLocalTranslation(closest.getContactPoint());
         rootNode.attachChild(mark);
+
+        Geometry collisionGeometry = closest.getGeometry();
+        System.out.println("name: " + collisionGeometry.getName());
+        if(collisionGeometry.getName().equals("button")){
+          System.out.println("name: " + collisionGeometry.getMaterial());
+          Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+          mat1.setColor("Color", ColorRGBA.randomColor());
+          collisionGeometry.setMaterial(mat1);
+
+          String boxName = collisionGeometry.getName();
+          for(Geometry door : doorList){
+            if(door.getName().equals(boxName)){
+              rootNode.detachChild(door);
+              bulletAppState.getPhysicsSpace().remove(door.getControl(0));
+              break;
+            }
+          }
+        }
       }
     }
   }
