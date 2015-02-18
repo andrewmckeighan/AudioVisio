@@ -1,5 +1,9 @@
 package audiovisio.entities;
 
-public class AudioPlayer {
-	
+public class AudioPlayer extends Player {
+
+    public AudioPlayer(){
+
+    }
+
 }

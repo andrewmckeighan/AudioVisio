@@ -93,7 +93,7 @@ public class Main extends SimpleApplication implements ActionListener{
 
   //create material for our button
   Material pondMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md"); //load the material & color
-  pondMat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Terrain/Pond/Pond.jpg"));
+  pondMat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Terrain/Pond/Pond.jpg"));//located in jME3-testdata.jar
   pondMat.setTexture("NormalMap", assetManager.loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
   pondMat.setBoolean("UseMaterialColors",true);
   pondMat.setColor("Diffuse",ColorRGBA.White);  // minimum material color
