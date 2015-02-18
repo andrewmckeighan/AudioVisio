@@ -1,4 +1,4 @@
-package audioviso.level;
+package audiovisio.level;
 
 public class LevelReader {
 	
