@@ -1,5 +1,7 @@
 package Server;
 //imports for jme3 server apps
+import Server.NetworkUtils.NetworkMessage;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -8,8 +10,19 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapText;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.network.MessageListener;
@@ -20,34 +33,18 @@ import com.jme3.system.JmeContext;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-
-
-
-
-
 //import for creating geometric objects
 import com.jme3.scene.Geometry;
-
-
-
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-
+import com.jme3.scene.shape.Sphere;
 
 //import for catching port exceptions
 import java.io.IOException;
 //import for server logs
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
-
-
-
-
-//import for network messaging
-import AudioVisio.NetworkUtils.NetworkMessage;
 
 public class ClientMain extends SimpleApplication{
 	//Client instance variable
@@ -56,7 +53,6 @@ public class ClientMain extends SimpleApplication{
 	//prevents message loss
 	private ConcurrentLinkedQueue<String> messageQueue;
 	
-	protected Geometry player;
 	Boolean isRunning = true;
 	
 	private Node shootables;
@@ -66,7 +62,7 @@ public class ClientMain extends SimpleApplication{
 	  private BulletAppState bulletAppState;
 	  private RigidBodyControl landscape;
 	  private RigidBodyControl button;
-	  //private CharacterControl player;
+	  private CharacterControl player;
 	  private Vector3f walkDirection = new Vector3f();
 	  private boolean up = false, down = false, left = false, right = false;
 	  private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
@@ -91,7 +87,7 @@ public class ClientMain extends SimpleApplication{
 			Logger.getLogger(ClientMain.class.getName()).log(Level.SEVERE, null, e);
 		}
 		player = CreateGeometrics.createPlayer();
-        rootNode.attachChild(player);
+        //rootNode.attachChild(player);
 		initKeys();
 		
 		bulletAppState = new BulletAppState();
@@ -219,22 +215,127 @@ public class ClientMain extends SimpleApplication{
 		}
 	};
 	
-	private class NetworkMessageListener implements MessageListener<Client>{
-		//runs seperate thread from renderer
-		public void messageRecieved(Client source, Message m){
-			if(m instanceof NetworkMessage){
-				NetworkMessage message = (NetworkMessage) m;
-			}
-			
-			messageQueue.add(message.getMessage());
-		}
-		
-	}
+//	private class NetworkMessageListener implements MessageListener<Client>{
+//		//runs seperate thread from renderer
+//		public void messageRecieved(Client source, Message m){
+//			if(m instanceof NetworkMessage){
+//				NetworkMessage message = (NetworkMessage) m;
+//			}
+//			
+//			messageQueue.add(message.getMessage());
+//		}
+//		
+//	}
 	//must override client destroy method from super
 	@Override
 	public void destroy(){
 		myClient.close();
 		super.destroy();
 	}
+	
+	private void initKeys() {
+	    inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+	    inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+	    inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+	    inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+	    inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+
+	    inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+
+	    inputManager.addListener(actionListener, "Up");
+	    inputManager.addListener(actionListener, "Down");
+	    inputManager.addListener(actionListener, "Left");
+	    inputManager.addListener(actionListener, "Right");
+	    inputManager.addListener(actionListener, "Jump");
+	    inputManager.addListener(actionListener, "Shoot");
+	  }
+	
+	private ActionListener actionListener = new ActionListener() {
+        public void onAction(String name, boolean keyPressed, float tpf) {
+            if(name.equals("Pause") && !keyPressed){
+                isRunning = !isRunning;
+            }
+        }
+    };
+	
+	private void initLight(){
+		  //add light so we can actually see.
+		  AmbientLight al = new AmbientLight();
+		  al.setColor(ColorRGBA.White.mult(1.3f));
+		  rootNode.addLight(al);
+
+		  DirectionalLight dl = new DirectionalLight();
+		  dl.setColor(ColorRGBA.White);
+		  dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
+		  rootNode.addLight(dl);
+	  }
+	
+	public void onAction (String binding, boolean isPressed, float tpf){
+		  if(binding.equals("Up")){
+			  up = isPressed;
+		  }else if(binding.equals("Down")){
+			  down = isPressed;
+		  }else if(binding.equals("Left")){
+			  left = isPressed;
+		  }else if(binding.equals("Right")){
+			  right = isPressed;
+		  }else if(binding.equals("Jump")){
+			  if(isPressed){
+				  player.jump();
+			  }
+		  }
+	    if(binding.equals("Shoot") && !isPressed){
+	      CollisionResults results = new CollisionResults();
+
+	      Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+
+	      shootables.collideWith(ray, results);
+
+	      if(results.size() > 0){
+	        CollisionResult closest = results.getClosestCollision();
+	        // Let's interact - we mark the hit with a red dot.
+	        mark.setLocalTranslation(closest.getContactPoint());
+	        rootNode.attachChild(mark);
+
+	        Geometry collisionGeometry = closest.getGeometry();
+	        System.out.println("name: " + collisionGeometry.getName());
+	        if(collisionGeometry.getName().equals("button")){
+	          System.out.println("name: " + collisionGeometry.getMaterial());
+	          Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+	          mat1.setColor("Color", ColorRGBA.randomColor());
+	          collisionGeometry.setMaterial(mat1);
+
+	          String boxName = collisionGeometry.getName();
+	          for(Geometry door : doorList){
+	            if(door.getName().equals(boxName)){
+	              rootNode.detachChild(door);
+	              bulletAppState.getPhysicsSpace().remove(door.getControl(0));
+	              break;
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+	
+	protected void initMark() {
+	    Sphere sphere = new Sphere(30, 30, 0.2f);
+	    mark = new Geometry("BOOM!", sphere);
+	    Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+	    mark_mat.setColor("Color", ColorRGBA.Red);
+	    mark.setMaterial(mark_mat);
+	  }
+
+	  /** A centred plus sign to help the player aim. */
+	  protected void initCrossHairs() {
+	    setDisplayStatView(false);
+	    guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+	    BitmapText ch = new BitmapText(guiFont, false);
+	    ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+	    ch.setText("+"); // crosshairs
+	    ch.setLocalTranslation( // center
+	      settings.getWidth() / 2 - ch.getLineWidth()/2, settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
+	    guiNode.attachChild(ch);
+	  }
 
 }

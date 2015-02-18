@@ -11,3 +11,8 @@ dit
 *.dll
 *.so
 /AudioVisio/nbproject/private/
+
+.classpath
+.metadata
+.project
+JMonkeyLib

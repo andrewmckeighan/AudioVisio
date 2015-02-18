@@ -32,11 +32,14 @@ import com.jme3.system.JmeContext;
 
 
 
+
 //import for catching port exceptions
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 //import for server logs
 import java.util.logging.Logger;
+
 
 
 
@@ -93,7 +96,7 @@ public class ServerMain extends SimpleApplication{
 		}
 		catch(IOException e){
 			//submits the catch to server log
-			Logger.getLogger(ServerMain.class.getName().log(Level.SEVERE, null, e));
+			Logger.getLogger(ServerMain.class.getName()).log(Level.SEVERE, null, e);
 		}
         player = CreateGeometrics.createPlayer();
         //rootNode.attachChild(player);
@@ -212,7 +215,6 @@ public class ServerMain extends SimpleApplication{
 
 		  player.setWalkDirection(walkDirection);
 		  cam.setLocation(player.getPhysicsLocation());
-		Serializer.broadcast(new NetworkMessage("Hello World! server time is: " + tpf));
 	}
 	
 	// must override destroy method from super
@@ -231,13 +233,12 @@ public class ServerMain extends SimpleApplication{
 
 	    inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
-	    inputManager.addListener(this, "Up");
-	    inputManager.addListener(this, "Down");
-	    inputManager.addListener(this, "Left");
-	    inputManager.addListener(this, "Right");
-	    inputManager.addListener(this, "Jump");
-
-	    inputManager.addListener(this, "Shoot");
+	    inputManager.addListener(actionListener, "Up");
+	    inputManager.addListener(actionListener, "Down");
+	    inputManager.addListener(actionListener, "Left");
+	    inputManager.addListener(actionListener, "Right");
+	    inputManager.addListener(actionListener, "Jump");
+	    inputManager.addListener(actionListener, "Shoot");
 	  }
 	
 	private ActionListener actionListener = new ActionListener() {
@@ -246,7 +247,7 @@ public class ServerMain extends SimpleApplication{
                 isRunning = !isRunning;
             }
         }
-    }
+    };
 	
 	private void initLight(){
 		  //add light so we can actually see.

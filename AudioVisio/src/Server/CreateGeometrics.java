@@ -16,10 +16,10 @@ public class CreateGeometrics {
 	private Material m;
 	private Box b;
 	
-	public CreateGeometrics(){
-		m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		b = new Box(Vector3f.ZERO, new Vector3f(1,1,1));
-	}
+//	public CreateGeometrics(){
+//		m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//		b = new Box(Vector3f.ZERO, new Vector3f(1,1,1));
+//	}
 	
 	public Geometry createBox(){
 		Geometry box = new Geometry("box", b);
@@ -28,35 +28,29 @@ public class CreateGeometrics {
 	}
 	
 	public static CharacterControl createPlayer(){
-//		Box b = new Box(1, 1, 1);
-//		Geometry player = new Geometry("Box", b);
-//		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        mat.setColor("Color", ColorRGBA.Blue);
-//        player.setMaterial(mat);
-		
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 		CharacterControl player = new CharacterControl(capsuleShape, 0.05f);
 		return player;
 	}
 	
-	 protected Geometry makeCube(String name, float x, float y, float z) {
-		    Box box = new Box(2, 2, 2);
-		    Geometry cube = new Geometry(name, box);
-		    cube.setLocalTranslation(x, y, z);
-		    Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		    mat1.setColor("Color", ColorRGBA.randomColor());
-		    cube.setMaterial(mat1);
-		    return cube;
-		  }
+//	 protected Geometry makeCube(String name, float x, float y, float z) {
+//		    Box box = new Box(2, 2, 2);
+//		    Geometry cube = new Geometry(name, box);
+//		    cube.setLocalTranslation(x, y, z);
+//		    Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//		    mat1.setColor("Color", ColorRGBA.randomColor());
+//		    cube.setMaterial(mat1);
+//		    return cube;
+//		  }
 	 
-	 protected Geometry makeFloor() {
-		    Box box = new Box(15, .2f, 15);
-		    Geometry floor = new Geometry("the Floor", box);
-		    floor.setLocalTranslation(0, -4, -5);
-		    Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		    mat1.setColor("Color", ColorRGBA.Gray);
-		    floor.setMaterial(mat1);
-		    return floor;
-		  }
+//	 protected Geometry makeFloor() {
+//		    Box box = new Box(15, .2f, 15);
+//		    Geometry floor = new Geometry("the Floor", box);
+//		    floor.setLocalTranslation(0, -4, -5);
+//		    Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//		    mat1.setColor("Color", ColorRGBA.Gray);
+//		    floor.setMaterial(mat1);
+//		    return floor;
+//		  }
 
 }
