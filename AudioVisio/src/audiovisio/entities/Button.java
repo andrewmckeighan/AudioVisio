@@ -35,12 +35,19 @@ public class Button extends InteractableEntity {
     private Material material;
     //rootNode.attachChild(this.geometry);
 
-    private Vector3f position;
     private RigidBodyControl collision; //(physics)
     //RigidBodyControl  (CollisionShape shape, float mass)
     //buttonGeometry.addControl(collision)
 
     public Button(){
+
+    }
+
+    private void buttonStartPress(){
+
+    }
+
+    private void buttonStopPress(){
 
     }
 
