@@ -1,5 +1,11 @@
 package audiovisio.entities;
 
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Cylinder;
+
 
 /*
 //creat geometry for our button
@@ -38,15 +44,15 @@ public class Button extends InteractableEntity {
 
     }
 
-    public getGeometry(){
+    public Geometry getGeometry(){
         return this.geometry;
     }
 
-    public getPos(){
+    public Vector3f getPos(){
         return this.position;
     }
 
-    public setPos(Vector3f position){
+    public void setPos(Vector3f position){
         this.position = position;
     }
 }
