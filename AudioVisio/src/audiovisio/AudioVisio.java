@@ -15,6 +15,7 @@ public class AudioVisio {
     public static void main(String[] args) {
     	GeneralUtilities.setPort(6000);
     	//Server start- put in condition
+
     	serverApp = new Server(//fill this out audiovisio.networking.Server serverApp);
 
 		Gui mainScreen = new Gui();
@@ -25,6 +26,11 @@ public class AudioVisio {
     	clientApp.start(JmeContext.Type.Headless);
     	//Client Start
     	Client clientApp = new Client();
+
+    	serverApp = new Server();
+    	serverApp.start(JmeContext.Type.Headless);
+    	clientApp = new Client();
+
 		clientApp.start();
     }
 
