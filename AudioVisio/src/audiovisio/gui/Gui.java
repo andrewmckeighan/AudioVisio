@@ -38,7 +38,7 @@ public class Gui {
 
 	String ipString;
 
-	public Gui() throws UnknownHostException {
+	public Gui() {
 
 		f.setSize(1000, 700);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
