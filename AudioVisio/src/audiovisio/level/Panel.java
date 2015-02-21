@@ -13,9 +13,9 @@ public class Panel {
     
     public static Panel load(JSONObject obj) {
     	JSONObject location = (JSONObject) obj.get("location");
-    	float locX = (float) location.get("x");
-    	float locY = (float) location.get("y");
-    	float locZ = (float) location.get("z");
+    	float locX = ((Double)location.get("x")).floatValue();
+    	float locY = ((Double)location.get("y")).floatValue();
+    	float locZ = ((Double)location.get("z")).floatValue();
     	
     	Vector3f locVec = new Vector3f(locX, locY, locZ);
     	return new Panel(locVec);
