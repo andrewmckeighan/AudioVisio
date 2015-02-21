@@ -16,7 +16,7 @@ public class Door extends InteractableEntity {
         this.stuck = stuck;
     }
 
-    private onTriggeredEvent(){
+    private void onTriggeredEvent(){
         if(!this.stuck){
             this.open = !this.open;
         }

@@ -2,8 +2,8 @@ package audiovisio.entities;
 
 public class InteractableEntity extends Entity {
 
-    private Entity linkedEntity;
-    private boolean stuck; //if the entity keeps it state regardless of triggerEvents
+    private InteractableEntity linkedEntity;
+    public boolean stuck; //if the entity keeps it state regardless of triggerEvents
 
     public InteractableEntity(){
         this(false);
@@ -17,11 +17,16 @@ public class InteractableEntity extends Entity {
         linkedEntity.onTriggeredEvent();
     }
 
-    public Entity getLinkedEntity(){
+    private void onTriggeredEvent() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Entity getLinkedEntity(){
         return this.linkedEntity;
     }
 
-    public setLinkedEntity(Entity entity){
+    public void setLinkedEntity(InteractableEntity entity){
         this.linkedEntity = entity;
     }
 

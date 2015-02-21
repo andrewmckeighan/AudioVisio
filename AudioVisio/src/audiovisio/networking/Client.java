@@ -13,7 +13,7 @@ import com.jme3.network.Network;
 public class Client extends SimpleApplication{
 	
 	private com.jme3.network.Client myClient;
-	private ConcurrentLinkedQueue<String> messageQueue;
+	public ConcurrentLinkedQueue<String> messageQueue;
 	
 	@Override
 	public void simpleInitApp(){

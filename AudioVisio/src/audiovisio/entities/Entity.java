@@ -20,7 +20,7 @@ public class Entity {
 
     private Geometry geometry;
     private RigidBodyControl physics;
-    private Vector3f position;
+    public Vector3f position;
 
     public Entity(){
 
