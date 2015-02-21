@@ -10,16 +10,26 @@ public class AudioVisio {
 	public static final String CONNECTIP = "127.0.0.1";
 	private static audiovisio.networking.Server serverApp;
 	private static audiovisio.networking.Client clientApp;
-	
+
     public static void main(String[] args) {
-    	Gui mainScreen = new Gui();
-		mainScreen.start();
-    	
     	GeneralUtilities.setPort(6000);
     	//Server start- put in condition
+
+    	serverApp = new Server(//fill this out audiovisio.networking.Server serverApp);
+
+		Gui mainScreen = new Gui();
+		mainScreen.start();
+
+    	//Server Start
+    	audiovisio.networking.Server serverApp = new Server(null, null);
+    	clientApp.start(JmeContext.Type.Headless);
+    	//Client Start
+    	Client clientApp = new Client();
+
     	serverApp = new Server();
     	serverApp.start(JmeContext.Type.Headless);
     	clientApp = new Client();
+
 		clientApp.start();
     }
 
