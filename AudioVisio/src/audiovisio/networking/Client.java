@@ -26,7 +26,7 @@ public class Client extends SimpleApplication{
 			myClient.start();
 		}
 		catch(IOException e){
-			LogHelper.severe("Error on client start");
+			LogHelper.severe("Error on client start", e);
 		}
 	}
 	
@@ -37,7 +37,7 @@ public class Client extends SimpleApplication{
 			myClient.start();
 		}
 		catch(IOException e){
-			Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, e);
+			LogHelper.severe("Error on client start", e);
 		}
 	}
 	

@@ -19,7 +19,7 @@ public class Server extends SimpleApplication{
 			myServer.start();
 		}
 		catch(IOException e){
-			LogHelper.severe("Error on server start");
+			LogHelper.severe("Error on server start", e);
 		}
 	}
 	
