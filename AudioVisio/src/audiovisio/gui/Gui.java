@@ -15,13 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import audiovisio.utils.LogHelper;
+
 public class Gui {
 
 	JPanel panel = new JPanel();// different screens
 	JPanel main = new JPanel();
-	JPanel joinscn = new JPanel();
-	JPanel hostscn = new JPanel();
-	JPanel settings = new JPanel();
+	JPanel joinScreen = new JPanel();
+	JPanel hostScreen = new JPanel();
+	JPanel settingsScreen = new JPanel();
 
 	JButton host = new JButton("Host");// different buttons to access other
 										// screens
@@ -34,7 +36,7 @@ public class Gui {
 	// manage the panels and buttons
 	JFrame f = new JFrame("Audio Visio"); // new window
 
-	String ipad;
+	String ipString;
 
 	public Gui() throws UnknownHostException {
 
@@ -47,23 +49,23 @@ public class Gui {
 		main.add(sett);
 
 		panel.add(main, "1");// adds the screens to the window
-		panel.add(joinscn, "2");
-		panel.add(settings, "3");
-		panel.add(hostscn, "4");
+		panel.add(joinScreen, "2");
+		panel.add(settingsScreen, "3");
+		panel.add(hostScreen, "4");
 
 		c.show(panel, "1");
 
-		ipad = InetAddress.getLocalHost().getHostAddress();
+		ipString = getIp();
 
 		initMainScreen();
-		join();
-		host();
+		initJoinScreen();
+		initHostScreen();
 		actions();
 
 	}
 
 	public void start() {
-		
+
 		f.setVisible(true);// make the window visible
 	}
 
@@ -74,40 +76,40 @@ public class Gui {
 		main.add(mainlbl);
 	}
 
-	public void join() {
+	public void initJoinScreen() {
 		JLabel jnlbl = new JLabel("Enter An IP Address:  ");
 		jnlbl.setFont(new Font("Verdana", 1, 20));
-		joinscn.add(jnlbl);
+		joinScreen.add(jnlbl);
 		JTextField ip = new JTextField(10); // the text box for ip address.
-		joinscn.add(ip);
-		joinscn.add(submit);
+		joinScreen.add(ip);
+		joinScreen.add(submit);
 	}
 
-	public void host() {
-		JLabel hstlbl = new JLabel("Your IP Address Is: " + ipad);
+	public void initHostScreen() {
+		JLabel hstlbl = new JLabel("Your IP Address Is: " + ipString);
 		hstlbl.setFont(new Font("Verdana", 1, 20));
-		hostscn.add(hstlbl);
+		hostScreen.add(hstlbl);
 	}
 
 	public void actions() {
 		host.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				c.show(panel, "4");
-				hostscn.add(back);
+				hostScreen.add(back);
 			}
 		});
 		join.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				c.show(panel, "2");
-				joinscn.add(back);
+				joinScreen.add(back);
 			}
 		});
 		sett.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				c.show(panel, "3");
-				settings.add(back);
+				settingsScreen.add(back);
 			}
 		});
 
@@ -120,10 +122,13 @@ public class Gui {
 		f.add(panel);
 	}
 
-	public String getIp() throws UnknownHostException {
-		return InetAddress.getLocalHost().getHostAddress();
+	public String getIp() {
+		String temp = "";
+		try {
+			temp = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			LogHelper.warn("UnkownHostException");
+		}
+		return temp;
 	}
-	public static void main(String args[]) throws UnknownHostException {
-	    Gui start = new Gui();
-	  }
 }
