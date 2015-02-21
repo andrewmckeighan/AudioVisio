@@ -18,9 +18,8 @@ public class AudioVisio {
     	
     	GeneralUtilities.setPort(6000);
     	//Server start- put in condition
-    	serverApp = new Server(/*fill this out audiovisio.networking.Server serverApp null, null)*/);
-    	serverApp.start();
-    	//Client Start
+    	serverApp = new Server();
+    	serverApp.start(JmeContext.Type.Headless);
     	clientApp = new Client();
 		clientApp.start();
     }

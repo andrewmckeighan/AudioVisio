@@ -2,6 +2,7 @@ package audiovisio.networking.utilities;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
+import com.jme3.network.serializing.Serializer;
 
 @Serializable
 public class NetworkMessage extends AbstractMessage{
@@ -16,6 +17,10 @@ public class NetworkMessage extends AbstractMessage{
 	
 	public String getMessage(){
 		return message;
+	}
+	
+	public static void initializeSerializables(){
+		Serializer.registerClass(NetworkMessage.class);
 	}
 	
 }

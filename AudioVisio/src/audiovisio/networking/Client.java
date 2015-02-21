@@ -4,18 +4,32 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import audiovisio.networking.utilities.GeneralUtilities;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.network.Network;
 
 public class Client extends SimpleApplication{
 	
-	private Client myClient;
+	private com.jme3.network.Client myClient;
 	private ConcurrentLinkedQueue<String> messageQueue;
 	
 	@Override
 	public void simpleInitApp(){
 		try{
-			myClient = Network.connectToServer(/*port, hostname*/);
+			myClient = Network.connectToServer("127.0.0.1", GeneralUtilities.getPort());
+			myClient.start();
+		}
+		catch(IOException e){
+			Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	
+	public void simpleInitApp(String IP){
+		try{
+			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
 			myClient.start();
 		}
 		catch(IOException e){
@@ -30,7 +44,6 @@ public class Client extends SimpleApplication{
 		if(message !=null){
 			fpsText.setText(message);
 		}
-		//if no messages
 		else{
 			fpsText.setText("No message in queue.");
 		}

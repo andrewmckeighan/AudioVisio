@@ -9,9 +9,10 @@ public class NetworkMessageListener implements MessageListener<Client>{
 		public void messageRecieved(Client source, Message m){
 			if(m instanceof NetworkMessage){
 				NetworkMessage message = (NetworkMessage) m;
+				messageQueue.add(message.getMessage());
 			}
 			
-			Client.messageQueue.add(message.getMessage());
+			
 			
 		}
 
