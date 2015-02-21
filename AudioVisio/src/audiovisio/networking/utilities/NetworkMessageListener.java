@@ -9,17 +9,15 @@ public class NetworkMessageListener implements MessageListener<Client>{
 		public void messageRecieved(Client source, Message m){
 			if(m instanceof NetworkMessage){
 				NetworkMessage message = (NetworkMessage) m;
-				messageQueue.add(message.getMessage());
+				source.messageQueue.add(message.getMessage());
 			}
-			
-			
-			
+	
 		}
 
-	@Override
-	public void messageReceived(Client arg0, Message arg1) {
-		// TODO Auto-generated method stub
-		
-	}
+		@Override
+		public void messageReceived(Client arg0, Message arg1) {
+			// TODO Auto-generated method stub
+			
+		}
 
 }

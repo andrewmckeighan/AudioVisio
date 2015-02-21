@@ -3,7 +3,6 @@ package audiovisio;
 import audiovisio.networking.Server;
 import audiovisio.networking.Client;
 import audiovisio.networking.utilities.GeneralUtilities;
-
 import com.jme3.system.JmeContext;
 
 public class AudioVisio {
