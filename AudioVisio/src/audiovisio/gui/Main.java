@@ -1,4 +1,4 @@
-package GUI;
+package audiovisio.gui;
 
 
 import java.awt.BorderLayout;
