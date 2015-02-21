@@ -6,20 +6,19 @@ import com.jme3.network.MessageListener;
 
 public class NetworkMessageListener implements MessageListener<Client>{
 		//runs separate thread from renderer
-		public void messageRecieved(Client source, Message m){
+		audiovisio.networking.Client myClient;
+	
+		public NetworkMessageListener(audiovisio.networking.Client myClient){
+			this.myClient = myClient;
+		}
+	 
+		@Override
+		public void messageReceived(Client source, Message m){
 			if(m instanceof NetworkMessage){
 				NetworkMessage message = (NetworkMessage) m;
-				messageQueue.add(message.getMessage());
+				myClient.messageQueue.add(message.getMessage());
 			}
-			
-			
-			
+	
 		}
-
-	@Override
-	public void messageReceived(Client arg0, Message arg1) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

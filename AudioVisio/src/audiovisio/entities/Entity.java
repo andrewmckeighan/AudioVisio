@@ -10,6 +10,8 @@
 
 package audiovisio.entities;
 
+import org.json.simple.JSONObject;
+
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
@@ -24,6 +26,14 @@ public class Entity {
 
     public Entity(){
 
+    }
+    
+    public static Entity load(JSONObject obj){
+		return null;
+    }
+    
+    public static void save(JSONObject obj){
+    	
     }
 
 }

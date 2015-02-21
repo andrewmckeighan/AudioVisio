@@ -38,7 +38,7 @@ public class Gui {
 
 	String ipString;
 
-	public Gui() throws UnknownHostException {
+	public Gui() {
 
 		f.setSize(1000, 700);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +127,7 @@ public class Gui {
 		try {
 			temp = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
-			LogHelper.warn("UnkownHostException");
+			LogHelper.warn("UnkownHostException" , e);
 		}
 		return temp;
 	}

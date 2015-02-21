@@ -4,16 +4,24 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import audiovisio.networking.utilities.GeneralUtilities;
-
+import audiovisio.utils.LogHelper;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.StatsAppState;
 import com.jme3.network.Network;
 
 public class Client extends SimpleApplication{
 	
 	private com.jme3.network.Client myClient;
+<<<<<<< HEAD
 	public ConcurrentLinkedQueue<String> messageQueue;
+=======
+	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
+	
+	public Client(){
+		super(new StatsAppState());
+	}
+>>>>>>> 41e5102d23d67026a8bdb31e5c70c8a38164778f
 	
 	@Override
 	public void simpleInitApp(){
@@ -22,7 +30,7 @@ public class Client extends SimpleApplication{
 			myClient.start();
 		}
 		catch(IOException e){
-			Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, e);
+			LogHelper.severe("Error on client start", e);
 		}
 	}
 	
@@ -33,7 +41,7 @@ public class Client extends SimpleApplication{
 			myClient.start();
 		}
 		catch(IOException e){
-			Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, e);
+			LogHelper.severe("Error on client start", e);
 		}
 	}
 	
