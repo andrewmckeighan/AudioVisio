@@ -2,6 +2,8 @@ package audiovisio.level;
 
 import org.json.simple.JSONObject;
 
+import audiovisio.utils.JSONHelper;
+
 import com.jme3.math.Vector3f;
 
 public class Trigger {
@@ -15,12 +17,11 @@ public class Trigger {
 
 	public void load(JSONObject obj) {
 		JSONObject location = (JSONObject) obj.get("location");
-		float locX = ((Double)location.get("x")).floatValue();
-		float locY = ((Double)location.get("y")).floatValue();
-		float locZ = ((Double)location.get("z")).floatValue();
+		this.location = JSONHelper.readVector3f(location);
 	}
 
 	public void save(JSONObject obj) {
-
+		JSONObject location = JSONHelper.saveVector3f(this.location);
+		obj.put("location", this.location);
 	}
 }
