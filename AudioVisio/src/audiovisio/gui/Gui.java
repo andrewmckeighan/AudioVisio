@@ -1,6 +1,5 @@
 package audiovisio.gui;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import audiovisio.utils.LogHelper;
 
@@ -31,6 +29,7 @@ public class Gui {
 	JButton sett = new JButton("Settings");
 	JButton back = new JButton("Back");
 	JButton submit = new JButton("Submit");
+	JButton serverStart = new JButton("Start Server");
 	CardLayout c = new CardLayout();// don't quite understand this completely
 									// but it helps
 	// manage the panels and buttons
@@ -89,6 +88,7 @@ public class Gui {
 		JLabel hstlbl = new JLabel("Your IP Address Is: " + ipString);
 		hstlbl.setFont(new Font("Verdana", 1, 20));
 		hostScreen.add(hstlbl);
+		hostScreen.add(serverStart);
 	}
 
 	public void actions() {
