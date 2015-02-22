@@ -1,17 +1,21 @@
-package audiovisio.networking.utilities;
+package audiovisio.networking.utilities.client;
+
+import audiovisio.networking.utilities.NetworkMessage;
 
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 
-public class NetworkMessageListener implements MessageListener<Client>{
+public class ClientNetworkMessageListener implements MessageListener<Client>{
 		//runs separate thread from renderer
 		audiovisio.networking.Client myClient;
+		audiovisio.networking.Server myServer;
+		
 	
-		public NetworkMessageListener(audiovisio.networking.Client myClient){
+		public ClientNetworkMessageListener(audiovisio.networking.Client myClient){
 			this.myClient = myClient;
 		}
-	 
+		
 		@Override
 		public void messageReceived(Client source, Message m){
 			if(m instanceof NetworkMessage){
