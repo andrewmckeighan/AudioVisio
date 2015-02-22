@@ -29,28 +29,71 @@ public class niftyTest extends SimpleApplication {
  
         // <layer>
         layer(new LayerBuilder("Layer_ID") {{
-            childLayoutVertical(); // layer properties, add more...
- 
+            childLayoutHorizontal(); // layer properties, add more...
+            //childLayoutVertical();
+            //childLayoutCenter();
             // <panel>
-            panel(new PanelBuilder("Panel_ID") {{
-               childLayoutCenter(); // panel properties, add more...               
+            panel(new PanelBuilder("panel_bottom_left") {{
+               childLayoutCenter(); // panel properties, add more...
+               valignCenter();
+               backgroundColor("#FFFFFF");
+               height("33%");
+               width("33%");
+
  
                 // GUI elements
-                control(new ButtonBuilder("Button_ID", "Hello Nifty"){{
+                control(new ButtonBuilder("Button_ID", "Does Your"){{
                     alignCenter();
                     valignCenter();
-                    height("5%");
-                    width("15%");
+                    height("50%");
+                    width("50%");
                 }});
-                control(new ButtonBuilder("Button_ID", "Exit"){{
-                    alignLeft();
-                    valignCenter();
-                    height("5%");
-                    width("15%");
-                }});
+                
                 //.. add more GUI elements here              
  
             }});
+            
+            panel(new PanelBuilder("panel_bottom_mid") {{
+                childLayoutCenter(); // panel properties, add more...
+                valignCenter();
+                backgroundColor("#FFF555");
+                height("33%");
+                width("33%");
+
+  
+                 // GUI elements
+                 control(new ButtonBuilder("Button_ID", "Chain Hang"){{
+                     alignCenter();
+                     valignCenter();
+                     height("50%");
+                     width("50%");
+                 }});
+                 
+                 //.. add more GUI elements here              
+  
+             }});
+            
+            panel(new PanelBuilder("panel_bottom_right") {{
+                childLayoutCenter(); // panel properties, add more...
+                backgroundColor("#88f8");
+                alignRight();
+                valignCenter();
+                height("33%");
+                width("33%");
+                 // GUI elements
+                 control(new ButtonBuilder("Button_ID222", "Low?"){{
+                     alignCenter();
+                     valignCenter();
+                     height("50%");
+                     width("50%");
+                 }});
+                 
+                 //.. add more GUI elements here              
+  
+             }});
+            
+            
+            
             // </panel>
           }});
         // </layer>
