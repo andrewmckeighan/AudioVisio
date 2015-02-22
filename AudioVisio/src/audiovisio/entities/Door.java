@@ -1,24 +1,30 @@
 package audiovisio.entities;
 
 public class Door extends InteractableEntity {
-    private boolean open;
+    private Boolean isOpen;
 
     public Door(){
-        this.open = false;
+        this.isOpen = false;
     }
 
-    public Door(boolean open){
-        this.open = open;
+    public Door(Boolean open){
+        this.isOpen = open;
     }
 
-    public Door(boolean open, boolean stuck){
-        this.open = open;
+    public Door(Boolean open, Boolean stuck){
+        this.isOpen = open;
         this.stuck = stuck;
+    }
+
+    public void load(JSONObject obj){
+        super.load(obj);
+
+        this.isOpen = (Boolean) obj.get("isOpen");
     }
 
     private void onTriggeredEvent(){
         if(!this.stuck){
-            this.open = !this.open;
+            this.isOpen = !this.isOpen;
         }
     }
 

@@ -29,14 +29,20 @@ public class Player extends MovingEntity implements ActionListener{
     private CharacterControl characterControl;
     protected Camera mainCamera;
     private Map<String, KeyTrigger> keyBinds;
-    
+
     private Geometry mark;
-    
+
     private boolean up = false, down = false, left = false, right = false;
 
 
     public Player(){
 
+    }
+
+    public void load(JSONObject obj){
+        super.load(obj);
+
+        //TODO
     }
 
     public void setMoveDirection(Vector3f direction){
@@ -132,7 +138,7 @@ public class Player extends MovingEntity implements ActionListener{
             CollisionResults results = new CollisionResults();
 
             Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-            
+
             /*
             shootables.collideWith(ray, results);
 

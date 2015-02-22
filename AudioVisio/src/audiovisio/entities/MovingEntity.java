@@ -12,4 +12,12 @@ public class MovingEntity extends Entity {
 
     }
 
+    public void load(JSONObject obj){
+        super.load(obj);
+
+        this.frontDirection = (Vector3f) obj.get("frontDirection");
+        this.frontDirection = (Vector3f) obj.get("leftDirection");
+        this.frontDirection = (Vector3f) obj.get("moveDirection");
+    }
+
 }
