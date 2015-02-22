@@ -17,33 +17,48 @@ public class Level {
     private List<Panel> panelList = new ArrayList<>();
     private List<Entity> entityList = new ArrayList<>();
     private List<Trigger> triggerList = new ArrayList<>();
+    
+    JSONObject levelData;
+    
+    public Level(String name, String author, String version) {
+    	this.name = name;
+    	this.author = author;
+    	this.version = version;
+    }
 
     public Level(JSONObject obj){
     	this.name = (String) obj.get("name");
     	this.author = (String) obj.get("author");
     	this.version = (String) obj.get("version");
     	
-    	JSONArray triggers = (JSONArray) obj.get("triggers");
+    	levelData = obj;
+    }
+    
+    public void loadLevel() {
+    	JSONArray triggers = (JSONArray) levelData.get("triggers");
     	for (Object triggerObj : triggers) {
     		JSONObject triggerJson = (JSONObject) triggerObj;
     		
-    		Trigger trigger = Trigger.load(triggerJson);
+    		Trigger trigger = new Trigger();
+    		trigger.load(triggerJson);
     		triggerList.add(trigger);
     	}
     	
-    	JSONArray panels = (JSONArray) obj.get("panels");
+    	JSONArray panels = (JSONArray) levelData.get("panels");
     	for (Object panelObj : panels) {
     		JSONObject panelJson = (JSONObject) panelObj;
     		
-    		Panel panel = Panel.load(panelJson);
+    		Panel panel = new Panel();
+    		panel.load(panelJson);
     		panelList.add(panel);
     	}
     	
-    	JSONArray stairs = (JSONArray) obj.get("stairs");
+    	JSONArray stairs = (JSONArray) levelData.get("stairs");
     	for (Object stairObj : stairs) {
     		JSONObject stairJson = (JSONObject) stairObj;
     		
-    		Stair stair = Stair.load(stairJson);
+    		Stair stair = new Stair();
+    		stair.load(stairJson);
     		panelList.add(stair);
     	}
     }
@@ -58,5 +73,17 @@ public class Level {
     
     public List<Trigger> getTriggers() {
     	return triggerList;
+    }
+    
+    public String getName() {
+    	return this.name;
+    }
+    
+    public String getAuthor() {
+    	return this.author;
+    }
+    
+    public String getVersion() {
+    	return this.version;
     }
 }
