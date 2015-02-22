@@ -4,34 +4,75 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
+import com.jme3.scene.control.Control;
+
+import audiovisio.entities.*;
+import audiovisio.level.*;
 
 public class Client extends SimpleApplication{
-	
+
 	private com.jme3.network.Client myClient;
 
 	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
-	
+
 	public Client(){
 		super(new StatsAppState());
 	}
-	
+
 	@Override
 	public void simpleInitApp(){
 		try{
 			myClient = Network.connectToServer("127.0.0.1", GeneralUtilities.getPort());
 			myClient.start();
+
+			///////////////////////////////////////////
+
+			BulletAppState bulletAppState = new BulletAppState();
+			stateManager.attach(bulletAppState);
+
+			viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+			//flyCam.setMoveSpeed(100);
+			audiovisio.level.Level level = new  audiovisio.level.Level("testLevel", "author", "0.0.0");
+
+			Panel testPanel = new Panel();
+			Button testButton = new Button();
+			Player testPlayer = new Player();
+
+			testPlayer.initKeys(inputManager);
+			testPlayer.makeCharacter(assetManager);
+
+			AmbientLight al = new AmbientLight();
+			al.setColor(ColorRGBA.White.mult(1.3f));
+			rootNode.addLight(al);
+
+			DirectionalLight dl = new DirectionalLight();
+			dl.setColor(ColorRGBA.White);
+			dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
+			rootNode.addLight(dl);
+			
+			rootNode.attachChild(testPlayer.model);
+
+			level.getEntities().add(testButton);
+			level.getPanels().add(testPanel);
 		}
 		catch(IOException e){
 			LogHelper.severe("Error on client start", e);
 		}
 	}
-	
-	
+
+
 	public void simpleInitApp(String IP){
 		try{
 			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
@@ -41,10 +82,10 @@ public class Client extends SimpleApplication{
 			LogHelper.severe("Error on client start", e);
 		}
 	}
-	
+
 	@Override
 	public void simpleUpdate(float tpf){
-		
+
 		String message = messageQueue.poll();
 		if(message !=null){
 			fpsText.setText(message);
@@ -52,13 +93,13 @@ public class Client extends SimpleApplication{
 		else{
 			fpsText.setText("No message in queue.");
 		}
-		
+
 	}
-	
+
 	@Override
 	public void destroy(){
 		myClient.close();
 		super.destroy();
 	}
-	
+
 }

@@ -4,14 +4,25 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.ZipLocator;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -19,15 +30,17 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 
 public class Player extends MovingEntity implements ActionListener{
 
-    private Spatial model;
+    public Spatial model;
     private DirectionalLight light;
     private CharacterControl characterControl;
-    protected Camera mainCamera;
+    public Camera mainCamera;
     private Map<String, KeyTrigger> keyBinds;
 
     private Geometry mark;
@@ -61,7 +74,7 @@ public class Player extends MovingEntity implements ActionListener{
     }
 
     /** A centered plus sign to help the player aim. */
-    protected void initCrossHairs() {
+    public void initCrossHairs() {
         setDisplayStatView(false);
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
@@ -75,7 +88,7 @@ public class Player extends MovingEntity implements ActionListener{
     }
 
     /** A red ball that marks the last spot that was "hit" by the "shot". */
-    protected void initMark() {
+    public void initMark() {
         Sphere sphere = new Sphere(30, 30, 0.2f);
         mark = new Geometry("BOOM!", sphere);
         Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -83,17 +96,19 @@ public class Player extends MovingEntity implements ActionListener{
         mark.setMaterial(mark_mat);
     }
 
-    protected Spatial makeCharacter() {
+    public Spatial makeCharacter(AssetManager assetManager) {
     // load a character from jme3test-test-data
-        Spatial golem = assetManager.loadModel("Models/Oto/Oto.mesh.xml");
-        golem.scale(0.5f);
-        golem.setLocalTranslation(-1.0f, -1.5f, -0.6f);
+        this.model = assetManager.loadModel("Models/Oto/Oto.mesh.xml");
+        this.model.scale(0.5f);
+        this.model.setLocalTranslation(-1.0f, -1.5f, -0.6f);
 
     // We must add a light to make the model visible
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
-        golem.addLight(sun);
-        return golem;
+        this.model.addLight(sun);
+
+        //this.model
+        return this.model;
     }
 
     @Override
@@ -169,7 +184,7 @@ public class Player extends MovingEntity implements ActionListener{
         }
     }
 
-    private void initKeys() {
+    public void initKeys(InputManager inputManager) {
         inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));

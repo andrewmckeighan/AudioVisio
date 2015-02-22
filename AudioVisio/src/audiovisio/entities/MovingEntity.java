@@ -1,5 +1,7 @@
 package audiovisio.entities;
 
+import org.json.simple.JSONObject;
+
 import com.jme3.math.Vector3f;
 
 public class MovingEntity extends Entity {

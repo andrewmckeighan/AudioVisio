@@ -1,5 +1,7 @@
 package audiovisio.entities;
 
+import org.json.simple.JSONObject;
+
 public class Door extends InteractableEntity {
     private Boolean isOpen;
 
