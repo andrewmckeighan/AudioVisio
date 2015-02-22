@@ -1,7 +1,5 @@
 package audiovisio;
 
-import java.net.UnknownHostException;
-
 import audiovisio.gui.Gui;
 import audiovisio.networking.Server;
 import audiovisio.networking.Client;
@@ -10,8 +8,7 @@ import audiovisio.networking.utilities.GeneralUtilities;
 import com.jme3.system.JmeContext;
 
 public class AudioVisio {
-
-	public static final String CONNECTIP = "127.0.0.1";
+	
 	private static audiovisio.networking.Server serverApp;
 	private static audiovisio.networking.Client clientApp;
 
