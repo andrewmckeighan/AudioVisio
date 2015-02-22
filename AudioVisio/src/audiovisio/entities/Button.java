@@ -47,12 +47,6 @@ public class Button extends InteractableEntity {
 
     }
 
-    public void load(JSONObject obj){
-        super.load(obj);
-
-        //I dont think we load anything because Everything about button is constant, except what is handled by super.
-    }
-
     private void buttonStartPress(){
 
     }
@@ -71,5 +65,11 @@ public class Button extends InteractableEntity {
 
     public void setPos(Vector3f position){
         this.position = position;
+    }
+    
+    @Override
+    public void save(JSONObject obj) {
+    	super.save(obj);
+    	obj.put("type", "button");
     }
 }

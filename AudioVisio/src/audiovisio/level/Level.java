@@ -6,7 +6,10 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import audiovisio.entities.Button;
+import audiovisio.entities.Door;
 import audiovisio.entities.Entity;
+import audiovisio.entities.Lever;
 
 public class Level {
 	
@@ -18,6 +21,8 @@ public class Level {
     private List<Entity> entityList = new ArrayList<>();
     private List<Trigger> triggerList = new ArrayList<>();
     
+    private String fileName;
+    
     JSONObject levelData;
     
     public Level(String name, String author, String version) {
@@ -26,41 +31,79 @@ public class Level {
     	this.version = version;
     }
 
-    public Level(JSONObject obj){
+    public Level(JSONObject obj, String fileName){
     	this.name = (String) obj.get("name");
     	this.author = (String) obj.get("author");
     	this.version = (String) obj.get("version");
     	
     	levelData = obj;
+    	
+    	this.fileName = fileName;
     }
     
     public void loadLevel() {
-    	JSONArray triggers = (JSONArray) levelData.get("triggers");
-    	for (Object triggerObj : triggers) {
-    		JSONObject triggerJson = (JSONObject) triggerObj;
+    	JSONArray level = (JSONArray) levelData.get("level");
+    	
+    	for (Object item : level) {
+    		JSONObject itemJson = (JSONObject) item;
+    		String type = (String) itemJson.get("type");
     		
-    		Trigger trigger = new Trigger();
-    		trigger.load(triggerJson);
-    		triggerList.add(trigger);
+    		if (type.equalsIgnoreCase("trigger")) {
+    			Trigger trigger = new Trigger();
+    			trigger.load(itemJson);
+    			triggerList.add(trigger);
+    		} else if (type.equalsIgnoreCase("panel")) {
+    			Panel panel = new Panel();
+    			panel.load(itemJson);
+    			panelList.add(panel);
+    		} else if (type.equalsIgnoreCase("stair")) {
+    			Stair stair = new Stair();
+    			stair.load(itemJson);
+    			panelList.add(stair);
+    		} else if (type.equalsIgnoreCase("door")) {
+    			Door door = new Door();
+    			door.load(itemJson);
+    			entityList.add(door);
+    		} else if (type.equalsIgnoreCase("button")) {
+    			Button button = new Button();
+    			button.load(itemJson);
+    			entityList.add(button);
+    		} else if (type.equalsIgnoreCase("lever")) {
+    			Lever lever = new Lever();
+    			lever.load(itemJson);
+    			entityList.add(lever);
+    		}
+    	}
+    }
+    
+    @SuppressWarnings("unchecked")
+	public void saveLevel() {
+    	levelData = new JSONObject();
+    	
+    	levelData.put("name", this.name);
+    	levelData.put("author", this.author);
+    	levelData.put("version", this.version);
+    	
+    	JSONArray level = new JSONArray();
+    	for (Panel panel : panelList) {
+    		JSONObject obj = new JSONObject();
+    		panel.save(obj);
+    		level.add(obj);
     	}
     	
-    	JSONArray panels = (JSONArray) levelData.get("panels");
-    	for (Object panelObj : panels) {
-    		JSONObject panelJson = (JSONObject) panelObj;
-    		
-    		Panel panel = new Panel();
-    		panel.load(panelJson);
-    		panelList.add(panel);
+    	for (Trigger trigger : triggerList) {
+    		JSONObject obj = new JSONObject();
+    		trigger.save(obj);
+    		level.add(obj);
     	}
     	
-    	JSONArray stairs = (JSONArray) levelData.get("stairs");
-    	for (Object stairObj : stairs) {
-    		JSONObject stairJson = (JSONObject) stairObj;
-    		
-    		Stair stair = new Stair();
-    		stair.load(stairJson);
-    		panelList.add(stair);
+    	for (Entity entity : entityList) {
+    		JSONObject obj = new JSONObject();
+    		entity.save(obj);
+    		level.add(obj);
     	}
+    	
+    	levelData.put("level", level);
     }
     
     public List<Panel> getPanels() {
@@ -75,6 +118,18 @@ public class Level {
     	return triggerList;
     }
     
+    public void addPanel(Panel panel) {
+    	panelList.add(panel);
+    }
+    
+    public void addEntity(Entity entity) {
+    	entityList.add(entity);
+    }
+    
+    public void addTrigger(Trigger trigger) {
+    	triggerList.add(trigger);
+    }
+    
     public String getName() {
     	return this.name;
     }
@@ -85,5 +140,13 @@ public class Level {
     
     public String getVersion() {
     	return this.version;
+    }
+    
+    public String getFileName() {
+    	return this.fileName;
+    }
+    
+    protected void setFileName(String fileName) {
+    	this.fileName = fileName;
     }
 }

@@ -2,8 +2,9 @@
     "name": "Level Name",
     "author": "Author Name",
     "version": "1.0",
-    "triggers": [
+    "level": [
         {
+            "type": "trigger",
             "location": {
                 "x": 5.0,
                 "y": 2.0,
@@ -11,25 +12,24 @@
             }
         },
         {
+            "type": "trigger",
             "location": {
                 "x": 3.0,
                 "y": 5.0,
                 "z": 4.0
             }
-        }
-    ],
-    "stairs": [
+        },
         {
+            "type": "stair",
             "location": {
                 "x": 5.0,
                 "y": 1.0,
                 "z": 2.0
             },
             "direction": "EAST"
-        }
-    ],
-    "panels": [
+        },
         {
+            "type": "panel",
             "location": {
                 "x": 4.0,
                 "y": 1.0,

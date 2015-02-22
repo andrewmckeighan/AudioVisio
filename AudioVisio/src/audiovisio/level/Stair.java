@@ -27,4 +27,12 @@ public class Stair extends Panel{
     	
     	Direction direction = Direction.valueOf((String) obj.get("direction"));
     }
+    
+    @Override
+    public void save(JSONObject obj) {
+    	super.save(obj);
+    	
+    	obj.put("type", "stair");
+    	obj.put("direction", direction);
+    }
 }

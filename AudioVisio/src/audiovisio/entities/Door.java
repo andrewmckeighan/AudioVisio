@@ -18,10 +18,19 @@ public class Door extends InteractableEntity {
         this.stuck = stuck;
     }
 
+    @Override
     public void load(JSONObject obj){
         super.load(obj);
 
         this.isOpen = (Boolean) obj.get("isOpen");
+    }
+    
+    @Override
+    public void save(JSONObject obj) {
+    	super.save(obj);
+    	obj.put("type", "door");
+    	
+    	obj.put("isOpen", this.isOpen);
     }
 
     private void onTriggeredEvent(){

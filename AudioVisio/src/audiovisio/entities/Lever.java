@@ -28,12 +28,6 @@ public class Lever extends InteractableEntity {
         this.geometry.setLocalRotation(new Quaternion().fromAngles(0, LEVER_BOX_ANGLE, 0));
 
     }
-    
-    //@Override
-    public void load(JSONObject obj){
-        super.load(obj);
-        this.isOn = (Boolean) obj.get("isOn");
-    }
 
     public void switchLever(){
         this.isOn = !this.isOn;
@@ -54,5 +48,20 @@ public class Lever extends InteractableEntity {
     private void turnedOffEvent(){
 
     }
+
+    @Override
+    public void load(JSONObject obj){
+        super.load(obj);
+        this.isOn = (Boolean) obj.get("isOn");
+    }
+    
+    @Override
+    public void save(JSONObject obj) {
+    	super.save(obj);
+    	obj.put("type", "lever");
+    	
+    	obj.put("isOn", this.isOn);
+    }
+
 
 }

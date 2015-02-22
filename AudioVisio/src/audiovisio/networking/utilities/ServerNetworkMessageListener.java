@@ -1,4 +1,6 @@
-package audiovisio.networking.utilities.server;
+package audiovisio.networking.utilities;
+
+import audiovisio.networking.messages.NetworkMessage;
 
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -13,11 +15,16 @@ public class ServerNetworkMessageListener implements MessageListener<Server>{
 		this.myServer = myServer;
 	}
 
-
 	@Override
-	public void messageReceived(Server myServer, Message m) {
-		// TODO Auto-generated method stub
-		myServer.broadcast(m);
+	public void messageReceived(Server myServer, Message m){
+		if(m instanceof NetworkMessage){
+			NetworkMessageHandler((NetworkMessage) m);
+		}
+
+	}
+	
+	public void NetworkMessageHandler(NetworkMessage handle) {
+		((Server) myServer).broadcast(handle);
 	}
 
 }
