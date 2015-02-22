@@ -1,5 +1,7 @@
 package audiovisio.networking.utilities;
 
+import audiovisio.networking.messages.NetworkMessage;
+
 import com.jme3.network.serializing.Serializer;
 
 public class GeneralUtilities {
