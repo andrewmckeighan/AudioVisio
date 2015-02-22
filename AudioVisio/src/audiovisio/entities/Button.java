@@ -43,6 +43,12 @@ public class Button extends InteractableEntity {
 
     }
 
+    public void load(JSONObject obj){
+        super.load(obj);
+
+        //I dont think we load anything because Everything about button is constant, except what is handled by super.
+    }
+
     private void buttonStartPress(){
 
     }

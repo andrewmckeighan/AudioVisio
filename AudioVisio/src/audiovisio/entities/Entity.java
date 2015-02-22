@@ -21,26 +21,28 @@ import com.jme3.scene.shape.Cylinder;
 
 public class Entity extends SimpleApplication{
 
-    private Geometry geometry;
+    protected Geometry geometry;
     private RigidBodyControl physics;
     public Vector3f position;
+    public String name;
 
     public Entity(){
 
     }
-    
-    public static Entity load(JSONObject obj){
-		return null;
+
+    public void load(JSONObject obj){
+        this.position = (Vector3f) obj.get("geometry");
+        this.name = (String) obj.get("name");
     }
-    
+
     public static void save(JSONObject obj){
-    	
+
     }
 
 	@Override
 	public void simpleInitApp() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
