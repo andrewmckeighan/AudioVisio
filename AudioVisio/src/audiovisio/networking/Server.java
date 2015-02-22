@@ -21,6 +21,9 @@ public class Server extends SimpleApplication{
 		catch(IOException e){
 			LogHelper.severe("Error on server start", e);
 		}
+		
+		
+		
 	}
 	
 	@Override
