@@ -127,7 +127,7 @@ public class Gui {
 		try {
 			temp = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
-			LogHelper.warn("UnkownHostException");
+			LogHelper.warn("UnkownHostException" , e);
 		}
 		return temp;
 	}
