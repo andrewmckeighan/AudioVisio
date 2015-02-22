@@ -13,6 +13,7 @@ import com.jme3.app.StatsAppState;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
@@ -43,12 +44,22 @@ public class Client extends SimpleApplication{
 			stateManager.attach(bulletAppState);
 
 			viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-			//flyCam.setMoveSpeed(100);
+			flyCam.setMoveSpeed(100);
 			audiovisio.level.Level level = new  audiovisio.level.Level("testLevel", "author", "0.0.0");
 
 			Panel testPanel = new Panel();
 			Button testButton = new Button();
 			Player testPlayer = new Player();
+			
+			Material pondMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md"); //load the material & color
+			  pondMat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Terrain/Pond/Pond.jpg"));//located in jME3-testdata.jar
+			  pondMat.setTexture("NormalMap", assetManager.loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
+			  pondMat.setBoolean("UseMaterialColors",true);
+			  pondMat.setColor("Diffuse",ColorRGBA.White);  // minimum material color
+			  pondMat.setColor("Specular",ColorRGBA.White); // for shininess
+			  pondMat.setFloat("Shininess", 64f); // [1,128] for shininess
+			  
+			  testButton.geometry.setMaterial(pondMat);
 
 			testPlayer.initKeys(inputManager);
 			testPlayer.makeCharacter(assetManager);
@@ -63,6 +74,7 @@ public class Client extends SimpleApplication{
 			rootNode.addLight(dl);
 			
 			rootNode.attachChild(testPlayer.model);
+			rootNode.attachChild(testButton.geometry);
 
 			level.getEntities().add(testButton);
 			level.getPanels().add(testPanel);

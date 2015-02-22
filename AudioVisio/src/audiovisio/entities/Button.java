@@ -33,7 +33,7 @@ import com.jme3.scene.shape.Cylinder;
 public class Button extends InteractableEntity {
 
     private Cylinder shape;
-    private Geometry geometry;
+    public Geometry geometry;
     private Material material;
     //rootNode.attachChild(this.geometry);
 
@@ -42,6 +42,8 @@ public class Button extends InteractableEntity {
     //buttonGeometry.addControl(collision)
 
     public Button(){
+      this.shape = new Cylinder(8, 8, 1.0f, 0.2f);
+      this.geometry = new Geometry("button", this.shape);
 
     }
 

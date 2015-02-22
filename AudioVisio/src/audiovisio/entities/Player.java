@@ -37,7 +37,7 @@ import com.jme3.scene.shape.Sphere;
 
 public class Player extends MovingEntity implements ActionListener{
 
-    public Spatial model;
+    //public Spatial model;
     private DirectionalLight light;
     private CharacterControl characterControl;
     public Camera mainCamera;
@@ -150,9 +150,9 @@ public class Player extends MovingEntity implements ActionListener{
             }
         }
         if(binding.equals("Shoot") && !isPressed){
-            CollisionResults results = new CollisionResults();
+            //CollisionResults results = new CollisionResults();
 
-            Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+            //Ray ray = new Ray(cam.getLocation(), cam.getDirection());
 
             /*
             shootables.collideWith(ray, results);
