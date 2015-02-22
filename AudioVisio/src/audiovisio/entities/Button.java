@@ -1,5 +1,7 @@
 package audiovisio.entities;
 
+import org.json.simple.JSONObject;
+
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
@@ -43,12 +45,6 @@ public class Button extends InteractableEntity {
 
     }
 
-    public void load(JSONObject obj){
-        super.load(obj);
-
-        //I dont think we load anything because Everything about button is constant, except what is handled by super.
-    }
-
     private void buttonStartPress(){
 
     }
@@ -67,5 +63,11 @@ public class Button extends InteractableEntity {
 
     public void setPos(Vector3f position){
         this.position = position;
+    }
+    
+    @Override
+    public void save(JSONObject obj) {
+    	super.save(obj);
+    	obj.put("type", "button");
     }
 }

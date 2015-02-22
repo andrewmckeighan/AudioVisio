@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import audiovisio.entities.Button;
+
 import com.jme3.math.Vector3f;
 
 public class LevelWriterTest {
@@ -17,6 +19,13 @@ public class LevelWriterTest {
 		level.setFileName("../test_level.json");
 		
 		level.addPanel(new Panel(new Vector3f(1F, 2F, 3F)));
+		
+		Button btn = new Button();
+		btn.position = new Vector3f(1F, 2F, 4F);
+		level.addEntity(btn);
+		
+		Stair stair = new Stair(new Vector3f(1F, 1F, 3F), Stair.Direction.SOUTH);
+		level.addPanel(stair);
 	}
 
 	@Test

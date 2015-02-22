@@ -28,12 +28,6 @@ public class Lever extends InteractableEntity {
 
     }
 
-    public void load(JSONObject obj){
-        super.load(obj);
-
-        this.isOn = (Boolean) obj.get("isOn");
-    }
-
     public void switchLever(){
         this.isOn = !this.isOn;
         if(this.isOn){
@@ -58,6 +52,14 @@ public class Lever extends InteractableEntity {
     public void load(JSONObject obj){
         super.load(obj);
         this.isOn = (Boolean) obj.get("isOn");
+    }
+    
+    @Override
+    public void save(JSONObject obj) {
+    	super.save(obj);
+    	obj.put("type", "lever");
+    	
+    	obj.put("isOn", this.isOn);
     }
 
 }

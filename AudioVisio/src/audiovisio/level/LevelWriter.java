@@ -15,6 +15,7 @@ public class LevelWriter {
     		levelFile.setWritable(true);
     		
     		FileWriter saveFile = new FileWriter(levelFile);
+    		level.saveLevel();
     		level.levelData.writeJSONString(saveFile);
     		saveFile.flush();
     		saveFile.close();
