@@ -17,7 +17,7 @@ public class AudioVisio {
     	//Server start- put in condition
 
 		Gui mainScreen = new Gui();
-		mainScreen.start();
+		//mainScreen.start();
 
     	//Server Start
 		serverApp = new Server();

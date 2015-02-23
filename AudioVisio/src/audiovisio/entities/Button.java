@@ -4,6 +4,8 @@ import org.json.simple.JSONObject;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Cylinder;
@@ -42,9 +44,15 @@ public class Button extends InteractableEntity {
     //buttonGeometry.addControl(collision)
 
     public Button(){
-      this.shape = new Cylinder(8, 8, 1.0f, 0.2f);
+      this.shape = new Cylinder(8, 8, 2.0f, 0.2f, true);
       this.geometry = new Geometry("button", this.shape);
-
+      this.geometry.setLocalRotation(new Quaternion().fromAngles(90, 0, 0));
+      this.geometry.setLocalTranslation(new Vector3f(4f,2f,4f));
+//      
+//      Material randomMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//      randomMaterial.setColor("Color", ColorRGBA.randomColor());
+//
+//      this.geometry.setMaterial(randomMaterial);
     }
 
     private void buttonStartPress(){
