@@ -10,74 +10,87 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Cylinder;
 
+//create geometry for our button
+// Box box = new Box(2,2,2);
+// Geometry buttonGeometry = new Geometry("button", box);
+// buttonGeometry.setMaterial(pondMat);
+// rootNode.attachChild(buttonGeometry);
 
-/*
-//creat geometry for our button
-  Box box = new Box(2,2,2);
-  Geometry buttonGeometry = new Geometry("button", box);
-  buttonGeometry.setMaterial(pondMat);
-  rootNode.attachChild(buttonGeometry);
+// //position our button
+// buttonGeometry.setLocalTranslation(new Vector3f(2f,2f,2f));
 
-  //position our button
-  buttonGeometry.setLocalTranslation(new Vector3f(2f,2f,2f));
+// //make button physics
+// RigidBodyControl buttonPhysics = new RigidBodyControl(2f);
 
-  //make button physics
-  RigidBodyControl buttonPhysics = new RigidBodyControl(2f);
+// //add button physics to our space
+// buttonGeometry.addControl(buttonPhysics);
+// bulletAppState.getPhysicsSpace().add(buttonPhysics);
 
-  //add button physics to our space
-  buttonGeometry.addControl(buttonPhysics);
-  bulletAppState.getPhysicsSpace().add(buttonPhysics);
+// shootables = new Node("Shootables");
+// rootNode.attachChild(shootables);
+// shootables.attachChild(buttonGeometry);
 
-  shootables = new Node("Shootables");
-  rootNode.attachChild(shootables);
-  shootables.attachChild(buttonGeometry);
- */
 public class Button extends InteractableEntity {
 
-    private Cylinder shape;
-    public Geometry geometry;
-    private Material material;
-    //rootNode.attachChild(this.geometry);
+	public final float MASS = 0f;
 
-    private RigidBodyControl collision; //(physics)
-    //RigidBodyControl  (CollisionShape shape, float mass)
-    //buttonGeometry.addControl(collision)
+	public Cylinder shape;
+	public Geometry geometry;
+	public Material material;
+	public RigidBodyControl physics;
+	// rootNode.attachChild(this.geometry);
 
-    public Button(){
-      this.shape = new Cylinder(8, 8, 2.0f, 0.2f, true);
-      this.geometry = new Geometry("button", this.shape);
-      this.geometry.setLocalRotation(new Quaternion().fromAngles(90, 0, 0));
-      this.geometry.setLocalTranslation(new Vector3f(4f,2f,4f));
-//      
-//      Material randomMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//      randomMaterial.setColor("Color", ColorRGBA.randomColor());
-//
-//      this.geometry.setMaterial(randomMaterial);
-    }
+	public RigidBodyControl collision; // (physics)
 
-    private void buttonStartPress(){
+	// RigidBodyControl (CollisionShape shape, float mass)
+	// buttonGeometry.addControl(collision)
 
-    }
+	public Button() {
+		this(new Vector3f(0f, 0f, 0f));
+	}
 
-    private void buttonStopPress(){
+	public Button(float x, float y, float z){
+		this(new Vector3f(x, y, z));
+	}
 
-    }
+	public Button(Vector3f location) {
+		this.shape = new Cylinder(8, 8, 2.0f, 0.2f, true);
+		this.geometry = new Geometry("button", this.shape);
+		this.geometry.setLocalRotation(new Quaternion().fromAngles(
+				(float) Math.PI / 2, 0, 0));
+		this.geometry.setLocalTranslation(location);
 
-    public Geometry getGeometry(){
-        return this.geometry;
-    }
+		this.physics = new RigidBodyControl(MASS);
+		this.geometry.addControl(this.physics);
+	}
 
-    public Vector3f getPos(){
-        return this.position;
-    }
+	private void buttonStartPress() {
 
-    public void setPos(Vector3f position){
-        this.position = position;
-    }
-    
-    @Override
-    public void save(JSONObject obj) {
-    	super.save(obj);
-    	obj.put("type", "button");
-    }
+	}
+
+	private void buttonStopPress() {
+
+	}
+
+	public Geometry getGeometry() {
+		return this.geometry;
+	}
+
+	public Vector3f getPos() {
+		return this.position;
+	}
+
+	public void setPos(Vector3f position) {
+		this.position = position;
+	}
+
+	@Override
+	public void save(JSONObject obj) {
+		super.save(obj);
+		obj.put("type", "button");
+	}
+
+	public void setMaterial(Material mat) {
+		this.geometry.setMaterial(mat);
+	}
 }

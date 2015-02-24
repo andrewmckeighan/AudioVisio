@@ -179,7 +179,7 @@ public class Main extends SimpleApplication implements ActionListener{
   }
 
   /** Declaring the "Shoot" action and mapping to its triggers. */
-  /*
+  
   private void initKeys() {
     inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
     inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
@@ -197,8 +197,8 @@ public class Main extends SimpleApplication implements ActionListener{
 
     inputManager.addListener(this, "Shoot");
   }
-  */
-  /*
+  
+  
   public void onAction (String binding, boolean isPressed, float tpf){
 	  if(binding.equals("Up")){
 		  up = isPressed;
@@ -246,9 +246,9 @@ public class Main extends SimpleApplication implements ActionListener{
       }
     }
   }
-  */
+  
 
-  /*
+  
   @Override
   public void simpleUpdate(float tpf){
 	  camDir.set(cam.getDirection().multLocal(0.6f));
@@ -272,7 +272,7 @@ public class Main extends SimpleApplication implements ActionListener{
 	  player.setWalkDirection(walkDirection);
 	  cam.setLocation(player.getPhysicsLocation());
   }
-  */
+  
 
 
   /** A cube object for target practice */
@@ -298,7 +298,7 @@ public class Main extends SimpleApplication implements ActionListener{
   }
 
   /** A red ball that marks the last spot that was "hit" by the "shot". */
-  /*
+  
   protected void initMark() {
     Sphere sphere = new Sphere(30, 30, 0.2f);
     mark = new Geometry("BOOM!", sphere);
@@ -306,10 +306,10 @@ public class Main extends SimpleApplication implements ActionListener{
     mark_mat.setColor("Color", ColorRGBA.Red);
     mark.setMaterial(mark_mat);
   }
-  */
+  
 
   /** A centred plus sign to help the player aim. */
-  /*
+  
   protected void initCrossHairs() {
     setDisplayStatView(false);
     guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -319,9 +319,9 @@ public class Main extends SimpleApplication implements ActionListener{
     ch.setLocalTranslation( // center
       settings.getWidth() / 2 - ch.getLineWidth()/2, settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
     guiNode.attachChild(ch);
-  }*/
+  }
 
-  /*
+  
   protected Spatial makeCharacter() {
     // load a character from jme3test-test-data
     Spatial golem = assetManager.loadModel("Models/Oto/Oto.mesh.xml");
@@ -334,6 +334,6 @@ public class Main extends SimpleApplication implements ActionListener{
     golem.addLight(sun);
     return golem;
   }
-  */
+  
 
 }
