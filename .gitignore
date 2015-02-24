@@ -7,7 +7,7 @@
 
 nbproject/private
 build
-dit
+dist
 *.dll
 *.so
 /AudioVisio/nbproject/private/
