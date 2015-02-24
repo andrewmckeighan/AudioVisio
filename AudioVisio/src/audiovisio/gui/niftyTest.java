@@ -29,20 +29,19 @@ public class niftyTest extends SimpleApplication {
  
         // <layer>
         layer(new LayerBuilder("Layer_ID") {{
-            childLayoutHorizontal(); // layer properties, add more...
-            //childLayoutVertical();
+            childLayoutVertical();
             //childLayoutCenter();
             // <panel>
-            panel(new PanelBuilder("panel_bottom_left") {{
+            panel(new PanelBuilder("panel_top") {{
                childLayoutCenter(); // panel properties, add more...
-               valignCenter();
+               alignCenter();
                backgroundColor("#FFFFFF");
-               height("33%");
-               width("33%");
+               height("25%");
+               width("100%");
 
  
                 // GUI elements
-                control(new ButtonBuilder("Button_ID", "Does Your"){{
+                control(new ButtonBuilder("host", "Host Game"){{
                     alignCenter();
                     valignCenter();
                     height("50%");
@@ -53,45 +52,59 @@ public class niftyTest extends SimpleApplication {
  
             }});
             
-            panel(new PanelBuilder("panel_bottom_mid") {{
+            panel(new PanelBuilder("panel_top_mid") {{
                 childLayoutCenter(); // panel properties, add more...
-                valignCenter();
-                backgroundColor("#FFF555");
-                height("33%");
-                width("33%");
+                alignCenter();
+                backgroundColor("#FFFFFF");
+                height("25%");
+                width("100%");
 
   
                  // GUI elements
-                 control(new ButtonBuilder("Button_ID", "Chain Hang"){{
+                 control(new ButtonBuilder("join", "Join Game"){{
                      alignCenter();
                      valignCenter();
                      height("50%");
                      width("50%");
                  }});
                  
-                 //.. add more GUI elements here              
-  
+                 
              }});
-            
-            panel(new PanelBuilder("panel_bottom_right") {{
+            panel(new PanelBuilder("panel_bottom_mid") {{
                 childLayoutCenter(); // panel properties, add more...
-                backgroundColor("#88f8");
-                alignRight();
-                valignCenter();
-                height("33%");
-                width("33%");
+                backgroundColor("#FFFFFF");
+                alignCenter();
+                height("25%");
+                width("100%");
                  // GUI elements
-                 control(new ButtonBuilder("Button_ID222", "Low?"){{
+                 control(new ButtonBuilder("sett", "Settings"){{
                      alignCenter();
                      valignCenter();
                      height("50%");
                      width("50%");
                  }});
                  
-                 //.. add more GUI elements here              
+                               
   
              }});
             
+            panel(new PanelBuilder("panel_bottom") {{
+                childLayoutCenter(); // panel properties, add more...
+                backgroundColor("#FFFFFF");
+                alignCenter();
+                height("25%");
+                width("100%");
+                 // GUI elements
+                 control(new ButtonBuilder("Leave", "Leave Game"){{
+                     alignCenter();
+                     valignCenter();
+                     height("50%");
+                     width("50%");
+                 }});
+                 
+                               
+  
+             }});
             
             
             // </panel>
