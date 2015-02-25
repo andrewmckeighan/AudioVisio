@@ -81,7 +81,8 @@ public class Client extends SimpleApplication implements ActionListener,
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private RigidBodyControl button;
-	private CharacterControl player;
+	//private CharacterControl player;
+	private Player player;
 	private Vector3f walkDirection = new Vector3f();
 	private boolean up = false, down = false, left = false, right = false;
 	private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
@@ -162,6 +163,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
 
+		/*
 		// Create player collision detection
 		// by creating a capsule collison shape and a CharacterControl to adjust
 		// extra settings
@@ -196,6 +198,15 @@ public class Client extends SimpleApplication implements ActionListener,
 		// attach everything to activate it
 		rootNode.attachChild(myCharacter);
 		physicsSpace.add(ghost);
+		*/
+
+		player = new Player();
+		Node myCharacter = (Node) assetManager
+				.loadModel("Models/Oto/Oto.mesh.xml");
+		myCharacter.setLocalTranslation(new Vector3f(0,30,0));
+		player.setNode(myCharacter);
+		player.init();
+
 
 		// create geometry for our box
 		Box box = new Box(2, 2, 2);
@@ -223,6 +234,8 @@ public class Client extends SimpleApplication implements ActionListener,
 		initKeys(); // load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
+		player.addToScene(rootNode, physicsSpace);
+
 		// ////////////////////////////
 		// Add objects to rootNode //
 		// ////////////////////////////
@@ -241,7 +254,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(testButton.physics);
 		physicsSpace.add(landscape);
-		physicsSpace.add(player);
+		//physicsSpace.add(player);
 
 	}
 
@@ -276,7 +289,7 @@ public class Client extends SimpleApplication implements ActionListener,
 			right = isPressed;
 		} else if (binding.equals("Jump")) {
 			if (isPressed) {
-				player.jump();
+				player.characterControl.jump();
 			}
 		}
 		if (binding.equals("Shoot") && !isPressed) {
@@ -372,8 +385,8 @@ public class Client extends SimpleApplication implements ActionListener,
 			walkDirection.addLocal(camLeft.negate());
 		}
 
-		player.setWalkDirection(walkDirection);
-		cam.setLocation(player.getPhysicsLocation());
+		player.characterControl.setWalkDirection(walkDirection);
+		cam.setLocation(player.characterControl.getPhysicsLocation());
 
 	}
 

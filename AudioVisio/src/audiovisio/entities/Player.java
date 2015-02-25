@@ -8,9 +8,11 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
@@ -37,9 +39,11 @@ import com.jme3.scene.shape.Sphere;
 
 public class Player extends MovingEntity implements ActionListener{
 
+    private final float STEP_HEIGHT = 0.05f;
+
     //public Spatial model;
     private DirectionalLight light;
-    private CharacterControl characterControl;
+    public CharacterControl characterControl;
     public Camera mainCamera;
     private Map<String, KeyTrigger> keyBinds;
 
@@ -47,9 +51,50 @@ public class Player extends MovingEntity implements ActionListener{
 
     private boolean up = false, down = false, left = false, right = false;
 
+    ///////////////////////////////////
+
+    private CapsuleCollisionShape collisionShape;
+    private GhostControl ghost;
+
+	private Node node;
+
 
     public Player(){
+    }
 
+    public void setNode(Node n){
+        this.node = n;
+    }
+
+    public void init(){
+        this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
+        this.characterControl = new CharacterControl(this.collisionShape, STEP_HEIGHT);
+        this.characterControl.setJumpSpeed(20);
+        this.characterControl.setFallSpeed(30);
+        this.characterControl.setGravity(30);
+        //this.characterControl.setPhysicsLocation(new Vector3f(10, 30, 15));
+
+         //GhostControl ghost = new GhostControl(new BoxCollisionShape(new Vector3f(1, 1, 1))); // a box-shaped ghost
+        this.ghost = new GhostControl(this.collisionShape);
+        //this.ghost.setPhysicsLocation(new Vector3f(10, 30, 15));
+
+        /*
+        / Load any model
+        Node myCharacter = (Node) assetManager
+                .loadModel("Models/Oto/Oto.mesh.xml");
+        rootNode.attachChild(myCharacter);
+         */
+
+        this.node.addControl(this.characterControl);
+        this.node.addControl(this.ghost);
+        //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
+    }
+
+    public void addToScene(Node root, PhysicsSpace physics){
+        root.attachChild(this.node);
+        //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
+        physics.add(this.characterControl);
+        physics.add(this.ghost);
     }
 
     public void load(JSONObject obj){
