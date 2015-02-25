@@ -13,7 +13,7 @@ public class AudioVisio {
 	private static audiovisio.networking.Client clientApp;
 
     public static void main(String[] args) {
-    	GeneralUtilities.setPort(6000);
+    	GeneralUtilities.setPort(6020);
     	//Server start- put in condition
 
 		Gui mainScreen = new Gui();

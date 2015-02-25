@@ -59,6 +59,8 @@ public class Player extends MovingEntity implements ActionListener{
     private GhostControl ghost;
 
 	private Node node;
+	
+	public Player() {}
 
     public Player(Node playerModel, Vector3f spawnLocation){
         this.node = playerModel;
