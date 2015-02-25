@@ -81,14 +81,13 @@ public class Client extends SimpleApplication implements ActionListener,
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private RigidBodyControl button;
-	//private CharacterControl player;
 	private Player player;
 	private Vector3f walkDirection = new Vector3f();
 	private boolean up = false, down = false, left = false, right = false;
 	private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
 
 	// vectors that will be updated each frame,
-	// so we dont have to make a new vector each frame.
+	// so we don't have to make a new vector each frame.
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
 
@@ -146,6 +145,9 @@ public class Client extends SimpleApplication implements ActionListener,
 		Material randomMaterial = new Material(assetManager,
 				"Common/MatDefs/Misc/Unshaded.j3md");
 		randomMaterial.setColor("Color", ColorRGBA.randomColor());
+		
+		Node myCharacter = (Node) assetManager
+				.loadModel("Models/Oto/Oto.mesh.xml");
 
 		// /////////////
 		// Physics //
@@ -162,51 +164,6 @@ public class Client extends SimpleApplication implements ActionListener,
 				.createMeshShape((Node) sceneModel);
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
-
-		/*
-		// Create player collision detection
-		// by creating a capsule collison shape and a CharacterControl to adjust
-		// extra settings
-		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f,
-				6f, 1);
-		player = new CharacterControl(capsuleShape, 0.05f);
-		player.setJumpSpeed(20);
-		player.setFallSpeed(30);
-		player.setGravity(30);
-		player.setPhysicsLocation(new Vector3f(0, 10, 0));
-
-		GhostControl ghost = new GhostControl(new BoxCollisionShape(
-				new Vector3f(1, 1, 1))); // a box-shaped ghost
-
-		// Load any model
-		Node myCharacter = (Node) assetManager
-				.loadModel("Models/Oto/Oto.mesh.xml");
-		rootNode.attachChild(myCharacter);
-		// Create a appropriate physical shape for it
-		// CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f,
-		// 6f, 1);
-		CharacterControl myCharacter_phys = new CharacterControl(capsuleShape,
-				0.01f);
-		// Attach physical properties to model and PhysicsSpace
-		myCharacter.addControl(myCharacter_phys);
-		bulletAppState.getPhysicsSpace().add(myCharacter_phys);
-		// Node node = new Node("a ghost-controlled thing");
-		myCharacter.addControl(ghost); // the ghost follows this node
-		// Optional: Add a Geometry, or other controls, to the node if you need
-		// to
-
-		// attach everything to activate it
-		rootNode.attachChild(myCharacter);
-		physicsSpace.add(ghost);
-		*/
-
-		player = new Player();
-		Node myCharacter = (Node) assetManager
-				.loadModel("Models/Oto/Oto.mesh.xml");
-		myCharacter.setLocalTranslation(new Vector3f(0,30,0));
-		player.setNode(myCharacter);
-		player.init();
-
 
 		// create geometry for our box
 		Box box = new Box(2, 2, 2);
@@ -226,6 +183,8 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		Button testButton = new Button(0f, 1f, 0f);
 		testButton.setMaterial(randomMaterial);
+		
+		player = new Player(myCharacter);
 
 		// ///////////////////////
 		// Initialization Methods //
@@ -235,13 +194,13 @@ public class Client extends SimpleApplication implements ActionListener,
 		initMark(); // a red sphere to mark the hit
 
 		player.addToScene(rootNode, physicsSpace);
+		testButton.addToScene(rootNode, physicsSpace);
 
 		// ////////////////////////////
 		// Add objects to rootNode //
 		// ////////////////////////////
 		rootNode.attachChild(buttonGeometry);
 		rootNode.attachChild(shootables);
-		rootNode.attachChild(testButton.geometry);
 		rootNode.attachChild(sceneModel);
 
 		rootNode.addLight(ambientLight);
@@ -252,9 +211,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		// /////////////////////////////////
 		physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
-		physicsSpace.add(testButton.physics);
 		physicsSpace.add(landscape);
-		//physicsSpace.add(player);
 
 	}
 

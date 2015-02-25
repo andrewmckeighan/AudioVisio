@@ -39,7 +39,9 @@ import com.jme3.scene.shape.Sphere;
 
 public class Player extends MovingEntity implements ActionListener{
 
-    private final float STEP_HEIGHT = 0.05f;
+    private final static float STEP_HEIGHT = 0.05f;
+    private final static Vector3f SPAWN_LOCATION = new Vector3f(0,30,0);
+    //private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 
     //public Spatial model;
     private DirectionalLight light;
@@ -58,36 +60,25 @@ public class Player extends MovingEntity implements ActionListener{
 
 	private Node node;
 
+    public Player(Node playerModel, Vector3f spawnLocation){
+        this.node = playerModel;
+        this.node.setLocalTranslation(spawnLocation);
 
-    public Player(){
-    }
-
-    public void setNode(Node n){
-        this.node = n;
-    }
-
-    public void init(){
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
+
         this.characterControl = new CharacterControl(this.collisionShape, STEP_HEIGHT);
         this.characterControl.setJumpSpeed(20);
         this.characterControl.setFallSpeed(30);
         this.characterControl.setGravity(30);
-        //this.characterControl.setPhysicsLocation(new Vector3f(10, 30, 15));
 
-         //GhostControl ghost = new GhostControl(new BoxCollisionShape(new Vector3f(1, 1, 1))); // a box-shaped ghost
         this.ghost = new GhostControl(this.collisionShape);
-        //this.ghost.setPhysicsLocation(new Vector3f(10, 30, 15));
-
-        /*
-        / Load any model
-        Node myCharacter = (Node) assetManager
-                .loadModel("Models/Oto/Oto.mesh.xml");
-        rootNode.attachChild(myCharacter);
-         */
 
         this.node.addControl(this.characterControl);
         this.node.addControl(this.ghost);
-        //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
+    }
+
+    public Player(Node playerModel){
+        this(playerModel, SPAWN_LOCATION);
     }
 
     public void addToScene(Node root, PhysicsSpace physics){
