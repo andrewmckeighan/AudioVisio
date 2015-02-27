@@ -2,10 +2,20 @@ package audiovisio.entities;
 
 import org.json.simple.JSONObject;
 
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+
 public class InteractableEntity extends Entity {
 
     private InteractableEntity linkedEntity;
     public boolean stuck; //if the entity keeps it state regardless of triggerEvents
+
+    public Geometry geometry;
+    public Material material;
+    public RigidBodyControl physics;
 
 
     public InteractableEntity(){
@@ -24,11 +34,11 @@ public class InteractableEntity extends Entity {
         //"linked": { "type": "door", "location": {"x": 5, "y": 5, "z": 5}}
         //this.linkedEntity = Level.getListOfType(type).getAt(x,y,z);
     }
-    
+
     @Override
     public void save(JSONObject obj) {
     	super.save(obj);
-    	
+
     	// TODO: Figure out how to deal with linked entities
     }
 
@@ -47,6 +57,15 @@ public class InteractableEntity extends Entity {
 
     public void setLinkedEntity(InteractableEntity entity){
         this.linkedEntity = entity;
+    }
+
+    public void setMaterial(Material mat) {
+        this.geometry.setMaterial(mat);
+    }
+
+    public void addToScene(Node root, PhysicsSpace physics) {
+        root.attachChild(this.geometry);
+    physics.add(this.physics);
     }
 
 }

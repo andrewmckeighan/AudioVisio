@@ -51,19 +51,23 @@ public class Player extends MovingEntity implements ActionListener{
 
     private Geometry mark;
 
-    private boolean up = false, down = false, left = false, right = false;
+    public boolean up = false;
+	public boolean down = false;
+	public boolean left = false;
+	public boolean right = false;
 
     ///////////////////////////////////
 
     private CapsuleCollisionShape collisionShape;
     private GhostControl ghost;
 
-	private Node node;
-	
+	public Node node;
+
 	public Player() {}
 
     public Player(Node playerModel, Vector3f spawnLocation){
         this.node = playerModel;
+        this.node.setLocalScale(0.2f);
         this.node.setLocalTranslation(spawnLocation);
 
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
@@ -73,10 +77,10 @@ public class Player extends MovingEntity implements ActionListener{
         this.characterControl.setFallSpeed(30);
         this.characterControl.setGravity(30);
 
-        this.ghost = new GhostControl(this.collisionShape);
+        //this.ghost = new GhostControl(this.collisionShape);
 
         this.node.addControl(this.characterControl);
-        this.node.addControl(this.ghost);
+        //this.node.addControl(this.ghost);
     }
 
     public Player(Node playerModel){
@@ -87,7 +91,7 @@ public class Player extends MovingEntity implements ActionListener{
         root.attachChild(this.node);
         //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
         physics.add(this.characterControl);
-        physics.add(this.ghost);
+        //physics.add(this.ghost);
     }
 
     public void load(JSONObject obj){
@@ -96,10 +100,10 @@ public class Player extends MovingEntity implements ActionListener{
         //TODO
     }
 
-    public void setMoveDirection(Vector3f direction){
+    public void setWalkDirection(Vector3f direction){
         this.moveDirection = direction;
-        characterControl.setWalkDirection(direction);
-        mainCamera.setLocation(characterControl.getPhysicsLocation());
+        this.characterControl.setWalkDirection(direction);
+        //mainCamera.setLocation(this.characterControl.getPhysicsLocation());
     }
 
     public void loadKeyBinds(JSONObject obj){
@@ -107,70 +111,20 @@ public class Player extends MovingEntity implements ActionListener{
         //this.keyBinds = new ObjectMapper().readValue(jsonMap, Map.class);
     }
 
+
+    public void initKeys(InputManager inputManager, Map<String, KeyTrigger> map) {
+        for ( Map.Entry<String, KeyTrigger> entry : map.entrySet()) {
+            inputManager.addMapping(entry.getKey(), entry.getValue());
+            inputManager.addListener(this, entry.getKey());
+        }
+    }
+
+    public void initKeys(InputManager inputManager){
+        this.initKeys(inputManager, this.keyBinds);
+    }
+
     public void setKeyBinds(Map<String, KeyTrigger> map){
         this.keyBinds = map;
-    }
-
-    /** A centered plus sign to help the player aim. */
-    public void initCrossHairs() {
-        setDisplayStatView(false);
-        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
-        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-        ch.setText("+"); // crosshairs
-        ch.setLocalTranslation( // center
-            settings.getWidth() / 2 - ch.getLineWidth()/2,
-            settings.getHeight() / 2 + ch.getLineHeight()/2,
-            0);
-        guiNode.attachChild(ch);
-    }
-
-    /** A red ball that marks the last spot that was "hit" by the "shot". */
-    public void initMark() {
-        Sphere sphere = new Sphere(30, 30, 0.2f);
-        mark = new Geometry("BOOM!", sphere);
-        Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat.setColor("Color", ColorRGBA.Red);
-        mark.setMaterial(mark_mat);
-    }
-
-    public Spatial makeCharacter(AssetManager assetManager) {
-    // load a character from jme3test-test-data
-        this.model = assetManager.loadModel("Models/Oto/Oto.mesh.xml");
-        this.model.scale(0.5f);
-        this.model.setLocalTranslation(-1.0f, -1.5f, -0.6f);
-
-    // We must add a light to make the model visible
-        DirectionalLight sun = new DirectionalLight();
-        sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
-        this.model.addLight(sun);
-
-        //this.model
-        return this.model;
-    }
-
-    @Override
-    public void simpleUpdate(float tpf){
-        frontDirection.set(cam.getDirection().multLocal(0.6f));
-        leftDirection.set(cam.getLeft()).multLocal(0.4f);
-
-        moveDirection.set(0, 0, 0);
-
-        if(up){
-            moveDirection.addLocal(frontDirection);
-        }
-        if(down){
-            moveDirection.addLocal(frontDirection.negate());
-        }
-        if(left){
-            moveDirection.addLocal(leftDirection);
-        }
-        if(right){
-            moveDirection.addLocal(leftDirection.negate());
-        }
-
-        characterControl.setWalkDirection(moveDirection);
-        cam.setLocation(characterControl.getPhysicsLocation());
     }
 
     public void onAction (String binding, boolean isPressed, float tpf){
@@ -222,22 +176,6 @@ public class Player extends MovingEntity implements ActionListener{
         }
     }
 
-    public void initKeys(InputManager inputManager) {
-        inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
 
-        inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-
-        inputManager.addListener(this, "Up");
-        inputManager.addListener(this, "Down");
-        inputManager.addListener(this, "Left");
-        inputManager.addListener(this, "Right");
-        inputManager.addListener(this, "Jump");
-
-        inputManager.addListener(this, "Shoot");
-    }
 
 }

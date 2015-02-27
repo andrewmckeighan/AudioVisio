@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import audiovisio.networking.messages.NetworkMessage;
+import audiovisio.networking.utilities.ClientNetworkMessageListener;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
@@ -82,14 +84,26 @@ public class Client extends SimpleApplication implements ActionListener,
 	private RigidBodyControl landscape;
 	private RigidBodyControl button;
 	private Player player;
-	private Vector3f walkDirection = new Vector3f();
-	private boolean up = false, down = false, left = false, right = false;
+	//private Vector3f walkDirection = new Vector3f();
+	//private boolean up = false, down = false, left = false, right = false;
 	private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
 
 	// vectors that will be updated each frame,
 	// so we don't have to make a new vector each frame.
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
+
+	private Vector3f oldLocation;
+	private Vector3f newLocation = new Vector3f();
+	private long oldTime;
+	private long newTime;
+	private long time;
+	private int counter = 0;
+	private	float velocity = 0;
+	private	float distance = 0;
+	private	Vector3f position = new Vector3f();
+	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(this);
+	NetworkMessage velocityMessage = new NetworkMessage("");
 
 	public void simpleInitApp(String IP) {
 
@@ -145,7 +159,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		Material randomMaterial = new Material(assetManager,
 				"Common/MatDefs/Misc/Unshaded.j3md");
 		randomMaterial.setColor("Color", ColorRGBA.randomColor());
-		
+
 		Node myCharacter = (Node) assetManager
 				.loadModel("Models/Oto/Oto.mesh.xml");
 
@@ -167,23 +181,27 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		// create geometry for our box
 		Box box = new Box(2, 2, 2);
-		Geometry buttonGeometry = new Geometry("box", box);
-		buttonGeometry.setMaterial(pondMat);
+		Geometry boxGeometry = new Geometry("box", box);
+		boxGeometry.setMaterial(pondMat);
 
 		// position our box
-		buttonGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
+		boxGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
 
 		// make box physics
 		RigidBodyControl boxPhysics = new RigidBodyControl(0.1f);
 
 		// add box physics to our space
-		buttonGeometry.addControl(boxPhysics);
+		boxGeometry.addControl(boxPhysics);
 		shootables = new Node("Shootables");
-		shootables.attachChild(buttonGeometry);
+		shootables.attachChild(boxGeometry);
 
 		Button testButton = new Button(0f, 1f, 0f);
 		testButton.setMaterial(randomMaterial);
-		
+
+		Lever testLever = new Lever(3f, 5f, 3f);
+		testLever.setMaterial(randomMaterial);
+		shootables.attachChild(testLever.geometry);
+
 		player = new Player(myCharacter);
 
 		// ///////////////////////
@@ -195,12 +213,13 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		player.addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
+		testLever.addToScene(rootNode, physicsSpace);
 
 		// ////////////////////////////
 		// Add objects to rootNode //
 		// ////////////////////////////
-		rootNode.attachChild(buttonGeometry);
-		rootNode.attachChild(shootables);
+		//rootNode.attachChild(boxGeometry);
+		//rootNode.attachChild(shootables);
 		rootNode.attachChild(sceneModel);
 
 		rootNode.addLight(ambientLight);
@@ -209,10 +228,14 @@ public class Client extends SimpleApplication implements ActionListener,
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
 		// /////////////////////////////////
-		physicsSpace.add(boxPhysics);
+		//physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
 
+	}
+
+	public void simpleInitApp() {
+		simpleInitApp("127.0.0.1");
 	}
 
 	private void initKeys() {
@@ -233,57 +256,6 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		inputManager.addListener(this, "Shoot");
 
-	}
-
-	public void onAction(String binding, boolean isPressed, float tpf) {
-		if (binding.equals("Up")) {
-			up = isPressed;
-		} else if (binding.equals("Down")) {
-			down = isPressed;
-		} else if (binding.equals("Left")) {
-			left = isPressed;
-		} else if (binding.equals("Right")) {
-			right = isPressed;
-		} else if (binding.equals("Jump")) {
-			if (isPressed) {
-				player.characterControl.jump();
-			}
-		}
-		if (binding.equals("Shoot") && !isPressed) {
-			CollisionResults results = new CollisionResults();
-
-			Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-
-			shootables.collideWith(ray, results);
-
-			if (results.size() > 0) {
-				CollisionResult closest = results.getClosestCollision();
-				// Let's interact - we mark the hit with a red dot.
-				mark.setLocalTranslation(closest.getContactPoint());
-				rootNode.attachChild(mark);
-
-				Geometry collisionGeometry = closest.getGeometry();
-				System.out.println("name: " + collisionGeometry.getName());
-				if (collisionGeometry.getName().equals("button")) {
-					System.out.println("name: "
-							+ collisionGeometry.getMaterial());
-					Material mat1 = new Material(assetManager,
-							"Common/MatDefs/Misc/Unshaded.j3md");
-					mat1.setColor("Color", ColorRGBA.randomColor());
-					collisionGeometry.setMaterial(mat1);
-
-					String boxName = collisionGeometry.getName();
-					for (Geometry door : doorList) {
-						if (door.getName().equals(boxName)) {
-							rootNode.detachChild(door);
-							bulletAppState.getPhysicsSpace().remove(
-									door.getControl(0));
-							break;
-						}
-					}
-				}
-			}
-		}
 	}
 
 	private void initMark() {
@@ -310,10 +282,6 @@ public class Client extends SimpleApplication implements ActionListener,
 
 	}
 
-	public void simpleInitApp() {
-		simpleInitApp("127.0.0.1");
-	}
-
 	@Override
 	public void simpleUpdate(float tpf) {
 
@@ -327,24 +295,52 @@ public class Client extends SimpleApplication implements ActionListener,
 		camDir.set(cam.getDirection().multLocal(0.6f));
 		camLeft.set(cam.getLeft()).multLocal(0.4f);
 
-		walkDirection.set(0, 0, 0);
+		Vector3f walkDirection = new Vector3f(0, 0, 0);
+		//walkDirection.set(0, 0, 0);
 
-		if (up) {
+		if (player.up) {
 			walkDirection.addLocal(camDir);
 		}
-		if (down) {
+		if (player.down) {
 			walkDirection.addLocal(camDir.negate());
 		}
-		if (left) {
+		if (player.left) {
 			walkDirection.addLocal(camLeft);
 		}
-		if (right) {
+		if (player.right) {
 			walkDirection.addLocal(camLeft.negate());
 		}
 
-		player.characterControl.setWalkDirection(walkDirection);
+		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.characterControl.getPhysicsLocation());
+		//player.node.set
 
+		if(counter % 1000 == 0){
+			if (oldLocation != null
+					&& newLocation != null
+					&& oldTime != 0
+					&& newTime != 0) {
+				distance = oldLocation.distance(newLocation);
+				time = newTime - oldTime;
+				velocity = distance / time;
+				velocityMessage = new NetworkMessage("V: " + velocity +
+						", D: " + distance +
+						", P: " + newLocation +
+						"F: " + counter);
+			}
+
+			oldLocation = newLocation.clone();
+			newLocation = player.characterControl.getPhysicsLocation();
+			
+
+			oldTime = newTime;
+			newTime = System.currentTimeMillis();
+
+			counter = 0;
+		}
+
+		messageListener.NetworkMessageHandler(velocityMessage);
+		counter++;
 	}
 
 	@Override
@@ -357,31 +353,28 @@ public class Client extends SimpleApplication implements ActionListener,
 	public void collision(PhysicsCollisionEvent event) {
 		try {
 			if ("button".equals(event.getNodeA().getName())){
-				Geometry foundGeometry = (Geometry) event.getNodeA();
-					Material randomMaterial = new Material(assetManager,
-							"Common/MatDefs/Misc/Unshaded.j3md");
-					randomMaterial.setColor("Color", ColorRGBA.randomColor());
-					foundGeometry.setMaterial(randomMaterial);
-				if("Oto-ogremesh".equals(event.getNodeB().getName())) {
 
-					System.out.println("404, " + event.getNodeA().toString() + ", " + randomMaterial);
+				if("Oto-ogremesh".equals(event.getNodeB().getName())) {
+					Geometry boxGeometry = (Geometry) event.getNodeA();
 				}
 			}
 			if("button".equals(event.getNodeB().getName())) {
-				Geometry foundGeometry = (Geometry) event.getNodeB();
-					Material randomMaterial = new Material(assetManager,
-							"Common/MatDefs/Misc/Unshaded.j3md");
-					randomMaterial.setColor("Color", ColorRGBA.randomColor());
-					foundGeometry.setMaterial(randomMaterial);
-				if ("Oto-ogremesh".equals(event.getNodeA().getName())){
 
-					System.out.println("413, " + event.getNodeB().toString() + ", " + randomMaterial);
+				if ("Oto-ogremesh".equals(event.getNodeA().getName())){
+					Geometry boxGeometry = (Geometry) event.getNodeB();
 				}
 			}
 		} catch (NullPointerException nullException) {
-
+			//System.out.println("nullException Caught: " + nullException);
+		} catch(ClassCastException castException){
+			//System.out.println("castException Caught: " + castException);
 		}
 
+	}
+
+	@Override
+	public void onAction(String binding, boolean isPressed, float tpf) {
+		player.onAction(binding, isPressed, tpf);
 	}
 
 }

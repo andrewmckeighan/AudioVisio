@@ -2,31 +2,45 @@ package audiovisio.entities;
 
 import org.json.simple.JSONObject;
 
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
 public class Lever extends InteractableEntity {
 
-    public static final int LEVER_BOX_SIZE = 1;
-    public static final int LEVER_BOX_LENGTH = 3;
-    public static final int LEVER_BOX_ANGLE = 60;
+    public static final float LEVER_BOX_SIZE = 0.3f;
+    public static final float LEVER_BOX_LENGTH = 1.3f;
+    public static final float LEVER_BOX_ANGLE = (float) (Math.PI / 6.0);
+    private static final float MASS = 0f;
 
     private Box shape;
     private Boolean isOn;
 
-    @SuppressWarnings("deprecation")
-	public Lever(){
+    public Lever(){
+        this(new Vector3f(0f, 0f, 0f));
+    }
+
+    public Lever(float x, float y, float z){
+        this(new Vector3f(x, y, z));
+    }
+
+	public Lever(Vector3f location){
+        this.shape = new Box(LEVER_BOX_SIZE, LEVER_BOX_LENGTH, LEVER_BOX_SIZE);
+        this.geometry = new Geometry("lever", this.shape);
+        this.geometry.setLocalRotation(new Quaternion().
+            fromAngles(LEVER_BOX_ANGLE, 0, 0));
+
+        this.geometry.setLocalTranslation(location);
+
+        this.physics = new RigidBodyControl(MASS);
+        this.geometry.addControl(this.physics);
+
         this.isOn = false;
-
-        //todo
-        Material material = new Material();
-
-        this.shape = new Box(this.position, LEVER_BOX_SIZE, LEVER_BOX_LENGTH, LEVER_BOX_SIZE);
-        this.geometry = new Geometry(this.name, this.shape);
-        this.geometry.setLocalRotation(new Quaternion().fromAngles(0, LEVER_BOX_ANGLE, 0));
-
     }
 
     public void switchLever(){
@@ -54,14 +68,12 @@ public class Lever extends InteractableEntity {
         super.load(obj);
         this.isOn = (Boolean) obj.get("isOn");
     }
-    
+
     @Override
     public void save(JSONObject obj) {
     	super.save(obj);
     	obj.put("type", "lever");
-    	
+
     	obj.put("isOn", this.isOn);
     }
-
-
 }

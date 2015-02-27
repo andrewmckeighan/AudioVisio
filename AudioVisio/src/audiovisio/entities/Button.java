@@ -37,9 +37,7 @@ public class Button extends InteractableEntity {
 	public final float MASS = 0f;
 
 	public Cylinder shape;
-	public Geometry geometry;
-	public Material material;
-	public RigidBodyControl physics;
+
 	// rootNode.attachChild(this.geometry);
 
 	public RigidBodyControl collision; // (physics)
@@ -57,6 +55,7 @@ public class Button extends InteractableEntity {
 
 	public Button(Vector3f location) {
 		this.shape = new Cylinder(8, 8, 2.0f, 0.2f, true);
+
 		this.geometry = new Geometry("button", this.shape);
 		this.geometry.setLocalRotation(new Quaternion().fromAngles(
 				(float) Math.PI / 2, 0, 0));
@@ -90,14 +89,5 @@ public class Button extends InteractableEntity {
 	public void save(JSONObject obj) {
 		super.save(obj);
 		obj.put("type", "button");
-	}
-
-	public void setMaterial(Material mat) {
-		this.geometry.setMaterial(mat);
-	}
-
-	public void addToScene(Node root, PhysicsSpace physics) {
-		root.attachChild(this.geometry);
-		physics.add(this.physics);
 	}
 }
