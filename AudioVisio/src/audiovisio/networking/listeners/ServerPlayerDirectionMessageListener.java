@@ -1,4 +1,4 @@
-package Listeners;
+package audiovisio.networking.listeners;
 
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerDirectionMessage;

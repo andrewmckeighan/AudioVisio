@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Listeners.ServerPlayerDirectionMessageListener;
 import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.networking.listeners.ServerPlayerDirectionMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerDirectionMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
