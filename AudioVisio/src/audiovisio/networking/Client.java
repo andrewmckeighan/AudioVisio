@@ -81,9 +81,6 @@ public class Client extends SimpleApplication implements ActionListener,
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
-	private Player audioPlayer;
-	private Player visualPlayer;
-	private RigidBodyControl button;
 	private Player currentPlayer;
 	private Player networkedPlayer;
 	private Button testButton;
@@ -266,7 +263,7 @@ public class Client extends SimpleApplication implements ActionListener,
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		visualPlayer.update(cam, camDir, camLeft);
+		currentPlayer.update(cam, camDir, camLeft);
 		updateVelocityMessage();
 	}
 
