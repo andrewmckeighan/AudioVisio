@@ -1,5 +1,7 @@
 package audiovisio.gui;
 
+import audiovisio.utils.LogHelper;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.niftygui.NiftyJmeDisplay;
 
@@ -108,7 +110,7 @@ public class niftyTest extends SimpleApplication implements ScreenController {
                          height("50%");
                          width("50%");
                          visibleToMouse(true);
-                         interactOnClick(System.out.println("Clicked Leave game"));
+                         interactOnClick("leave()");
                      }});
                      
                                    
@@ -123,6 +125,10 @@ public class niftyTest extends SimpleApplication implements ScreenController {
         // </screen>
      
         nifty.gotoScreen("main_menu"); // start the screen
+    }
+    
+    public void leave() {
+    	LogHelper.info("Clicked leave game");
     }
 
 	@Override
