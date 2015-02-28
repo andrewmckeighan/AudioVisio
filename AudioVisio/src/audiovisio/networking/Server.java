@@ -74,7 +74,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 			System.exit(1);
 		}
 		
-			GeneralUtilities.initializeSerializables();
+		GeneralUtilities.initializeSerializables();
 		
 		assetManager.registerLocator("town.zip", ZipLocator.class);
 		sceneModel = assetManager.loadModel("main.scene");
