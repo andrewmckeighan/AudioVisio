@@ -64,8 +64,7 @@ public class InteractableEntity extends Entity {
     }
 
     public void addToScene(Node root, PhysicsSpace physics) {
-        //root.attachChild(this.geometry);
-    	root.attachChild(this);
+        addToScene(root);
     	physics.add(this.physics);
     }
 
