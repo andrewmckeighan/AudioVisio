@@ -316,7 +316,6 @@ public class Client extends SimpleApplication implements ActionListener,
 				if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
 					Button b = (Button) event.getNodeA().getParent();
 					b.startPress();
-					Geometry boxGeometry = (Geometry) event.getNodeA();
 				}
 			}
 			if ("button".equals(event.getNodeB().getName())) {
@@ -324,7 +323,6 @@ public class Client extends SimpleApplication implements ActionListener,
 				if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
 					Button b = (Button) event.getNodeB().getParent();
 					b.startPress();
-					Geometry boxGeometry = (Geometry) event.getNodeB();
 				}
 			}
 
