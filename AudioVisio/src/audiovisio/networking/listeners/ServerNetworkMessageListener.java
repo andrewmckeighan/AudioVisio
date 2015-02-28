@@ -1,4 +1,4 @@
-package audiovisio.networking.utilities;
+package audiovisio.networking.listeners;
 
 import audiovisio.networking.messages.NetworkMessage;
 
@@ -24,7 +24,7 @@ public class ServerNetworkMessageListener implements MessageListener<Server>{
 	}
 	
 	public void NetworkMessageHandler(NetworkMessage handle) {
-		((Server) myServer).broadcast(handle);
+		
 	}
 
 }

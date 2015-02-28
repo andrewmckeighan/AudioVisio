@@ -1,4 +1,4 @@
-package audiovisio.networking.utilities;
+package audiovisio.networking.listeners;
 
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerDirectionMessage;
@@ -25,9 +25,7 @@ public class ServerPlayerDirectionMessageListener implements MessageListener<Ser
 	}
 	
 	public void PlayerDirectionMessageHandler(PlayerDirectionMessage handle) {
-		myServer.getAudioPlayer().setWalkDirection(handle.getAudioDirection());
-		myServer.getVisualPlayer().setWalkDirection(handle.getVisualDirection());
-		((Server) myServer).broadcast(handle);
+		
 	}
 
 }

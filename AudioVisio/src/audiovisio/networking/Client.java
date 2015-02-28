@@ -7,8 +7,8 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.networking.listeners.ClientNetworkMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.utilities.ClientNetworkMessageListener;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 

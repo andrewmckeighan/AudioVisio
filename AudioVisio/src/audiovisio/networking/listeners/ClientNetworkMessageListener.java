@@ -1,4 +1,4 @@
-package audiovisio.networking.utilities;
+package audiovisio.networking.listeners;
 
 import audiovisio.networking.messages.NetworkMessage;
 
@@ -25,7 +25,7 @@ public class ClientNetworkMessageListener implements MessageListener<Client>{
 		}
 		
 		public void NetworkMessageHandler(NetworkMessage handle){
-			myClient.messageQueue.add(handle.getMessage());
+			
 		}
 
 }

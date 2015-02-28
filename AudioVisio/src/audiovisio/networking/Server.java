@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.networking.listeners.ServerPlayerDirectionMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerDirectionMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
-import audiovisio.networking.utilities.ServerPlayerDirectionMessageListener;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.SimpleApplication;
