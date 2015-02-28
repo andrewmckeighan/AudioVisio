@@ -84,8 +84,9 @@ public class Client extends SimpleApplication implements ActionListener,
 	private RigidBodyControl landscape;
 	private RigidBodyControl button;
 	private Player player;
-	//private Vector3f walkDirection = new Vector3f();
-	//private boolean up = false, down = false, left = false, right = false;
+	private Button testButton;
+	// private Vector3f walkDirection = new Vector3f();
+	// private boolean up = false, down = false, left = false, right = false;
 	private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
 
 	// vectors that will be updated each frame,
@@ -99,10 +100,11 @@ public class Client extends SimpleApplication implements ActionListener,
 	private long newTime;
 	private long time;
 	private int counter = 0;
-	private	float velocity = 0;
-	private	float distance = 0;
-	private	Vector3f position = new Vector3f();
-	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(this);
+	private float velocity = 0;
+	private float distance = 0;
+	private Vector3f position = new Vector3f();
+	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
+			this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
 
 	public void simpleInitApp(String IP) {
@@ -162,6 +164,7 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		Node myCharacter = (Node) assetManager
 				.loadModel("Models/Oto/Oto.mesh.xml");
+		//Geometry testGeo = (Geometry) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
 
 		// /////////////
 		// Physics //
@@ -195,7 +198,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		shootables = new Node("Shootables");
 		shootables.attachChild(boxGeometry);
 
-		Button testButton = new Button(0f, 1f, 0f);
+		testButton = new Button(0f, 1f, 0f);
 		testButton.setMaterial(randomMaterial);
 
 		Lever testLever = new Lever(3f, 5f, 3f);
@@ -203,6 +206,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		shootables.attachChild(testLever.geometry);
 
 		player = new Player(myCharacter);
+		//player.mesh = testGeo.getMesh();
 
 		// ///////////////////////
 		// Initialization Methods //
@@ -218,8 +222,8 @@ public class Client extends SimpleApplication implements ActionListener,
 		// ////////////////////////////
 		// Add objects to rootNode //
 		// ////////////////////////////
-		//rootNode.attachChild(boxGeometry);
-		//rootNode.attachChild(shootables);
+		// rootNode.attachChild(boxGeometry);
+		// rootNode.attachChild(shootables);
 		rootNode.attachChild(sceneModel);
 
 		rootNode.addLight(ambientLight);
@@ -228,7 +232,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
 		// /////////////////////////////////
-		//physicsSpace.add(boxPhysics);
+		// physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
 
@@ -285,6 +289,16 @@ public class Client extends SimpleApplication implements ActionListener,
 	@Override
 	public void simpleUpdate(float tpf) {
 
+		/*
+		 * CollisionResults results = null;
+		 *
+		if (player != null && testButton != null) {
+			if (player.collideWith(testButton, results) != 0) {
+				testButton.startPress();
+			}
+		}
+		*/
+
 		String message = messageQueue.poll();
 		if (message != null) {
 			fpsText.setText(message);
@@ -296,7 +310,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		camLeft.set(cam.getLeft()).multLocal(0.4f);
 
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
-		//walkDirection.set(0, 0, 0);
+		// walkDirection.set(0, 0, 0);
 
 		if (player.up) {
 			walkDirection.addLocal(camDir);
@@ -313,25 +327,20 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.characterControl.getPhysicsLocation());
-		//player.node.set
+		// player.node.set
 
-		if(counter % 1000 == 0){
-			if (oldLocation != null
-					&& newLocation != null
-					&& oldTime != 0
+		if (counter % 1000 == 0) {
+			if (oldLocation != null && newLocation != null && oldTime != 0
 					&& newTime != 0) {
 				distance = oldLocation.distance(newLocation);
 				time = newTime - oldTime;
 				velocity = distance / time;
-				velocityMessage = new NetworkMessage("V: " + velocity +
-						", D: " + distance +
-						", P: " + newLocation +
-						"F: " + counter);
+				velocityMessage = new NetworkMessage("V: " + velocity + ", D: "
+						+ distance + ", P: " + newLocation + "F: " + counter);
 			}
 
 			oldLocation = newLocation.clone();
 			newLocation = player.characterControl.getPhysicsLocation();
-			
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
@@ -352,22 +361,29 @@ public class Client extends SimpleApplication implements ActionListener,
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
 		try {
-			if ("button".equals(event.getNodeA().getName())){
+			if ("button".equals(event.getNodeA().getName())) {
 
-				if("Oto-ogremesh".equals(event.getNodeB().getName())) {
+				if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
+					Button b = (Button) event.getNodeA().getParent();
+					b.startPress();
 					Geometry boxGeometry = (Geometry) event.getNodeA();
 				}
 			}
-			if("button".equals(event.getNodeB().getName())) {
+			if ("button".equals(event.getNodeB().getName())) {
 
-				if ("Oto-ogremesh".equals(event.getNodeA().getName())){
+				if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
+					Button b = (Button) event.getNodeB().getParent();
+					b.startPress();
 					Geometry boxGeometry = (Geometry) event.getNodeB();
 				}
 			}
+			
+			System.out.println(event.getNodeA().getName());
+			System.out.println("	" + event.getNodeB().getName());
 		} catch (NullPointerException nullException) {
 			//System.out.println("nullException Caught: " + nullException);
-		} catch(ClassCastException castException){
-			//System.out.println("castException Caught: " + castException);
+		} catch (ClassCastException castException) {
+			System.out.println("castException Caught: " + castException);
 		}
 
 	}

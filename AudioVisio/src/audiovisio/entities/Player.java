@@ -32,6 +32,7 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
@@ -62,10 +63,13 @@ public class Player extends MovingEntity implements ActionListener{
     private GhostControl ghost;
 
 	public Node node;
+	public Mesh mesh;
 
 	public Player() {}
 
     public Player(Node playerModel, Vector3f spawnLocation){
+    	//this.geometry = (Geometry) playerModel;
+    	
         this.node = playerModel;
         this.node.setLocalScale(0.2f);
         this.node.setLocalTranslation(spawnLocation);
@@ -81,6 +85,7 @@ public class Player extends MovingEntity implements ActionListener{
 
         this.node.addControl(this.characterControl);
         //this.node.addControl(this.ghost);
+        this.attachChild(this.node);
     }
 
     public Player(Node playerModel){
@@ -88,7 +93,8 @@ public class Player extends MovingEntity implements ActionListener{
     }
 
     public void addToScene(Node root, PhysicsSpace physics){
-        root.attachChild(this.node);
+        //root.attachChild(this.node);
+    	root.attachChild(this);
         //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
         physics.add(this.characterControl);
         //physics.add(this.ghost);
