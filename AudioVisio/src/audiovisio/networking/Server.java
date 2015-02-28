@@ -99,14 +99,14 @@ public class Server extends SimpleApplication{
 		testLever.setMaterial(randomMaterial);
 		shootables.attachChild(testLever.geometry);
 
-		audioPlayer = new Player(myCharacter);
+		setAudioPlayer(new Player(myCharacter));
 		visualPlayer = new Player(myCharacter);
 
 		// ///////////////////////
 		// Initialization Methods //
 		// ///////////////////////
 
-		audioPlayer.addToScene(rootNode, physicsSpace);
+		getAudioPlayer().addToScene(rootNode, physicsSpace);
 		visualPlayer.addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
@@ -170,6 +170,22 @@ Vector3f walkDirection = new Vector3f(0, 0, 0);
 	public void destroy(){
 		myServer.close();
 		super.destroy();
+	}
+
+	public Player getAudioPlayer() {
+		return audioPlayer;
+	}
+
+	public Player getVisualPlayer() {
+		return visualPlayer;
+	}
+
+	public void setAudioPlayer(Player audioPlayer) {
+		this.audioPlayer = audioPlayer;
+	}
+	
+	public void setVisualPlayer(Player visualPlayer) {
+		this.visualPlayer = visualPlayer;
 	}
 	
 }

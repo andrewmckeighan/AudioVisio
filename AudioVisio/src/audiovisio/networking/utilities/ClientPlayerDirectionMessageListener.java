@@ -1,6 +1,8 @@
 package audiovisio.networking.utilities;
 
-import audiovisio.networking.messages.NetworkMessage;
+import java.util.concurrent.Callable;
+
+import audiovisio.networking.messages.PlayerDirectionMessage;
 
 import com.jme3.network.Client;
 import com.jme3.network.Message;
@@ -18,14 +20,23 @@ public class ClientPlayerDirectionMessageListener implements MessageListener<Cli
 		
 		@Override
 		public void messageReceived(Client source, Message m){
-			if(m instanceof NetworkMessage){
-				
+			if(m instanceof PlayerDirectionMessage){
+				PlayerDirectionMessageHandler((PlayerDirectionMessage) m);
 			}
 	
 		}
 		
-		public void NetworkMessageHandler(NetworkMessage handle){
-			
+		public void PlayerDirectionMessageHandler(final PlayerDirectionMessage handle){
+			myClient.enqueue(new Callable()){
+				
+				public Object call() throws Exception{
+					myClient.audioPlayer.setWalkDirection(handle.getAudioDirection());
+					myClient.visualPlayer.setWalkDirection(handle.getVisualDirection());
+					
+					return null;
+				}
+				
+			};
 		}
 
 }
