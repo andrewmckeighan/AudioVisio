@@ -1,24 +1,25 @@
 package audiovisio.networking.messages;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.network.serializing.Serializer;
 
 @Serializable
-public class NetworkMessage extends AbstractMessage{
-
-	private String message;
+public class PlayerDirectionMessage extends AbstractMessage{
 	
-	public NetworkMessage(){
+	private Vector3f direction;
+	
+	public PlayerDirectionMessage(){
 		
 	}
-	
-	public NetworkMessage(String message){
-		this.message = message;
+
+	public PlayerDirectionMessage(Vector3f direction){
+		this.direction = direction;
 	}
 	
-	public String getMessage(){
-		return message;
+	public Vector3f getDirection(){
+		return direction;
 	}
 	
 	public static void initializeSerializables(){
