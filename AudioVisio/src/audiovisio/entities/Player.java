@@ -65,6 +65,7 @@ public class Player extends MovingEntity implements ActionListener{
 	public Node node;
 	public Mesh mesh;
 
+//<<<<<<< HEAD
 	public Player() {
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 
@@ -77,13 +78,13 @@ public class Player extends MovingEntity implements ActionListener{
     }
 
     public Player(Node playerModel, Vector3f spawnLocation){
+    	this();
+    	
         this.node = playerModel;
         this.node.setLocalScale(0.2f);
         this.node.setLocalTranslation(spawnLocation);
 
         this.node.addControl(this.characterControl);
-
-        this();
     }
 
     public Player(Node playerModel){
@@ -91,11 +92,8 @@ public class Player extends MovingEntity implements ActionListener{
     }
 
     public void addToScene(Node root, PhysicsSpace physics){
-        //root.attachChild(this.node);
-    	root.attachChild(this);
-        //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
+    	addToScene(root);
         physics.add(this.characterControl);
-        //physics.add(this.ghost);
     }
 
     public void load(JSONObject obj){
@@ -180,9 +178,34 @@ public class Player extends MovingEntity implements ActionListener{
         }
     }
 
-	public void createModel(AssetManager assetManager) {
+    public void createModel(AssetManager assetManager) {
 		Node myCharacter = (Node) assetManager
 				.loadModel("Models/Oto/Oto.mesh.xml");
+		this.model = myCharacter;
+    }
+
+	public void update(Camera cam, Vector3f camDir, Vector3f camLeft) {
+        camDir.set(cam.getDirection().multLocal(0.6f));
+        camLeft.set(cam.getLeft()).multLocal(0.4f);
+
+        Vector3f walkDirection = new Vector3f(0, 0, 0);
+
+        if (this.up) {
+            walkDirection.addLocal(camDir);
+        }
+        if (this.down) {
+            walkDirection.addLocal(camDir.negate());
+        }
+        if (this.left) {
+            walkDirection.addLocal(camLeft);
+        }
+        if (this.right) {
+            walkDirection.addLocal(camLeft.negate());
+        }
+
+        this.setWalkDirection(walkDirection);
+        cam.setLocation(this.characterControl.getPhysicsLocation());
+
 	}
 
 

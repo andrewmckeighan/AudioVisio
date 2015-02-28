@@ -50,7 +50,6 @@ public class Client extends SimpleApplication implements ActionListener,
 		// DebugKeysAppState());
 	}
 
-	private Node shootables;
 	private Geometry mark;
 
 	private Spatial sceneModel;
@@ -59,11 +58,8 @@ public class Client extends SimpleApplication implements ActionListener,
 	private Player currentPlayer;
 	private Player networkedPlayer;
 	private Button testButton;
-	// vectors that will be updated each frame,
-	// so we don't have to make a new vector each frame.
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
-
 	private Vector3f oldLocation;
 	private Vector3f newLocation = new Vector3f();
 	private long oldTime;
@@ -72,6 +68,7 @@ public class Client extends SimpleApplication implements ActionListener,
 	private int counter = 0;
 	private float velocity = 0;
 	private float distance = 0;
+
 	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
 			this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
@@ -117,21 +114,17 @@ public class Client extends SimpleApplication implements ActionListener,
 		// ///////////////
 		Material pondMat = new Material(assetManager,
 				"Common/MatDefs/Light/Lighting.j3md"); // load the material &
-														// color
+		// color
 		pondMat.setTexture("DiffuseMap",
 				assetManager.loadTexture("Textures/Terrain/Pond/Pond.jpg"));// located
-																			// in
-																			// jME3-testdata.jar
+		// in
+		// jME3-testdata.jar
 		pondMat.setTexture("NormalMap", assetManager
 				.loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
 		pondMat.setBoolean("UseMaterialColors", true);
 		pondMat.setColor("Diffuse", ColorRGBA.White); // minimum material color
 		pondMat.setColor("Specular", ColorRGBA.White); // for shininess
 		pondMat.setFloat("Shininess", 64f); // [1,128] for shininess
-
-
-
-		//Geometry testGeo = (Geometry) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
 
 		// /////////////
 		// Physics //
@@ -149,7 +142,6 @@ public class Client extends SimpleApplication implements ActionListener,
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
 
-
 		/////////////////////////
 		// Generate entities //
 		/////////////////////////
@@ -158,7 +150,6 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		Lever testLever = new Lever(3f, 5f, 3f);
 		testLever.createMaterial(assetManager);
-		shootables.attachChild(testLever.geometry);
 
 		currentPlayer = new Player();
 		currentPlayer.createModel(assetManager);
@@ -175,6 +166,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		///////////////////////////
 		currentPlayer.addToScene(rootNode, physicsSpace);
 		networkedPlayer.addToScene(rootNode, physicsSpace);
+
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
 
@@ -243,46 +235,22 @@ public class Client extends SimpleApplication implements ActionListener,
 
 	@Override
 	public void simpleUpdate(float tpf) {
+		updateFpsText();
+		currentPlayer.update(cam, camDir, camLeft);
+		updateVelocityMessage();
+	}
 
-		/*
-		 * CollisionResults results = null;
-		 *
-		if (player != null && testButton != null) {
-			if (player.collideWith(testButton, results) != 0) {
-				testButton.startPress();
-			}
-		}
-		*/
-
+	private void updateFpsText(){
 		String message = messageQueue.poll();
 		if (message != null) {
 			fpsText.setText(message);
 		} else {
 			fpsText.setText("No message in queue.");
 		}
+	}
 
-		camDir.set(cam.getDirection().multLocal(0.6f));
-		camLeft.set(cam.getLeft()).multLocal(0.4f);
 
-		Vector3f walkDirection = new Vector3f(0, 0, 0);
-		// walkDirection.set(0, 0, 0);
-
-		if (currentPlayer.up) {
-			walkDirection.addLocal(camDir);
-		}
-		if (currentPlayer.down) {
-			walkDirection.addLocal(camDir.negate());
-		}
-		if (currentPlayer.left) {
-			walkDirection.addLocal(camLeft);
-		}
-		if (currentPlayer.right) {
-			walkDirection.addLocal(camLeft.negate());
-		}
-
-		currentPlayer.setWalkDirection(walkDirection);
-		cam.setLocation(currentPlayer.characterControl.getPhysicsLocation());
-		// player.node.set
+	private void updateVelocityMessage(){
 
 		if (counter % 1000 == 0) {
 			if (oldLocation != null && newLocation != null && oldTime != 0
@@ -336,7 +304,7 @@ public class Client extends SimpleApplication implements ActionListener,
 			System.out.println(event.getNodeA().getName());
 			System.out.println("	" + event.getNodeB().getName());
 		} catch (NullPointerException nullException) {
-			//System.out.println("nullException Caught: " + nullException);
+			// System.out.println("nullException Caught: " + nullException);
 		} catch (ClassCastException castException) {
 			System.out.println("castException Caught: " + castException);
 		}
