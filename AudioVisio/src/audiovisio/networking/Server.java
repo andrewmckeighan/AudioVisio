@@ -74,9 +74,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		}
 
 		GeneralUtilities.initializeSerializables();
-
-
-
 		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 		// /////////////////////
@@ -97,7 +94,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		bulletAppState = new BulletAppState();
 		stateManager.attach(bulletAppState);
 
-
 		/////////////////////////
 		// Generate entities //
 		/////////////////////////
@@ -108,11 +104,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 		setAudioPlayer(new Player(audioPlayer));
 		setVisualPlayer(new Player(visualPlayer));
-
-		// ///////////////////////
-		// Initialization Methods //
-		// ///////////////////////
-
 
 		///////////////////////////
 		//Add entities to Scene //
@@ -128,16 +119,11 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		// ////////////////////////////
 		rootNode.attachChild(sceneModel);
 
-
-
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
 		// /////////////////////////////////
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
-
-
-
 	}
 
 	@Override
