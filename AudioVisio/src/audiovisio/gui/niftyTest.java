@@ -16,137 +16,160 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 public class niftyTest extends SimpleApplication implements ScreenController {
 
-    @Override
-    public void simpleInitApp() {
-    	initMain();
-    }
-    
-    public void initMain(){
-    	NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
-                assetManager, inputManager, audioRenderer, guiViewPort);
-        Nifty nifty = niftyDisplay.getNifty();
-        guiViewPort.addProcessor(niftyDisplay);
-        flyCam.setDragToRotate(true);
-     
-        nifty.loadStyleFile("nifty-default-styles.xml");
-        nifty.loadControlFile("nifty-default-controls.xml");
-     
-        // <screen>
-        nifty.addScreen("main_menu", new ScreenBuilder("Hello Nifty Screen"){{
-            controller(new DefaultScreenController()); // Screen properties       
-     
-            // <layer>
-            layer(new LayerBuilder("Layer_ID") {{
-                childLayoutVertical();
-                //childLayoutCenter();
-                // <panel>
-                panel(new PanelBuilder("panel_top") {{
-                   childLayoutCenter(); // panel properties, add more...
-                   alignCenter();
-                   backgroundColor("#FFFFFF");
-                   height("25%");
-                   width("100%");
+	@Override
+	public void simpleInitApp() {
+		initMain();
+	}
 
-     
-                    // GUI elements
-                    control(new ButtonBuilder("host", "Host Game"){{
-                        alignCenter();
-                        valignCenter();
-                        height("50%");
-                        width("50%");
-                    }});
-                    
-                    //.. add more GUI elements here              
-     
-                }});
-                
-                panel(new PanelBuilder("panel_top_mid") {{
-                    childLayoutCenter(); // panel properties, add more...
-                    alignCenter();
-                    backgroundColor("#FFFFFF");
-                    height("25%");
-                    width("100%");
+	public void initMain(){
+		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
+				assetManager, inputManager, audioRenderer, guiViewPort);
+		Nifty nifty = niftyDisplay.getNifty();
+		guiViewPort.addProcessor(niftyDisplay);
+		flyCam.setDragToRotate(true);
 
-      
-                     // GUI elements
-                     control(new ButtonBuilder("join", "Join Game"){{
-                         alignCenter();
-                         valignCenter();
-                         height("50%");
-                         width("50%");
-                     }});
-                     
-                     
-                 }});
-                panel(new PanelBuilder("panel_bottom_mid") {{
-                    childLayoutCenter(); // panel properties, add more...
-                    backgroundColor("#FFFFFF");
-                    alignCenter();
-                    height("25%");
-                    width("100%");
-                     // GUI elements
-                     control(new ButtonBuilder("sett", "Settings"){{
-                         alignCenter();
-                         valignCenter();
-                         height("50%");
-                         width("50%");
-                     }});
-                     
-                                   
-      
-                 }});
-                
-                panel(new PanelBuilder("panel_bottom") {{
-                    childLayoutCenter(); // panel properties, add more...
-                    backgroundColor("#FFFFFF");
-                    alignCenter();
-                    height("25%");
-                    width("100%");
-                    
-                     // GUI elements
-                     control(new ButtonBuilder("Leave", "Leave Game"){{
-                         alignCenter();
-                         valignCenter();
-                         height("50%");
-                         width("50%");
-                         visibleToMouse(true);
-                         interactOnClick("leave()");
-                     }});
-                     
-                                   
-      
-                 }});
-                
-                
-                // </panel>
-              }});
-            // </layer>
-          }}.build(nifty));
-        // </screen>
-     
-        nifty.gotoScreen("main_menu"); // start the screen
-    }
-    
-    public void leave() {
-    	LogHelper.info("Clicked leave game");
-    }
+		nifty.loadStyleFile("nifty-default-styles.xml");
+		nifty.loadControlFile("nifty-default-controls.xml");
+
+		// <screen>
+		nifty.addScreen("main_menu", new ScreenBuilder("Hello Nifty Screen"){
+			{
+				controller(new DefaultScreenController()); // Screen properties       
+
+				// <layer>
+				layer(new LayerBuilder("Layer_ID") {
+					{
+						childLayoutVertical();
+						//childLayoutCenter();
+						// <panel>
+						panel(new PanelBuilder("panel_top") {
+							{
+								childLayoutCenter(); // panel properties, add more...
+								alignCenter();
+								backgroundColor("#FFFFFF");
+								height("25%");
+								width("100%");
+
+
+								// GUI elements
+								control(new ButtonBuilder("host", "Host Game"){
+									{
+										alignCenter();
+										valignCenter();
+										height("50%");
+										width("50%");
+									}
+								}
+										);
+
+								//.. add more GUI elements here              
+
+							}
+						}
+								);
+
+						panel(new PanelBuilder("panel_top_mid") {
+							{
+								childLayoutCenter(); // panel properties, add more...
+								alignCenter();
+								backgroundColor("#FFFFFF");
+								height("25%");
+								width("100%");
+
+
+								// GUI elements
+								control(
+										new ButtonBuilder("join", "Join Game"){
+											{
+												alignCenter();
+												valignCenter();
+												height("50%");
+												width("50%");
+											}
+										}
+										);
+
+
+							}
+						}
+								);
+						panel(new PanelBuilder("panel_bottom_mid") {
+							{
+								childLayoutCenter(); // panel properties, add more...
+								backgroundColor("#FFFFFF");
+								alignCenter();
+								height("25%");
+								width("100%");
+								// GUI elements
+								control(new ButtonBuilder("sett", "Settings"){
+									{
+										alignCenter();
+										valignCenter();
+										height("50%");
+										width("50%");
+									}
+								}
+										);
+
+
+
+							}
+						}
+								);
+
+						panel(new PanelBuilder("panel_bottom") {
+							{
+								childLayoutCenter(); // panel properties, add more...
+								backgroundColor("#FFFFFF");
+								alignCenter();
+								height("25%");
+								width("100%");
+
+								// GUI elements
+								control(new ButtonBuilder("Leave", "Leave Game"){{
+									alignCenter();
+									valignCenter();
+									height("50%");
+									width("50%");
+									visibleToMouse(true);
+									interactOnClick("leave()");
+								}});
+
+
+
+							}});
+
+
+						// </panel>
+					}});
+				// </layer>
+			}}.build(nifty));
+		// </screen>
+
+		nifty.gotoScreen("main_menu"); // start the screen
+	}
+
+	public void leave() {
+		LogHelper.info("Clicked leave game");
+		System.out.println("clicked leave game");
+	}
 
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
 		throw new UnsupportedOperationException("Not supported yet."); 
-		
+
 	}
 
 	@Override
 	public void onEndScreen() {
 		throw new UnsupportedOperationException("Not supported yet."); 
-		
+
 	}
 
 	@Override
 	public void onStartScreen() {
 		throw new UnsupportedOperationException("Not supported yet."); 
-		
+
 	}
-    
+
 }

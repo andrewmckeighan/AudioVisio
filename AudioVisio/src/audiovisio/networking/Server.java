@@ -31,13 +31,12 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
-	
 	private com.jme3.network.Server myServer;
-	
+
 	public Server(){
-		
+
 	}
-	
+
 
 	private Node shootables;
 	private Geometry mark;
@@ -62,7 +61,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private	Vector3f audioPosition = new Vector3f();
 	private	Vector3f visualPosition = new Vector3f();
 	private ServerPlayerDirectionMessageListener pDML= new ServerPlayerDirectionMessageListener(this);
-	
+
 	@Override
 	public void simpleInitApp(){
 		try{
@@ -75,11 +74,11 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		}
 		
 		GeneralUtilities.initializeSerializables();
-		
+
 		assetManager.registerLocator("town.zip", ZipLocator.class);
 		sceneModel = assetManager.loadModel("main.scene");
 		sceneModel.setLocalScale(2f);
-		
+
 		CollisionShape sceneShape = CollisionShapeFactory
 				.createMeshShape((Node) sceneModel);
 		landscape = new RigidBodyControl(sceneShape, 0);
@@ -137,20 +136,19 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		//physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
-		
-		
-		
+
+
+
 	}
-	
+
 	@Override
 	public void simpleUpdate(float tpf){
-		
 		pDML.messageReceived();
 		
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
 		
 		player.setWalkDirection(walkDirection);
-		
+
 		if(counter % 1000 == 0){
 			if (oldLocation != null
 					&& newLocation != null
@@ -167,17 +165,17 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 			oldLocation = newLocation.clone();
 			newLocation = player.characterControl.getPhysicsLocation();
-			
+
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
 
 			counter = 0;
 		}
-		
-		
+
+
 	}
-	
+
 	@Override
 	public void destroy(){
 		myServer.close();
@@ -213,3 +211,4 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	}
 	
 }
+

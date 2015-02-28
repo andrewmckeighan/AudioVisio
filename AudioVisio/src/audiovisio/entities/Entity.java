@@ -29,7 +29,7 @@ public class Entity extends Node{
     public Spatial model;
 
     public Entity(){
-    	
+
     }
 
     public void load(JSONObject obj){
@@ -39,10 +39,18 @@ public class Entity extends Node{
     }
 
     @SuppressWarnings("unchecked")
-	public void save(JSONObject obj){
+    public void save(JSONObject obj){
     	JSONObject location = JSONHelper.saveVector3f(this.position);
     	obj.put("location", location);
     	obj.put("name", this.name);
+    }
+
+    public void addToScene(Node root){
+        //root.attachChild(this.node);
+        root.attachChild(this);
+        //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
+        //physics.add(this.characterControl);
+        //physics.add(this.ghost);
     }
 
 }
