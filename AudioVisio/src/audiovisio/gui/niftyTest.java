@@ -9,8 +9,10 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.DefaultScreenController;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 
-public class niftyTest extends SimpleApplication {
+public class niftyTest extends SimpleApplication implements ScreenController {
 
     @Override
     public void simpleInitApp() {
@@ -98,12 +100,15 @@ public class niftyTest extends SimpleApplication {
                     alignCenter();
                     height("25%");
                     width("100%");
+                    
                      // GUI elements
                      control(new ButtonBuilder("Leave", "Leave Game"){{
                          alignCenter();
                          valignCenter();
                          height("50%");
                          width("50%");
+                         visibleToMouse(true);
+                         interactOnClick(System.out.println("Clicked Leave game"));
                      }});
                      
                                    
@@ -119,5 +124,23 @@ public class niftyTest extends SimpleApplication {
      
         nifty.gotoScreen("main_menu"); // start the screen
     }
+
+	@Override
+	public void bind(Nifty arg0, Screen arg1) {
+		throw new UnsupportedOperationException("Not supported yet."); 
+		
+	}
+
+	@Override
+	public void onEndScreen() {
+		throw new UnsupportedOperationException("Not supported yet."); 
+		
+	}
+
+	@Override
+	public void onStartScreen() {
+		throw new UnsupportedOperationException("Not supported yet."); 
+		
+	}
     
 }
