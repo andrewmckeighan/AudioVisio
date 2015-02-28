@@ -74,7 +74,11 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		}
 
 		GeneralUtilities.initializeSerializables();
+		bulletAppState = new BulletAppState();
+		stateManager.attach(bulletAppState);
+
 		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+
 
 		// /////////////////////
 		// Load Scene (map) //
@@ -100,7 +104,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		Button testButton = new Button(0f, 1f, 0f);
 
 		Lever testLever = new Lever(3f, 5f, 3f);
-		shootables.attachChild(testLever.geometry);
 
 		setAudioPlayer(new Player(audioPlayer));
 		setVisualPlayer(new Player(visualPlayer));

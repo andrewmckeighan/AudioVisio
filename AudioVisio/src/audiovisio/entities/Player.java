@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import audiovisio.networking.messages.PlayerMoveMessage;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ZipLocator;
@@ -76,7 +78,7 @@ public class Player extends MovingEntity implements ActionListener{
 
     public Player(Node playerModel, Vector3f spawnLocation){
     	this();
-    	
+
         this.node = playerModel;
         this.node.setLocalScale(0.2f);
         this.node.setLocalTranslation(spawnLocation);
@@ -198,6 +200,8 @@ public class Player extends MovingEntity implements ActionListener{
         if (this.right) {
             walkDirection.addLocal(camLeft.negate());
         }
+        
+        PlayerMoveMessage moveMessage = new PlayerMoveMessage(this.ID, walkDirection, this.characterControl.getPhysicsLocation());
 
         this.setWalkDirection(walkDirection);
         cam.setLocation(this.characterControl.getPhysicsLocation());
