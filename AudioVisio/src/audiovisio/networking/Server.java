@@ -1,6 +1,8 @@
 package audiovisio.networking;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +26,10 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.network.ConnectionListener;
+import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
+import com.jme3.network.Server;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -37,7 +42,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 	}
 
-
+	private Map<Integer, Player> players;
 	private Node shootables;
 	private Geometry mark;
 	private Spatial sceneModel;
@@ -67,6 +72,25 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		try{
 			myServer = Network.createServer(GeneralUtilities.getPort());
 			myServer.start();
+			myServer.addConnectionListener(new ConnectionListener() {
+
+				@Override
+				public void connectionAdded(com.jme3.network.Server server,
+						HostedConnection conn) {
+					if (players.size() < 2) {
+						players.put(conn.getId(), new Player());
+					} else {
+						// TODO: Throw an error of some kind
+						LogHelper.severe("More than 2 players attempted to join");
+					}
+				}
+
+				@Override
+				public void connectionRemoved(com.jme3.network.Server server,
+						HostedConnection conn) {
+					players.remove(conn.getId());
+				}
+			});
 		}
 		catch(IOException e){
 			LogHelper.severe("Error on server start", e);
