@@ -8,15 +8,21 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.messages.NetworkMessage;
+import audiovisio.networking.messages.PlayerDirectionMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
+import audiovisio.networking.utilities.ServerPlayerDirectionMessageListener;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
 import com.jme3.scene.Geometry;
@@ -24,7 +30,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
-public class Server extends SimpleApplication{
+public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
 	
 	private com.jme3.network.Server myServer;
 	
@@ -55,6 +61,7 @@ public class Server extends SimpleApplication{
 	private	float visualDistance = 0;
 	private	Vector3f audioPosition = new Vector3f();
 	private	Vector3f visualPosition = new Vector3f();
+	private ServerPlayerDirectionMessageListener pDML= new ServerPlayerDirectionMessageListener(this);
 	
 	@Override
 	public void simpleInitApp(){
@@ -66,6 +73,8 @@ public class Server extends SimpleApplication{
 			LogHelper.severe("Error on server start", e);
 			System.exit(1);
 		}
+		
+			GeneralUtilities.initializeSerializables();
 		
 		assetManager.registerLocator("town.zip", ZipLocator.class);
 		sceneModel = assetManager.loadModel("main.scene");
@@ -102,6 +111,11 @@ public class Server extends SimpleApplication{
 		// ///////////////////////
 		// Initialization Methods //
 		// ///////////////////////
+		
+		bulletAppState = new BulletAppState();
+		stateManager.attach(bulletAppState);
+
+		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 		getAudioPlayer().addToScene(rootNode, physicsSpace);
 		getVisualPlayer().addToScene(rootNode, physicsSpace);
@@ -114,6 +128,8 @@ public class Server extends SimpleApplication{
 		//rootNode.attachChild(boxGeometry);
 		//rootNode.attachChild(shootables);
 		rootNode.attachChild(sceneModel);
+		
+		
 
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
@@ -128,6 +144,8 @@ public class Server extends SimpleApplication{
 	
 	@Override
 	public void simpleUpdate(float tpf){
+		
+		pDML.messageReceived();
 		
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
 		
@@ -180,6 +198,18 @@ public class Server extends SimpleApplication{
 	
 	public void setVisualPlayer(Player visualPlayer) {
 		this.visualPlayer = visualPlayer;
+	}
+
+	@Override
+	public void onAction(String arg0, boolean arg1, float arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void collision(PhysicsCollisionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

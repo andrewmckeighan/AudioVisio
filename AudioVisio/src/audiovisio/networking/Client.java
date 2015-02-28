@@ -92,6 +92,8 @@ public class Client extends SimpleApplication implements ActionListener,
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
 		}
+		
+		GeneralUtilities.initializeSerializables();
 
 		// /////////////////////
 		// Load Scene (map) //
