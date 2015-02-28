@@ -164,7 +164,7 @@ public class Client extends SimpleApplication implements ActionListener,
 
 		Node myCharacter = (Node) assetManager
 				.loadModel("Models/Oto/Oto.mesh.xml");
-		Geometry testGeo = (Geometry) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
+		//Geometry testGeo = (Geometry) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
 
 		// /////////////
 		// Physics //
@@ -206,7 +206,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		shootables.attachChild(testLever.geometry);
 
 		player = new Player(myCharacter);
-		player.mesh = testGeo.getMesh();
+		//player.mesh = testGeo.getMesh();
 
 		// ///////////////////////
 		// Initialization Methods //
@@ -289,12 +289,15 @@ public class Client extends SimpleApplication implements ActionListener,
 	@Override
 	public void simpleUpdate(float tpf) {
 
-		CollisionResults results = null;
+		/*
+		 * CollisionResults results = null;
+		 *
 		if (player != null && testButton != null) {
 			if (player.collideWith(testButton, results) != 0) {
 				testButton.startPress();
 			}
 		}
+		*/
 
 		String message = messageQueue.poll();
 		if (message != null) {
