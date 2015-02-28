@@ -17,18 +17,19 @@ import audiovisio.utils.JSONHelper;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
-public class Entity {
+public class Entity extends Node{
 
-    protected Geometry geometry;
+    public Geometry geometry;
     private RigidBodyControl physics;
     public Vector3f position;
     public String name;
     public Spatial model;
 
     public Entity(){
-
+    	
     }
 
     public void load(JSONObject obj){

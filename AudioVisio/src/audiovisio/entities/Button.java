@@ -32,7 +32,7 @@ import com.jme3.scene.shape.Cylinder;
 // rootNode.attachChild(shootables);
 // shootables.attachChild(buttonGeometry);
 
-public class Button extends InteractableEntity {
+public class Button extends InteractableEntity  {
 
 	public final float MASS = 0f;
 
@@ -63,13 +63,16 @@ public class Button extends InteractableEntity {
 
 		this.physics = new RigidBodyControl(MASS);
 		this.geometry.addControl(this.physics);
+		
+		this.attachChild(this.geometry);
+
 	}
 
-	private void buttonStartPress() {
-
+	public void startPress() {
+		System.out.println("I'm being pressed!");
 	}
 
-	private void buttonStopPress() {
+	public void stopPress() {
 
 	}
 
