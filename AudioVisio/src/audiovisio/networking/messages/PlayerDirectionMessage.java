@@ -8,24 +8,18 @@ import com.jme3.network.serializing.Serializer;
 @Serializable
 public class PlayerDirectionMessage extends AbstractMessage{
 	
-	private Vector3f audioDirection;
-	private Vector3f visualDirection;
+	private Vector3f direction;
 	
 	public PlayerDirectionMessage(){
 		
 	}
 
-	public PlayerDirectionMessage(Vector3f audioDirection, Vector3f visualDirection){
-		this.audioDirection = audioDirection;
-		this.visualDirection = visualDirection;
+	public PlayerDirectionMessage(Vector3f direction){
+		this.direction = direction;
 		
 	}
 	
-	public Vector3f getAudioDirection(){
-		return audioDirection;
-	}
-	
-	public Vector3f getVisualDirection(){
-		return audioDirection;
+	public Vector3f getDirection(){
+		return direction;
 	}
 }

@@ -3,11 +3,11 @@ package audiovisio.networking;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Listeners.ClientNetworkMessageListener;
 import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.utilities.ClientNetworkMessageListener;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
