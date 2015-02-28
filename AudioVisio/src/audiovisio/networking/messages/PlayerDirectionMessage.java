@@ -28,9 +28,4 @@ public class PlayerDirectionMessage extends AbstractMessage{
 	public Vector3f getVisualDirection(){
 		return audioDirection;
 	}
-	
-	public static void initializeSerializables(){
-		Serializer.registerClass(NetworkMessage.class);
-	}
-	
 }

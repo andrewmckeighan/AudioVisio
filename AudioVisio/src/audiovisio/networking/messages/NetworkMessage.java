@@ -20,9 +20,4 @@ public class NetworkMessage extends AbstractMessage{
 	public String getMessage(){
 		return message;
 	}
-	
-	public static void initializeSerializables(){
-		Serializer.registerClass(NetworkMessage.class);
-	}
-	
 }

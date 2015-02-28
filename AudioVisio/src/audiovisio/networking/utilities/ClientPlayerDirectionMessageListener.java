@@ -2,6 +2,7 @@ package audiovisio.networking.utilities;
 
 import java.util.concurrent.Callable;
 
+import audiovisio.entities.Player;
 import audiovisio.networking.messages.PlayerDirectionMessage;
 
 import com.jme3.network.Client;
@@ -27,15 +28,14 @@ public class ClientPlayerDirectionMessageListener implements MessageListener<Cli
 		}
 		
 		public void PlayerDirectionMessageHandler(final PlayerDirectionMessage handle){
-			myClient.enqueue(new Callable()){
+			myClient.enqueue(new Callable(){
 				
 				public Object call() throws Exception{
-					
 					
 					return null;
 				}
 				
-			};
+			});
 		}
 
 }
