@@ -25,13 +25,13 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 public class Server extends SimpleApplication{
-	
+
 	private com.jme3.network.Server myServer;
-	
+
 	public Server(){
-		
+
 	}
-	
+
 
 	private Node shootables;
 	private Geometry mark;
@@ -55,7 +55,7 @@ public class Server extends SimpleApplication{
 	private	float visualDistance = 0;
 	private	Vector3f audioPosition = new Vector3f();
 	private	Vector3f visualPosition = new Vector3f();
-	
+
 	@Override
 	public void simpleInitApp(){
 		try{
@@ -66,11 +66,11 @@ public class Server extends SimpleApplication{
 			LogHelper.severe("Error on server start", e);
 			System.exit(1);
 		}
-		
+
 		assetManager.registerLocator("town.zip", ZipLocator.class);
 		sceneModel = assetManager.loadModel("main.scene");
 		sceneModel.setLocalScale(2f);
-		
+
 		CollisionShape sceneShape = CollisionShapeFactory
 				.createMeshShape((Node) sceneModel);
 		landscape = new RigidBodyControl(sceneShape, 0);
@@ -78,8 +78,8 @@ public class Server extends SimpleApplication{
 
 		// create geometry for our box
 		Box box = new Box(2, 2, 2);
-		Geometry boxGeometry = new Geometry("box", box);
-		boxGeometry.setMaterial(pondMat);
+		Geometry boxGeometry = new Geometry("box", box);}}
+		/*boxGeometry.setMaterial(pondMat);
 
 		// position our box
 		boxGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
@@ -127,18 +127,18 @@ public class Server extends SimpleApplication{
 		//physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
-		
-		
-		
+
+
+
 	}
-	
+
 	@Override
 	public void simpleUpdate(float tpf){
-		
-Vector3f walkDirection = new Vector3f(0, 0, 0);
-		
+
+		Vector3f walkDirection = new Vector3f(0, 0, 0);
+
 		player.setWalkDirection(walkDirection);
-		
+
 		if(counter % 1000 == 0){
 			if (oldLocation != null
 					&& newLocation != null
@@ -155,21 +155,21 @@ Vector3f walkDirection = new Vector3f(0, 0, 0);
 
 			oldLocation = newLocation.clone();
 			newLocation = player.characterControl.getPhysicsLocation();
-			
+
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
 
 			counter = 0;
 		}
-		
-		
+
+
 	}
-	
+
 	@Override
 	public void destroy(){
 		myServer.close();
 		super.destroy();
 	}
-	
-}
+
+}*/
