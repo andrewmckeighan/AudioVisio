@@ -27,6 +27,7 @@ public class ServerPlayerDirectionMessageListener implements MessageListener<Ser
 	public void PlayerDirectionMessageHandler(PlayerDirectionMessage handle) {
 		myServer.getAudioPlayer().setWalkDirection(handle.getAudioDirection());
 		myServer.getVisualPlayer().setWalkDirection(handle.getVisualDirection());
+		((Server) myServer).broadcast(handle);
 	}
 
 }

@@ -83,7 +83,8 @@ public class Client extends SimpleApplication implements ActionListener,
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private RigidBodyControl button;
-	private Player player;
+	private Player currentPlayer;
+	private Player networkedPlayer;
 	private Button testButton;
 	// private Vector3f walkDirection = new Vector3f();
 	// private boolean up = false, down = false, left = false, right = false;
@@ -205,7 +206,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		testLever.setMaterial(randomMaterial);
 		shootables.attachChild(testLever.geometry);
 
-		player = new Player(myCharacter);
+		currentPlayer = new Player(myCharacter);
 		//player.mesh = testGeo.getMesh();
 
 		// ///////////////////////
@@ -215,7 +216,8 @@ public class Client extends SimpleApplication implements ActionListener,
 		initKeys(); // load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
-		player.addToScene(rootNode, physicsSpace);
+		currentPlayer.addToScene(rootNode, physicsSpace);
+		networkedPlayer.addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
 
@@ -312,21 +314,21 @@ public class Client extends SimpleApplication implements ActionListener,
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
 		// walkDirection.set(0, 0, 0);
 
-		if (player.up) {
+		if (currentPlayer.up) {
 			walkDirection.addLocal(camDir);
 		}
-		if (player.down) {
+		if (currentPlayer.down) {
 			walkDirection.addLocal(camDir.negate());
 		}
-		if (player.left) {
+		if (currentPlayer.left) {
 			walkDirection.addLocal(camLeft);
 		}
-		if (player.right) {
+		if (currentPlayer.right) {
 			walkDirection.addLocal(camLeft.negate());
 		}
 
-		player.setWalkDirection(walkDirection);
-		cam.setLocation(player.characterControl.getPhysicsLocation());
+		currentPlayer.setWalkDirection(walkDirection);
+		cam.setLocation(currentPlayer.characterControl.getPhysicsLocation());
 		// player.node.set
 
 		if (counter % 1000 == 0) {
@@ -340,7 +342,7 @@ public class Client extends SimpleApplication implements ActionListener,
 			}
 
 			oldLocation = newLocation.clone();
-			newLocation = player.characterControl.getPhysicsLocation();
+			newLocation = currentPlayer.characterControl.getPhysicsLocation();
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
@@ -390,7 +392,7 @@ public class Client extends SimpleApplication implements ActionListener,
 
 	@Override
 	public void onAction(String binding, boolean isPressed, float tpf) {
-		player.onAction(binding, isPressed, tpf);
+		currentPlayer.onAction(binding, isPressed, tpf);
 	}
 
 }

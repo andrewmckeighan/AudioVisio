@@ -30,8 +30,7 @@ public class ClientPlayerDirectionMessageListener implements MessageListener<Cli
 			myClient.enqueue(new Callable()){
 				
 				public Object call() throws Exception{
-					myClient.audioPlayer.setWalkDirection(handle.getAudioDirection());
-					myClient.visualPlayer.setWalkDirection(handle.getVisualDirection());
+					
 					
 					return null;
 				}
