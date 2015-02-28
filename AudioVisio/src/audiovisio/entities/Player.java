@@ -57,15 +57,12 @@ public class Player extends MovingEntity implements ActionListener{
 	public boolean left = false;
 	public boolean right = false;
 
-    ///////////////////////////////////
-
     private CapsuleCollisionShape collisionShape;
     private GhostControl ghost;
 
 	public Node node;
 	public Mesh mesh;
 
-//<<<<<<< HEAD
 	public Player() {
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 
@@ -105,7 +102,6 @@ public class Player extends MovingEntity implements ActionListener{
     public void setWalkDirection(Vector3f direction){
         this.moveDirection = direction;
         this.characterControl.setWalkDirection(direction);
-        //mainCamera.setLocation(this.characterControl.getPhysicsLocation());
     }
 
     public void loadKeyBinds(JSONObject obj){

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import audiovisio.entities.Button;
+import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ClientNetworkMessageListener;
@@ -38,7 +39,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
 public class Client extends SimpleApplication implements ActionListener,
-		PhysicsCollisionListener {
+PhysicsCollisionListener {
 
 	private com.jme3.network.Client myClient;
 
@@ -106,24 +107,7 @@ public class Client extends SimpleApplication implements ActionListener,
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(ColorRGBA.White);
 		directionalLight.setDirection(new Vector3f(2.8f, -2.8f, -2.8f)
-				.normalizeLocal());
-
-		// ///////////////
-		// Materials //
-		// ///////////////
-		Material pondMat = new Material(assetManager,
-				"Common/MatDefs/Light/Lighting.j3md"); // load the material &
-		// color
-		pondMat.setTexture("DiffuseMap",
-				assetManager.loadTexture("Textures/Terrain/Pond/Pond.jpg"));// located
-		// in
-		// jME3-testdata.jar
-		pondMat.setTexture("NormalMap", assetManager
-				.loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
-		pondMat.setBoolean("UseMaterialColors", true);
-		pondMat.setColor("Diffuse", ColorRGBA.White); // minimum material color
-		pondMat.setColor("Specular", ColorRGBA.White); // for shininess
-		pondMat.setFloat("Shininess", 64f); // [1,128] for shininess
+		.normalizeLocal());
 
 		// /////////////
 		// Physics //
@@ -225,9 +209,10 @@ public class Client extends SimpleApplication implements ActionListener,
 		ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
-				// center
-				settings.getWidth() / 2 - ch.getLineWidth() / 2,
-				settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+				
+		// center
+		settings.getWidth() / 2 - ch.getLineWidth() / 2,
+		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
 
 	}
@@ -283,12 +268,15 @@ public class Client extends SimpleApplication implements ActionListener,
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
 		try {
+			Entity entityA = (Entity) event.getNodeA().getParent();
+			Entity entityB = (Entity) event.getNodeB().getParent();
+			entityA.collisionTrigger(entityB);
+			entityB.collisionTrigger(entityA);
 			if ("button".equals(event.getNodeA().getName())) {
 
 				if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
 					Button b = (Button) event.getNodeA().getParent();
 					b.startPress();
-					Geometry boxGeometry = (Geometry) event.getNodeA();
 				}
 			}
 			if ("button".equals(event.getNodeB().getName())) {
@@ -296,7 +284,6 @@ public class Client extends SimpleApplication implements ActionListener,
 				if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
 					Button b = (Button) event.getNodeB().getParent();
 					b.startPress();
-					Geometry boxGeometry = (Geometry) event.getNodeB();
 				}
 			}
 
