@@ -75,8 +75,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 		GeneralUtilities.initializeSerializables();
 
-
-
 		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 		// /////////////////////
@@ -142,11 +140,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 	@Override
 	public void simpleUpdate(float tpf){
-		pDML.messageReceived();
-
-		Vector3f walkDirection = new Vector3f(0, 0, 0);
-
-		player.setWalkDirection(walkDirection);
+		
 	}
 
 	@Override
