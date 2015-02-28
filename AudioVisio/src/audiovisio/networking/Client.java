@@ -1,7 +1,6 @@
 package audiovisio.networking;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import audiovisio.entities.Button;
@@ -57,14 +56,9 @@ public class Client extends SimpleApplication implements ActionListener,
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
-	private RigidBodyControl button;
 	private Player currentPlayer;
 	private Player networkedPlayer;
 	private Button testButton;
-	// private Vector3f walkDirection = new Vector3f();
-	// private boolean up = false, down = false, left = false, right = false;
-	private ArrayList<Geometry> doorList = new ArrayList<Geometry>();
-
 	// vectors that will be updated each frame,
 	// so we don't have to make a new vector each frame.
 	private Vector3f camDir = new Vector3f();
@@ -78,7 +72,6 @@ public class Client extends SimpleApplication implements ActionListener,
 	private int counter = 0;
 	private float velocity = 0;
 	private float distance = 0;
-	private Vector3f position = new Vector3f();
 	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
 			this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
@@ -92,7 +85,7 @@ public class Client extends SimpleApplication implements ActionListener,
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
 		}
-		
+
 		GeneralUtilities.initializeSerializables();
 
 		// /////////////////////
@@ -136,12 +129,8 @@ public class Client extends SimpleApplication implements ActionListener,
 		pondMat.setColor("Specular", ColorRGBA.White); // for shininess
 		pondMat.setFloat("Shininess", 64f); // [1,128] for shininess
 
-		Material randomMaterial = new Material(assetManager,
-				"Common/MatDefs/Misc/Unshaded.j3md");
-		randomMaterial.setColor("Color", ColorRGBA.randomColor());
 
-		Node myCharacter = (Node) assetManager
-				.loadModel("Models/Oto/Oto.mesh.xml");
+
 		//Geometry testGeo = (Geometry) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
 
 		// /////////////
@@ -160,31 +149,19 @@ public class Client extends SimpleApplication implements ActionListener,
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
 
-		// create geometry for our box
-		Box box = new Box(2, 2, 2);
-		Geometry boxGeometry = new Geometry("box", box);
-		boxGeometry.setMaterial(pondMat);
 
-		// position our box
-		boxGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
-
-		// make box physics
-		RigidBodyControl boxPhysics = new RigidBodyControl(0.1f);
-
-		// add box physics to our space
-		boxGeometry.addControl(boxPhysics);
-		shootables = new Node("Shootables");
-		shootables.attachChild(boxGeometry);
-
+		/////////////////////////
+		// Generate entities //
+		/////////////////////////
 		testButton = new Button(0f, 1f, 0f);
-		testButton.setMaterial(randomMaterial);
+		testButton.createMaterial(assetManager);
 
 		Lever testLever = new Lever(3f, 5f, 3f);
-		testLever.setMaterial(randomMaterial);
+		testLever.createMaterial(assetManager);
 		shootables.attachChild(testLever.geometry);
 
-		currentPlayer = new Player(myCharacter);
-		//player.mesh = testGeo.getMesh();
+		currentPlayer = new Player();
+		currentPlayer.createModel(assetManager);
 
 		// ///////////////////////
 		// Initialization Methods //
@@ -193,6 +170,9 @@ public class Client extends SimpleApplication implements ActionListener,
 		initKeys(); // load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
+		///////////////////////////
+		//Add entities to Scene //
+		///////////////////////////
 		currentPlayer.addToScene(rootNode, physicsSpace);
 		networkedPlayer.addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
@@ -201,17 +181,13 @@ public class Client extends SimpleApplication implements ActionListener,
 		// ////////////////////////////
 		// Add objects to rootNode //
 		// ////////////////////////////
-		// rootNode.attachChild(boxGeometry);
-		// rootNode.attachChild(shootables);
 		rootNode.attachChild(sceneModel);
-
 		rootNode.addLight(ambientLight);
 		rootNode.addLight(directionalLight);
 
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
 		// /////////////////////////////////
-		// physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
 
@@ -356,7 +332,7 @@ public class Client extends SimpleApplication implements ActionListener,
 					Geometry boxGeometry = (Geometry) event.getNodeB();
 				}
 			}
-			
+
 			System.out.println(event.getNodeA().getName());
 			System.out.println("	" + event.getNodeB().getName());
 		} catch (NullPointerException nullException) {

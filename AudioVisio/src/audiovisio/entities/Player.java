@@ -65,15 +65,7 @@ public class Player extends MovingEntity implements ActionListener{
 	public Node node;
 	public Mesh mesh;
 
-	public Player() {}
-
-    public Player(Node playerModel, Vector3f spawnLocation){
-    	//this.geometry = (Geometry) playerModel;
-    	
-        this.node = playerModel;
-        this.node.setLocalScale(0.2f);
-        this.node.setLocalTranslation(spawnLocation);
-
+	public Player() {
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 
         this.characterControl = new CharacterControl(this.collisionShape, STEP_HEIGHT);
@@ -81,11 +73,17 @@ public class Player extends MovingEntity implements ActionListener{
         this.characterControl.setFallSpeed(30);
         this.characterControl.setGravity(30);
 
-        //this.ghost = new GhostControl(this.collisionShape);
+        this.attachChild(this.node);
+    }
+
+    public Player(Node playerModel, Vector3f spawnLocation){
+        this.node = playerModel;
+        this.node.setLocalScale(0.2f);
+        this.node.setLocalTranslation(spawnLocation);
 
         this.node.addControl(this.characterControl);
-        //this.node.addControl(this.ghost);
-        this.attachChild(this.node);
+
+        this();
     }
 
     public Player(Node playerModel){
@@ -181,6 +179,11 @@ public class Player extends MovingEntity implements ActionListener{
             }*/
         }
     }
+
+	public void createModel(AssetManager assetManager) {
+		Node myCharacter = (Node) assetManager
+				.loadModel("Models/Oto/Oto.mesh.xml");
+	}
 
 
 

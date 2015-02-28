@@ -2,9 +2,11 @@ package audiovisio.entities;
 
 import org.json.simple.JSONObject;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 
@@ -68,5 +70,12 @@ public class InteractableEntity extends Entity {
     	root.attachChild(this);
     	physics.add(this.physics);
     }
+    
+	public void createMaterial(AssetManager assetManager) {
+		Material randomMaterial = new Material(assetManager,
+				"Common/MatDefs/Misc/Unshaded.j3md");
+		randomMaterial.setColor("Color", ColorRGBA.randomColor());
+		this.material = randomMaterial;
+	}
 
 }
