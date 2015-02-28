@@ -9,7 +9,7 @@ import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ServerPlayerDirectionMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.messages.PlayerDirectionMessage;
+import audiovisio.networking.messages.PlayerUpdateMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
