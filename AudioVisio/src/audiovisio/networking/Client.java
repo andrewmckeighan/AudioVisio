@@ -83,6 +83,9 @@ public class Client extends SimpleApplication implements ActionListener,
 	private RigidBodyControl landscape;
 	private Player audioPlayer;
 	private Player visualPlayer;
+	private RigidBodyControl button;
+	private Player currentPlayer;
+	private Player networkedPlayer;
 	private Button testButton;
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
@@ -181,7 +184,8 @@ public class Client extends SimpleApplication implements ActionListener,
 		Lever testLever = new Lever(3f, 5f, 3f);
 		testLever.setMaterial(randomMaterial);
 
-		visualPlayer = new Player(myCharacter);
+		currentPlayer = new Player(myCharacter);
+		//player.mesh = testGeo.getMesh();
 
 		// ///////////////////////
 		// Initialization Methods //
@@ -190,7 +194,9 @@ public class Client extends SimpleApplication implements ActionListener,
 		initKeys(); // load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
-		visualPlayer.addToScene(rootNode, physicsSpace);
+		currentPlayer.addToScene(rootNode, physicsSpace);
+		networkedPlayer.addToScene(rootNode, physicsSpace);
+
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
 
@@ -273,7 +279,9 @@ public class Client extends SimpleApplication implements ActionListener,
 		}
 	}
 
+
 	private void updateVelocityMessage(){
+
 		if (counter % 1000 == 0) {
 			if (oldLocation != null && newLocation != null && oldTime != 0
 					&& newTime != 0) {
@@ -285,7 +293,7 @@ public class Client extends SimpleApplication implements ActionListener,
 			}
 
 			oldLocation = newLocation.clone();
-			newLocation = visualPlayer.characterControl.getPhysicsLocation();
+			newLocation = currentPlayer.characterControl.getPhysicsLocation();
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
@@ -335,7 +343,7 @@ public class Client extends SimpleApplication implements ActionListener,
 
 	@Override
 	public void onAction(String binding, boolean isPressed, float tpf) {
-		visualPlayer.onAction(binding, isPressed, tpf);
+		currentPlayer.onAction(binding, isPressed, tpf);
 	}
 
 }

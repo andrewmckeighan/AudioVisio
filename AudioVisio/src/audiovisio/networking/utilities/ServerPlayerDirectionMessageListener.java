@@ -1,6 +1,7 @@
 package audiovisio.networking.utilities;
 
 import audiovisio.networking.messages.NetworkMessage;
+import audiovisio.networking.messages.PlayerDirectionMessage;
 
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -17,14 +18,16 @@ public class ServerPlayerDirectionMessageListener implements MessageListener<Ser
 
 	@Override
 	public void messageReceived(Server myServer, Message m){
-		if(m instanceof NetworkMessage){
-			
+		if(m instanceof PlayerDirectionMessage){
+			PlayerDirectionMessageHandler((PlayerDirectionMessage) m);
 		}
 
 	}
 	
-	public void NetworkMessageHandler(NetworkMessage handle) {
-		
+	public void PlayerDirectionMessageHandler(PlayerDirectionMessage handle) {
+		myServer.getAudioPlayer().setWalkDirection(handle.getAudioDirection());
+		myServer.getVisualPlayer().setWalkDirection(handle.getVisualDirection());
+		((Server) myServer).broadcast(handle);
 	}
 
 }

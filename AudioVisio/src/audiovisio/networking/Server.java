@@ -78,8 +78,8 @@ public class Server extends SimpleApplication{
 
 		// create geometry for our box
 		Box box = new Box(2, 2, 2);
-		Geometry boxGeometry = new Geometry("box", box);}}
-		/*boxGeometry.setMaterial(pondMat);
+		Geometry boxGeometry = new Geometry("box", box);
+		boxGeometry.setMaterial(pondMat);
 
 		// position our box
 		boxGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
@@ -99,14 +99,14 @@ public class Server extends SimpleApplication{
 		testLever.setMaterial(randomMaterial);
 		shootables.attachChild(testLever.geometry);
 
-		audioPlayer = new Player(myCharacter);
+		setAudioPlayer(new Player(myCharacter));
 		visualPlayer = new Player(myCharacter);
 
 		// ///////////////////////
 		// Initialization Methods //
 		// ///////////////////////
 
-		audioPlayer.addToScene(rootNode, physicsSpace);
+		getAudioPlayer().addToScene(rootNode, physicsSpace);
 		visualPlayer.addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
@@ -172,4 +172,21 @@ public class Server extends SimpleApplication{
 		super.destroy();
 	}
 
-}*/
+	public Player getAudioPlayer() {
+		return audioPlayer;
+	}
+
+	public Player getVisualPlayer() {
+		return visualPlayer;
+	}
+
+	public void setAudioPlayer(Player audioPlayer) {
+		this.audioPlayer = audioPlayer;
+	}
+	
+	public void setVisualPlayer(Player visualPlayer) {
+		this.visualPlayer = visualPlayer;
+	}
+	
+}
+
