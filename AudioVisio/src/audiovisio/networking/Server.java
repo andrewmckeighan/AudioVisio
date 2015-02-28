@@ -79,7 +79,6 @@ public class Server extends SimpleApplication{
 		// create geometry for our box
 		Box box = new Box(2, 2, 2);
 		Geometry boxGeometry = new Geometry("box", box);
-		boxGeometry.setMaterial(pondMat);
 
 		// position our box
 		boxGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
@@ -93,21 +92,19 @@ public class Server extends SimpleApplication{
 		shootables.attachChild(boxGeometry);
 
 		Button testButton = new Button(0f, 1f, 0f);
-		testButton.setMaterial(randomMaterial);
 
 		Lever testLever = new Lever(3f, 5f, 3f);
-		testLever.setMaterial(randomMaterial);
 		shootables.attachChild(testLever.geometry);
 
-		setAudioPlayer(new Player(myCharacter));
-		visualPlayer = new Player(myCharacter);
+		setAudioPlayer(new Player(audioPlayer));
+		setVisualPlayer(new Player(visualPlayer));
 
 		// ///////////////////////
 		// Initialization Methods //
 		// ///////////////////////
 
 		getAudioPlayer().addToScene(rootNode, physicsSpace);
-		visualPlayer.addToScene(rootNode, physicsSpace);
+		getVisualPlayer().addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
 
@@ -117,9 +114,6 @@ public class Server extends SimpleApplication{
 		//rootNode.attachChild(boxGeometry);
 		//rootNode.attachChild(shootables);
 		rootNode.attachChild(sceneModel);
-
-		rootNode.addLight(ambientLight);
-		rootNode.addLight(directionalLight);
 
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
@@ -135,7 +129,7 @@ public class Server extends SimpleApplication{
 	@Override
 	public void simpleUpdate(float tpf){
 		
-Vector3f walkDirection = new Vector3f(0, 0, 0);
+		Vector3f walkDirection = new Vector3f(0, 0, 0);
 		
 		player.setWalkDirection(walkDirection);
 		
