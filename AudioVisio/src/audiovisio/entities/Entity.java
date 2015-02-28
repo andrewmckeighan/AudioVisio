@@ -46,11 +46,12 @@ public class Entity extends Node{
     }
 
     public void addToScene(Node root){
-        //root.attachChild(this.node);
         root.attachChild(this);
-        //this.node.setLocalTranslation(new Vector3f(10, 30, 15));
-        //physics.add(this.characterControl);
-        //physics.add(this.ghost);
     }
+
+	public void collisionTrigger(Entity entityB) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

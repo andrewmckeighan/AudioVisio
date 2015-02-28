@@ -148,32 +148,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
 		
 		player.setWalkDirection(walkDirection);
-
-		if(counter % 1000 == 0){
-			if (oldLocation != null
-					&& newLocation != null
-					&& oldTime != 0
-					&& newTime != 0) {
-				distance = oldLocation.distance(newLocation);
-				time = newTime - oldTime;
-				velocity = distance / time;
-				velocityMessage = new NetworkMessage("V: " + velocity +
-						", D: " + distance +
-						", P: " + newLocation +
-						"F: " + counter);
-			}
-
-			oldLocation = newLocation.clone();
-			newLocation = player.characterControl.getPhysicsLocation();
-
-
-			oldTime = newTime;
-			newTime = System.currentTimeMillis();
-
-			counter = 0;
-		}
-
-
 	}
 
 	@Override

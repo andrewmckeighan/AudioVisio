@@ -65,7 +65,6 @@ public class Player extends MovingEntity implements ActionListener{
 	public Node node;
 	public Mesh mesh;
 
-//<<<<<<< HEAD
 	public Player() {
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 
