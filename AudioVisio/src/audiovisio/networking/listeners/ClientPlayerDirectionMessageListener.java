@@ -3,7 +3,7 @@ package audiovisio.networking.listeners;
 import java.util.concurrent.Callable;
 
 import audiovisio.entities.Player;
-import audiovisio.networking.messages.PlayerDirectionMessage;
+import audiovisio.networking.messages.PlayerUpdateMessage;
 
 import com.jme3.network.Client;
 import com.jme3.network.Message;
@@ -21,13 +21,13 @@ public class ClientPlayerDirectionMessageListener implements MessageListener<Cli
 		
 		@Override
 		public void messageReceived(Client source, Message m){
-			if(m instanceof PlayerDirectionMessage){
-				PlayerDirectionMessageHandler((PlayerDirectionMessage) m);
+			if(m instanceof PlayerUpdateMessage){
+				PlayerDirectionMessageHandler((PlayerUpdateMessage) m);
 			}
 	
 		}
 		
-		public void PlayerDirectionMessageHandler(final PlayerDirectionMessage handle){
+		public void PlayerDirectionMessageHandler(final PlayerUpdateMessage handle){
 			
 		}
 

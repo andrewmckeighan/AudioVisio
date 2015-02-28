@@ -36,7 +36,6 @@ import com.jme3.network.Network;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 
 public class Client extends SimpleApplication implements ActionListener,
