@@ -33,6 +33,8 @@ public class PlayerLocationMessage extends AbstractMessage {
 		this.playerID = playerID;
 		this.direction = direction;
 		this.position = position;
+
+		setReliable(false);
 	}
 	
 	public int getPlayerID() {

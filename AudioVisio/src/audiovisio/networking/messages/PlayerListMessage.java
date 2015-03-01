@@ -22,6 +22,8 @@ public class PlayerListMessage extends AbstractMessage {
 	 */
 	public PlayerListMessage(Integer[] objects) {
 		this.playerList = objects;
+
+		setReliable(true);
 	}
 	
 	public Integer[] getPlayerList() {

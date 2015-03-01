@@ -21,6 +21,8 @@ public class PlayerJoinMessage extends AbstractMessage {
 	 */
 	public PlayerJoinMessage(int playerID) {
 		this.playerID = playerID;
+
+		setReliable(true);
 	}
 	
 	public int getPlayerID() {

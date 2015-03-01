@@ -23,6 +23,8 @@ public class PlayerLeaveMessage extends AbstractMessage {
 	 */
 	public PlayerLeaveMessage(int playerID) {
 		this.playerID = playerID;
+
+		setReliable(true);
 	}
 	
 	public int getPlayerID() {
