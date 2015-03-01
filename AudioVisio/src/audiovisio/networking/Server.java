@@ -74,6 +74,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	@Override
 	public void simpleInitApp(){
+		GeneralUtilities.initializeSerializables();
+		
 		try{
 			myServer = Network.createServer(GeneralUtilities.getPort());
 			myServer.start();
@@ -88,7 +90,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					// DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
 					LogHelper.info("connectionAdded() for connection: " + conn.getId());
 					if (players.size() < 2) {
-						server.broadcast(Filters.notEqualTo(conn), new PlayerJoinMessage(conn.getId()));
+						server.broadcast(new PlayerJoinMessage(conn.getId()));
 						LogHelper.info("Sent PlayerJoinMessage");
 						players.put(conn.getId(), new Player());
 						
@@ -118,8 +120,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 			LogHelper.severe("Error on server start", e);
 			System.exit(1);
 		}
-
-		GeneralUtilities.initializeSerializables();
 
 		bulletAppState = new BulletAppState();
 		stateManager.attach(bulletAppState);

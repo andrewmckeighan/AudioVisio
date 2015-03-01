@@ -72,7 +72,8 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	 * @param IP Specified server connection IP address
 	 */
 	public void simpleInitApp(String IP) {
-
+		GeneralUtilities.initializeSerializables();
+		
 		try {
 			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
 			myClient.start();
@@ -81,8 +82,6 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
 		}
-
-		GeneralUtilities.initializeSerializables();
 
 		// /////////////////////
 		// Load Scene (map) //
