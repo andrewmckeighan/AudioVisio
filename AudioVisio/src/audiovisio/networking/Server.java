@@ -30,6 +30,9 @@ import com.jme3.scene.Spatial;
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
 	private com.jme3.network.Server myServer;
 
+	/**
+	 * Default constructor
+	 */
 	public Server(){
 
 	}
@@ -58,6 +61,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private	Vector3f audioPosition = new Vector3f();
 	private	Vector3f visualPosition = new Vector3f();
 
+	/**
+	 * Initializes game App on server startup
+	 */
 	@Override
 	public void simpleInitApp(){
 		try{
@@ -65,6 +71,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 			myServer.start();
 			myServer.addConnectionListener(new ConnectionListener() {
 
+				/**
+				 * Handles adding connections to Server
+				 */
 				@Override
 				public void connectionAdded(com.jme3.network.Server server,
 						HostedConnection conn) {
@@ -75,7 +84,10 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 						LogHelper.severe("More than 2 players attempted to join");
 					}
 				}
-
+				
+				/**
+				 * Handles Removing connections from server
+				 */
 				@Override
 				public void connectionRemoved(com.jme3.network.Server server,
 						HostedConnection conn) {
@@ -145,12 +157,18 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 	}
 
+	/**
+	 * Handles App updates on server to client
+	 */
 	@Override
 	public void simpleUpdate(float tpf){
 		//TODO
 
 	}
 
+	/**
+	 * Override default server destruction method
+	 */
 	@Override
 	public void destroy(){
 		myServer.close();

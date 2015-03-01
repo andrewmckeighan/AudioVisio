@@ -53,7 +53,14 @@ PhysicsCollisionListener {
 	private long oldTime;
 	private long newTime;
 	private int counter = 0;
+	private float velocity = 0;
+	private float distance = 0;
 	
+	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
+			this);
+	NetworkMessage velocityMessage = new NetworkMessage("");
+
+
 	/**
 	 * Default client constructor
 	 */
