@@ -9,6 +9,7 @@ import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ClientMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
+import audiovisio.networking.messages.PlayerLocationMessage;
 import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
@@ -327,5 +328,13 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 	public Player getPlayer() {
 		return currentPlayer;
+	}
+
+	public void updatePlayer(PlayerLocationMessage msg) {
+		if(msg.getPlayerID() == myClient.getId()){
+			currentPlayer.update(msg);
+		}else{
+			networkedPlayer.update(msg);
+		}
 	}
 }

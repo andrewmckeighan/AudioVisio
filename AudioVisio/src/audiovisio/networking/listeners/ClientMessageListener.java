@@ -28,6 +28,7 @@ public class ClientMessageListener implements MessageListener<Client> {
 		if (message instanceof PlayerLocationMessage) {
 			PlayerLocationMessage msg = (PlayerLocationMessage) message;
 			myClient.getPlayer().update(msg);
+			myClient.updatePlayer(msg);
 			return;
 		}
 		if (message instanceof PlayerJoinMessage) {
