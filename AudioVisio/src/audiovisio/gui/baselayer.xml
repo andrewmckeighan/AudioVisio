@@ -2,24 +2,29 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
-	<screen id="start">
+	<useStyles filename="nifty-default-styles.xml" />
+  	<useControls filename="nifty-default-controls.xml" />
+	<screen id="start" controller="audiovisio.gui.Main">
 		<layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
 			
 			<panel id="panel_top" height="25%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
-				<control name="button" label="Start" id="StartButton" align="center" valign="center"> 
+				<control name="button" label="Host" id="HostButton" align="center" valign="center"> 
           		</control>
 			</panel>
 			
 			<panel id="panel_mid" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<text text="My Cool Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000" />
+				<control name="button" label="Join" id="JoinButton" align="center" valign="center"> 
+          		</control>
 			</panel>
 			
 			<panel id="panel_mid_low" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<text text="My Cool Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000" />
+				<control name="button" label="Settings" id="SettingsButton" align="center" valign="center"> 
+          		</control>
 			</panel>
 			
 			<panel id="panel_bot" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<text text="My Cool Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000" />
+				<control name="button" label="Exit" id="ExitButton" align="center" valign="center"> 
+          		</control>
 			</panel>
 			
 		</layer>
