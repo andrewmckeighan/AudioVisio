@@ -56,19 +56,15 @@ PhysicsCollisionListener {
 	private float velocity = 0;
 	private float distance = 0;
 	
-	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
-			this);
-	NetworkMessage velocityMessage = new NetworkMessage("");
-
-
 	/**
 	 * Default client constructor
 	 */
 	public Client() {
-		new ClientNetworkMessageListener(
-				this);
-		new NetworkMessage("");
+		
 	}
+	
+	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener();
+	NetworkMessage velocityMessage = new NetworkMessage("");
 
 	/**
 	 * Client Initialization
