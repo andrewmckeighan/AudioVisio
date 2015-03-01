@@ -12,17 +12,17 @@ import com.jme3.network.serializing.Serializable;
  * telling it what direction it is traveling in.
  */
 @Serializable
-public class PlayerUpdateMessage extends AbstractMessage{
+public class PlayerSendMovementMessage extends AbstractMessage{
 	private Vector3f direction;
 	
-	public PlayerUpdateMessage(){
+	public PlayerSendMovementMessage(){
 		
 	}
 
 	/**
 	 * @param direction The direction the player is currently moving
 	 */
-	public PlayerUpdateMessage(Vector3f direction){
+	public PlayerSendMovementMessage(Vector3f direction){
 		this.direction = direction;
 	}
 	

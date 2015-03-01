@@ -1,8 +1,8 @@
 package audiovisio.networking.listeners;
 
 import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.messages.PlayerMoveMessage;
-import audiovisio.networking.messages.PlayerUpdateMessage;
+import audiovisio.networking.messages.PlayerLocationMessage;
+import audiovisio.networking.messages.PlayerSendMovementMessage;
 
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -16,10 +16,10 @@ public class ClientMessageListener implements MessageListener<Server>{
 	
 	@Override
 	public void messageReceived(Server server, Message message) {
-		if(message instanceof PlayerMoveMessage){
+		if(message instanceof PlayerLocationMessage){
 			
 		}
-		if(message instanceof PlayerUpdateMessage){
+		if(message instanceof PlayerSendMovementMessage){
 					
 				}
 		if(message instanceof NetworkMessage){

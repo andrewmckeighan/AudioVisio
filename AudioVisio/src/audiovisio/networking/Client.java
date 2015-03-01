@@ -2,10 +2,12 @@ package audiovisio.networking;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.networking.listeners.ClientMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
@@ -34,8 +36,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
-public class Client extends SimpleApplication implements 
-PhysicsCollisionListener {
+public class Client extends SimpleApplication implements PhysicsCollisionListener {
 
 	private com.jme3.network.Client myClient;
 	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
@@ -52,6 +53,7 @@ PhysicsCollisionListener {
 	private long oldTime;
 	private long newTime;
 	private int counter = 0;
+
 	/**
 	 * Default client constructor
 	 */
@@ -59,7 +61,8 @@ PhysicsCollisionListener {
 		
 	}
 	
-	//ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener();
+
+	ClientMessageListener messageListener = new ClientMessageListener();
 	NetworkMessage velocityMessage = new NetworkMessage("");
 
 	/**
