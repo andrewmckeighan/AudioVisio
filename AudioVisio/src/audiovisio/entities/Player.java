@@ -173,7 +173,9 @@ public class Player extends MovingEntity implements ActionListener{
 	public void update(Vector3f position, Vector3f direction) {
 		this.setWalkDirection(direction);
 		this.characterControl.setPhysicsLocation(position);
-		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
+		if(this.playerCamera != null){
+			this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
+		}
 	}
 	
 	/**
@@ -241,6 +243,7 @@ public class Player extends MovingEntity implements ActionListener{
 		return this.moveDirection;
 	}
 
+	
 	public PlayerLocationMessage getLocationMessage(Integer ID) {
 		return new PlayerLocationMessage(ID, this.characterControl.getPhysicsLocation(), this.characterControl.getWalkDirection());
 	}

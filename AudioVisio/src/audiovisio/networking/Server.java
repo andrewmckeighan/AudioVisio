@@ -45,9 +45,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private Player audioPlayer;
-	private Vector3f audioCamDir, audioCamLeft;
 	private Player visualPlayer;
-	private Vector3f visualCamDir, visualCamLeft;
 	private ServerMessageListener messageListener = new ServerMessageListener(this);
 
 	/**
@@ -67,42 +65,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		try{
 			myServer = Network.createServer(GeneralUtilities.getPort());
 			myServer.start();
-			myServer.addConnectionListener(new ConnectionListener() {
-
-				/**
-				 * Handles adding connections to Server
-				 */
-				@Override
-				public void connectionAdded(com.jme3.network.Server server,
-						HostedConnection conn) {
-					// DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
-					LogHelper.info("connectionAdded() for connection: " + conn.getId());
-					if (players.size() < 2) {
-						server.broadcast(new PlayerJoinMessage(conn.getId()));
-						LogHelper.info("Sent PlayerJoinMessage");
-						players.put(conn.getId(), new Player());
-
-						Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
-						conn.send(new PlayerListMessage(list));
-						LogHelper.info("Sent PlayerListMessage");
-					} else {
-						conn.close("Too many clients connect to server");
-						LogHelper.severe("More than 2 players attempted to join");
-					}
-				}
-
-				/**
-				 * Handles Removing connections from server
-				 */
-				@Override
-				public void connectionRemoved(com.jme3.network.Server server,
-						HostedConnection conn) {
-					if (players.containsKey(conn.getId()))
-						players.remove(conn.getId());
-					server.broadcast(Filters.notEqualTo(conn), new PlayerLeaveMessage(conn.getId()));
-				}
-			});
-			myServer.addMessageListener(messageListener);
+			
+			
 		}
 		catch(IOException e){
 			LogHelper.severe("Error on server start", e);
@@ -161,6 +125,43 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		// /////////////////////////////////
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
+		
+		myServer.addConnectionListener(new ConnectionListener() {
+
+			/**
+			 * Handles adding connections to Server
+			 */
+			@Override
+			public void connectionAdded(com.jme3.network.Server server,
+					HostedConnection conn) {
+				// DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
+				LogHelper.info("connectionAdded() for connection: " + conn.getId());
+				if (players.size() < 2) {
+					server.broadcast(new PlayerJoinMessage(conn.getId()));
+					LogHelper.info("Sent PlayerJoinMessage");
+					players.put(conn.getId(), new Player());
+
+					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
+					conn.send(new PlayerListMessage(list));
+					LogHelper.info("Sent PlayerListMessage");
+				} else {
+					conn.close("Too many clients connect to server");
+					LogHelper.severe("More than 2 players attempted to join");
+				}
+			}
+
+			/**
+			 * Handles Removing connections from server
+			 */
+			@Override
+			public void connectionRemoved(com.jme3.network.Server server,
+					HostedConnection conn) {
+				if (players.containsKey(conn.getId()))
+					players.remove(conn.getId());
+				server.broadcast(Filters.notEqualTo(conn), new PlayerLeaveMessage(conn.getId()));
+			}
+		});
+		myServer.addMessageListener(messageListener);
 
 	}
 

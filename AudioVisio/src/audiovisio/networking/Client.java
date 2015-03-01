@@ -77,7 +77,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		try {
 			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
 			myClient.start();
-			myClient.addMessageListener(messageListener);
+
 		} catch (IOException e) {
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
@@ -168,6 +168,8 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		// /////////////////////////////////
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
+		
+		myClient.addMessageListener(messageListener);
 
 	}
 
@@ -336,6 +338,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			}else{
 				networkedPlayer.update(msg);
 			}
+			LogHelper.info("id: " + msg.getPlayerID());
 		} catch (NullPointerException e) {
 			LogHelper.warn("null exception, client cannot find player: ", e);
 		}
