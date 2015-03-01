@@ -23,6 +23,8 @@ public class NetworkMessage extends AbstractMessage{
 	 */
 	public NetworkMessage(String message){
 		this.message = message;
+
+		setReliable(true);
 	}
 	
 	/**
