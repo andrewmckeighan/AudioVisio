@@ -30,7 +30,7 @@ public class ClientMessageListener implements MessageListener<Client> {
 			LogHelper.info("Received PlayerLocationMessage");
 			PlayerLocationMessage msg = (PlayerLocationMessage) message;
 			myClient.getPlayer().update(msg);
-			myClient.updatePlayer(msg);
+			//myClient.updatePlayer(msg);
 			return;
 		}
 		if (message instanceof PlayerJoinMessage) {

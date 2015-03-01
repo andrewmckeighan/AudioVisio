@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import audiovisio.entities.Button;
+import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ServerMessageListener;
@@ -37,29 +38,11 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private com.jme3.network.Server myServer;	
 
 	private Map<Integer, Player> players = new HashMap<Integer, Player>();
-	private Node shootables;
-	private Geometry mark;
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
-	private RigidBodyControl button;
 	private Player audioPlayer;
 	private Player visualPlayer;
-	private Vector3f oldAudioLocation;
-	private Vector3f oldVisualLocation;
-	private Vector3f newAudioLocation = new Vector3f();
-	private Vector3f newVisualLocation = new Vector3f();
-	private long oldTime;
-	private long newTime;
-	private long time;
-	private int counter = 0;
-	private	float audioVelocity = 0;
-	private	float visualVelocity = 0;
-	private	float audioDistance = 0;
-	private	float visualDistance = 0;
-	private	Vector3f audioPosition = new Vector3f();
-	private	Vector3f visualPosition = new Vector3f();
-	
 	private ServerMessageListener messageListener = new ServerMessageListener(this);
 	
 	/**
@@ -182,7 +165,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	@Override
 	public void simpleUpdate(float tpf){
 		//TODO
-
 	}
 
 	/**
@@ -219,16 +201,42 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	}
 
 	@Override
-	public void onAction(String arg0, boolean arg1, float arg2) {
-		// TODO Auto-generated method stub
+	public void collision(PhysicsCollisionEvent event) {
+		try {
+			Entity entityA = (Entity) event.getNodeA().getParent();
+			Entity entityB = (Entity) event.getNodeB().getParent();
+			entityA.collisionTrigger(entityB);
+			entityB.collisionTrigger(entityA);
+			if ("button".equals(event.getNodeA().getName())) {
+
+				if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
+					Button b = (Button) event.getNodeA().getParent();
+					b.startPress();
+				}
+			}
+			if ("button".equals(event.getNodeB().getName())) {
+
+				if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
+					Button b = (Button) event.getNodeB().getParent();
+					b.startPress();
+				}
+			}
+		} catch (NullPointerException nullException) {
+			// System.out.println("nullException Caught: " + nullException);
+		} catch (ClassCastException castException) {
+			LogHelper.warn("castException Caught: ", castException);
+			System.out.println("castException Caught: " + castException);
+		}
+
 
 	}
 
 	@Override
-	public void collision(PhysicsCollisionEvent arg0) {
+	public void onAction(String arg0, boolean arg1, float arg2) {
 		// TODO Auto-generated method stub
-
+		
 	}
+	
 
 }
 

@@ -12,7 +12,6 @@ import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
-import com.jme3.network.Message;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -236,5 +235,9 @@ public class Player extends MovingEntity implements ActionListener{
 	
 	public void setCam(Camera cam) {
 		this.playerCamera = cam;
+	}
+	
+	public Vector3f getWalkDirection(){
+		return this.moveDirection;
 	}
 }
