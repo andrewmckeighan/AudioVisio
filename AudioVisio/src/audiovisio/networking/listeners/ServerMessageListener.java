@@ -18,18 +18,17 @@ public class ServerMessageListener implements MessageListener<HostedConnection> 
 
 	@Override
 	public void messageReceived(HostedConnection client, Message message) {
-		if (message instanceof PlayerSendMovementMessage) {
-			PlayerSendMovementMessage msg = (PlayerSendMovementMessage) message;
-			Player player = myServer.getPlayer(client.getId());
-
-			player.update(msg);
-
-			return;
-		}
 		if (message instanceof NetworkMessage) {
 
 		}
-		LogHelper.warn("Received unknown message type: " + message.getClass().getName());
+		if (message instanceof PlayerSendMovementMessage) {
+			PlayerSendMovementMessage msg = (PlayerSendMovementMessage) message;
+			Player player = myServer.getPlayer(client.getId());
+			player.update(msg);
+			return;
+		}
+		LogHelper.warn("Received unknown message type: "
+				+ message.getClass().getName());
 	}
 
 }

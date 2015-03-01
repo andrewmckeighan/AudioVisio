@@ -8,6 +8,7 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ServerMessageListener;
+import audiovisio.networking.messages.PlayerListMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
@@ -82,6 +83,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				public void connectionAdded(com.jme3.network.Server server,
 						HostedConnection conn) {
 					if (players.size() < 2) {
+						conn.send(new PlayerListMessage(players.keySet()));
 						players.put(conn.getId(), new Player());
 					} else {
 						conn.close("Too many clients connect to server");
