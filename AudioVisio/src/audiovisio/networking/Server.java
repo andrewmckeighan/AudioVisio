@@ -29,7 +29,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
-import com.jme3.network.Server;
+//import com.jme3.network.Server;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -129,8 +129,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 		Lever testLever = new Lever(3f, 5f, 3f);
 
-		setAudioPlayer(new Player(audioPlayer));
-		setVisualPlayer(new Player(visualPlayer));
+		setAudioPlayer(new Player());
+		setVisualPlayer(new Player());
 
 		///////////////////////////
 		//Add entities to Scene //
@@ -155,11 +155,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 	@Override
 	public void simpleUpdate(float tpf){
-		pDML.messageReceived();
-
-		Vector3f walkDirection = new Vector3f(0, 0, 0);
-
-		player.setWalkDirection(walkDirection);
+		//TODO
 	}
 
 	@Override
