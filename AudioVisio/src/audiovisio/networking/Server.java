@@ -1,17 +1,11 @@
 package audiovisio.networking;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ServerPlayerDirectionMessageListener;
-import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.messages.PlayerUpdateMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
@@ -29,11 +23,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
-//import com.jme3.network.Server;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
 	private com.jme3.network.Server myServer;
@@ -80,7 +72,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					if (players.size() < 2) {
 						players.put(conn.getId(), new Player());
 					} else {
-						// TODO: Throw an error of some kind
+						conn.close("Too many clients connect to server");
 						LogHelper.severe("More than 2 players attempted to join");
 					}
 				}
@@ -98,9 +90,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		}
 
 		GeneralUtilities.initializeSerializables();
+
 		bulletAppState = new BulletAppState();
 		stateManager.attach(bulletAppState);
-
 		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 
@@ -151,11 +143,13 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		// /////////////////////////////////
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
+
 	}
 
 	@Override
 	public void simpleUpdate(float tpf){
 		//TODO
+
 	}
 
 	@Override
