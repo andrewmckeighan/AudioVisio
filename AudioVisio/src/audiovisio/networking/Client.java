@@ -54,16 +54,15 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	private long newTime;
 	private int counter = 0;
 
+	ClientMessageListener messageListener = new ClientMessageListener(this);
+	NetworkMessage velocityMessage = new NetworkMessage("");
+	
 	/**
 	 * Default client constructor
 	 */
 	public Client() {
 		
 	}
-	
-
-	ClientMessageListener messageListener = new ClientMessageListener();
-	NetworkMessage velocityMessage = new NetworkMessage("");
 
 	/**
 	 * Client Initialization
@@ -321,4 +320,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 	}
 
+	public Player getPlayer() {
+		return currentPlayer;
+	}
 }
