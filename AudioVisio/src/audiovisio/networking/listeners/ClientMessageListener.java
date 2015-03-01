@@ -31,10 +31,14 @@ public class ClientMessageListener implements MessageListener<Client> {
 			return;
 		}
 		if (message instanceof PlayerJoinMessage) {
-			
+			PlayerJoinMessage msg = (PlayerJoinMessage) message;
+			LogHelper.info("Player " + msg.getPlayerID() + " has joined");
+			return;
 		}
 		if (message instanceof PlayerLeaveMessage) {
-
+			PlayerLeaveMessage msg = (PlayerLeaveMessage) message;
+			LogHelper.info("Player " + msg.getPlayerID() + " has left");
+			return;
 		}
 		if (message instanceof PlayerListMessage) {
 			PlayerListMessage msg = (PlayerListMessage) message;
