@@ -22,7 +22,6 @@ public class ClientMessageListener implements MessageListener<Client> {
 
 	@Override
 	public void messageReceived(Client client, Message message) {
-		LogHelper.info("I am player " + client.getId());
 		if (message instanceof NetworkMessage) {
 
 		}
