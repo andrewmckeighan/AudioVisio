@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 
 import audiovisio.networking.messages.PlayerMoveMessage;
 import audiovisio.networking.messages.PlayerUpdateMessage;
+import audiovisio.utils.LogHelper;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
@@ -24,7 +25,7 @@ public class Player extends MovingEntity implements ActionListener{
     private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 
     public CharacterControl characterControl;
-    public Camera mainCamera;
+    private Camera playerCamera;
     public boolean up = false;
 	public boolean down = false;
 	public boolean left = false;
@@ -168,17 +169,22 @@ public class Player extends MovingEntity implements ActionListener{
     }
 
     /**
-     * updates the players position & camera based on the keys the user pressed.
-     * @param cam
-     * @param camDir
-     * @param camLeft
+     * updates the players position based on the message recieved from the server
+     * @param cam players camera
+     * @param walkDirection direction the player is going to move
      */
-	public void update(Camera cam, Vector3f camDir, Vector3f camLeft) {
+	public void update(Vector3f position, Vector3f direction) {
+		this.setWalkDirection(direction);
+		this.characterControl.setPhysicsLocation(position);
+		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
+	}
+	
+	public void update(PlayerMoveMessage m){
 		//TODO
-
-        //this.setWalkDirection(walkDirection);
-        cam.setLocation(this.characterControl.getPhysicsLocation());
-
+		if(m.getID() != this.ID){
+			LogHelper.warn("The Message ID (" + m.getID() + ")doesn't match this players ID(" + this.ID + ")");
+		}
+		update(m.getPosition(), m.getDirection());
 	}
 
 	/**
@@ -189,10 +195,10 @@ public class Player extends MovingEntity implements ActionListener{
 	 * @param camLeft vector directed straight left of the player
 	 * @return the message that is sent to the server
 	 */
-	public Message getUpdateMessage(Camera cam, Vector3f camDir,
+	public PlayerUpdateMessage getUpdateMessage(Vector3f camDir,
 			Vector3f camLeft) {
-		camDir.set(cam.getDirection().multLocal(0.6f));
-        camLeft.set(cam.getLeft()).multLocal(0.4f);
+		camDir.set(this.playerCamera.getDirection().multLocal(0.6f));
+        camLeft.set(this.playerCamera.getLeft()).multLocal(0.4f);
 
         Vector3f walkDirection = new Vector3f(0, 0, 0);
 
@@ -210,6 +216,20 @@ public class Player extends MovingEntity implements ActionListener{
         }
         
         return new PlayerUpdateMessage(walkDirection);
+	}
+
+	/**
+	 * @return the mainCamera
+	 */
+	public Camera getCam() {
+		return this.playerCamera;
+	}
+
+	/**
+	 * @param mainCamera the mainCamera to set
+	 */
+	public void setCam(Camera mainCamera) {
+		this.playerCamera = mainCamera;
 	}
 
 }
