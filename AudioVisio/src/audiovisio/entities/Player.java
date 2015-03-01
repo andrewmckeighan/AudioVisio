@@ -179,10 +179,20 @@ public class Player extends MovingEntity implements ActionListener{
 		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
 	}
 	
-
-	public void update(PlayerLocationMessage m){
-
-		update(m.getPosition(), m.getDirection());
+	/**
+	 * Updates the players direction based on the message received from the client
+	 * @param msg The message send from the client
+	 */
+	public void update(PlayerSendMovementMessage msg) {
+		this.setWalkDirection(msg.getDirection());
+	}
+	
+	public void update(Vector3f direction) {
+		this.setWalkDirection(direction);
+	}
+	
+	public void update(PlayerLocationMessage msg){
+		update(msg.getPosition(), msg.getDirection());
 	}
 
 	/**
