@@ -12,6 +12,8 @@ public class Main extends SimpleApplication {
 	public static void main(String args[]) {
 		// Gui gui = new Gui();
 		// gui.start();
+//		niftyTest test = new niftyTest();
+//		test.start();
 		AppSettings settings = new AppSettings(true);
 		settings.setAudioRenderer("LWJGL");
 		Main app = new Main();

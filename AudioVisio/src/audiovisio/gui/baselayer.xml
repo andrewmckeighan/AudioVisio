@@ -3,11 +3,25 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 	<screen id="start">
-		<layer id="background" backgroundColor="#FFFFFF" childLayout="center">
-			<panel id="panel_mid" height="50%" width="75%" align="center"
-				backgroundColor="#FFFFFF" childLayout="center">
+		<layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
+			
+			<panel id="panel_top" height="25%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
+				<control name="button" label="Start" id="StartButton" align="center" valign="center"> 
+          		</control>
+			</panel>
+			
+			<panel id="panel_mid" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
 				<text text="My Cool Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000" />
 			</panel>
+			
+			<panel id="panel_mid_low" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
+				<text text="My Cool Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000" />
+			</panel>
+			
+			<panel id="panel_bot" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
+				<text text="My Cool Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000" />
+			</panel>
+			
 		</layer>
 	</screen>
 </nifty>
