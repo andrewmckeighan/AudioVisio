@@ -26,6 +26,7 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.network.ConnectionListener;
+import com.jme3.network.Filters;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
 import com.jme3.scene.Geometry;
@@ -87,8 +88,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					if (players.size() < 2) {
 						Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 						conn.send(new PlayerListMessage(list));
+						server.broadcast(Filters.notEqualTo(conn), new PlayerJoinMessage(conn.getId()));
 						players.put(conn.getId(), new Player());
-//						server.broadcast(new PlayerJoinMessage(conn.getId()));
 					} else {
 						conn.close("Too many clients connect to server");
 						LogHelper.severe("More than 2 players attempted to join");
@@ -103,7 +104,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 						HostedConnection conn) {
 					if (players.containsKey(conn.getId()))
 						players.remove(conn.getId());
-//					server.broadcast(new PlayerLeaveMessage(conn.getId()));
+					server.broadcast(Filters.notEqualTo(conn), new PlayerLeaveMessage(conn.getId()));
 				}
 			});
 			myServer.addMessageListener(messageListener);

@@ -316,9 +316,6 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 					b.startPress();
 				}
 			}
-
-			System.out.println(event.getNodeA().getName());
-			System.out.println("	" + event.getNodeB().getName());
 		} catch (NullPointerException nullException) {
 			// System.out.println("nullException Caught: " + nullException);
 		} catch (ClassCastException castException) {
