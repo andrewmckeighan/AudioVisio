@@ -1,6 +1,6 @@
 package audiovisio.networking.messages;
 
-import java.util.List;
+import java.util.Set;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
@@ -11,18 +11,18 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerListMessage extends AbstractMessage {
-	private List<Integer> playerList;
+	private Set<Integer> playerList;
 	
 	public PlayerListMessage() {}
 	
 	/**
 	 * @param playerList A list of IDs of all currently connected players
 	 */
-	public PlayerListMessage(List<Integer> playerList) {
+	public PlayerListMessage(Set<Integer> playerList) {
 		this.playerList = playerList;
 	}
 	
-	public List<Integer> getPlayerList() {
+	public Set<Integer> getPlayerList() {
 		return playerList;
 	}
 }
