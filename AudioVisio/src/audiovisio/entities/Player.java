@@ -180,10 +180,6 @@ public class Player extends MovingEntity implements ActionListener{
 	}
 	
 	public void update(PlayerMoveMessage m){
-		//TODO
-		if(m.getID() != this.ID){
-			LogHelper.warn("The Message ID (" + m.getID() + ")doesn't match this players ID(" + this.ID + ")");
-		}
 		update(m.getPosition(), m.getDirection());
 	}
 
