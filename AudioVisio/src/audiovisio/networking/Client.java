@@ -6,7 +6,6 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
-import audiovisio.networking.listeners.ClientNetworkMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
@@ -53,9 +52,6 @@ PhysicsCollisionListener {
 	private long oldTime;
 	private long newTime;
 	private int counter = 0;
-	private float velocity = 0;
-	private float distance = 0;
-	
 	/**
 	 * Default client constructor
 	 */
@@ -63,7 +59,7 @@ PhysicsCollisionListener {
 		
 	}
 	
-	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener();
+	//ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener();
 	NetworkMessage velocityMessage = new NetworkMessage("");
 
 	/**
@@ -237,7 +233,7 @@ PhysicsCollisionListener {
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		myClient.send(currentPlayer.getUpdateMessage(cam, camDir, camLeft));
+		myClient.send(currentPlayer.getUpdateMessage(camDir, camLeft));
 		updateVelocityMessage();
 	}
 
