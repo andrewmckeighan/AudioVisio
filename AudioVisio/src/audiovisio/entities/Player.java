@@ -156,20 +156,20 @@ public class Player extends MovingEntity implements ActionListener{
      * @param assetManager
      */
     public void createModel(AssetManager assetManager) {
-		Node myCharacter = (Node) assetManager
-				.loadModel(DEFAULT_MODEL);
+		Node myCharacter = (Node) assetManager.loadModel(DEFAULT_MODEL);
 		this.model = myCharacter;
 		
 		this.model = myCharacter;
 		
-		this.model.setLocalScale(0.2f);
+		this.model.setLocalScale(0.5f);
         this.model.setLocalTranslation(SPAWN_LOCATION);
 
         this.model.addControl(this.characterControl);
+        this.attachChild(this.model);
     }
 
     /**
-     * updates the players position based on the message recieved from the server
+     * updates the players position based on the message received from the server
      * @param cam players camera
      * @param walkDirection direction the player is going to move
      */
@@ -184,8 +184,12 @@ public class Player extends MovingEntity implements ActionListener{
 	 * @param msg The message send from the client
 	 */
 	public void update(PlayerSendMovementMessage msg) {
-		this.setWalkDirection(msg.getDirection());
-		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
+		try{	
+			this.setWalkDirection(msg.getDirection());
+			this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
+		}catch(NullPointerException e){
+			//LogHelper.warn("null exception: ", e);
+		}
 	}
 	
 	public void update(Vector3f direction) {

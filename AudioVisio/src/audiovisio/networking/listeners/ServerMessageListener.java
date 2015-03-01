@@ -21,7 +21,9 @@ public class ServerMessageListener implements MessageListener<HostedConnection> 
 		if (message instanceof PlayerSendMovementMessage) {
 			PlayerSendMovementMessage msg = (PlayerSendMovementMessage) message;
 			Player player = myServer.getPlayer(client.getId());
+
 			player.update(msg);
+
 			return;
 		}
 		if (message instanceof NetworkMessage) {

@@ -132,8 +132,9 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		testLever.createMaterial(assetManager);
 
 		currentPlayer = new Player();
-		currentPlayer.createModel(assetManager);
 		currentPlayer.setCam(cam);
+		currentPlayer.createModel(assetManager);
+
 		
 		networkedPlayer = new Player();
 		networkedPlayer.createModel(assetManager);
@@ -241,6 +242,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		myClient.send(sendMessage);
 		currentPlayer.update(sendMessage);
 		//player.update(cam, receivedMessage);
+		
 		updateVelocityMessage();
 	}
 
