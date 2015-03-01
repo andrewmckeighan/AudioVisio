@@ -83,7 +83,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				public void connectionAdded(com.jme3.network.Server server,
 						HostedConnection conn) {
 					if (players.size() < 2) {
-						conn.send(new PlayerListMessage(players.keySet()));
+						conn.send(new PlayerListMessage((Integer[]) players.keySet().toArray()));
 						players.put(conn.getId(), new Player());
 					} else {
 						conn.close("Too many clients connect to server");

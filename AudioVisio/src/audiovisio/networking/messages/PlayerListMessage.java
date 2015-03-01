@@ -11,18 +11,18 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerListMessage extends AbstractMessage {
-	private Set<Integer> playerList;
+	private Integer[] playerList;
 	
 	public PlayerListMessage() {}
 	
 	/**
-	 * @param playerList A list of IDs of all currently connected players
+	 * @param objects A list of IDs of all currently connected players
 	 */
-	public PlayerListMessage(Set<Integer> playerList) {
-		this.playerList = playerList;
+	public PlayerListMessage(Integer[] objects) {
+		this.playerList = objects;
 	}
 	
-	public Set<Integer> getPlayerList() {
+	public Integer[] getPlayerList() {
 		return playerList;
 	}
 }
