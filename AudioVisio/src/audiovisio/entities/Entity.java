@@ -65,7 +65,6 @@ public class Entity extends Node{
      */
 	public void collisionTrigger(Entity entityB) {
 		// TODO Auto-generated method stub
-		System.out.println(this.getClass() + "");
 	}
 
 }

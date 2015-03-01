@@ -69,7 +69,6 @@ public class Button extends InteractableEntity  {
 	}
 
 	public void startPress() {
-		System.out.println("I'm being pressed!");
 	}
 
 	public void stopPress() {
