@@ -9,7 +9,7 @@ public class AudioVisioServer {
 	private static Server serverApp;
 	
 	public static void main(String[] args) {
-		GeneralUtilities.setPort(6020);
+		GeneralUtilities.setPort(11550);
 		
 		serverApp = new Server();
 		serverApp.start(JmeContext.Type.Headless);

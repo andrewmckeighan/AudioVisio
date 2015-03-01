@@ -36,7 +36,8 @@ public class ClientMessageListener implements MessageListener<Server> {
 
 		}
 		if (message instanceof PlayerListMessage) {
-
+			PlayerListMessage msg = (PlayerListMessage) message;
+			LogHelper.info("Received player list, punk");
 		}
 		LogHelper.warn("Received message of unknown type: " + message.getClass().getName());
 	}
