@@ -5,11 +5,11 @@ import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.utils.LogHelper;
 
-import com.jme3.network.Client;
+import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 
-public class ServerMessageListener implements MessageListener<Client> {
+public class ServerMessageListener implements MessageListener<HostedConnection> {
 	audiovisio.networking.Server myServer;
 
 	public ServerMessageListener(audiovisio.networking.Server myServer) {
@@ -17,7 +17,7 @@ public class ServerMessageListener implements MessageListener<Client> {
 	}
 
 	@Override
-	public void messageReceived(Client client, Message message) {
+	public void messageReceived(HostedConnection client, Message message) {
 		if (message instanceof PlayerSendMovementMessage) {
 			PlayerSendMovementMessage msg = (PlayerSendMovementMessage) message;
 			Player player = myServer.getPlayer(client.getId());

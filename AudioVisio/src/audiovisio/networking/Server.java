@@ -98,6 +98,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					players.remove(conn.getId());
 				}
 			});
+			myServer.addMessageListener(messageListener);
 		}
 		catch(IOException e){
 			LogHelper.severe("Error on server start", e);
