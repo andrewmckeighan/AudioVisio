@@ -1,70 +1,39 @@
 package audiovisio.entities;
 
-import java.util.Map;
-
 import org.json.simple.JSONObject;
 
 import audiovisio.networking.messages.PlayerMoveMessage;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.ZipLocator;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.collision.CollisionResult;
-import com.jme3.collision.CollisionResults;
-import com.jme3.font.BitmapText;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
 
 public class Player extends MovingEntity implements ActionListener{
 
     private final static float STEP_HEIGHT = 0.05f;
     private final static Vector3f SPAWN_LOCATION = new Vector3f(0,30,0);
-    //private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
+    private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 
-    //public Spatial model;
-    private DirectionalLight light;
     public CharacterControl characterControl;
     public Camera mainCamera;
-    private Map<String, KeyTrigger> keyBinds;
-
-    private Geometry mark;
-
     public boolean up = false;
 	public boolean down = false;
 	public boolean left = false;
 	public boolean right = false;
 
     private CapsuleCollisionShape collisionShape;
-    private GhostControl ghost;
-
-	public Node node;
+    public Node node;
 	public Mesh mesh;
 
+	/**
+	 * Creates the collision for player, and sets the physics perameters for the player.
+	 */
 	public Player() {
         this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 
@@ -72,10 +41,13 @@ public class Player extends MovingEntity implements ActionListener{
         this.characterControl.setJumpSpeed(20);
         this.characterControl.setFallSpeed(30);
         this.characterControl.setGravity(30);
-
-        this.attachChild(this.node);
     }
 
+	/**
+	 * creates a player with a given model, and spawn point.
+	 * @param playerModel
+	 * @param spawnLocation
+	 */
     public Player(Node playerModel, Vector3f spawnLocation){
     	this();
 
@@ -85,11 +57,20 @@ public class Player extends MovingEntity implements ActionListener{
 
         this.node.addControl(this.characterControl);
     }
-
+    
+    /**
+     * creates a player with a given model
+     * @param playerModel
+     */
     public Player(Node playerModel){
         this(playerModel, SPAWN_LOCATION);
     }
 
+    /**
+     * adds the player to the rootNode and PhysicsSpace of the client.
+     * @param root
+     * @param physics
+     */
     public void addToScene(Node root, PhysicsSpace physics){
     	addToScene(root);
         physics.add(this.characterControl);
@@ -101,33 +82,22 @@ public class Player extends MovingEntity implements ActionListener{
         //TODO
     }
 
+    /**
+     * moves the character in the direction of the vector3f
+     * @param direction
+     */
     public void setWalkDirection(Vector3f direction){
         this.moveDirection = direction;
         this.characterControl.setWalkDirection(direction);
     }
 
-    public void loadKeyBinds(JSONObject obj){
-        JSONObject jsonMap = (JSONObject) obj.get("playerKeyBinds");
-        //this.keyBinds = new ObjectMapper().readValue(jsonMap, Map.class);
-    }
-
-
-    public void initKeys(InputManager inputManager, Map<String, KeyTrigger> map) {
-        for ( Map.Entry<String, KeyTrigger> entry : map.entrySet()) {
-            inputManager.addMapping(entry.getKey(), entry.getValue());
-            inputManager.addListener(this, entry.getKey());
-        }
-    }
-
-    public void initKeys(InputManager inputManager){
-        this.initKeys(inputManager, this.keyBinds);
-    }
-
-    public void setKeyBinds(Map<String, KeyTrigger> map){
-        this.keyBinds = map;
-    }
-
-    public void onAction (String binding, boolean isPressed, float tpf){
+    /**
+     * action handler for when the user moves/shoots
+     * @param binding the keyword for the action.
+     * @param isPressed
+     * @param tpf time per frame
+     */
+    public void onAction(String binding, boolean isPressed, float tpf){
         if(binding.equals("Up")){
             up = isPressed;
         }else if(binding.equals("Down")){
@@ -142,6 +112,7 @@ public class Player extends MovingEntity implements ActionListener{
             }
         }
         if(binding.equals("Shoot") && !isPressed){
+        	//TODO
             //CollisionResults results = new CollisionResults();
 
             //Ray ray = new Ray(cam.getLocation(), cam.getDirection());
@@ -176,12 +147,29 @@ public class Player extends MovingEntity implements ActionListener{
         }
     }
 
+    /**
+     * generates the default model for the player.
+     * @param assetManager
+     */
     public void createModel(AssetManager assetManager) {
 		Node myCharacter = (Node) assetManager
-				.loadModel("Models/Oto/Oto.mesh.xml");
+				.loadModel(DEFAULT_MODEL);
 		this.model = myCharacter;
+		
+		this.node = myCharacter;
+		
+		this.node.setLocalScale(0.2f);
+        this.node.setLocalTranslation(SPAWN_LOCATION);
+
+        this.node.addControl(this.characterControl);
     }
 
+    /**
+     * updates the players position & camera based on the keys the user pressed.
+     * @param cam
+     * @param camDir
+     * @param camLeft
+     */
 	public void update(Camera cam, Vector3f camDir, Vector3f camLeft) {
         camDir.set(cam.getDirection().multLocal(0.6f));
         camLeft.set(cam.getLeft()).multLocal(0.4f);
@@ -201,13 +189,11 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(camLeft.negate());
         }
         
-        PlayerMoveMessage moveMessage = new PlayerMoveMessage(this.ID, walkDirection, this.characterControl.getPhysicsLocation());
+        new PlayerMoveMessage(this.ID, walkDirection, this.characterControl.getPhysicsLocation());
 
         this.setWalkDirection(walkDirection);
         cam.setLocation(this.characterControl.getPhysicsLocation());
 
 	}
-
-
 
 }
