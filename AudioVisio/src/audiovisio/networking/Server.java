@@ -72,7 +72,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					if (players.size() < 2) {
 						players.put(conn.getId(), new Player());
 					} else {
-						// TODO: Throw an error of some kind
+						conn.close("Too many clients connect to server");
 						LogHelper.severe("More than 2 players attempted to join");
 					}
 				}
