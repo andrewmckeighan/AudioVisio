@@ -9,19 +9,19 @@ import com.jme3.system.JmeContext;
 
 public class AudioVisio {
 	
-	private static audiovisio.networking.Server serverApp;
-	private static audiovisio.networking.Client clientApp;
+//	private static Server serverApp;
+	private static Client clientApp;
 
     public static void main(String[] args) {
     	GeneralUtilities.setPort(6020);
     	//Server start- put in condition
 
-		Gui mainScreen = new Gui();
+//		Gui mainScreen = new Gui();
 		//mainScreen.start();
 
     	//Server Start
-		serverApp = new Server();
-		serverApp.start(JmeContext.Type.Headless);
+//		serverApp = new Server();
+//		serverApp.start(JmeContext.Type.Headless);
 		//Client Start
     	clientApp = new Client();
     	clientApp.start();

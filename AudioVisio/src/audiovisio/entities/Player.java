@@ -159,8 +159,6 @@ public class Player extends MovingEntity implements ActionListener{
 		Node myCharacter = (Node) assetManager.loadModel(DEFAULT_MODEL);
 		this.model = myCharacter;
 		
-		this.model = myCharacter;
-		
 		this.model.setLocalScale(0.5f);
         this.model.setLocalTranslation(SPAWN_LOCATION);
 
@@ -212,7 +210,7 @@ public class Player extends MovingEntity implements ActionListener{
 	public PlayerSendMovementMessage getUpdateMessage(Vector3f camDir,
 			Vector3f camLeft) {
 		camDir.set(this.playerCamera.getDirection().multLocal(0.6f));
-        camLeft.set(this.playerCamera.getDirection()).multLocal(0.4f);
+        camLeft.set(this.playerCamera.getLeft()).multLocal(0.4f);
 
         Vector3f walkDirection = new Vector3f(0, 0, 0);
 
