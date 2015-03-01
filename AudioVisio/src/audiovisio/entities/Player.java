@@ -226,7 +226,7 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(camLeft.negate());
         }
         
-        return new PlayerSendMovementMessage(walkDirection);
+        return new PlayerSendMovementMessage(walkDirection, camDir, camLeft);
 	}
 	
 	public Camera getCam(){
@@ -239,5 +239,9 @@ public class Player extends MovingEntity implements ActionListener{
 	
 	public Vector3f getWalkDirection(){
 		return this.moveDirection;
+	}
+
+	public PlayerLocationMessage getLocationMessage(Integer ID) {
+		return new PlayerLocationMessage(ID, this.characterControl.getPhysicsLocation(), this.characterControl.getWalkDirection());
 	}
 }

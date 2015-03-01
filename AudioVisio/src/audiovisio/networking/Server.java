@@ -3,6 +3,7 @@ package audiovisio.networking;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
@@ -12,6 +13,8 @@ import audiovisio.networking.listeners.ServerMessageListener;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.PlayerListMessage;
+import audiovisio.networking.messages.PlayerLocationMessage;
+import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
@@ -35,16 +38,18 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
-	private com.jme3.network.Server myServer;	
+	private com.jme3.network.Server myServer;
 
 	private Map<Integer, Player> players = new HashMap<Integer, Player>();
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private Player audioPlayer;
+	private Vector3f audioCamDir, audioCamLeft;
 	private Player visualPlayer;
+	private Vector3f visualCamDir, visualCamLeft;
 	private ServerMessageListener messageListener = new ServerMessageListener(this);
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -58,7 +63,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	@Override
 	public void simpleInitApp(){
 		GeneralUtilities.initializeSerializables();
-		
+
 		try{
 			myServer = Network.createServer(GeneralUtilities.getPort());
 			myServer.start();
@@ -76,7 +81,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 						server.broadcast(new PlayerJoinMessage(conn.getId()));
 						LogHelper.info("Sent PlayerJoinMessage");
 						players.put(conn.getId(), new Player());
-						
+
 						Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 						conn.send(new PlayerListMessage(list));
 						LogHelper.info("Sent PlayerListMessage");
@@ -85,7 +90,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 						LogHelper.severe("More than 2 players attempted to join");
 					}
 				}
-				
+
 				/**
 				 * Handles Removing connections from server
 				 */
@@ -164,7 +169,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	@Override
 	public void simpleUpdate(float tpf){
-		//TODO
+		for (Entry<Integer, Player> entry : this.players.entrySet()) {
+			myServer.broadcast(entry.getValue().getLocationMessage(entry.getKey()));
+		}
 	}
 
 	/**
@@ -175,7 +182,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		myServer.close();
 		super.destroy();
 	}
-	
+
 	/**
 	 * Get a player by the connection ID
 	 * @param id The connection ID
@@ -234,9 +241,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	@Override
 	public void onAction(String arg0, boolean arg1, float arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
 
 }
 

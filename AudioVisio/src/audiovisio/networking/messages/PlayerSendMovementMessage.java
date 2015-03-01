@@ -22,7 +22,7 @@ public class PlayerSendMovementMessage extends AbstractMessage{
 	/**
 	 * @param direction The direction the player is currently moving
 	 */
-	public PlayerSendMovementMessage(Vector3f direction){
+	public PlayerSendMovementMessage(Vector3f direction, Vector3f camDir, Vector3f camLeft){
 		this.direction = direction;
 	}
 	

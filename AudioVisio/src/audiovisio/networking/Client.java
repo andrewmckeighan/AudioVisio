@@ -330,10 +330,14 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	}
 
 	public void updatePlayer(PlayerLocationMessage msg) {
-		if(msg.getPlayerID() == myClient.getId()){
-			currentPlayer.update(msg);
-		}else{
-			networkedPlayer.update(msg);
+		try {
+			if(msg.getPlayerID() == myClient.getId()){
+				currentPlayer.update(msg);
+			}else{
+				networkedPlayer.update(msg);
+			}
+		} catch (NullPointerException e) {
+			LogHelper.warn("null exception, client cannot find player: ", e);
 		}
 	}
 }
