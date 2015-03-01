@@ -240,7 +240,7 @@ PhysicsCollisionListener {
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		currentPlayer.update(cam, camDir, camLeft);
+		myClient.send(currentPlayer.getUpdateMessage(cam, camDir, camLeft));
 		updateVelocityMessage();
 	}
 
