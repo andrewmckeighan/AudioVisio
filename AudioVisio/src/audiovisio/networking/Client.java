@@ -243,7 +243,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		updateFpsText();
 		PlayerSendMovementMessage sendMessage = currentPlayer.getUpdateMessage(camDir, camLeft);
 		myClient.send(sendMessage);
-		currentPlayer.update(sendMessage);
+		//currentPlayer.update(sendMessage);
 		//player.update(cam, receivedMessage);
 		
 		updateVelocityMessage();

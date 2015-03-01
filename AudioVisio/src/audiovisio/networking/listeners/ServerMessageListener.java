@@ -5,6 +5,7 @@ import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.utils.LogHelper;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;

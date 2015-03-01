@@ -44,6 +44,9 @@ public class Player extends MovingEntity implements ActionListener{
         this.characterControl.setJumpSpeed(20);
         this.characterControl.setFallSpeed(30);
         this.characterControl.setGravity(30);
+        
+        this.characterControl.setPhysicsLocation(SPAWN_LOCATION);
+        
     }
 
 	/**
@@ -172,7 +175,14 @@ public class Player extends MovingEntity implements ActionListener{
      */
 	public void update(Vector3f position, Vector3f direction) {
 		this.setWalkDirection(direction);
-		this.characterControl.setPhysicsLocation(position);
+		if(this.characterControl.getPhysicsLocation().distance(new Vector3f(0f, 0f, 0f)) == 0 || position.distance(new Vector3f(0f, 0f, 0f)) == 0){
+			this.characterControl.setPhysicsLocation(direction);
+		}
+		else{
+			this.characterControl.setPhysicsLocation(position);
+		}
+		
+		
 		if(this.playerCamera != null){
 			this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
 		}
@@ -228,7 +238,7 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(camLeft.negate());
         }
         
-        return new PlayerSendMovementMessage(walkDirection, camDir, camLeft);
+        return new PlayerSendMovementMessage(walkDirection);
 	}
 	
 	public Camera getCam(){
