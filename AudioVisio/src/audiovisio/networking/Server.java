@@ -1,6 +1,7 @@
 package audiovisio.networking;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import audiovisio.entities.Button;
@@ -31,7 +32,7 @@ import com.jme3.scene.Spatial;
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
 	private com.jme3.network.Server myServer;	
 
-	private Map<Integer, Player> players;
+	private Map<Integer, Player> players = new HashMap<Integer, Player>();
 	private Node shootables;
 	private Geometry mark;
 	private Spatial sceneModel;
