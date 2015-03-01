@@ -18,8 +18,8 @@ public class MovingEntity extends Entity {
         super.load(obj);
 
         this.frontDirection = (Vector3f) obj.get("frontDirection");
-        this.frontDirection = (Vector3f) obj.get("leftDirection");
-        this.frontDirection = (Vector3f) obj.get("moveDirection");
+        this.leftDirection = (Vector3f) obj.get("leftDirection");
+        this.moveDirection = (Vector3f) obj.get("moveDirection");
     }
 
 }

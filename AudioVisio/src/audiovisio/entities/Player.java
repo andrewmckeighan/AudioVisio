@@ -3,6 +3,7 @@ package audiovisio.entities;
 import org.json.simple.JSONObject;
 
 import audiovisio.networking.messages.PlayerMoveMessage;
+import audiovisio.networking.messages.PlayerUpdateMessage;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
@@ -10,10 +11,12 @@ import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.network.Message;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 
+@SuppressWarnings("deprecation")
 public class Player extends MovingEntity implements ActionListener{
 
     private final static float STEP_HEIGHT = 0.05f;
@@ -28,7 +31,7 @@ public class Player extends MovingEntity implements ActionListener{
 	public boolean right = false;
 
     private CapsuleCollisionShape collisionShape;
-    public Node node;
+    public Node model;
 	public Mesh mesh;
 
 	/**
@@ -51,11 +54,11 @@ public class Player extends MovingEntity implements ActionListener{
     public Player(Node playerModel, Vector3f spawnLocation){
     	this();
 
-        this.node = playerModel;
-        this.node.setLocalScale(0.2f);
-        this.node.setLocalTranslation(spawnLocation);
+        this.model = playerModel;
+        this.model.setLocalScale(0.2f);
+        this.model.setLocalTranslation(spawnLocation);
 
-        this.node.addControl(this.characterControl);
+        this.model.addControl(this.characterControl);
     }
     
     /**
@@ -156,12 +159,12 @@ public class Player extends MovingEntity implements ActionListener{
 				.loadModel(DEFAULT_MODEL);
 		this.model = myCharacter;
 		
-		this.node = myCharacter;
+		this.model = myCharacter;
 		
-		this.node.setLocalScale(0.2f);
-        this.node.setLocalTranslation(SPAWN_LOCATION);
+		this.model.setLocalScale(0.2f);
+        this.model.setLocalTranslation(SPAWN_LOCATION);
 
-        this.node.addControl(this.characterControl);
+        this.model.addControl(this.characterControl);
     }
 
     /**
@@ -171,7 +174,24 @@ public class Player extends MovingEntity implements ActionListener{
      * @param camLeft
      */
 	public void update(Camera cam, Vector3f camDir, Vector3f camLeft) {
-        camDir.set(cam.getDirection().multLocal(0.6f));
+		//TODO
+
+        //this.setWalkDirection(walkDirection);
+        cam.setLocation(this.characterControl.getPhysicsLocation());
+
+	}
+
+	/**
+	 * generates where the player is trying to move based on keypresses,
+	 * and returns that message.
+	 * @param cam camera that the player uses.
+	 * @param camDir vector directed straight forward of the player
+	 * @param camLeft vector directed straight left of the player
+	 * @return the message that is sent to the server
+	 */
+	public Message getUpdateMessage(Camera cam, Vector3f camDir,
+			Vector3f camLeft) {
+		camDir.set(cam.getDirection().multLocal(0.6f));
         camLeft.set(cam.getLeft()).multLocal(0.4f);
 
         Vector3f walkDirection = new Vector3f(0, 0, 0);
@@ -189,11 +209,7 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(camLeft.negate());
         }
         
-        new PlayerMoveMessage(this.ID, walkDirection, this.characterControl.getPhysicsLocation());
-
-        this.setWalkDirection(walkDirection);
-        cam.setLocation(this.characterControl.getPhysicsLocation());
-
+        return new PlayerUpdateMessage(walkDirection);
 	}
 
 }

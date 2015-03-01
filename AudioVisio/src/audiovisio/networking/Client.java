@@ -2,7 +2,6 @@ package audiovisio.networking;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
@@ -11,7 +10,6 @@ import audiovisio.networking.listeners.ClientNetworkMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
-
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -41,7 +39,6 @@ public class Client extends SimpleApplication implements
 PhysicsCollisionListener {
 
 	private com.jme3.network.Client myClient;
-
 	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
 	private Geometry mark;
 	private Spatial sceneModel;
@@ -49,14 +46,12 @@ PhysicsCollisionListener {
 	private RigidBodyControl landscape;
 	private Player currentPlayer;
 	private Player networkedPlayer;
-	private Button testButton;
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
 	private Vector3f oldLocation;
 	private Vector3f newLocation = new Vector3f();
 	private long oldTime;
 	private long newTime;
-	private long time;
 	private int counter = 0;
 	private float velocity = 0;
 	private float distance = 0;
@@ -65,11 +60,14 @@ PhysicsCollisionListener {
 			this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
 
+
 	/**
 	 * Default client constructor
 	 */
 	public Client() {
-		
+		new ClientNetworkMessageListener(
+				this);
+		new NetworkMessage("");
 	}
 
 	/**
@@ -180,6 +178,7 @@ PhysicsCollisionListener {
 	public void simpleInitApp() {
 		simpleInitApp("127.0.0.1");
 	}
+	
 	/**
 	 * Initialization for key mapping
 	 */
@@ -204,7 +203,7 @@ PhysicsCollisionListener {
 	}
 
 	/**
-	 * Initialization for cross-hairs center
+	 * Initialization for ball that shows where the player hit the given object
 	 */
 	private void initMark() {
 		Sphere sphere = new Sphere(30, 30, 0.2f);
@@ -215,6 +214,7 @@ PhysicsCollisionListener {
 		mark.setMaterial(mark_mat);
 
 	}
+	
 	/**
 	 * Initialization for cross-hairs
 	 */
@@ -232,6 +232,7 @@ PhysicsCollisionListener {
 		guiNode.attachChild(ch);
 
 	}
+	
 	/**
 	 * Updates App to current status
 	 * Generates position from user input/server messages
@@ -239,7 +240,7 @@ PhysicsCollisionListener {
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		currentPlayer.update(cam, camDir, camLeft);
+		myClient.send(currentPlayer.getUpdateMessage(cam, camDir, camLeft));
 		updateVelocityMessage();
 	}
 
@@ -256,18 +257,14 @@ PhysicsCollisionListener {
 	}
 
 	/**
-	 * Updates displayed velocity server text
+	 * Updates displayed velocity text
 	 */
 	private void updateVelocityMessage(){
 
 		if (counter % 1000 == 0) {
 			if (oldLocation != null && newLocation != null && oldTime != 0
 					&& newTime != 0) {
-				distance = oldLocation.distance(newLocation);
-				time = newTime - oldTime;
-				velocity = distance / time;
-				velocityMessage = new NetworkMessage("V: " + velocity + ", D: "
-						+ distance + ", P: " + newLocation + "F: " + counter);
+				oldLocation.distance(newLocation);
 			}
 
 			oldLocation = newLocation.clone();
@@ -293,7 +290,7 @@ PhysicsCollisionListener {
 	}
 	
 	/**
-	 * 
+	 * collision handling
 	 */
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
@@ -326,12 +323,6 @@ PhysicsCollisionListener {
 			System.out.println("castException Caught: " + castException);
 		}
 
-	}
-	/**
-	 * 
-	 */
-	public void onAction(String binding, boolean isPressed, float tpf) {
-		currentPlayer.onAction(binding, isPressed, tpf);
 	}
 
 }
