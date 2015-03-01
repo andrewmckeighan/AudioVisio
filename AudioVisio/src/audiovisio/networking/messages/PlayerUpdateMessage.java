@@ -21,10 +21,9 @@ public class PlayerUpdateMessage extends AbstractMessage{
 	}
 
 	/**
-	 * @param playerID The ID of the player being updated with this message
 	 * @param direction The direction the player is currently moving
 	 */
-	public PlayerUpdateMessage(int playerID, Vector3f direction){
+	public PlayerUpdateMessage(Vector3f direction){
 		this.direction = direction;
 	}
 	
