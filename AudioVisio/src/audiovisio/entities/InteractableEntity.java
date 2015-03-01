@@ -75,6 +75,7 @@ public class InteractableEntity extends Entity {
 				"Common/MatDefs/Misc/Unshaded.j3md");
 		randomMaterial.setColor("Color", ColorRGBA.randomColor());
 		this.material = randomMaterial;
+		this.geometry.setMaterial(randomMaterial);;
 	}
 
 }

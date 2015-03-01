@@ -27,6 +27,8 @@ public class Entity extends Node{
     public Vector3f position;
     public String name;
     public Spatial model;
+    
+    public int ID;
 
     public Entity(){
 

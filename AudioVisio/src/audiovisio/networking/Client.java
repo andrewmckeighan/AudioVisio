@@ -1,6 +1,7 @@
 package audiovisio.networking;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import audiovisio.entities.Button;
@@ -22,6 +23,7 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -38,7 +40,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
-public class Client extends SimpleApplication implements ActionListener,
+public class Client extends SimpleApplication implements 
 PhysicsCollisionListener {
 
 	private com.jme3.network.Client myClient;
@@ -130,7 +132,7 @@ PhysicsCollisionListener {
 		/////////////////////////
 		// Generate entities //
 		/////////////////////////
-		testButton = new Button(0f, 1f, 0f);
+		Button testButton = new Button(0f, 1f, 0f);
 		testButton.createMaterial(assetManager);
 
 		Lever testLever = new Lever(3f, 5f, 3f);
@@ -138,6 +140,9 @@ PhysicsCollisionListener {
 
 		currentPlayer = new Player();
 		currentPlayer.createModel(assetManager);
+		
+		networkedPlayer = new Player();
+		networkedPlayer.createModel(assetManager);
 
 		// ///////////////////////
 		// Initialization Methods //
@@ -189,15 +194,16 @@ PhysicsCollisionListener {
 		inputManager.addMapping("Shoot", new MouseButtonTrigger(
 				MouseInput.BUTTON_LEFT));
 
-		inputManager.addListener(this, "Up");
-		inputManager.addListener(this, "Down");
-		inputManager.addListener(this, "Left");
-		inputManager.addListener(this, "Right");
-		inputManager.addListener(this, "Jump");
+		inputManager.addListener(currentPlayer, "Up");
+		inputManager.addListener(currentPlayer, "Down");
+		inputManager.addListener(currentPlayer, "Left");
+		inputManager.addListener(currentPlayer, "Right");
+		inputManager.addListener(currentPlayer, "Jump");
 
-		inputManager.addListener(this, "Shoot");
+		inputManager.addListener(currentPlayer, "Shoot");
 
 	}
+
 	/**
 	 * Initialization for cross-hairs center
 	 */
@@ -220,7 +226,7 @@ PhysicsCollisionListener {
 		ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
-				
+
 		// center
 		settings.getWidth() / 2 - ch.getLineWidth() / 2,
 		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
@@ -317,6 +323,7 @@ PhysicsCollisionListener {
 		} catch (NullPointerException nullException) {
 			// System.out.println("nullException Caught: " + nullException);
 		} catch (ClassCastException castException) {
+			LogHelper.warn("castException Caught: ", castException);
 			System.out.println("castException Caught: " + castException);
 		}
 
@@ -324,7 +331,6 @@ PhysicsCollisionListener {
 	/**
 	 * 
 	 */
-	@Override
 	public void onAction(String binding, boolean isPressed, float tpf) {
 		currentPlayer.onAction(binding, isPressed, tpf);
 	}
