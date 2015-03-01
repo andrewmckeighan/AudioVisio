@@ -6,16 +6,16 @@ import audiovisio.networking.messages.PlayerUpdateMessage;
 
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import com.jme3.network.Client;
+import com.jme3.network.Server;
 
-public class ClientMessageListener implements MessageListener<Client>{
+public class ClientMessageListener implements MessageListener<Server>{
 
 	public ClientMessageListener(){
 		
 	}
 	
 	@Override
-	public void messageReceived(Client client, Message message) {
+	public void messageReceived(Server server, Message message) {
 		if(message instanceof PlayerMoveMessage){
 			
 		}
