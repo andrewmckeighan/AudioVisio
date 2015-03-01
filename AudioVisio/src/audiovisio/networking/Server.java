@@ -2,11 +2,14 @@ package audiovisio.networking;
 
 import java.io.IOException;
 import java.util.Map;
+
 import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.networking.listeners.ServerMessageListener;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -26,14 +29,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
-	private com.jme3.network.Server myServer;
-
-	/**
-	 * Default constructor
-	 */
-	public Server(){
-
-	}
+	private com.jme3.network.Server myServer;	
 
 	private Map<Integer, Player> players;
 	private Node shootables;
@@ -58,6 +54,15 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private	float visualDistance = 0;
 	private	Vector3f audioPosition = new Vector3f();
 	private	Vector3f visualPosition = new Vector3f();
+	
+	private ServerMessageListener messageListener = new ServerMessageListener(this);
+	
+	/**
+	 * Default constructor
+	 */
+	public Server(){
+
+	}
 
 	/**
 	 * Initializes game App on server startup
