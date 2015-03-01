@@ -3,7 +3,6 @@ package audiovisio.networking.messages;
 import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
-import com.jme3.network.serializing.Serializer;
 
 /**
  * Sent by the client to the server when the player is moving.

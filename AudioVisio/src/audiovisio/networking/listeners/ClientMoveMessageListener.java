@@ -4,7 +4,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Client;
 
-public class ClientNetworkMessageListener implements MessageListener<Client>{
+public class ClientMoveMessageListener implements MessageListener<Client>{
 
 	@Override
 	public void messageReceived(Client arg0, Message arg1) {
