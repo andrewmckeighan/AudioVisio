@@ -53,8 +53,6 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	private long oldTime;
 	private long newTime;
 	private int counter = 0;
-	private float velocity = 0;
-	private float distance = 0;
 	
 	/**
 	 * Default client constructor
