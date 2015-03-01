@@ -44,14 +44,7 @@ PhysicsCollisionListener {
 	private com.jme3.network.Client myClient;
 
 	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
-
-	public Client() {
-		// super(new StatsAppState(), new FlyCamAppState(), new
-		// DebugKeysAppState());
-	}
-
 	private Geometry mark;
-
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
@@ -69,10 +62,19 @@ PhysicsCollisionListener {
 	private float velocity = 0;
 	private float distance = 0;
 
-	ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
-			this);
-	NetworkMessage velocityMessage = new NetworkMessage("");
+	/**
+	 * Default client constructor
+	 */
+	public Client() {
+		ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
+				this);
+		NetworkMessage velocityMessage = new NetworkMessage("");
+	}
 
+	/**
+	 * Client Initialization
+	 * @param IP Specified server connection IP address
+	 */
 	public void simpleInitApp(String IP) {
 
 		try {
@@ -168,10 +170,15 @@ PhysicsCollisionListener {
 
 	}
 
+	/**
+	 * Client initialization using default constructor
+	 */
 	public void simpleInitApp() {
 		simpleInitApp("127.0.0.1");
 	}
-
+	/**
+	 * Initialization for key mapping
+	 */
 	private void initKeys() {
 		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
 		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
@@ -191,7 +198,9 @@ PhysicsCollisionListener {
 		inputManager.addListener(this, "Shoot");
 
 	}
-
+	/**
+	 * Initialization for cross-hairs center
+	 */
 	private void initMark() {
 		Sphere sphere = new Sphere(30, 30, 0.2f);
 		mark = new Geometry("BOOM!", sphere);
@@ -201,7 +210,9 @@ PhysicsCollisionListener {
 		mark.setMaterial(mark_mat);
 
 	}
-
+	/**
+	 * Initialization for cross-hairs
+	 */
 	private void initCrossHairs() {
 		setDisplayStatView(false);
 		guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -216,7 +227,10 @@ PhysicsCollisionListener {
 		guiNode.attachChild(ch);
 
 	}
-
+	/**
+	 * Updates App to current status
+	 * Generates position from user input/server messages
+	 */
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
@@ -224,6 +238,9 @@ PhysicsCollisionListener {
 		updateVelocityMessage();
 	}
 
+	/**
+	 * Updates displayed generic server text
+	 */
 	private void updateFpsText(){
 		String message = messageQueue.poll();
 		if (message != null) {
@@ -233,7 +250,9 @@ PhysicsCollisionListener {
 		}
 	}
 
-
+	/**
+	 * Updates displayed velocity server text
+	 */
 	private void updateVelocityMessage(){
 
 		if (counter % 1000 == 0) {
@@ -259,12 +278,18 @@ PhysicsCollisionListener {
 		counter++;
 	}
 
+	/**
+	 * Override server default destruction
+	 */
 	@Override
 	public void destroy() {
 		myClient.close();
 		super.destroy();
 	}
-
+	
+	/**
+	 * 
+	 */
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
 		try {
@@ -296,7 +321,9 @@ PhysicsCollisionListener {
 		}
 
 	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public void onAction(String binding, boolean isPressed, float tpf) {
 		currentPlayer.onAction(binding, isPressed, tpf);

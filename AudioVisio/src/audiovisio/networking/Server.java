@@ -57,7 +57,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private	float visualDistance = 0;
 	private	Vector3f audioPosition = new Vector3f();
 	private	Vector3f visualPosition = new Vector3f();
-	private ServerPlayerDirectionMessageListener pDML= new ServerPlayerDirectionMessageListener(this);
 
 	@Override
 	public void simpleInitApp(){

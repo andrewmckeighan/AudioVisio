@@ -5,17 +5,29 @@ import com.jme3.network.serializing.Serializable;
 
 @Serializable
 public class NetworkMessage extends AbstractMessage{
-
+	
+	/**
+	 * message contents
+	 */
 	private String message;
 	
+	/**
+	 * Default constructor- empty
+	 */
 	public NetworkMessage(){
 		
 	}
-	
+	/**
+	 * Constructor
+	 * @param message Message contents
+	 */
 	public NetworkMessage(String message){
 		this.message = message;
 	}
 	
+	/**
+	 * @return Message contents
+	 */
 	public String getMessage(){
 		return message;
 	}

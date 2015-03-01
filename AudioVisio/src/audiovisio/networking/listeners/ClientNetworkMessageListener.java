@@ -11,21 +11,25 @@ public class ClientNetworkMessageListener implements MessageListener<Client>{
 		audiovisio.networking.Client myClient;
 		audiovisio.networking.Server myServer;
 		
-	
+		/**
+		 * Constructor
+		 * @param myClient The Client for handling operations
+		 */
 		public ClientNetworkMessageListener(audiovisio.networking.Client myClient){
 			this.myClient = myClient;
 		}
 		
+		/**
+		 * Ensures handling of correct message type
+		 * @param source The source of the message (from client)
+		 * @param m Generic typed Message to handle
+		 */
 		@Override
 		public void messageReceived(Client source, Message m){
 			if(m instanceof NetworkMessage){
-				NetworkMessageHandler((NetworkMessage) m);
+				
 			}
 	
 		}
 		
-		public void NetworkMessageHandler(NetworkMessage handle){
-			
-		}
-
 }
