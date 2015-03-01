@@ -8,11 +8,12 @@ import audiovisio.networking.messages.PlayerLocationMessage;
 import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.utils.LogHelper;
 
+import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Server;
 
-public class ClientMessageListener implements MessageListener<Server> {
+public class ClientMessageListener implements MessageListener<Client> {
 	audiovisio.networking.Client myClient;
 
 	public ClientMessageListener(audiovisio.networking.Client myClient) {
@@ -20,7 +21,7 @@ public class ClientMessageListener implements MessageListener<Server> {
 	}
 
 	@Override
-	public void messageReceived(Server server, Message message) {
+	public void messageReceived(Client client, Message message) {
 		if (message instanceof NetworkMessage) {
 
 		}

@@ -8,6 +8,8 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ServerMessageListener;
+import audiovisio.networking.messages.PlayerJoinMessage;
+import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.PlayerListMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
@@ -86,6 +88,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 						Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 						conn.send(new PlayerListMessage(list));
 						players.put(conn.getId(), new Player());
+//						server.broadcast(new PlayerJoinMessage(conn.getId()));
 					} else {
 						conn.close("Too many clients connect to server");
 						LogHelper.severe("More than 2 players attempted to join");
@@ -98,7 +101,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				@Override
 				public void connectionRemoved(com.jme3.network.Server server,
 						HostedConnection conn) {
-					players.remove(conn.getId());
+					if (players.containsKey(conn.getId()))
+						players.remove(conn.getId());
+//					server.broadcast(new PlayerLeaveMessage(conn.getId()));
 				}
 			});
 			myServer.addMessageListener(messageListener);

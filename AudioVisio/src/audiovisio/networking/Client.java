@@ -75,6 +75,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		try {
 			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
 			myClient.start();
+			myClient.addMessageListener(messageListener);
 		} catch (IOException e) {
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
