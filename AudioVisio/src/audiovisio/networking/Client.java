@@ -9,8 +9,10 @@ import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ClientMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
+import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -235,7 +237,10 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		myClient.send(currentPlayer.getUpdateMessage(camDir, camLeft));
+		PlayerSendMovementMessage sendMessage = currentPlayer.getUpdateMessage(camDir, camLeft);
+		myClient.send(sendMessage);
+		currentPlayer.update(sendMessage);
+		//player.update(cam, receivedMessage);
 		updateVelocityMessage();
 	}
 

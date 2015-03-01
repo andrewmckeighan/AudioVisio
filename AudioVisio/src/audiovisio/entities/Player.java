@@ -185,10 +185,12 @@ public class Player extends MovingEntity implements ActionListener{
 	 */
 	public void update(PlayerSendMovementMessage msg) {
 		this.setWalkDirection(msg.getDirection());
+		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
 	}
 	
 	public void update(Vector3f direction) {
 		this.setWalkDirection(direction);
+		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
 	}
 	
 	public void update(PlayerLocationMessage msg){
@@ -206,7 +208,7 @@ public class Player extends MovingEntity implements ActionListener{
 	public PlayerSendMovementMessage getUpdateMessage(Vector3f camDir,
 			Vector3f camLeft) {
 		camDir.set(this.playerCamera.getDirection().multLocal(0.6f));
-        camLeft.set(this.playerCamera.getLeft()).multLocal(0.4f);
+        camLeft.set(this.playerCamera.getDirection()).multLocal(0.4f);
 
         Vector3f walkDirection = new Vector3f(0, 0, 0);
 
@@ -225,19 +227,12 @@ public class Player extends MovingEntity implements ActionListener{
         
         return new PlayerSendMovementMessage(walkDirection);
 	}
-
-	/**
-	 * @return the mainCamera
-	 */
-	public Camera getCam() {
+	
+	public Camera getCam(){
 		return this.playerCamera;
 	}
-
-	/**
-	 * @param mainCamera the mainCamera to set
-	 */
-	public void setCam(Camera mainCamera) {
-		this.playerCamera = mainCamera;
+	
+	public void setCam(Camera cam) {
+		this.playerCamera = cam;
 	}
-
 }
