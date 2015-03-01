@@ -2,8 +2,8 @@ package audiovisio.entities;
 
 import org.json.simple.JSONObject;
 
-import audiovisio.networking.messages.PlayerMoveMessage;
-import audiovisio.networking.messages.PlayerUpdateMessage;
+import audiovisio.networking.messages.PlayerLocationMessage;
+import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.asset.AssetManager;
@@ -179,7 +179,7 @@ public class Player extends MovingEntity implements ActionListener{
 		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
 	}
 	
-	public void update(PlayerMoveMessage m){
+	public void update(PlayerLocationMessage m){
 		//TODO
 		if(m.getID() != this.ID){
 			LogHelper.warn("The Message ID (" + m.getID() + ")doesn't match this players ID(" + this.ID + ")");
@@ -195,7 +195,7 @@ public class Player extends MovingEntity implements ActionListener{
 	 * @param camLeft vector directed straight left of the player
 	 * @return the message that is sent to the server
 	 */
-	public PlayerUpdateMessage getUpdateMessage(Vector3f camDir,
+	public PlayerSendMovementMessage getUpdateMessage(Vector3f camDir,
 			Vector3f camLeft) {
 		camDir.set(this.playerCamera.getDirection().multLocal(0.6f));
         camLeft.set(this.playerCamera.getLeft()).multLocal(0.4f);
@@ -215,7 +215,7 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(camLeft.negate());
         }
         
-        return new PlayerUpdateMessage(walkDirection);
+        return new PlayerSendMovementMessage(walkDirection);
 	}
 
 	/**

@@ -172,6 +172,14 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		myServer.close();
 		super.destroy();
 	}
+	
+	/**
+	 * Get a player by the connection ID
+	 * @param id The connection ID
+	 */
+	public Player getPlayer(int id) {
+		return players.get(id);
+	}
 
 	public Player getAudioPlayer() {
 		return audioPlayer;
