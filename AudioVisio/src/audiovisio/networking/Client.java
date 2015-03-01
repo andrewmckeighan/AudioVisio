@@ -280,7 +280,7 @@ PhysicsCollisionListener {
 			counter = 0;
 		}
 
-		messageListener.NetworkMessageHandler(velocityMessage);
+		//messageListener.NetworkMessageHandler(velocityMessage);
 		counter++;
 	}
 
