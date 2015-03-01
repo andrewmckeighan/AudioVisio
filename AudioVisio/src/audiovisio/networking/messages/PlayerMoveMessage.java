@@ -16,6 +16,7 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerMoveMessage extends AbstractMessage {
+	private int playerID;
 	private Vector3f position;
 	private Vector3f direction;
 	private int ID;
@@ -28,8 +29,13 @@ public class PlayerMoveMessage extends AbstractMessage {
 	 * @param position The position the player is currently in
 	 */
 	public PlayerMoveMessage(int playerID, Vector3f direction, Vector3f position) {
+		this.playerID = playerID;
 		this.direction = direction;
 		this.position = position;
+	}
+	
+	public int getPlayerID() {
+		return playerID;
 	}
 	
 	public Vector3f getDirection() {
