@@ -1,9 +1,7 @@
 package audiovisio.networking;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
@@ -12,7 +10,6 @@ import audiovisio.networking.listeners.ClientNetworkMessageListener;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
-
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -23,10 +20,8 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
-import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
@@ -44,7 +39,6 @@ public class Client extends SimpleApplication implements
 PhysicsCollisionListener {
 
 	private com.jme3.network.Client myClient;
-
 	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
 	private Geometry mark;
 	private Spatial sceneModel;
@@ -52,25 +46,21 @@ PhysicsCollisionListener {
 	private RigidBodyControl landscape;
 	private Player currentPlayer;
 	private Player networkedPlayer;
-	private Button testButton;
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
 	private Vector3f oldLocation;
 	private Vector3f newLocation = new Vector3f();
 	private long oldTime;
 	private long newTime;
-	private long time;
 	private int counter = 0;
-	private float velocity = 0;
-	private float distance = 0;
-
+	
 	/**
 	 * Default client constructor
 	 */
 	public Client() {
-		ClientNetworkMessageListener messageListener = new ClientNetworkMessageListener(
+		new ClientNetworkMessageListener(
 				this);
-		NetworkMessage velocityMessage = new NetworkMessage("");
+		new NetworkMessage("");
 	}
 
 	/**
@@ -181,6 +171,7 @@ PhysicsCollisionListener {
 	public void simpleInitApp() {
 		simpleInitApp("127.0.0.1");
 	}
+	
 	/**
 	 * Initialization for key mapping
 	 */
@@ -205,7 +196,7 @@ PhysicsCollisionListener {
 	}
 
 	/**
-	 * Initialization for cross-hairs center
+	 * Initialization for ball that shows where the player hit the given object
 	 */
 	private void initMark() {
 		Sphere sphere = new Sphere(30, 30, 0.2f);
@@ -216,6 +207,7 @@ PhysicsCollisionListener {
 		mark.setMaterial(mark_mat);
 
 	}
+	
 	/**
 	 * Initialization for cross-hairs
 	 */
@@ -233,6 +225,7 @@ PhysicsCollisionListener {
 		guiNode.attachChild(ch);
 
 	}
+	
 	/**
 	 * Updates App to current status
 	 * Generates position from user input/server messages
@@ -257,18 +250,14 @@ PhysicsCollisionListener {
 	}
 
 	/**
-	 * Updates displayed velocity server text
+	 * Updates displayed velocity text
 	 */
 	private void updateVelocityMessage(){
 
 		if (counter % 1000 == 0) {
 			if (oldLocation != null && newLocation != null && oldTime != 0
 					&& newTime != 0) {
-				distance = oldLocation.distance(newLocation);
-				time = newTime - oldTime;
-				velocity = distance / time;
-				velocityMessage = new NetworkMessage("V: " + velocity + ", D: "
-						+ distance + ", P: " + newLocation + "F: " + counter);
+				oldLocation.distance(newLocation);
 			}
 
 			oldLocation = newLocation.clone();
@@ -280,7 +269,7 @@ PhysicsCollisionListener {
 			counter = 0;
 		}
 
-		messageListener.NetworkMessageHandler(velocityMessage);
+		//messageListener.NetworkMessageHandler(velocityMessage);
 		counter++;
 	}
 
@@ -294,7 +283,7 @@ PhysicsCollisionListener {
 	}
 	
 	/**
-	 * 
+	 * collision handling
 	 */
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
@@ -327,12 +316,6 @@ PhysicsCollisionListener {
 			System.out.println("castException Caught: " + castException);
 		}
 
-	}
-	/**
-	 * 
-	 */
-	public void onAction(String binding, boolean isPressed, float tpf) {
-		currentPlayer.onAction(binding, isPressed, tpf);
 	}
 
 }

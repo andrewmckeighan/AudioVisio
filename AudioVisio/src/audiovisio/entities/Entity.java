@@ -34,6 +34,10 @@ public class Entity extends Node{
 
     }
 
+    /**
+     * Create and instance of Entity class, 
+     * @param obj the JSON object that is read.
+     */
     public void load(JSONObject obj){
     	JSONObject location = (JSONObject) obj.get("location");
         this.position = JSONHelper.readVector3f(location);
@@ -47,10 +51,18 @@ public class Entity extends Node{
     	obj.put("name", this.name);
     }
 
+    /**
+     * add the entities to rootNode so they are rendered in the game space.
+     * @param root rootNode from simpleApplication
+     */
     public void addToScene(Node root){
         root.attachChild(this);
     }
 
+    /**
+     * TODO: checks if the two collisions are meaningful.
+     * @param entityB the entity that this is colliding with.
+     */
 	public void collisionTrigger(Entity entityB) {
 		// TODO Auto-generated method stub
 		System.out.println(this.getClass() + "");
