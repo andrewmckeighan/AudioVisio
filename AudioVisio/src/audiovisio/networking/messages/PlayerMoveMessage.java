@@ -19,6 +19,7 @@ public class PlayerMoveMessage extends AbstractMessage {
 	private int playerID;
 	private Vector3f position;
 	private Vector3f direction;
+	private int ID;
 	
 	public PlayerMoveMessage() {}
 	
@@ -43,5 +44,10 @@ public class PlayerMoveMessage extends AbstractMessage {
 	
 	public Vector3f getPosition() {
 		return position;
+	}
+
+	public int getID() {
+		// TODO Auto-generated method stub
+		return ID;
 	}
 }

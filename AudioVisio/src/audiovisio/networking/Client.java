@@ -133,6 +133,7 @@ PhysicsCollisionListener {
 
 		currentPlayer = new Player();
 		currentPlayer.createModel(assetManager);
+		currentPlayer.setCam(cam);
 		
 		networkedPlayer = new Player();
 		networkedPlayer.createModel(assetManager);
