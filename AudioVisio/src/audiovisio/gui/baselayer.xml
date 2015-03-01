@@ -8,22 +8,22 @@
 		<layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
 			
 			<panel id="panel_top" height="25%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
-				<control name="button" label="Host" id="HostButton" align="center" valign="center"> 
+				<control name="button" label="Host" id="HostButton" height="50%" width="50%" align="center" valign="center"> 
           		</control>
 			</panel>
 			
 			<panel id="panel_mid" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Join" id="JoinButton" align="center" valign="center"> 
+				<control name="button" label="Join" id="JoinButton" height="50%" width="50%" align="center" valign="center"> 
           		</control>
 			</panel>
 			
 			<panel id="panel_mid_low" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Settings" id="SettingsButton" align="center" valign="center"> 
+				<control name="button" label="Settings" id="SettingsButton" height="50%" width="50%" align="center" valign="center"> 
           		</control>
 			</panel>
 			
 			<panel id="panel_bot" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Exit" id="ExitButton" align="center" valign="center"> 
+				<control name="button" label="Exit" id="ExitButton" height="50%" width="50%" align="center" valign="center"> 
           		</control>
 			</panel>
 			
