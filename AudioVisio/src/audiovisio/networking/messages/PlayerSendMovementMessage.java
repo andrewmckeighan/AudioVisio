@@ -16,7 +16,7 @@ public class PlayerSendMovementMessage extends AbstractMessage{
 	private Vector3f direction;
 	
 	public PlayerSendMovementMessage(){
-		
+		setReliable(false);
 	}
 
 	/**

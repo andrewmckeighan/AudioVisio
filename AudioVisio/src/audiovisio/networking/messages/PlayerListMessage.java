@@ -13,7 +13,9 @@ import com.jme3.network.serializing.Serializable;
 public class PlayerListMessage extends AbstractMessage {
 	private Integer[] playerList;
 	
-	public PlayerListMessage() {}
+	public PlayerListMessage() {
+		setReliable(true);
+	}
 	
 	/**
 	 * @param objects A list of IDs of all currently connected players

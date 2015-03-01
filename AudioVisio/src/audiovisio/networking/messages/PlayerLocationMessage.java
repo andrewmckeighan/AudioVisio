@@ -20,7 +20,9 @@ public class PlayerLocationMessage extends AbstractMessage {
 	private Vector3f position;
 	private Vector3f direction;
 	
-	public PlayerLocationMessage() {}
+	public PlayerLocationMessage() {
+		setReliable(false);
+	}
 	
 	/**
 	 * @param playerID The ID of the player being updated with this message

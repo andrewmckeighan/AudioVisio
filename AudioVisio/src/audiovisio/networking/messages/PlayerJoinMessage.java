@@ -12,7 +12,9 @@ import com.jme3.network.serializing.Serializable;
 public class PlayerJoinMessage extends AbstractMessage {
 	private int playerID;
 	
-	public PlayerJoinMessage() {}
+	public PlayerJoinMessage() {
+		setReliable(true);
+	}
 	
 	/**
 	 * @param playerID The ID of the player who has just connected

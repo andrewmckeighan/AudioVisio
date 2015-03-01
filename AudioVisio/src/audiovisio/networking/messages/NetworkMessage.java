@@ -15,7 +15,7 @@ public class NetworkMessage extends AbstractMessage{
 	 * Default constructor- empty
 	 */
 	public NetworkMessage(){
-		
+		setReliable(true);
 	}
 	/**
 	 * Constructor

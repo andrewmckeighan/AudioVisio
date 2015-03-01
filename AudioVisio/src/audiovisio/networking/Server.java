@@ -85,10 +85,14 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				@Override
 				public void connectionAdded(com.jme3.network.Server server,
 						HostedConnection conn) {
+					// DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
+					LogHelper.info("connectionAdded() for connection: " + conn.getId());
 					if (players.size() < 2) {
 						Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 						conn.send(new PlayerListMessage(list));
+						LogHelper.info("Sent PlayerListMessage");
 						server.broadcast(Filters.notEqualTo(conn), new PlayerJoinMessage(conn.getId()));
+						LogHelper.info("Sent PlayerJoinMessage");
 						players.put(conn.getId(), new Player());
 					} else {
 						conn.close("Too many clients connect to server");

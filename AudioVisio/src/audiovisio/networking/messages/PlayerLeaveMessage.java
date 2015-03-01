@@ -14,7 +14,9 @@ import com.jme3.network.serializing.Serializable;
 public class PlayerLeaveMessage extends AbstractMessage {
 	private int playerID;
 	
-	public PlayerLeaveMessage() {}
+	public PlayerLeaveMessage() {
+		setReliable(true);
+	}
 	
 	/**
 	 * @param playerID The ID of the leaving player

@@ -26,17 +26,20 @@ public class ClientMessageListener implements MessageListener<Client> {
 
 		}
 		if (message instanceof PlayerLocationMessage) {
+			LogHelper.info("Received PlayerLocationMessage");
 			PlayerLocationMessage msg = (PlayerLocationMessage) message;
 			myClient.getPlayer().update(msg);
 			myClient.updatePlayer(msg);
 			return;
 		}
 		if (message instanceof PlayerJoinMessage) {
+			LogHelper.info("Received PlayerJoinMessage");
 			PlayerJoinMessage msg = (PlayerJoinMessage) message;
 			LogHelper.info("Player " + msg.getPlayerID() + " has joined");
 			return;
 		}
 		if (message instanceof PlayerLeaveMessage) {
+			LogHelper.info("Received PlayerLeaveMessage");
 			PlayerLeaveMessage msg = (PlayerLeaveMessage) message;
 			LogHelper.info("Player " + msg.getPlayerID() + " has left");
 			return;
