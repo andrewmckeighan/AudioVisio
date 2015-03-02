@@ -41,7 +41,8 @@ public class Main extends SimpleApplication implements ScreenController{
 	}
 	
 	public void initSettings(){
-		nifty.fromXml("audiovisio/gui/baselayer.xml", "settings");
+		//nifty.fromXml("audiovisio/gui/baselayer.xml", "settings");
+		nifty.gotoScreen("settings");
 	}
 	
 	public void goBack(){
