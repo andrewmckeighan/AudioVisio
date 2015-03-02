@@ -84,7 +84,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
 		}
-		
+
 		// /////////////
 		// Physics //
 		// /////////////
