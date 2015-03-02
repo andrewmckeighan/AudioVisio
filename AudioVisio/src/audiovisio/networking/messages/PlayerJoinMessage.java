@@ -14,7 +14,7 @@ import com.jme3.scene.Node;
  */
 @Serializable
 public class PlayerJoinMessage extends PhysicsSyncMessage {
-	private int playerID;
+	private long playerID;
 	private Vector3f spawnLocation;
 	
 	public PlayerJoinMessage() {
@@ -24,21 +24,21 @@ public class PlayerJoinMessage extends PhysicsSyncMessage {
 	/**
 	 * @param playerID The ID of the player who has just connected
 	 */
-	public PlayerJoinMessage(long id, int playerID, Vector3f spawnLocation) {
-		this.syncId = id;
+	public PlayerJoinMessage(long playerID, Vector3f spawnLocation) {
+		this.syncId = -1;
 		this.playerID = playerID;
 		this.spawnLocation = spawnLocation;
 		
 		setReliable(true);
 	}
 	
-	public int getPlayerID() {
+	public long getPlayerID() {
 		return this.playerID;
 	}
 
 	@Override
 	public void applyData(Object object) {
 		WorldManager manager = (WorldManager) object;
-		manager.addPlayer(syncId, playerID, spawnLocation);
+		manager.addPlayer(playerID, spawnLocation);
 	}
 }
