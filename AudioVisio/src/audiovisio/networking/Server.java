@@ -172,12 +172,12 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	@Override
 	public void simpleUpdate(float tpf){
-		for (Entry<Integer, Player> entry : this.players.entrySet()) {
-			PlayerLocationMessage message = entry.getValue().getLocationMessage(entry.getKey());
-			
-			myServer.broadcast(message);
-			LogHelper.info("Server is sending message: [" + message + "] to, client [" + entry.getKey() + "]");
-		}
+//		for (Entry<Integer, Player> entry : this.players.entrySet()) {
+//			PlayerLocationMessage message = entry.getValue().getLocationMessage(entry.getKey());
+//
+//			myServer.broadcast(message);
+//			LogHelper.info("Server is sending message: [" + message + "] to, client [" + entry.getKey() + "]");
+//		}
 	}
 	
 
