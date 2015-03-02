@@ -39,7 +39,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
-public class Client extends SimpleApplication implements PhysicsCollisionListener {
+public class Client extends SimpleApplication implements
+		PhysicsCollisionListener {
 
 	private com.jme3.network.Client myClient;
 	public ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<String>();
@@ -72,7 +73,9 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 	/**
 	 * Client Initialization
-	 * @param IP Specified server connection IP address
+	 * 
+	 * @param IP
+	 *            Specified server connection IP address
 	 */
 	public void simpleInitApp(String IP) {
 		GeneralUtilities.initializeSerializables();
@@ -84,7 +87,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
 		}
-		
+
 		// /////////////
 		// Physics //
 		// /////////////
@@ -111,7 +114,8 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		// ///////////////////////
 		syncManager = new SyncManager(this, myClient);
 		syncManager.setMaxDelay(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
-		syncManager.setMessageTypes(SyncCharacterMessage.class, SyncRigidBodyMessage.class);
+		syncManager.setMessageTypes(SyncCharacterMessage.class,
+				SyncRigidBodyMessage.class);
 		stateManager.attach(syncManager);
 
 		worldManager = new WorldManager(this, rootNode);
@@ -127,7 +131,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(ColorRGBA.White);
 		directionalLight.setDirection(new Vector3f(2.8f, -2.8f, -2.8f)
-		.normalizeLocal());
+				.normalizeLocal());
 
 		// We set up collision detection for the scene by creating a
 		// compound collision shape and a static RigidBodyControl with mass
@@ -137,9 +141,9 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
 
-		/////////////////////////
+		// ///////////////////////
 		// Generate entities //
-		/////////////////////////
+		// ///////////////////////
 		Button testButton = new Button(0f, 1f, 0f);
 		testButton.createMaterial(assetManager);
 
@@ -152,7 +156,6 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 		syncManager.addObject(myClient.getId(), currentPlayer);
 
-
 		networkedPlayer = new Player();
 		networkedPlayer.createModel(assetManager);
 
@@ -163,9 +166,9 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		initKeys(); // load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
-		///////////////////////////
-		//Add entities to Scene //
-		///////////////////////////
+		// /////////////////////////
+		// Add entities to Scene //
+		// /////////////////////////
 		currentPlayer.addToScene(rootNode, physicsSpace);
 		networkedPlayer.addToScene(rootNode, physicsSpace);
 
@@ -185,8 +188,8 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
 
-		myClient.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
-				PlayerListMessage.class);
+		myClient.addMessageListener(messageListener, PlayerJoinMessage.class,
+				PlayerLeaveMessage.class, PlayerListMessage.class);
 	}
 
 	/**
@@ -243,25 +246,26 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
 
-		// center
-		settings.getWidth() / 2 - ch.getLineWidth() / 2,
-		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+				// center
+				settings.getWidth() / 2 - ch.getLineWidth() / 2,
+				settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
 
 	}
 
 	/**
-	 * Updates App to current status
-	 * Generates position from user input/server messages
+	 * Updates App to current status Generates position from user input/server
+	 * messages
 	 */
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		//currentPlayer.right = true;
-//		PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
-//		LogHelper.info("Client[" + myClient.getId() + "] is sending message: [" + message + "]");
-//		myClient.send(message);
-		currentPlayer.getUpdateMessage();
+		// currentPlayer.right = true;
+		PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
+		// LogHelper.info("Client[" + myClient.getId() +
+		// "] is sending message: [" + message + "]");
+		// myClient.send(message);
+		currentPlayer.characterControl.setWalkDirection(message.getDirection());
 		updateVelocityMessage();
 
 		currentPlayer.updateCam();
@@ -269,16 +273,15 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	}
 
 	public void simpleRender() {
-		//currentPlayer.updateLocalTranslation();
-		//networkedPlayer.updateLocalTranslation();
-
+		// currentPlayer.updateLocalTranslation();
+		// networkedPlayer.updateLocalTranslation();
 
 	}
 
 	/**
 	 * Updates displayed generic server text
 	 */
-	private void updateFpsText(){
+	private void updateFpsText() {
 		String message = messageQueue.poll();
 		if (message != null) {
 			fpsText.setText(message);
@@ -290,7 +293,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	/**
 	 * Updates displayed velocity text
 	 */
-	private void updateVelocityMessage(){
+	private void updateVelocityMessage() {
 
 		if (counter % 1000 == 0) {
 			if (oldLocation != null && newLocation != null && oldTime != 0
@@ -307,7 +310,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			counter = 0;
 		}
 
-		//messageListener.NetworkMessageHandler(velocityMessage);
+		// messageListener.NetworkMessageHandler(velocityMessage);
 		counter++;
 	}
 
@@ -325,7 +328,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
-		try {
+		if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
 			Entity entityA = (Entity) event.getNodeA().getParent();
 			Entity entityB = (Entity) event.getNodeB().getParent();
 			entityA.collisionTrigger(entityB);
@@ -344,17 +347,12 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 					b.startPress();
 				}
 			}
-		} catch (NullPointerException nullException) {
-			// System.out.println("nullException Caught: " + nullException);
-		} catch (ClassCastException castException) {
-			LogHelper.warn("castException Caught: ", castException);
-			System.out.println("castException Caught: " + castException);
 		}
 
 	}
 
 	public Player getPlayer(int ID) {
-		if(ID == myClient.getId())
+		if (ID == myClient.getId())
 			return currentPlayer;
 		else
 			return networkedPlayer;
