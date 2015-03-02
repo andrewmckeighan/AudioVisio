@@ -283,6 +283,8 @@ public class Player extends MovingEntity implements ActionListener {
 	public void updateModel() {
 		if (this.model != null) {
 			this.model.setLocalTranslation(this.getWorldTranslation().add(PLAYER_OFFSET));
+		}else{
+			System.out.println("no model!");
 		}
 	}
 	

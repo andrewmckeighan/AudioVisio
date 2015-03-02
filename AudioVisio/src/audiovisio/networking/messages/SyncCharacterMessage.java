@@ -1,5 +1,7 @@
 package audiovisio.networking.messages;
 
+import audiovisio.entities.Player;
+
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
@@ -30,5 +32,7 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
     public void applyData(Object character) {
         ((Spatial) character).getControl(BetterCharacterControl.class).setWalkDirection(walkDirection);
         ((Spatial) character).getControl(BetterCharacterControl.class).setViewDirection(viewDirection);
+        ((Spatial) character).setLocalTranslation(location);
+        ((Player) character).model.setLocalTranslation(((Spatial) character).getWorldTranslation());
     }
 }
