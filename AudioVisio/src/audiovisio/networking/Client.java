@@ -115,7 +115,7 @@ public class Client extends SimpleApplication implements
 		syncManager = new SyncManager(this, myClient);
 		syncManager.setMaxDelay(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
 		syncManager.setMessageTypes(SyncCharacterMessage.class,
-				SyncRigidBodyMessage.class);
+				SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 		stateManager.attach(syncManager);
 
 		worldManager = new WorldManager(this, rootNode);
@@ -188,8 +188,8 @@ public class Client extends SimpleApplication implements
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
 
-		myClient.addMessageListener(messageListener, PlayerJoinMessage.class,
-				PlayerLeaveMessage.class, PlayerListMessage.class);
+//		myClient.addMessageListener(messageListener, PlayerJoinMessage.class,
+//				PlayerLeaveMessage.class, PlayerListMessage.class);
 	}
 
 	/**

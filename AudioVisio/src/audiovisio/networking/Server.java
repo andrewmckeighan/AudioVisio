@@ -176,8 +176,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 			}
 		});
 
-		myServer.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
-				PlayerListMessage.class);
+//		myServer.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
+//				PlayerListMessage.class);
 	}
 
 	/**
