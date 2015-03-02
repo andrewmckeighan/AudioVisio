@@ -145,12 +145,14 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				// DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
 				LogHelper.info("connectionAdded() for connection: " + conn.getId());
 				if (players.size() < 2) {
-					server.broadcast(new PlayerJoinMessage(conn.getId()));
+					
 					LogHelper.info("Sent PlayerJoinMessage");
 					Player p = new Player();
+					p.createModel(assetManager);
 					p.addToScene(rootNode, physicsSpace);
+					server.broadcast(new PlayerJoinMessage(conn.getId(), conn.getId(), p.model, p.getWorldTranslation()));
 					players.put(conn.getId(), p);
-
+					
 					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 					conn.send(new PlayerListMessage(list));
 					LogHelper.info("Sent PlayerListMessage");
