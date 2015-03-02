@@ -64,9 +64,9 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 
     @Override
     public boolean checkMessage(PhysicsSyncMessage message) {
-        if (message.syncId >= 0 && getEntity(message.syncId) == null) {
-            return false;
-        }
+//        if (message.syncId >= 0 && getEntity(message.syncId) == null) {
+//            return false;
+//        }
         return true;
     }
 }
