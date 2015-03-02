@@ -144,6 +144,8 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		currentPlayer.setCam(cam);
 		currentPlayer.createModel(assetManager);
 
+		syncManager.addObject(myClient.getId(), currentPlayer);
+
 		
 		networkedPlayer = new Player();
 		networkedPlayer.createModel(assetManager);
@@ -176,8 +178,9 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		// /////////////////////////////////
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
-		
-		myClient.addMessageListener(messageListener);
+
+		myClient.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
+				PlayerListMessage.class);
 	}
 
 	/**

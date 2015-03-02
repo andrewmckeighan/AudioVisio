@@ -1,11 +1,6 @@
 package audiovisio.networking.utilities;
 
-import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.messages.PlayerJoinMessage;
-import audiovisio.networking.messages.PlayerLeaveMessage;
-import audiovisio.networking.messages.PlayerListMessage;
-import audiovisio.networking.messages.PlayerLocationMessage;
-import audiovisio.networking.messages.PlayerSendMovementMessage;
+import audiovisio.networking.messages.*;
 
 import com.jme3.network.serializing.Serializer;
 
@@ -27,6 +22,11 @@ public class GeneralUtilities {
 		Serializer.registerClass(PlayerJoinMessage.class);
 		Serializer.registerClass(PlayerLeaveMessage.class);
 		Serializer.registerClass(PlayerListMessage.class);
+
+		// Sync Messages
+		Serializer.registerClass(PhysicsSyncMessage.class);
+		Serializer.registerClass(SyncCharacterMessage.class);
+		Serializer.registerClass(SyncRigidBodyMessage.class);
 	}
 	
 	public static void setPort(int portNumber){
