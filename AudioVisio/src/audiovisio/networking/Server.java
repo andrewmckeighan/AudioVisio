@@ -146,6 +146,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 					conn.send(new PlayerListMessage(list));
 					LogHelper.info("Sent PlayerListMessage");
+
+					syncManager.addObject(conn.getId(), p);
 				} else {
 					conn.close("Too many clients connect to server");
 					LogHelper.severe("More than 2 players attempted to join");
@@ -163,7 +165,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				server.broadcast(Filters.notEqualTo(conn), new PlayerLeaveMessage(conn.getId()));
 			}
 		});
-		myServer.addMessageListener(messageListener);
+		myServer.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
+				PlayerListMessage.class);
 
 	}
 
