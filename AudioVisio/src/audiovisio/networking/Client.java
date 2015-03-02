@@ -84,6 +84,14 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			LogHelper.severe("Error on client start", e);
 			System.exit(1);
 		}
+		
+		// /////////////
+		// Physics //
+		// /////////////
+		bulletAppState = new BulletAppState();
+		stateManager.attach(bulletAppState);
+
+		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 		// /////////////////////
 		// Load Scene (map) //
@@ -120,14 +128,6 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		directionalLight.setColor(ColorRGBA.White);
 		directionalLight.setDirection(new Vector3f(2.8f, -2.8f, -2.8f)
 		.normalizeLocal());
-
-		// /////////////
-		// Physics //
-		// /////////////
-		bulletAppState = new BulletAppState();
-		stateManager.attach(bulletAppState);
-
-		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 		// We set up collision detection for the scene by creating a
 		// compound collision shape and a static RigidBodyControl with mass
