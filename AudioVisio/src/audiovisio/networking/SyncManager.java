@@ -47,6 +47,8 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 	double time = 0;
 	double offset = Double.MIN_VALUE;
 	private double maxDelay = 0.7;
+	
+    LinkedList<SyncMessageValidator> validators = new LinkedList<SyncMessageValidator>();
 
 	float timer = 0f;
 	LinkedList<PhysicsSyncMessage> messageQueue = new LinkedList<PhysicsSyncMessage>();
@@ -127,6 +129,19 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 			LogHelper.warn("Cannot find obj in message: " + message);
 		}
 	}
+	
+	protected void enqueueMessage(PhysicsSyncMessage message) {
+		if(offset == Double.MIN_VALUE){
+			offset = this.time - message.time;
+		}
+		double delay = (message.time + offset) - time;
+		if(delay < maxDelay){
+			offset -= delay - maxDelay;
+		}else if(delay < 0){
+			offset -= delay;
+		}
+		messageQueue.add(message);
+	}
 
 	protected void sendSyncData() {
         for (Iterator<Entry<Long, Object>> iter = objectMap.entrySet().iterator(); iter.hasNext();) {
@@ -194,7 +209,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 
         }else if(server != null){
             app.enqueue(new Callable<Void>() {
-
                 public Void call() throws Exception {
                     for (Iterator<SyncMessageValidator> it = validators.iterator(); it.hasNext();) {
                         SyncMessageValidator syncMessageValidator = it.next();
@@ -203,7 +217,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                         }
                     }
                     broadcast((PhysicsSyncMessage) message);
-                    doMessage((PhysicsSyncMessage) message);
+                    handleMessage((PhysicsSyncMessage) message);
                     return null;
                 }
             });
