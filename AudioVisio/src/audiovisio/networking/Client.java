@@ -243,17 +243,15 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
 		currentPlayer.right = true;
-		PlayerSendMovementMessage sendMessage = currentPlayer.getUpdateMessage();
-		myClient.send(sendMessage);
-		//currentPlayer.update(sendMessage);
-		//player.update(cam, receivedMessage);
-		
+		PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
+		LogHelper.info("Client[" + myClient.getId() + "] is sending message: [" + message + "]");
+		myClient.send(message);
 		updateVelocityMessage();
 	}
 	
 	public void simpleRender() {
-		currentPlayer.updateLocalTranslation();
-		networkedPlayer.updateLocalTranslation();
+		//currentPlayer.updateLocalTranslation();
+		//networkedPlayer.updateLocalTranslation();
 	}
 
 	/**
@@ -334,20 +332,10 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 	}
 
-	public Player getPlayer() {
-		return currentPlayer;
-	}
-
-	public void updatePlayer(PlayerLocationMessage msg) {
-		try {
-			if(msg.getPlayerID() == myClient.getId()){
-				currentPlayer.update(msg);
-			}else{
-				networkedPlayer.update(msg);
-			}
-			LogHelper.info("id: " + msg.getPlayerID());
-		} catch (NullPointerException e) {
-			LogHelper.warn("null exception, client cannot find player: ", e);
-		}
+	public Player getPlayer(int ID) {
+		if(ID == myClient.getId())
+			return currentPlayer;
+		else
+			return networkedPlayer;
 	}
 }

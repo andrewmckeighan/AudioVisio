@@ -29,11 +29,11 @@ public class PlayerLocationMessage extends AbstractMessage {
 	 * @param direction The direction the player is moving
 	 * @param position The position the player is currently in
 	 */
-	public PlayerLocationMessage(int playerID, Vector3f direction, Vector3f position) {
+	public PlayerLocationMessage(int playerID, Vector3f position, Vector3f direction) {
 		this.playerID = playerID;
-		this.direction = direction;
 		this.position = position;
-
+		this.direction = direction;
+		
 		setReliable(false);
 	}
 	
@@ -48,5 +48,10 @@ public class PlayerLocationMessage extends AbstractMessage {
 	public Vector3f getPosition() {
 		return position;
 	}
+	
+	@Override
+    public String toString() {
+        return String.format(playerID + ":" + position + ":" + direction);
+    }
 
 }

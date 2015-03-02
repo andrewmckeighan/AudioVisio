@@ -16,7 +16,7 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
 
     public SyncCharacterMessage(long id, BetterCharacterControl character) {
         this.syncId = id;
-
+        //location
         this.walkDirection.set(character.getWalkDirection());
         this.viewDirection.set(character.getViewDirection());
     }

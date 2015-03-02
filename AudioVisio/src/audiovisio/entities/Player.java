@@ -156,7 +156,7 @@ public class Player extends MovingEntity implements ActionListener{
 		this.model = myCharacter;
 
 		this.model.setLocalScale(0.5f);
-        //this.model.setLocalTranslation(SPAWN_LOCATION);
+        this.model.setLocalTranslation(SPAWN_LOCATION);
 
         this.model.addControl(this.characterControl);
         this.attachChild(this.model);
@@ -176,6 +176,7 @@ public class Player extends MovingEntity implements ActionListener{
 		if(this.playerCamera != null){
 			this.playerCamera.setLocation(this.getLocalTranslation());
 		}
+		
 	}
 
 	/**
@@ -183,11 +184,11 @@ public class Player extends MovingEntity implements ActionListener{
 	 * @param msg The message sent from the client
 	 */
 	public void update(PlayerSendMovementMessage msg) {
-        this.update(this.getLocalTranslation(), msg.getDirection());
+        this.update(msg.getPosition(), msg.getDirection());
 	}
 
 	public void update(PlayerLocationMessage msg){
-		update(msg.getPosition(), msg.getDirection());
+		this.update(msg.getPosition(), msg.getDirection());
 	}
 
 	/**
@@ -217,7 +218,7 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(this.camLeft.negate());
         }
 
-        return new PlayerSendMovementMessage(this.getLocalTranslation());
+        return new PlayerSendMovementMessage(this.getLocalTranslation(), walkDirection);
 	}
 
     public PlayerLocationMessage getLocationMessage(int ID) {
@@ -234,6 +235,9 @@ public class Player extends MovingEntity implements ActionListener{
 
 	public void updateLocalTranslation() {
 		this.setLocalTranslation(this.savedLocation); 
+		if(this.model != null){
+			this.model.setLocalTranslation(this.savedLocation);
+		}
 	}
 
 

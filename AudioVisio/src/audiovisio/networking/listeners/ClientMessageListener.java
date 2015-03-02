@@ -1,5 +1,6 @@
 package audiovisio.networking.listeners;
 
+import audiovisio.entities.Player;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
@@ -21,15 +22,17 @@ public class ClientMessageListener implements MessageListener<Client> {
 	}
 
 	@Override
-	public void messageReceived(Client client, Message message) {
+	public void messageReceived(Client source, Message message) {
 		if (message instanceof NetworkMessage) {
 
 		}
 		if (message instanceof PlayerLocationMessage) {
-			LogHelper.info("Received PlayerLocationMessage");
+			LogHelper.info("Client Received PlayerLocationMessage: " + message);
 			PlayerLocationMessage msg = (PlayerLocationMessage) message;
-			//myClient.getPlayer().update(msg);
-			myClient.updatePlayer(msg);
+			Player playerToUpdate = myClient.getPlayer(msg.getPlayerID());
+			LogHelper.info("player's old info: " + playerToUpdate.getLocalTranslation() + ", " + playerToUpdate.characterControl.getWalkDirection());
+			playerToUpdate.update(msg);
+			LogHelper.info("player's new info: " + playerToUpdate.getLocalTranslation() + ", " + playerToUpdate.characterControl.getWalkDirection());
 			return;
 		}
 		if (message instanceof PlayerJoinMessage) {
