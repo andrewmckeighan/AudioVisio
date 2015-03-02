@@ -75,15 +75,22 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return true;
     }
 
-	public void addPlayer(Long syncID, int playerID, Node playerModel, Vector3f spawnLocation) {
+	public void addPlayer(long syncID, int playerID, Vector3f spawnLocation) {
 		LogHelper.info("adding player: ");
 		if(isServer()){
-			syncManager.broadcast(new PlayerJoinMessage(syncID, playerID, playerModel, spawnLocation));
+			syncManager.broadcast(new PlayerJoinMessage(syncID, playerID, spawnLocation));
 		}
-		Player player = new Player(playerModel, spawnLocation);
+		Player player = new Player();
+        player.createModel(assetManager);
+        player.setLocalTranslation(spawnLocation);
 		syncManager.addObject(syncID, player);
 		player.addToScene(rootNode, space);
+        entities.put(syncID, player);
 	}
+
+    public Spatial getPlayer(long syncID) {
+        return entities.get(syncID);
+    }
 
 	public void removePlayer(long id) {
 		LogHelper.info("removing player: " + id);

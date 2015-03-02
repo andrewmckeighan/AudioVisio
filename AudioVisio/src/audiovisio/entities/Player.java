@@ -20,7 +20,7 @@ import com.jme3.scene.Node;
 
 public class Player extends MovingEntity implements ActionListener {
 
-	private final static Vector3f SPAWN_LOCATION = new Vector3f(0, 5, 0);
+	public final static Vector3f SPAWN_LOCATION = new Vector3f(0, 5, 0);
 	private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 	private static final Vector3f CAMERA_OFFSET = new Vector3f(0, 5, 0);
 
