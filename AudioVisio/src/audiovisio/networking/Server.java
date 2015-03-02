@@ -147,12 +147,17 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				if (players.size() < 2) {
 					
 					LogHelper.info("Sent PlayerJoinMessage");
-					worldManager.addPlayer(conn.getId(), conn.getId(), Player.SPAWN_LOCATION);
-					players.put(conn.getId(), (Player) worldManager.getPlayer(conn.getId()));
+					Player p = new Player();
+					p.createModel(assetManager);
+					p.addToScene(rootNode, physicsSpace);
+					server.broadcast(new PlayerJoinMessage(-1, conn.getId(), p.getWorldTranslation()));
+					players.put(conn.getId(), p);
 					
 					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 					conn.send(new PlayerListMessage(list));
 					LogHelper.info("Sent PlayerListMessage");
+
+					syncManager.addObject(conn.getId(), p);
 				} else {
 					conn.close("Too many clients connect to server");
 					LogHelper.severe("More than 2 players attempted to join");
