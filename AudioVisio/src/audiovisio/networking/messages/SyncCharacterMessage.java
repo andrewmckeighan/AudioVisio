@@ -14,14 +14,15 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
 
     public SyncCharacterMessage() {}
 
-    public SyncCharacterMessage(long id, BetterCharacterControl character) {
+    public SyncCharacterMessage(long id, BetterCharacterControl character, Vector3f location) {
         this.syncId = id;
-
+        this.location = location;
         this.walkDirection.set(character.getWalkDirection());
         this.viewDirection.set(character.getViewDirection());
     }
 
-    public void readData(BetterCharacterControl character) {
+    public void readData(BetterCharacterControl character, Vector3f location) {
+        this.location = location;
         this.walkDirection.set(character.getWalkDirection());
         this.viewDirection.set(character.getViewDirection());
     }
