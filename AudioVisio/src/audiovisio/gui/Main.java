@@ -39,7 +39,15 @@ public class Main extends SimpleApplication implements ScreenController{
 	public void quitGame(){
 		app.stop();
 	}
-
+	
+	public void initSettings(){
+		nifty.fromXml("audiovisio/gui/baselayer.xml", "settings");
+	}
+	
+	public void goBack(){
+		nifty.fromXml("audiovisio/gui/baselayer.xml", "start");
+	}
+	
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
 		// TODO Auto-generated method stub
