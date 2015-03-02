@@ -82,6 +82,8 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 		}
 		Player player = new Player();
         player.createModel(assetManager);
+        player.setCam(app.getCamera());
+        player.initKeys(app.getInputManager());
         player.setLocalTranslation(spawnLocation);
 		syncManager.addObject(playerID, player);
 		player.addToScene(rootNode, space);

@@ -24,10 +24,7 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
+
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -48,7 +45,7 @@ public class Client extends SimpleApplication implements
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
-	//private Player currentPlayer;
+	private Player player;
 	//private Player networkedPlayer;
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
@@ -165,7 +162,8 @@ public class Client extends SimpleApplication implements
 		// Initialization Methods //
 		// ///////////////////////
 		initCrossHairs(); // a "+" in the middle of the screen to help aiming
-		initKeys((Player) worldManager.getPlayer(myClient.getId())); // load custom key mappings
+//		Player p = new Player();
+//		p.initKeys(inputManager);// load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
 		// /////////////////////////
@@ -201,28 +199,7 @@ public class Client extends SimpleApplication implements
 		simpleInitApp("127.0.0.1");
 	}
 
-	/**
-	 * Initialization for key mapping
-	 */
-	private void initKeys(Player p) {
-		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-
-		inputManager.addMapping("Shoot", new MouseButtonTrigger(
-				MouseInput.BUTTON_LEFT));
-
-		inputManager.addListener(p, "Up");
-		inputManager.addListener(p, "Down");
-		inputManager.addListener(p, "Left");
-		inputManager.addListener(p, "Right");
-		inputManager.addListener(p, "Jump");
-
-		inputManager.addListener(p, "Shoot");
-
-	}
+	
 
 	/**
 	 * Initialization for ball that shows where the player hit the given object
@@ -248,7 +225,7 @@ public class Client extends SimpleApplication implements
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
 
-		// center
+		// centerwwwsdawsad
 		settings.getWidth() / 2 - ch.getLineWidth() / 2,
 		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
@@ -270,7 +247,10 @@ public class Client extends SimpleApplication implements
 		//currentPlayer.characterControl.setWalkDirection(message.getDirection());
 		updateVelocityMessage();
 
-		((Player) worldManager.getPlayer(myClient.getId())).updateCam();
+		player = ((Player) worldManager.getPlayer(myClient.getId()));
+		player.updateCam();
+		PlayerSendMovementMessage msg = player.getUpdateMessage();
+		player.characterControl.setWalkDirection(msg.getDirection());
 		//p.updateCam();
 //		currentPlayer.updateModel();
 	}

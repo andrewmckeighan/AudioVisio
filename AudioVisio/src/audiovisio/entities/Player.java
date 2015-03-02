@@ -11,8 +11,17 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Mesh;
@@ -273,6 +282,31 @@ public class Player extends MovingEntity implements ActionListener {
 		if (this.model != null) {
 			this.model.setLocalTranslation(this.getWorldTranslation());
 		}
+	}
+	
+	/**
+	 * Initialization for key mapping
+	 * @param inputManager 
+	 * @param inputManager 
+	 */
+	public void initKeys(InputManager inputManager) {
+		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+
+		inputManager.addMapping("Shoot", new MouseButtonTrigger(
+				MouseInput.BUTTON_LEFT));
+
+		inputManager.addListener(this, "Up");
+		inputManager.addListener(this, "Down");
+		inputManager.addListener(this, "Left");
+		inputManager.addListener(this, "Right");
+		inputManager.addListener(this, "Jump");
+
+		inputManager.addListener(this, "Shoot");
+
 	}
 
 }
