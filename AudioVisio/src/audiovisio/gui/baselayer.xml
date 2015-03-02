@@ -2,8 +2,10 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+	
 	<useStyles filename="nifty-default-styles.xml" />
   	<useControls filename="nifty-default-controls.xml" />
+	
 	<screen id="start" controller="audiovisio.gui.Main">
 		<layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
 			
@@ -23,10 +25,13 @@
 			</panel>
 			
 			<panel id="panel_bot" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Exit" id="ExitButton" height="50%" width="50%" align="center" valign="center"> 
+				<control name="button" label="Exit" id="ExitButton" height="50%" width="50%" align="center" valign="center">
+				<interact onClick="quitGame()"/>
           		</control>
 			</panel>
 			
 		</layer>
 	</screen>
+	
+	
 </nifty>
