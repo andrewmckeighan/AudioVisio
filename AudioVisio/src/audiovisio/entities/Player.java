@@ -24,6 +24,9 @@ public class Player extends MovingEntity implements ActionListener{
 
     public BetterCharacterControl characterControl;
     private Camera playerCamera;
+    private Vector3f camDir = new Vector3f();
+    private Vector3f camLeft = new Vector3f();
+    
     public boolean up = false;
 	public boolean down = false;
 	public boolean left = false;
@@ -36,14 +39,14 @@ public class Player extends MovingEntity implements ActionListener{
 	 * Creates the collision for player, and sets the physics parameters for the player.
 	 */
 	public Player() {
-        this.characterControl = new BetterCharacterControl(1.5f, 6f, 1);
+        this.characterControl = new BetterCharacterControl(.9f, 1.9f, 1f);
         characterControl.setJumpForce(new Vector3f(0, 0, 0));
         characterControl.setGravity(new Vector3f(0, -10, 0));
 
-        this.characterControl.warp(SPAWN_LOCATION);
-
         this.addControl(this.characterControl);
-
+        
+        this.characterControl.warp(SPAWN_LOCATION);
+        this.setLocalTranslation(SPAWN_LOCATION);
     }
 
 	/**
@@ -56,9 +59,11 @@ public class Player extends MovingEntity implements ActionListener{
 
         this.model = playerModel;
         this.model.setLocalScale(0.2f);
-        this.model.setLocalTranslation(spawnLocation);
+        //this.model.setLocalTranslation(spawnLocation);
 
         this.model.addControl(this.characterControl);
+        
+        this.attachChild(this.model);
     }
 
     /**
@@ -150,7 +155,7 @@ public class Player extends MovingEntity implements ActionListener{
 		this.model = myCharacter;
 
 		this.model.setLocalScale(0.5f);
-        this.model.setLocalTranslation(SPAWN_LOCATION);
+        //this.model.setLocalTranslation(SPAWN_LOCATION);
 
         this.model.addControl(this.characterControl);
         this.attachChild(this.model);
@@ -162,10 +167,11 @@ public class Player extends MovingEntity implements ActionListener{
      * @param walkDirection direction the player is going to move
      */
 	public void update(Vector3f position, Vector3f direction) {
-		//this.characterControl.setWalkDirection(direction);
-		this.characterControl.warp(position.add(direction)); //may need to use this instead of walkdirection
-		if(this.playerCamera != null)
+		this.characterControl.setWalkDirection(direction);
+		//this.characterControl.warp(position.add(direction)); //may need to use this instead of walkdirection
+		if(this.playerCamera != null){
 			this.playerCamera.setLocation(this.getLocalTranslation());
+		}
 	}
 
 	/**
@@ -188,30 +194,29 @@ public class Player extends MovingEntity implements ActionListener{
 	 * @param camLeft vector directed straight left of the player
 	 * @return the message that is sent to the server
 	 */
-	public PlayerSendMovementMessage getUpdateMessage(Vector3f camDir,
-			Vector3f camLeft) {
-		camDir.set(this.playerCamera.getDirection().multLocal(0.6f));
-        camLeft.set(this.playerCamera.getLeft()).multLocal(0.4f);
+	public PlayerSendMovementMessage getUpdateMessage() {
+		this.camDir.set(this.playerCamera.getDirection().multLocal(0.6f));
+		this.camLeft.set(this.playerCamera.getLeft()).multLocal(0.4f);
 
         Vector3f walkDirection = new Vector3f(0, 0, 0);
 
         if (this.up) {
-            walkDirection.addLocal(camDir);
+            walkDirection.addLocal(this.camDir);
         }
         if (this.down) {
-            walkDirection.addLocal(camDir.negate());
+            walkDirection.addLocal(this.camDir.negate());
         }
         if (this.left) {
-            walkDirection.addLocal(camLeft);
+            walkDirection.addLocal(this.camLeft);
         }
         if (this.right) {
-            walkDirection.addLocal(camLeft.negate());
+            walkDirection.addLocal(this.camLeft.negate());
         }
 
         return new PlayerSendMovementMessage(walkDirection);
 	}
 
-    public PlayerLocationMessage getLocationMessage(Integer ID) {
+    public PlayerLocationMessage getLocationMessage(int ID) {
         return new PlayerLocationMessage(ID, this.getLocalTranslation(), this.characterControl.getWalkDirection());
     }
 
