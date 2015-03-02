@@ -159,7 +159,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 }
                 BetterCharacterControl control = spat.getControl(BetterCharacterControl.class);
                 if (control != null) {
-                	this.addObject(entry.getKey(), control);
                     SyncCharacterMessage msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation());
                     
                     broadcast(msg);
