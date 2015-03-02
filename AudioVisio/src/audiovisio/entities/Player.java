@@ -32,6 +32,7 @@ public class Player extends MovingEntity implements ActionListener {
 	public final static Vector3f SPAWN_LOCATION = new Vector3f(0, 5, 0);
 	private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 	private static final Vector3f CAMERA_OFFSET = new Vector3f(0, 5, 0);
+	private static final Vector3f GRAVITY = new Vector3f(0, -9.81f, 0);
 
 	public BetterCharacterControl characterControl;
 	private Camera playerCamera;
@@ -61,9 +62,9 @@ public class Player extends MovingEntity implements ActionListener {
 			this.attachChild(this.model);
 		}
 
-		this.characterControl = new BetterCharacterControl(.9f, 1.9f, 800f);
+		this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
 		characterControl.setJumpForce(new Vector3f(0, 0, 0));
-		characterControl.setGravity(new Vector3f(0, -1, 0));
+		characterControl.setGravity(GRAVITY);
 
 		this.characterControl.warp(spawnLocation);
 		this.setLocalTranslation(spawnLocation);

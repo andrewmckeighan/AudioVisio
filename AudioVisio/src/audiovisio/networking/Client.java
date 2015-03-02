@@ -249,6 +249,7 @@ public class Client extends SimpleApplication implements
 
 		player = ((Player) worldManager.getPlayer(myClient.getId()));
 		player.updateCam();
+		//player.updateGravity();
 		PlayerSendMovementMessage msg = player.getUpdateMessage();
 		player.characterControl.setWalkDirection(msg.getDirection());
 		//p.updateCam();
