@@ -212,7 +212,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 	@Override
 	public void collision(PhysicsCollisionEvent event) {
-		try {
+		if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
 			Entity entityA = (Entity) event.getNodeA().getParent();
 			Entity entityB = (Entity) event.getNodeB().getParent();
 			entityA.collisionTrigger(entityB);
@@ -231,14 +231,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					b.startPress();
 				}
 			}
-		} catch (NullPointerException nullException) {
-			// System.out.println("nullException Caught: " + nullException);
-		} catch (ClassCastException castException) {
-			LogHelper.warn("castException Caught: ", castException);
-			System.out.println("castException Caught: " + castException);
 		}
-
-
 	}
 
 	@Override
