@@ -178,8 +178,6 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		physicsSpace.add(landscape);
 		
 		myClient.addMessageListener(messageListener);
-
-		myClient.addMessageListener(messageListener);
 	}
 
 	/**

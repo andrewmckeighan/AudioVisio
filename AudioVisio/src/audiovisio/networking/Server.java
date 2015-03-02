@@ -163,8 +163,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				server.broadcast(Filters.notEqualTo(conn), new PlayerLeaveMessage(conn.getId()));
 			}
 		});
+		
 		myServer.addMessageListener(messageListener);
-
 	}
 
 	/**
