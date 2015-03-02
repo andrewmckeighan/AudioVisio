@@ -9,9 +9,7 @@ import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ClientMessageListener;
-import audiovisio.networking.messages.NetworkMessage;
-import audiovisio.networking.messages.PlayerLocationMessage;
-import audiovisio.networking.messages.PlayerSendMovementMessage;
+import audiovisio.networking.messages.*;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
@@ -58,6 +56,8 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	private long newTime;
 	private int counter = 0;
 
+	private SyncManager syncManager;
+
 	ClientMessageListener messageListener = new ClientMessageListener(this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
 	
@@ -95,6 +95,14 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		// ///////////////////
 		viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
 		flyCam.setMoveSpeed(100);
+
+		// ///////////////////////
+		// Physics Sync Manager //
+		// ///////////////////////
+		syncManager = new SyncManager(this, myClient);
+		syncManager.setMaxDelay(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
+		syncManager.setMessageTypes(SyncCharacterMessage.class, SyncRigidBodyMessage.class);
+		stateManager.attach(syncManager);
 
 		// //////////////
 		// Lighting //

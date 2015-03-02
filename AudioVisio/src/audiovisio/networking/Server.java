@@ -47,6 +47,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	//private Player audioPlayer;
 	//private Player visualPlayer;
 	private ServerMessageListener messageListener = new ServerMessageListener(this);
+	private SyncManager syncManager;
 
 	/**
 	 * Default constructor
@@ -77,6 +78,10 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		stateManager.attach(bulletAppState);
 		final PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
+		// create sync manager
+		syncManager = new SyncManager(this, myServer);
+		syncManager.setSyncFrequency(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
+		stateManager.attach(syncManager);
 
 		// /////////////////////
 		// Load Scene (map) //
