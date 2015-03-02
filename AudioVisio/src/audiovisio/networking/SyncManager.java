@@ -126,7 +126,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 		if(obj != null){
 			message.applyData(obj);
 		}else{
-			LogHelper.warn("Cannot find obj in message: " + message);
+			LogHelper.warn("Cannot find obj in message: " + message + " with ID: " + message.syncId);
 		}
 	}
 	
