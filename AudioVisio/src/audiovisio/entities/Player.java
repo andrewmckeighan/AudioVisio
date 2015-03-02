@@ -22,6 +22,7 @@ public class Player extends MovingEntity implements ActionListener {
 
 	private final static Vector3f SPAWN_LOCATION = new Vector3f(0, 30, 0);
 	private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
+	private static final Vector3f CAMERA_OFFSET = new Vector3f(0, 5, 0);
 
 	public BetterCharacterControl characterControl;
 	private Camera playerCamera;
@@ -51,13 +52,15 @@ public class Player extends MovingEntity implements ActionListener {
 			this.attachChild(this.model);
 		}
 
-		this.characterControl = new BetterCharacterControl(.9f, 1.9f, 1f);
+		this.characterControl = new BetterCharacterControl(.9f, 1.9f, 800f);
 		characterControl.setJumpForce(new Vector3f(0, 0, 0));
-		characterControl.setGravity(new Vector3f(0, -10, 0));
+		characterControl.setGravity(new Vector3f(0, -1, 0));
 
 		this.characterControl.warp(spawnLocation);
 		this.setLocalTranslation(spawnLocation);
 		this.addControl(this.characterControl);
+		
+		this.move(new Vector3f());
 	}
 
 	/**
@@ -185,7 +188,7 @@ public class Player extends MovingEntity implements ActionListener {
 		this.characterControl.setWalkDirection(direction);
 
 		if (this.playerCamera != null) {
-			this.playerCamera.setLocation(this.getLocalTranslation());
+			this.playerCamera.setLocation(this.getLocalTranslation().add(CAMERA_OFFSET));
 		}
 
 	}
@@ -218,8 +221,8 @@ public class Player extends MovingEntity implements ActionListener {
 	 * @return the message that is sent to the server
 	 */
 	public PlayerSendMovementMessage getUpdateMessage() {
-		this.camDir.set(this.playerCamera.getDirection().multLocal(2.6f));
-		this.camLeft.set(this.playerCamera.getLeft()).multLocal(2.4f);
+		this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
+		this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
 
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
 
@@ -262,7 +265,7 @@ public class Player extends MovingEntity implements ActionListener {
 
 	public void updateCam() {
 		if (this.playerCamera != null) {
-			this.playerCamera.setLocation(this.getWorldTranslation());
+			this.playerCamera.setLocation(this.getWorldTranslation().add(CAMERA_OFFSET));
 		}
 	}
 
