@@ -9,6 +9,7 @@ import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
@@ -16,37 +17,33 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 
-@SuppressWarnings("deprecation")
 public class Player extends MovingEntity implements ActionListener{
 
-    private final static float STEP_HEIGHT = 0.05f;
     private final static Vector3f SPAWN_LOCATION = new Vector3f(0,30,0);
     private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 
-    public CharacterControl characterControl;
+    public BetterCharacterControl characterControl;
     private Camera playerCamera;
     public boolean up = false;
 	public boolean down = false;
 	public boolean left = false;
 	public boolean right = false;
 
-    private CapsuleCollisionShape collisionShape;
     public Node model;
 	public Mesh mesh;
 
 	/**
-	 * Creates the collision for player, and sets the physics perameters for the player.
+	 * Creates the collision for player, and sets the physics parameters for the player.
 	 */
 	public Player() {
-        this.collisionShape = new CapsuleCollisionShape(1.5f, 6f, 1);
+        this.characterControl = new BetterCharacterControl(1.5f, 6f, 1);
+        characterControl.setJumpForce(new Vector3f(0, 0, 0));
+        characterControl.setGravity(new Vector3f(0, -10, 0));
 
-        this.characterControl = new CharacterControl(this.collisionShape, STEP_HEIGHT);
-        this.characterControl.setJumpSpeed(20);
-        this.characterControl.setFallSpeed(30);
-        this.characterControl.setGravity(30);
-        
-        this.characterControl.setPhysicsLocation(SPAWN_LOCATION);
-        
+        this.characterControl.warp(SPAWN_LOCATION);
+
+        this.addControl(this.characterControl);
+
     }
 
 	/**
@@ -63,7 +60,7 @@ public class Player extends MovingEntity implements ActionListener{
 
         this.model.addControl(this.characterControl);
     }
-    
+
     /**
      * creates a player with a given model
      * @param playerModel
@@ -86,15 +83,6 @@ public class Player extends MovingEntity implements ActionListener{
         super.load(obj);
 
         //TODO
-    }
-
-    /**
-     * moves the character in the direction of the vector3f
-     * @param direction
-     */
-    public void setWalkDirection(Vector3f direction){
-        this.moveDirection = direction;
-        this.characterControl.setWalkDirection(direction);
     }
 
     /**
@@ -160,7 +148,7 @@ public class Player extends MovingEntity implements ActionListener{
     public void createModel(AssetManager assetManager) {
 		Node myCharacter = (Node) assetManager.loadModel(DEFAULT_MODEL);
 		this.model = myCharacter;
-		
+
 		this.model.setLocalScale(0.5f);
         this.model.setLocalTranslation(SPAWN_LOCATION);
 
@@ -174,38 +162,20 @@ public class Player extends MovingEntity implements ActionListener{
      * @param walkDirection direction the player is going to move
      */
 	public void update(Vector3f position, Vector3f direction) {
-		this.setWalkDirection(direction);
-		if(this.characterControl.getPhysicsLocation().distance(new Vector3f(0f, 0f, 0f)) == 0 || position.distance(new Vector3f(0f, 0f, 0f)) == 0){
-			this.characterControl.setPhysicsLocation(direction);
-		}
-		else{
-			this.characterControl.setPhysicsLocation(position);
-		}
-		
-		
-		if(this.playerCamera != null){
-			this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
-		}
+		//this.characterControl.setWalkDirection(direction);
+		this.characterControl.warp(position.add(direction)); //may need to use this instead of walkdirection
+		if(this.playerCamera != null)
+			this.playerCamera.setLocation(this.getLocalTranslation());
 	}
-	
+
 	/**
 	 * Updates the players direction based on the message received from the client
 	 * @param msg The message send from the client
 	 */
 	public void update(PlayerSendMovementMessage msg) {
-		try{	
-			this.setWalkDirection(msg.getDirection());
-			this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
-		}catch(NullPointerException e){
-			//LogHelper.warn("null exception: ", e);
-		}
+        this.update(this.getLocalTranslation(), msg.getDirection());
 	}
-	
-	public void update(Vector3f direction) {
-		this.setWalkDirection(direction);
-		this.playerCamera.setLocation(this.characterControl.getPhysicsLocation());
-	}
-	
+
 	public void update(PlayerLocationMessage msg){
 		update(msg.getPosition(), msg.getDirection());
 	}
@@ -237,24 +207,21 @@ public class Player extends MovingEntity implements ActionListener{
         if (this.right) {
             walkDirection.addLocal(camLeft.negate());
         }
-        
+
         return new PlayerSendMovementMessage(walkDirection);
 	}
-	
+
+    public PlayerLocationMessage getLocationMessage(Integer ID) {
+        return new PlayerLocationMessage(ID, this.getLocalTranslation(), this.characterControl.getWalkDirection());
+    }
+
 	public Camera getCam(){
 		return this.playerCamera;
 	}
-	
+
 	public void setCam(Camera cam) {
 		this.playerCamera = cam;
 	}
-	
-	public Vector3f getWalkDirection(){
-		return this.moveDirection;
-	}
 
-	
-	public PlayerLocationMessage getLocationMessage(Integer ID) {
-		return new PlayerLocationMessage(ID, this.characterControl.getPhysicsLocation(), this.characterControl.getWalkDirection());
-	}
+
 }

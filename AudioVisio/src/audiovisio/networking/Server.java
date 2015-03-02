@@ -173,7 +173,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		for (Entry<Integer, Player> entry : this.players.entrySet()) {
 			PlayerLocationMessage message = entry.getValue().getLocationMessage(entry.getKey());
 			myServer.broadcast(message);
-			entry.getValue().update(message);
+			//entry.getValue().update(message);
 		}
 	}
 

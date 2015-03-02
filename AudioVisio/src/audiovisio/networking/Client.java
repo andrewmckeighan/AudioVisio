@@ -273,7 +273,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 			}
 
 			oldLocation = newLocation.clone();
-			newLocation = currentPlayer.characterControl.getPhysicsLocation();
+			newLocation = currentPlayer.getLocalTranslation();
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
