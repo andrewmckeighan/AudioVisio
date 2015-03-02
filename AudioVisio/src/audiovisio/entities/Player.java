@@ -101,9 +101,11 @@ public class Player extends MovingEntity implements ActionListener {
 	 */
 	public void addToScene(Node root, PhysicsSpace physics) {
 		addToScene(root);
-		root.attachChild(this.model);
+		if(this.model != null){
+			root.attachChild(this.model);
+		}
 		physics.add(this);
-		physics.add(this.characterControl);
+		//physics.add(this.characterControl);
 	}
 
 	public void load(JSONObject obj) {

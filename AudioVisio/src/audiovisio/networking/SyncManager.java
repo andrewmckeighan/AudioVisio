@@ -42,11 +42,11 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 
 	private Server server;
 	private Client client;
-	private float syncFrequency = 0.2f;
+	private float syncFrequency = 0.1f;
 
 	double time = 0;
 	double offset = Double.MIN_VALUE;
-	private double maxDelay = 0.7;
+	private double maxDelay = 0.4;
 	
     LinkedList<SyncMessageValidator> validators = new LinkedList<SyncMessageValidator>();
 

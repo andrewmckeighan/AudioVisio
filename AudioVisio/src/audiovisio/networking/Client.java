@@ -246,9 +246,9 @@ public class Client extends SimpleApplication implements
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
 
-				// center
-				settings.getWidth() / 2 - ch.getLineWidth() / 2,
-				settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+		// center
+		settings.getWidth() / 2 - ch.getLineWidth() / 2,
+		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
 
 	}

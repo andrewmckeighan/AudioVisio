@@ -28,7 +28,6 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
     }
 
     public void applyData(Object character) {
-        ((Spatial) character).getControl(BetterCharacterControl.class).warp(location);
         ((Spatial) character).getControl(BetterCharacterControl.class).setWalkDirection(walkDirection);
         ((Spatial) character).getControl(BetterCharacterControl.class).setViewDirection(viewDirection);
     }
