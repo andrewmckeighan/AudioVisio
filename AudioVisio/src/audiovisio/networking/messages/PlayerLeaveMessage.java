@@ -1,5 +1,7 @@
 package audiovisio.networking.messages;
 
+import audiovisio.WorldManager;
+
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 
@@ -11,7 +13,7 @@ import com.jme3.network.serializing.Serializable;
  * who has just left.
  */
 @Serializable
-public class PlayerLeaveMessage extends AbstractMessage {
+public class PlayerLeaveMessage extends PhysicsSyncMessage {
 	private int playerID;
 	
 	public PlayerLeaveMessage() {
@@ -21,13 +23,24 @@ public class PlayerLeaveMessage extends AbstractMessage {
 	/**
 	 * @param playerID The ID of the leaving player
 	 */
-	public PlayerLeaveMessage(int playerID) {
+	public PlayerLeaveMessage(long id, int playerID) {
+		this.syncId = id;
 		this.playerID = playerID;
 
 		setReliable(true);
 	}
 	
+	public PlayerLeaveMessage(long id) {
+		this.syncId = id;
+	}
+
 	public int getPlayerID() {
 		return playerID;
+	}
+
+	@Override
+	public void applyData(Object object) {
+		WorldManager manager = (WorldManager) object;
+		manager.removePlayer(this.syncId);
 	}
 }

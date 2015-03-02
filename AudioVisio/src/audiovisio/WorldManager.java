@@ -1,9 +1,13 @@
 package audiovisio;
 
+import audiovisio.entities.Player;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.SyncMessageValidator;
 import audiovisio.networking.messages.PhysicsSyncMessage;
+import audiovisio.networking.messages.PlayerJoinMessage;
+import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.utils.LogHelper;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
@@ -28,6 +32,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     private Node rootNode;
 
     private HashMap<Long, Spatial> entities = new HashMap<Long, Spatial>();
+    private HashMap<Long, Player> players = new HashMap<Long, Player>();
     private int newId = 0;
     private Application app;
     private AssetManager assetManager;
@@ -69,4 +74,33 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 //        }
         return true;
     }
+
+	public void addPlayer(Long syncID, int playerID, Node playerModel, Vector3f spawnLocation) {
+		LogHelper.info("adding player: ");
+		if(isServer()){
+			syncManager.broadcast(new PlayerJoinMessage(syncID, playerID, playerModel, spawnLocation));
+		}
+		Player player = new Player(playerModel, spawnLocation);
+		syncManager.addObject(syncID, player);
+		player.addToScene(rootNode, space);
+	}
+
+	public void removePlayer(long id) {
+		LogHelper.info("removing player: " + id);
+		if(isServer()){
+			syncManager.broadcast(new PlayerLeaveMessage(id));
+		}
+		syncManager.removeObject(id);
+		Player player = players.remove(id);
+		if(player == null){
+			LogHelper.warn("tried to remove player who wasn't there: " + id);
+			return;
+		}
+		//TODO?
+		if(!isServer()){
+			//remove player from scene
+		}
+		player.removeFromParent();
+		space.removeAll(player);
+	}
 }
