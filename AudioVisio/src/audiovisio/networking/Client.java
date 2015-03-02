@@ -251,7 +251,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	@Override
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
-		currentPlayer.right = true;
+		//currentPlayer.right = true;
 //		PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
 //		LogHelper.info("Client[" + myClient.getId() + "] is sending message: [" + message + "]");
 //		myClient.send(message);
@@ -261,6 +261,10 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	public void simpleRender() {
 		//currentPlayer.updateLocalTranslation();
 		//networkedPlayer.updateLocalTranslation();
+		
+		currentPlayer.updateCam();
+		currentPlayer.updateModel();
+		
 	}
 
 	/**

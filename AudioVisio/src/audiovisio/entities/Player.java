@@ -240,5 +240,17 @@ public class Player extends MovingEntity implements ActionListener{
 		}
 	}
 
+	public void updateCam() {
+		if(this.playerCamera != null){
+			this.playerCamera.setLocation(this.getLocalTranslation());
+		}
+	}
+
+	public void updateModel() {
+		if(this.model != null){
+			this.model.setLocalTranslation(this.getLocalTranslation());
+		}
+	}
+
 
 }
