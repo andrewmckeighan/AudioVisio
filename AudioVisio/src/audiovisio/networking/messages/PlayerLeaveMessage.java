@@ -14,27 +14,23 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerLeaveMessage extends PhysicsSyncMessage {
-	private int playerID;
+	private long playerID;
 	
 	public PlayerLeaveMessage() {
 		setReliable(true);
 	}
-	
+
 	/**
-	 * @param playerID The ID of the leaving player
+	 * @param id The ID of the leaving player
 	 */
-	public PlayerLeaveMessage(long id, int playerID) {
-		this.syncId = id;
-		this.playerID = playerID;
+	public PlayerLeaveMessage(long id) {
+		this.syncId = -1;
+		this.playerID = id;
 
 		setReliable(true);
 	}
-	
-	public PlayerLeaveMessage(long id) {
-		this.syncId = id;
-	}
 
-	public int getPlayerID() {
+	public long getPlayerID() {
 		return playerID;
 	}
 

@@ -167,7 +167,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 					HostedConnection conn) {
 				if (players.containsKey(conn.getId()))
 					players.remove(conn.getId());
-				server.broadcast(Filters.notEqualTo(conn), new PlayerLeaveMessage(conn.getId()));
+				worldManager.removePlayer(conn.getId());
 			}
 		});
 

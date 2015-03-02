@@ -168,6 +168,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     SyncCharacterMessage msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation());
                     
                     broadcast(msg);
+                    LogHelper.info("Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
                 }
             }
 		}

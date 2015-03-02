@@ -2,6 +2,7 @@ package audiovisio.networking.messages;
 
 import audiovisio.entities.Player;
 
+import audiovisio.utils.LogHelper;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
@@ -30,6 +31,7 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
     }
 
     public void applyData(Object character) {
+        LogHelper.info("Obj: " + syncId + " located " + location + " walking " + walkDirection + " looking " + viewDirection);
         ((Spatial) character).getControl(BetterCharacterControl.class).setWalkDirection(walkDirection);
         ((Spatial) character).getControl(BetterCharacterControl.class).setViewDirection(viewDirection);
         ((Spatial) character).setLocalTranslation(location);
