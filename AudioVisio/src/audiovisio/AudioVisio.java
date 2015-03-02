@@ -24,6 +24,7 @@ public class AudioVisio {
 //		serverApp.start(JmeContext.Type.Headless);
 		//Client Start
     	clientApp = new Client();
+		clientApp.setPauseOnLostFocus(false);
     	clientApp.start();
    
     }
