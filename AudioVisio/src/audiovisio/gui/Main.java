@@ -3,20 +3,26 @@ package audiovisio.gui;
 import com.jme3.app.SimpleApplication;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
-import de.lessvoid.nifty.Nifty;
 
-public class Main extends SimpleApplication {
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
+
+public class Main extends SimpleApplication implements ScreenController{
 
 	private Nifty nifty;
-
+	static Main app = new Main();
 	public static void main(String args[]) {
-		// Gui gui = new Gui();
-		// gui.start();
+//		Gui gui = new Gui();
+//		gui.start();
+//		niftyTest test = new niftyTest();
+//		test.start();
 		AppSettings settings = new AppSettings(true);
 		settings.setAudioRenderer("LWJGL");
-		Main app = new Main();
+		
 		app.setSettings(settings);
 		app.start();
+		
 	}
 
 	public void simpleInitApp() {
@@ -29,5 +35,26 @@ public class Main extends SimpleApplication {
 		inputManager.setCursorVisible(true);
 		
 	}
+	
+	public void quitGame(){
+		app.stop();
+	}
 
+	@Override
+	public void bind(Nifty arg0, Screen arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStartScreen() {
+		// TODO Auto-generated method stub
+		
+	}
 }
