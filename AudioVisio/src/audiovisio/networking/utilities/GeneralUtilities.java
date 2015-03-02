@@ -12,6 +12,8 @@ import com.jme3.network.serializing.Serializer;
 public class GeneralUtilities {
 	
 	public static int PORT;
+
+	public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
 	
 	public static void initializeSerializables(){
 		// General Messages
