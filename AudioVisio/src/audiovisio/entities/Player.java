@@ -11,6 +11,7 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.input.ChaseCamera;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -35,19 +36,13 @@ public class Player extends MovingEntity implements ActionListener{
     public Node model;
 	public Mesh mesh;
 	private Vector3f savedLocation;
+	private ChaseCamera chaseCam;
 
 	/**
 	 * Creates the collision for player, and sets the physics parameters for the player.
 	 */
 	public Player() {
-        this.characterControl = new BetterCharacterControl(.9f, 1.9f, 1f);
-        characterControl.setJumpForce(new Vector3f(0, 0, 0));
-        characterControl.setGravity(new Vector3f(0, -10, 0));
-
-        this.addControl(this.characterControl);
-
-        this.characterControl.warp(SPAWN_LOCATION);
-        this.setLocalTranslation(SPAWN_LOCATION);
+        this(null, SPAWN_LOCATION);
     }
 
 	/**
@@ -56,15 +51,27 @@ public class Player extends MovingEntity implements ActionListener{
 	 * @param spawnLocation
 	 */
     public Player(Node playerModel, Vector3f spawnLocation){
-    	this();
+        if(playerModel != null){
+            this.model = playerModel;
+            this.model.setLocalScale(0.2f);
+            this.model.setLocalTranslation(spawnLocation);
 
-        this.model = playerModel;
-        this.model.setLocalScale(0.2f);
-        this.model.setLocalTranslation(spawnLocation);
+            this.model.addControl(this.characterControl);
 
-        this.model.addControl(this.characterControl);
+            this.attachChild(this.model);
+        }
 
-        this.attachChild(this.model);
+        this.characterControl = new BetterCharacterControl(.9f, 1.9f, 80f);
+        characterControl.setJumpForce(new Vector3f(0, 0, 0));
+        characterControl.setGravity(new Vector3f(0, -10, 0));
+
+        this.addControl(this.characterControl);
+
+        this.characterControl.warp(spawnLocation);
+        this.setLocalTranslation(spawnLocation);
+        
+        
+
     }
 
     /**
@@ -82,6 +89,8 @@ public class Player extends MovingEntity implements ActionListener{
      */
     public void addToScene(Node root, PhysicsSpace physics){
     	addToScene(root);
+        root.attachChild(this.model);
+        physics.add(this);
         physics.add(this.characterControl);
     }
 
@@ -169,14 +178,14 @@ public class Player extends MovingEntity implements ActionListener{
      */
 	public void update(Vector3f position, Vector3f direction) {
 		this.savedLocation = position;
-		
+
 		this.characterControl.warp(this.savedLocation);
 		this.characterControl.setWalkDirection(direction);
-		
+
 		if(this.playerCamera != null){
 			this.playerCamera.setLocation(this.getLocalTranslation());
 		}
-		
+
 	}
 
 	/**
@@ -234,7 +243,7 @@ public class Player extends MovingEntity implements ActionListener{
 	}
 
 	public void updateLocalTranslation() {
-		this.setLocalTranslation(this.savedLocation); 
+		this.setLocalTranslation(this.savedLocation);
 		if(this.model != null){
 			this.model.setLocalTranslation(this.savedLocation);
 		}
@@ -242,13 +251,13 @@ public class Player extends MovingEntity implements ActionListener{
 
 	public void updateCam() {
 		if(this.playerCamera != null){
-			this.playerCamera.setLocation(this.getLocalTranslation());
+			this.playerCamera.setLocation(this.model.getWorldTranslation());
 		}
 	}
 
 	public void updateModel() {
 		if(this.model != null){
-			this.model.setLocalTranslation(this.getLocalTranslation());
+			this.model.setLocalTranslation(this.getWorldTranslation());
 		}
 	}
 

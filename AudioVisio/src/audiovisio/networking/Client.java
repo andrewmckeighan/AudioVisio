@@ -60,12 +60,12 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 	ClientMessageListener messageListener = new ClientMessageListener(this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
-	
+
 	/**
 	 * Default client constructor
 	 */
 	public Client() {
-		
+
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	public void simpleInitApp(String IP) {
 		GeneralUtilities.initializeSerializables();
-		
+
 		try {
 			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
 			myClient.start();
@@ -146,7 +146,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 
 		syncManager.addObject(myClient.getId(), currentPlayer);
 
-		
+
 		networkedPlayer = new Player();
 		networkedPlayer.createModel(assetManager);
 
@@ -189,7 +189,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	public void simpleInitApp() {
 		simpleInitApp("127.0.0.1");
 	}
-	
+
 	/**
 	 * Initialization for key mapping
 	 */
@@ -225,7 +225,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		mark.setMaterial(mark_mat);
 
 	}
-	
+
 	/**
 	 * Initialization for cross-hairs
 	 */
@@ -243,7 +243,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		guiNode.attachChild(ch);
 
 	}
-	
+
 	/**
 	 * Updates App to current status
 	 * Generates position from user input/server messages
@@ -255,16 +255,18 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 //		PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
 //		LogHelper.info("Client[" + myClient.getId() + "] is sending message: [" + message + "]");
 //		myClient.send(message);
+		currentPlayer.getUpdateMessage();
 		updateVelocityMessage();
+
+		currentPlayer.updateCam();
+		currentPlayer.updateModel();
 	}
-	
+
 	public void simpleRender() {
 		//currentPlayer.updateLocalTranslation();
 		//networkedPlayer.updateLocalTranslation();
-		
-		currentPlayer.updateCam();
-		currentPlayer.updateModel();
-		
+
+
 	}
 
 	/**
@@ -311,7 +313,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		myClient.close();
 		super.destroy();
 	}
-	
+
 	/**
 	 * collision handling
 	 */
