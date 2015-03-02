@@ -176,6 +176,13 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 			//entry.getValue().update(message);
 		}
 	}
+	
+	public void simpleRender() {
+		for (Entry<Integer, Player> entry : this.players.entrySet()) {
+			Player p = entry.getValue();
+			p.updateLocalTranslation();
+		}
+	}
 
 	/**
 	 * Override default server destruction method

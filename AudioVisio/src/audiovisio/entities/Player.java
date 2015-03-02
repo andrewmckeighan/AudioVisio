@@ -26,7 +26,7 @@ public class Player extends MovingEntity implements ActionListener{
     private Camera playerCamera;
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
-    
+
     public boolean up = false;
 	public boolean down = false;
 	public boolean left = false;
@@ -34,6 +34,7 @@ public class Player extends MovingEntity implements ActionListener{
 
     public Node model;
 	public Mesh mesh;
+	private Vector3f savedLocation;
 
 	/**
 	 * Creates the collision for player, and sets the physics parameters for the player.
@@ -44,7 +45,7 @@ public class Player extends MovingEntity implements ActionListener{
         characterControl.setGravity(new Vector3f(0, -10, 0));
 
         this.addControl(this.characterControl);
-        
+
         this.characterControl.warp(SPAWN_LOCATION);
         this.setLocalTranslation(SPAWN_LOCATION);
     }
@@ -62,7 +63,7 @@ public class Player extends MovingEntity implements ActionListener{
         //this.model.setLocalTranslation(spawnLocation);
 
         this.model.addControl(this.characterControl);
-        
+
         this.attachChild(this.model);
     }
 
@@ -167,8 +168,11 @@ public class Player extends MovingEntity implements ActionListener{
      * @param walkDirection direction the player is going to move
      */
 	public void update(Vector3f position, Vector3f direction) {
+		this.savedLocation = position.add(direction);
+		
+		//this.characterControl.warp(this.savedLocation);
 		this.characterControl.setWalkDirection(direction);
-		//this.characterControl.warp(position.add(direction)); //may need to use this instead of walkdirection
+		
 		if(this.playerCamera != null){
 			this.playerCamera.setLocation(this.getLocalTranslation());
 		}
@@ -176,7 +180,7 @@ public class Player extends MovingEntity implements ActionListener{
 
 	/**
 	 * Updates the players direction based on the message received from the client
-	 * @param msg The message send from the client
+	 * @param msg The message sent from the client
 	 */
 	public void update(PlayerSendMovementMessage msg) {
         this.update(this.getLocalTranslation(), msg.getDirection());
@@ -226,6 +230,10 @@ public class Player extends MovingEntity implements ActionListener{
 
 	public void setCam(Camera cam) {
 		this.playerCamera = cam;
+	}
+
+	public void updateLocalTranslation() {
+		this.setLocalTranslation(this.savedLocation); 
 	}
 
 
