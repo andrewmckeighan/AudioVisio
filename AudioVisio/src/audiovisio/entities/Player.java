@@ -33,6 +33,7 @@ public class Player extends MovingEntity implements ActionListener {
 	private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
 	private static final Vector3f CAMERA_OFFSET = new Vector3f(0, 5, 0);
 	private static final Vector3f GRAVITY = new Vector3f(0, -9.81f, 0);
+	private static final Vector3f PLAYER_OFFSET = CAMERA_OFFSET.divide(2);
 
 	public BetterCharacterControl characterControl;
 	private Camera playerCamera;
@@ -281,7 +282,7 @@ public class Player extends MovingEntity implements ActionListener {
 
 	public void updateModel() {
 		if (this.model != null) {
-			this.model.setLocalTranslation(this.getWorldTranslation());
+			this.model.setLocalTranslation(this.getWorldTranslation().add(PLAYER_OFFSET));
 		}
 	}
 	
