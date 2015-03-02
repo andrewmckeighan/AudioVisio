@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import audiovisio.WorldManager;
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
@@ -57,6 +58,7 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 	private int counter = 0;
 
 	private SyncManager syncManager;
+	private WorldManager worldManager;
 
 	ClientMessageListener messageListener = new ClientMessageListener(this);
 	NetworkMessage velocityMessage = new NetworkMessage("");
@@ -103,6 +105,10 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		syncManager.setMaxDelay(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
 		syncManager.setMessageTypes(SyncCharacterMessage.class, SyncRigidBodyMessage.class);
 		stateManager.attach(syncManager);
+
+		worldManager = new WorldManager(this, rootNode);
+		stateManager.attach(worldManager);
+		syncManager.addObject(-1, worldManager);
 
 		// //////////////
 		// Lighting //

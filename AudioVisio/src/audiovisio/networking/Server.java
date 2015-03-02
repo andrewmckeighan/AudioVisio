@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import audiovisio.WorldManager;
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
@@ -48,6 +49,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	//private Player visualPlayer;
 	private ServerMessageListener messageListener = new ServerMessageListener(this);
 	private SyncManager syncManager;
+	private WorldManager worldManager;
 
 	/**
 	 * Default constructor
@@ -82,6 +84,12 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		syncManager = new SyncManager(this, myServer);
 		syncManager.setSyncFrequency(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
 		stateManager.attach(syncManager);
+
+		worldManager = new WorldManager(this, rootNode);
+		stateManager.attach(worldManager);
+		syncManager.addObject(-1, worldManager);
+
+		/* Shouldn't need the rest of this method */
 
 		// /////////////////////
 		// Load Scene (map) //
