@@ -48,8 +48,8 @@ public class Client extends SimpleApplication implements
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
-	private Player currentPlayer;
-	private Player networkedPlayer;
+	//private Player currentPlayer;
+	//private Player networkedPlayer;
 	private Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
 	private Vector3f oldLocation;
@@ -150,27 +150,29 @@ public class Client extends SimpleApplication implements
 		Lever testLever = new Lever(3f, 5f, 3f);
 		testLever.createMaterial(assetManager);
 
-		currentPlayer = new Player();
-		currentPlayer.setCam(cam);
-		currentPlayer.createModel(assetManager);
+//		currentPlayer = new Player();
+//		currentPlayer.setCam(cam);
+//		currentPlayer.createModel(assetManager);
+		
+		worldManager.addPlayer(myClient.getId(), new Vector3f(0, 30, 0));
 
-		syncManager.addObject(myClient.getId(), currentPlayer);
+//		syncManager.addObject(myClient.getId(), currentPlayer);
 
-		networkedPlayer = new Player();
-		networkedPlayer.createModel(assetManager);
+//		networkedPlayer = new Player();
+//		networkedPlayer.createModel(assetManager);
 
 		// ///////////////////////
 		// Initialization Methods //
 		// ///////////////////////
 		initCrossHairs(); // a "+" in the middle of the screen to help aiming
-		initKeys(); // load custom key mappings
+		initKeys((Player) worldManager.getPlayer(myClient.getId())); // load custom key mappings
 		initMark(); // a red sphere to mark the hit
 
 		// /////////////////////////
 		// Add entities to Scene //
 		// /////////////////////////
-		currentPlayer.addToScene(rootNode, physicsSpace);
-		networkedPlayer.addToScene(rootNode, physicsSpace);
+//		currentPlayer.addToScene(rootNode, physicsSpace);
+//		networkedPlayer.addToScene(rootNode, physicsSpace);
 
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
@@ -202,7 +204,7 @@ public class Client extends SimpleApplication implements
 	/**
 	 * Initialization for key mapping
 	 */
-	private void initKeys() {
+	private void initKeys(Player p) {
 		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
 		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
@@ -212,13 +214,13 @@ public class Client extends SimpleApplication implements
 		inputManager.addMapping("Shoot", new MouseButtonTrigger(
 				MouseInput.BUTTON_LEFT));
 
-		inputManager.addListener(currentPlayer, "Up");
-		inputManager.addListener(currentPlayer, "Down");
-		inputManager.addListener(currentPlayer, "Left");
-		inputManager.addListener(currentPlayer, "Right");
-		inputManager.addListener(currentPlayer, "Jump");
+		inputManager.addListener(p, "Up");
+		inputManager.addListener(p, "Down");
+		inputManager.addListener(p, "Left");
+		inputManager.addListener(p, "Right");
+		inputManager.addListener(p, "Jump");
 
-		inputManager.addListener(currentPlayer, "Shoot");
+		inputManager.addListener(p, "Shoot");
 
 	}
 
@@ -261,15 +263,16 @@ public class Client extends SimpleApplication implements
 	public void simpleUpdate(float tpf) {
 		updateFpsText();
 		// currentPlayer.right = true;
-		PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
+		//PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
 		// LogHelper.info("Client[" + myClient.getId() +
 		// "] is sending message: [" + message + "]");
 		// myClient.send(message);
-		currentPlayer.characterControl.setWalkDirection(message.getDirection());
+		//currentPlayer.characterControl.setWalkDirection(message.getDirection());
 		updateVelocityMessage();
 
-		currentPlayer.updateCam();
-		currentPlayer.updateModel();
+		((Player) worldManager.getPlayer(myClient.getId())).updateCam();
+		//p.updateCam();
+//		currentPlayer.updateModel();
 	}
 
 	public void simpleRender() {
@@ -302,7 +305,7 @@ public class Client extends SimpleApplication implements
 			}
 
 			oldLocation = newLocation.clone();
-			newLocation = currentPlayer.getLocalTranslation();
+			//newLocation = p.getLocalTranslation();
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
@@ -353,8 +356,9 @@ public class Client extends SimpleApplication implements
 
 	public Player getPlayer(int ID) {
 		if (ID == myClient.getId())
-			return currentPlayer;
+			//return p;
+			return null;
 		else
-			return networkedPlayer;
+			return null;
 	}
 }

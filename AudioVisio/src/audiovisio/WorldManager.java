@@ -31,7 +31,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     private long myPlayerId = -2;
     private Node rootNode;
 
-    private HashMap<Long, Spatial> entities = new HashMap<Long, Spatial>();
+    //private HashMap<Long, Spatial> entities = new HashMap<Long, Spatial>();
     private HashMap<Long, Player> players = new HashMap<Long, Player>();
     private int newId = 0;
     private Application app;
@@ -85,11 +85,11 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         player.setLocalTranslation(spawnLocation);
 		syncManager.addObject(playerID, player);
 		player.addToScene(rootNode, space);
-        entities.put(playerID, player);
+		players.put(playerID, player);
 	}
 
     public Spatial getPlayer(long syncID) {
-        return entities.get(syncID);
+        return players.get(syncID);
     }
 
 	public void removePlayer(long id) {
