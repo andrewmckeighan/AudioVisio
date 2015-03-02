@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import audiovisio.WorldManager;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.network.MessageListener;
@@ -126,6 +127,11 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 		if(obj != null){
 			message.applyData(obj);
 		}else{
+            if (client != null) {
+                WorldManager wm = (WorldManager) objectMap.get(-1L);
+                SyncCharacterMessage msg = (SyncCharacterMessage) message;
+                wm.addPlayer(msg.syncId, msg.location);
+            }
 			LogHelper.warn("Cannot find obj in message: " + message + " with ID: " + message.syncId);
 		}
 	}
