@@ -44,8 +44,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	private Spatial sceneModel;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
-	private Player audioPlayer;
-	private Player visualPlayer;
+	//private Player audioPlayer;
+	//private Player visualPlayer;
 	private ServerMessageListener messageListener = new ServerMessageListener(this);
 
 	/**
@@ -75,7 +75,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 		bulletAppState = new BulletAppState();
 		stateManager.attach(bulletAppState);
-		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+		final PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
 
 		// /////////////////////
@@ -103,14 +103,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 		Lever testLever = new Lever(3f, 5f, 3f);
 
-		setAudioPlayer(new Player());
-		setVisualPlayer(new Player());
-
 		///////////////////////////
 		//Add entities to Scene //
 		///////////////////////////
-		getAudioPlayer().addToScene(rootNode, physicsSpace);
-		getVisualPlayer().addToScene(rootNode, physicsSpace);
 
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
@@ -139,7 +134,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				if (players.size() < 2) {
 					server.broadcast(new PlayerJoinMessage(conn.getId()));
 					LogHelper.info("Sent PlayerJoinMessage");
-					players.put(conn.getId(), new Player());
+					Player p = new Player();
+					p.addToScene(rootNode, physicsSpace);
+					players.put(conn.getId(), p);
 
 					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
 					conn.send(new PlayerListMessage(list));
@@ -177,12 +174,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		}
 	}
 	
-	public void simpleRender() {
-		for (Entry<Integer, Player> entry : this.players.entrySet()) {
-			Player p = entry.getValue();
-			p.updateLocalTranslation();
-		}
-	}
+
 
 	/**
 	 * Override default server destruction method
@@ -199,22 +191,6 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	public Player getPlayer(int id) {
 		return players.get(id);
-	}
-
-	public Player getAudioPlayer() {
-		return audioPlayer;
-	}
-
-	public Player getVisualPlayer() {
-		return visualPlayer;
-	}
-
-	public void setAudioPlayer(Player audioPlayer) {
-		this.audioPlayer = audioPlayer;
-	}
-
-	public void setVisualPlayer(Player visualPlayer) {
-		this.visualPlayer = visualPlayer;
 	}
 
 	@Override

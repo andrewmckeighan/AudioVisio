@@ -60,7 +60,7 @@ public class Player extends MovingEntity implements ActionListener{
 
         this.model = playerModel;
         this.model.setLocalScale(0.2f);
-        //this.model.setLocalTranslation(spawnLocation);
+        this.model.setLocalTranslation(spawnLocation);
 
         this.model.addControl(this.characterControl);
 
@@ -168,9 +168,9 @@ public class Player extends MovingEntity implements ActionListener{
      * @param walkDirection direction the player is going to move
      */
 	public void update(Vector3f position, Vector3f direction) {
-		this.savedLocation = position.add(direction);
+		this.savedLocation = position;
 		
-		//this.characterControl.warp(this.savedLocation);
+		this.characterControl.warp(this.savedLocation);
 		this.characterControl.setWalkDirection(direction);
 		
 		if(this.playerCamera != null){
@@ -217,7 +217,7 @@ public class Player extends MovingEntity implements ActionListener{
             walkDirection.addLocal(this.camLeft.negate());
         }
 
-        return new PlayerSendMovementMessage(walkDirection);
+        return new PlayerSendMovementMessage(this.getLocalTranslation());
 	}
 
     public PlayerLocationMessage getLocationMessage(int ID) {

@@ -1,6 +1,7 @@
 package audiovisio.networking;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import audiovisio.entities.Button;
@@ -248,6 +249,11 @@ public class Client extends SimpleApplication implements PhysicsCollisionListene
 		//player.update(cam, receivedMessage);
 		
 		updateVelocityMessage();
+	}
+	
+	public void simpleRender() {
+		currentPlayer.updateLocalTranslation();
+		networkedPlayer.updateLocalTranslation();
 	}
 
 	/**
