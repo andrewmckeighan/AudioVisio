@@ -1,192 +1,241 @@
 package audiovisio.networking;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import audiovisio.WorldManager;
 import audiovisio.entities.Button;
+import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
-import audiovisio.networking.messages.NetworkMessage;
+import audiovisio.networking.listeners.ServerMessageListener;
+import audiovisio.networking.messages.PlayerJoinMessage;
+import audiovisio.networking.messages.PlayerLeaveMessage;
+import audiovisio.networking.messages.PlayerListMessage;
+import audiovisio.networking.messages.PlayerLocationMessage;
+import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.network.ConnectionListener;
+import com.jme3.network.Filters;
+import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 
-public class Server extends SimpleApplication{
-
+public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
 	private com.jme3.network.Server myServer;
 
+	private Map<Integer, Player> players = new HashMap<Integer, Player>();
+	private Spatial sceneModel;
+	private BulletAppState bulletAppState;
+	private RigidBodyControl landscape;
+	//private Player audioPlayer;
+	//private Player visualPlayer;
+	private ServerMessageListener messageListener = new ServerMessageListener(this);
+	private SyncManager syncManager;
+	private WorldManager worldManager;
+
+	/**
+	 * Default constructor
+	 */
 	public Server(){
 
 	}
 
-
-	private Node shootables;
-	private Geometry mark;
-	private Spatial sceneModel;
-	private BulletAppState bulletAppState;
-	private RigidBodyControl landscape;
-	private RigidBodyControl button;
-	private Player audioPlayer;
-	private Player visualPlayer;
-	private Vector3f oldAudioLocation;
-	private Vector3f oldVisualLocation;
-	private Vector3f newAudioLocation = new Vector3f();
-	private Vector3f newVisualLocation = new Vector3f();
-	private long oldTime;
-	private long newTime;
-	private long time;
-	private int counter = 0;
-	private	float audioVelocity = 0;
-	private	float visualVelocity = 0;
-	private	float audioDistance = 0;
-	private	float visualDistance = 0;
-	private	Vector3f audioPosition = new Vector3f();
-	private	Vector3f visualPosition = new Vector3f();
-
+	/**
+	 * Initializes game App on server startup
+	 */
 	@Override
 	public void simpleInitApp(){
+		GeneralUtilities.initializeSerializables();
+
 		try{
 			myServer = Network.createServer(GeneralUtilities.getPort());
 			myServer.start();
+			
+			
 		}
 		catch(IOException e){
 			LogHelper.severe("Error on server start", e);
 			System.exit(1);
 		}
 
+		bulletAppState = new BulletAppState();
+		stateManager.attach(bulletAppState);
+		final PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+
+		// create sync manager
+		syncManager = new SyncManager(this, myServer);
+		syncManager.setSyncFrequency(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
+		stateManager.attach(syncManager);
+
+		worldManager = new WorldManager(this, rootNode);
+		stateManager.attach(worldManager);
+		syncManager.addObject(-1, worldManager);
+
+		/* Shouldn't need the rest of this method */
+
+		// /////////////////////
+		// Load Scene (map) //
+		// /////////////////////
 		assetManager.registerLocator("town.zip", ZipLocator.class);
 		sceneModel = assetManager.loadModel("main.scene");
 		sceneModel.setLocalScale(2f);
 
+		// /////////////
+		// Physics //
+		// /////////////
 		CollisionShape sceneShape = CollisionShapeFactory
 				.createMeshShape((Node) sceneModel);
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
 
-		// create geometry for our box
-		Box box = new Box(2, 2, 2);
-		Geometry boxGeometry = new Geometry("box", box);
-		boxGeometry.setMaterial(pondMat);
+		bulletAppState = new BulletAppState();
+		stateManager.attach(bulletAppState);
 
-		// position our box
-		boxGeometry.setLocalTranslation(new Vector3f(2f, 2f, 2f));
-
-		// make box physics
-		RigidBodyControl boxPhysics = new RigidBodyControl(0.1f);
-
-		// add box physics to our space
-		boxGeometry.addControl(boxPhysics);
-		shootables = new Node("Shootables");
-		shootables.attachChild(boxGeometry);
-
+		/////////////////////////
+		// Generate entities //
+		/////////////////////////
 		Button testButton = new Button(0f, 1f, 0f);
-		testButton.setMaterial(randomMaterial);
 
 		Lever testLever = new Lever(3f, 5f, 3f);
-		testLever.setMaterial(randomMaterial);
-		shootables.attachChild(testLever.geometry);
 
-		setAudioPlayer(new Player(myCharacter));
-		visualPlayer = new Player(myCharacter);
+		///////////////////////////
+		//Add entities to Scene //
+		///////////////////////////
 
-		// ///////////////////////
-		// Initialization Methods //
-		// ///////////////////////
-
-		getAudioPlayer().addToScene(rootNode, physicsSpace);
-		visualPlayer.addToScene(rootNode, physicsSpace);
 		testButton.addToScene(rootNode, physicsSpace);
 		testLever.addToScene(rootNode, physicsSpace);
 
 		// ////////////////////////////
 		// Add objects to rootNode //
 		// ////////////////////////////
-		//rootNode.attachChild(boxGeometry);
-		//rootNode.attachChild(shootables);
 		rootNode.attachChild(sceneModel);
-
-		rootNode.addLight(ambientLight);
-		rootNode.addLight(directionalLight);
 
 		// /////////////////////////////////
 		// Add objects to physicsSpace //
 		// /////////////////////////////////
-		//physicsSpace.add(boxPhysics);
 		physicsSpace.addCollisionListener(this);
 		physicsSpace.add(landscape);
+		
+		myServer.addConnectionListener(new ConnectionListener() {
 
-
-
-	}
-
-	@Override
-	public void simpleUpdate(float tpf){
-
-		Vector3f walkDirection = new Vector3f(0, 0, 0);
-
-		player.setWalkDirection(walkDirection);
-
-		if(counter % 1000 == 0){
-			if (oldLocation != null
-					&& newLocation != null
-					&& oldTime != 0
-					&& newTime != 0) {
-				distance = oldLocation.distance(newLocation);
-				time = newTime - oldTime;
-				velocity = distance / time;
-				velocityMessage = new NetworkMessage("V: " + velocity +
-						", D: " + distance +
-						", P: " + newLocation +
-						"F: " + counter);
+			/**
+			 * Handles adding connections to Server
+			 */
+			@Override
+			public void connectionAdded(com.jme3.network.Server server,
+					HostedConnection conn) {
+				// DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
+				LogHelper.info("connectionAdded() for connection: " + conn.getId());
+				if (players.size() < 2) {
+					
+					LogHelper.info("Sent PlayerJoinMessage");
+					worldManager.addPlayer(conn.getId(), Player.SPAWN_LOCATION);
+					players.put(conn.getId(), (Player) worldManager.getPlayer(conn.getId()));
+					
+					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
+					conn.send(new PlayerListMessage(list));
+					LogHelper.info("Sent PlayerListMessage");
+				} else {
+					conn.close("Too many clients connect to server");
+					LogHelper.severe("More than 2 players attempted to join");
+				}
 			}
 
-			oldLocation = newLocation.clone();
-			newLocation = player.characterControl.getPhysicsLocation();
+			/**
+			 * Handles Removing connections from server
+			 */
+			@Override
+			public void connectionRemoved(com.jme3.network.Server server,
+					HostedConnection conn) {
+				if (players.containsKey(conn.getId()))
+					players.remove(conn.getId());
+				worldManager.removePlayer(conn.getId());
+			}
+		});
 
-
-			oldTime = newTime;
-			newTime = System.currentTimeMillis();
-
-			counter = 0;
-		}
-
-
+//		myServer.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
+//				PlayerListMessage.class);
 	}
 
+	/**
+	 * Handles App updates on server to client
+	 */
+	@Override
+	public void simpleUpdate(float tpf){
+//		for (Entry<Integer, Player> entry : this.players.entrySet()) {
+//			PlayerLocationMessage message = entry.getValue().getLocationMessage(entry.getKey());
+//
+//			myServer.broadcast(message);
+//			LogHelper.info("Server is sending message: [" + message + "] to, client [" + entry.getKey() + "]");
+//		}
+	}
+	
+
+
+	/**
+	 * Override default server destruction method
+	 */
 	@Override
 	public void destroy(){
 		myServer.close();
 		super.destroy();
 	}
 
-	public Player getAudioPlayer() {
-		return audioPlayer;
+	/**
+	 * Get a player by the connection ID
+	 * @param id The connection ID
+	 */
+	public Player getPlayer(int id) {
+		return players.get(id);
 	}
 
-	public Player getVisualPlayer() {
-		return visualPlayer;
+	@Override
+	public void collision(PhysicsCollisionEvent event) {
+		if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
+			Entity entityA = (Entity) event.getNodeA().getParent();
+			Entity entityB = (Entity) event.getNodeB().getParent();
+			entityA.collisionTrigger(entityB);
+			entityB.collisionTrigger(entityA);
+			if ("button".equals(event.getNodeA().getName())) {
+
+				if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
+					Button b = (Button) event.getNodeA().getParent();
+					b.startPress();
+				}
+			}
+			if ("button".equals(event.getNodeB().getName())) {
+
+				if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
+					Button b = (Button) event.getNodeB().getParent();
+					b.startPress();
+				}
+			}
+		}
 	}
 
-	public void setAudioPlayer(Player audioPlayer) {
-		this.audioPlayer = audioPlayer;
+	@Override
+	public void onAction(String arg0, boolean arg1, float arg2) {
+		// TODO Auto-generated method stub
+
 	}
-	
-	public void setVisualPlayer(Player visualPlayer) {
-		this.visualPlayer = visualPlayer;
-	}
-	
+
 }
 

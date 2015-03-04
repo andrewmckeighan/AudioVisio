@@ -5,6 +5,10 @@ import java.util.logging.Logger;
 
 public class LogHelper {
 	private static Logger LOGGER = Logger.getLogger("AudioVisio");
+
+	public static void fine(String msg) {
+		LOGGER.log(Level.FINE, msg);
+	}
 	
 	public static void info(String msg) {
 		LOGGER.log(Level.INFO, msg);
@@ -28,5 +32,9 @@ public class LogHelper {
 	
 	public static void severe(String msg, Exception e) {
 		LOGGER.log(Level.SEVERE, msg, e);
+	}
+
+	public static void setLevel(Level level) {
+		LOGGER.setLevel(level);
 	}
 }
