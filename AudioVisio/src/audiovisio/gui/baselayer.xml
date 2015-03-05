@@ -21,17 +21,27 @@
 			
 			<panel id="panel_mid_low" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
 				<control name="button" label="Settings" id="SettingsButton" height="50%" width="50%" align="center" valign="center"> 
+          			<interact onClick="initSettings()"/>
           		</control>
 			</panel>
 			
 			<panel id="panel_bot" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
 				<control name="button" label="Exit" id="ExitButton" height="50%" width="50%" align="center" valign="center">
-				<interact onClick="quitGame()"/>
+					<interact onClick="quitGame()"/>
           		</control>
 			</panel>
 			
 		</layer>
 	</screen>
 	
+	<screen id="settings" controller="audiovisio.gui.Main">
+		<layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
+			<panel id="panel" height="25%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
+				<control name="button" label="Back" id="BackButton" height="50%" width="50%" align="center" valign="center">
+					<interact onClick="goBack()"/>
+          		</control>
+			</panel>
+		</layer>
+	</screen>
 	
 </nifty>

@@ -29,7 +29,7 @@ public class Main extends SimpleApplication implements ScreenController{
 		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager,
 				inputManager, audioRenderer, guiViewPort);
 		nifty = niftyDisplay.getNifty();
-		nifty.fromXml("audiovisio/gui/baselayer.xml", "start");
+		nifty.fromXml("audiovisio/gui/baselayer.xml", "start", this);
 		guiViewPort.addProcessor(niftyDisplay);
 		flyCam.setEnabled(false);
 		inputManager.setCursorVisible(true);
@@ -39,7 +39,16 @@ public class Main extends SimpleApplication implements ScreenController{
 	public void quitGame(){
 		app.stop();
 	}
-
+	
+	public void initSettings(){
+		//nifty.fromXml("audiovisio/gui/baselayer.xml", "settings");
+		nifty.gotoScreen("settings");
+	}
+	
+	public void goBack(){
+		nifty.fromXml("audiovisio/gui/baselayer.xml", "start");
+	}
+	
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
 		// TODO Auto-generated method stub

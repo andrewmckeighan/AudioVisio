@@ -2,6 +2,7 @@ package audiovisio.entities;
 
 import org.json.simple.JSONObject;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
@@ -76,4 +77,6 @@ public class Lever extends InteractableEntity {
 
     	obj.put("isOn", this.isOn);
     }
+
+
 }
