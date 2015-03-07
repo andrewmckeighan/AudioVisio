@@ -10,7 +10,7 @@ public class ClientAndServer {
 	private static Server serverApp;
 	private static Client clientApp;
 
-    public static void main(String[] args) {
+    public static void startServerAndClient() {
     	GeneralUtilities.setPort(11550);
     	//Server start- put in condition
 

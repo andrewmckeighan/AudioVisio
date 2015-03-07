@@ -1,12 +1,23 @@
 package audiovisio.gui;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import audiovisio.networking.Client;
+import audiovisio.networking.Server;
+import audiovisio.networking.utilities.GeneralUtilities;
+import audiovisio.utils.LogHelper;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
+import com.jme3.system.JmeContext;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+
+import audiovisio.networking.*;
 
 public class Main extends SimpleApplication implements ScreenController{
 
@@ -40,6 +51,14 @@ public class Main extends SimpleApplication implements ScreenController{
 		app.stop();
 	}
 	
+	public void initHost(){
+		nifty.gotoScreen("host");
+	}
+	
+	public void initJoin(){
+		nifty.gotoScreen("join");
+	}
+	
 	public void initSettings(){
 		//nifty.fromXml("audiovisio/gui/baselayer.xml", "settings");
 		nifty.gotoScreen("settings");
@@ -48,6 +67,40 @@ public class Main extends SimpleApplication implements ScreenController{
 	public void goBack(){
 		nifty.fromXml("audiovisio/gui/baselayer.xml", "start");
 	}
+	
+	public String getIp() {
+		String temp = "";
+		try {
+			temp = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			LogHelper.warn("UnkownHostException" , e);
+		}
+		return temp;
+	}
+	
+	public static void startServerAndClient() {
+		Server serverApp;
+		Client clientApp;
+		
+    	GeneralUtilities.setPort(11550);
+    	
+		serverApp = new Server();
+		serverApp.start(JmeContext.Type.Headless);
+    	clientApp = new Client();
+		clientApp.setPauseOnLostFocus(false);
+    	clientApp.start();
+   
+    }
+	
+	public static void startClient() {
+		app.stop();
+		Client clientApp;
+    	GeneralUtilities.setPort(11550);
+    	clientApp = new Client();
+		clientApp.setPauseOnLostFocus(false);
+    	clientApp.start();
+   
+    }
 	
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
@@ -66,4 +119,5 @@ public class Main extends SimpleApplication implements ScreenController{
 		// TODO Auto-generated method stub
 		
 	}
+
 }
