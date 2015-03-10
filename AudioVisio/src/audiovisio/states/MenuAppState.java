@@ -5,7 +5,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 
-public class LobbyState extends AbstractAppState{
+public class MenuAppState extends AbstractAppState{
 	
 	private SimpleApplication app;
 
