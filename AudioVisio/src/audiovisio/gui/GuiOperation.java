@@ -14,20 +14,15 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import audiovisio.networking.*;
 
 public class GuiOperation extends SimpleApplication implements ScreenController{
 
 	private Nifty nifty;
 	static GuiOperation app = new GuiOperation();
 	public static void GUIStart() {
-//		Gui gui = new Gui();
-//		gui.start();
-//		niftyTest test = new niftyTest();
-//		test.start();
+
 		AppSettings settings = new AppSettings(true);
 		settings.setAudioRenderer("LWJGL");
 		
@@ -57,14 +52,9 @@ public class GuiOperation extends SimpleApplication implements ScreenController{
 	
 	public void initJoin(){
 		nifty.gotoScreen("join");
-		
-		//Screen screen = nifty.getCurrentScreen();
-		//TextField txt = screen.findNiftyControl("input", TextField.class);
-		//txt.setText("Hello!");
 	}
 	
 	public void initSettings(){
-		//nifty.fromXml("audiovisio/gui/baselayer.xml", "settings");
 		nifty.gotoScreen("settings");
 	}
 	

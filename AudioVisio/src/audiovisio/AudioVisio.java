@@ -18,14 +18,7 @@ public class AudioVisio {
     public static void main(String[] args) {
     	GeneralUtilities.setPort(11550);
 		LogHelper.setLevel(Level.FINE);
-    	//Server start- put in condition
 
-//		Gui mainScreen = new Gui();
-		//mainScreen.start();
-
-    	//Server Start
-//		serverApp = new Server();
-//		serverApp.start(JmeContext.Type.Headless);
 		//Client Start
     	clientApp = new Client();
 		clientApp.setPauseOnLostFocus(false);
