@@ -16,6 +16,8 @@ import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.PlayerListMessage;
 import audiovisio.networking.messages.PlayerLocationMessage;
 import audiovisio.networking.messages.PlayerSendMovementMessage;
+import audiovisio.networking.messages.SyncCharacterMessage;
+import audiovisio.networking.messages.SyncRigidBodyMessage;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
@@ -88,6 +90,8 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		worldManager = new WorldManager(this, rootNode);
 		stateManager.attach(worldManager);
 		syncManager.addObject(-1, worldManager);
+		syncManager.setMessageTypes(SyncCharacterMessage.class,
+				SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 
 		/* Shouldn't need the rest of this method */
 
