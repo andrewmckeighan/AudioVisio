@@ -10,7 +10,6 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
 public class RSLE extends JPanel implements TreeSelectionListener, ActionListener {
@@ -27,7 +26,7 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         setSize(600, 400);
 
         // Create the nodes.
-        DefaultMutableTreeNode top = JSON2Tree.getTree(LevelReader.loadJsonFile("../example_level.json"), "example_level.json");
+        DefaultMutableTreeNode top = TreeHelper.getTree(LevelReader.loadJsonFile("../example_level.json"), "example_level.json");
 
         tree = new JTree(top);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -95,6 +94,7 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         frame.pack();
         frame.setJMenuBar(rsle.menuBar);
         frame.setVisible(true);
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 
     public static void main(String[] args) {
