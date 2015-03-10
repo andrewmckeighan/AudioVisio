@@ -91,13 +91,13 @@
 			<panel id="paneltop" height="20%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
 				<text text="Enter IP Address" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000"/>
 			</panel>
-			<panel id="panelmid" height="20%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
+			<panel id="PanelTextField" height="20%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
+				<control id="input" name="textfield" width="25%"></control>
+			</panel>
+			<panel id="panelfill" height="20%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
 				<control name="button" label="Continue" id="ContButton" height="50%" width="50%" align="center" valign="center">
 					<interact onClick="startClient()"/>
           		</control>
-			</panel>
-			<panel id="panelfill" height="20%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				
 			</panel>
 			<panel id="panel_midlow" height="20%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
 				
