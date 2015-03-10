@@ -77,13 +77,15 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 
 	public void addPlayer(long playerID, Vector3f spawnLocation) {
 		LogHelper.info("adding player: ");
+		Player player = new Player();
 		if(isServer()){
 			syncManager.broadcast(new PlayerJoinMessage(playerID, spawnLocation));
+			player.isServer = true;
 		}
-		Player player = new Player();
+		
         player.createModel(assetManager);
         player.setCam(app.getCamera());
-        player.initKeys(app.getInputManager());
+        //player.initKeys(app.getInputManager());
         player.setLocalTranslation(spawnLocation);
 		syncManager.addObject(playerID, player);
 		player.addToScene(rootNode, space);
@@ -111,5 +113,9 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 		}
 		player.removeFromParent();
 		space.removeAll(player);
+	}
+
+	public Server getServer() {
+		return this.server;
 	}
 }

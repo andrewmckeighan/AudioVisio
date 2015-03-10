@@ -2,8 +2,10 @@ package audiovisio.entities;
 
 import org.json.simple.JSONObject;
 
+import sun.rmi.runtime.Log;
 import audiovisio.networking.messages.PlayerLocationMessage;
 import audiovisio.networking.messages.PlayerSendMovementMessage;
+import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.asset.AssetManager;
@@ -37,8 +39,9 @@ public class Player extends MovingEntity implements ActionListener {
 
 	public BetterCharacterControl characterControl;
 	private Camera playerCamera;
-	private Vector3f camDir = new Vector3f();
+	public Vector3f camDir = new Vector3f();
 	private Vector3f camLeft = new Vector3f();
+	private Vector3f walkDirection = new Vector3f();
 
 	public boolean up = false;
 	public boolean down = false;
@@ -49,9 +52,11 @@ public class Player extends MovingEntity implements ActionListener {
 	public Mesh mesh;
 	private Vector3f savedLocation;
 
+	public boolean isServer = false;
+
 	/**
 	 * creates a player with a given model, and spawn point.
-	 * 
+	 *
 	 * @param playerModel
 	 * @param spawnLocation
 	 */
@@ -70,13 +75,13 @@ public class Player extends MovingEntity implements ActionListener {
 		this.characterControl.warp(spawnLocation);
 		this.setLocalTranslation(spawnLocation);
 		this.addControl(this.characterControl);
-		
+
 		this.move(new Vector3f());
 	}
 
 	/**
 	 * creates a player with a given model
-	 * 
+	 *
 	 * @param playerModel
 	 */
 	public Player(Node playerModel) {
@@ -93,7 +98,7 @@ public class Player extends MovingEntity implements ActionListener {
 
 	/**
 	 * generates the default model for the player.
-	 * 
+	 *
 	 * @param assetManager
 	 */
 	public void createModel(AssetManager assetManager) {
@@ -109,7 +114,7 @@ public class Player extends MovingEntity implements ActionListener {
 
 	/**
 	 * adds the player to the rootNode and PhysicsSpace of the client.
-	 * 
+	 *
 	 * @param root
 	 * @param physics
 	 */
@@ -130,7 +135,7 @@ public class Player extends MovingEntity implements ActionListener {
 
 	/**
 	 * action handler for when the user moves/shoots
-	 * 
+	 *
 	 * @param binding
 	 *            the keyword for the action.
 	 * @param isPressed
@@ -139,13 +144,13 @@ public class Player extends MovingEntity implements ActionListener {
 	 */
 	public void onAction(String binding, boolean isPressed, float tpf) {
 		if (binding.equals("Up")) {
-			up = isPressed;
+			this.up = isPressed;
 		} else if (binding.equals("Down")) {
-			down = isPressed;
+			this.down = isPressed;
 		} else if (binding.equals("Left")) {
-			left = isPressed;
+			this.left = isPressed;
 		} else if (binding.equals("Right")) {
-			right = isPressed;
+			this.right = isPressed;
 		} else if (binding.equals("Jump")) {
 			if (isPressed) {
 				characterControl.jump();
@@ -159,13 +164,13 @@ public class Player extends MovingEntity implements ActionListener {
 
 			/*
 			 * shootables.collideWith(ray, results);
-			 * 
+			 *
 			 * if(results.size() > 0){ CollisionResult closest =
 			 * results.getClosestCollision(); // Let's interact - we mark the
 			 * hit with a red dot.
 			 * mark.setLocalTranslation(closest.getContactPoint());
 			 * rootNode.attachChild(mark);
-			 * 
+			 *
 			 * Geometry collisionGeometry = closest.getGeometry();
 			 * System.out.println("name: " + collisionGeometry.getName());
 			 * if(collisionGeometry.getName().equals("button")){
@@ -173,7 +178,7 @@ public class Player extends MovingEntity implements ActionListener {
 			 * Material mat1 = new Material(assetManager,
 			 * "Common/MatDefs/Misc/Unshaded.j3md"); mat1.setColor("Color",
 			 * ColorRGBA.randomColor()); collisionGeometry.setMaterial(mat1);
-			 * 
+			 *
 			 * String boxName = collisionGeometry.getName(); for(Geometry door :
 			 * doorList){ if(door.getName().equals(boxName)){
 			 * rootNode.detachChild(door);
@@ -186,7 +191,7 @@ public class Player extends MovingEntity implements ActionListener {
 	/**
 	 * updates the players position based on the message received from the
 	 * server
-	 * 
+	 *
 	 * @param cam
 	 *            players camera
 	 * @param walkDirection
@@ -194,6 +199,7 @@ public class Player extends MovingEntity implements ActionListener {
 	 */
 	public void update(Vector3f position, Vector3f direction) {
 		this.savedLocation = position;
+		this.setWalkDirection(direction);
 
 		this.characterControl.warp(this.savedLocation);
 		this.characterControl.setWalkDirection(direction);
@@ -207,7 +213,7 @@ public class Player extends MovingEntity implements ActionListener {
 	/**
 	 * Updates the players direction based on the message received from the
 	 * client
-	 * 
+	 *
 	 * @param msg
 	 *            The message sent from the client
 	 */
@@ -222,7 +228,7 @@ public class Player extends MovingEntity implements ActionListener {
 	/**
 	 * generates where the player is trying to move based on keypresses, and
 	 * returns that message.
-	 * 
+	 *
 	 * @param cam
 	 *            camera that the player uses.
 	 * @param camDir
@@ -235,23 +241,30 @@ public class Player extends MovingEntity implements ActionListener {
 		this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
 		this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
 
+
 		Vector3f walkDirection = new Vector3f(0, 0, 0);
 
-		if (this.up) {
-			walkDirection.addLocal(this.camDir);
-		}
-		if (this.down) {
-			walkDirection.addLocal(this.camDir.negate());
-		}
-		if (this.left) {
-			walkDirection.addLocal(this.camLeft);
-		}
-		if (this.right) {
-			walkDirection.addLocal(this.camLeft.negate());
+		if(!this.isServer){
+			if (this.up) {
+				walkDirection.addLocal(this.camDir);
+			}
+			if (this.down) {
+				walkDirection.addLocal(this.camDir.negate());
+			}
+			if (this.left) {
+				walkDirection.addLocal(this.camLeft);
+			}
+			if (this.right) {
+				walkDirection.addLocal(this.camLeft.negate());
+			}
+
+			this.setWalkDirection(walkDirection);
 		}
 
-		return new PlayerSendMovementMessage(this.getLocalTranslation(),
-				walkDirection);
+		PlayerSendMovementMessage msg = new PlayerSendMovementMessage(this.getLocalTranslation(),
+				this.getWalkDirection());
+		LogHelper.info("PlayerSendMovementMessage: " + msg);
+		return msg;
 	}
 
 	public PlayerLocationMessage getLocationMessage(int ID) {
@@ -287,11 +300,11 @@ public class Player extends MovingEntity implements ActionListener {
 			System.out.println("no model!");
 		}
 	}
-	
+
 	/**
 	 * Initialization for key mapping
-	 * @param inputManager 
-	 * @param inputManager 
+	 * @param inputManager
+	 * @param inputManager
 	 */
 	public void initKeys(InputManager inputManager) {
 		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
@@ -311,6 +324,53 @@ public class Player extends MovingEntity implements ActionListener {
 
 		inputManager.addListener(this, "Shoot");
 
+	}
+
+	/**
+	 * @return the walkDirection
+	 */
+	public Vector3f getWalkDirection() {
+		return walkDirection;
+	}
+
+	/**
+	 * @param walkDirection the walkDirection to set
+	 */
+	public void setWalkDirection(Vector3f walkDirection) {
+		this.walkDirection = walkDirection;
+	}
+
+	public SyncCharacterMessage getSyncCharacterMessage() {
+		if(this.isServer){
+			SyncCharacterMessage msg = new SyncCharacterMessage(this.ID, this.characterControl, this.getLocalTranslation(),
+					this.getWalkDirection(), this.camDir);
+			return msg;
+		}
+		this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
+		this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
+
+		Vector3f walkDirection = new Vector3f(0, 0, 0);
+
+		if (this.up) {
+			walkDirection.addLocal(this.camDir);
+		}
+		if (this.down) {
+			walkDirection.addLocal(this.camDir.negate());
+		}
+		if (this.left) {
+			walkDirection.addLocal(this.camLeft);
+		}
+		if (this.right) {
+			walkDirection.addLocal(this.camLeft.negate());
+		}
+
+		this.setWalkDirection(walkDirection);
+
+		SyncCharacterMessage msg = new SyncCharacterMessage(this.ID, this.characterControl, this.getLocalTranslation(),
+				this.getWalkDirection(), this.camDir);
+		LogHelper.info("	walkDir: " + walkDirection);
+		LogHelper.info("SyncCharacterMessage: " + msg);
+		return msg;
 	}
 
 }

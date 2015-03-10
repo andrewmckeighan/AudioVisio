@@ -24,7 +24,10 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
-
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -57,9 +60,12 @@ public class Client extends SimpleApplication implements
 
 	private SyncManager syncManager;
 	private WorldManager worldManager;
+	
+	private int time = 0;
+	private float syncFrequency = 0.1f;
 
 	ClientMessageListener messageListener = new ClientMessageListener(this);
-	NetworkMessage velocityMessage = new NetworkMessage("");
+	CharSequence velocityMessage;
 
 	/**
 	 * Default client constructor
@@ -152,6 +158,7 @@ public class Client extends SimpleApplication implements
 //		currentPlayer.createModel(assetManager);
 		
 		worldManager.addPlayer(myClient.getId(), new Vector3f(0, 30, 0));
+		initKeys((Player) worldManager.getPlayer(myClient.getId()));
 
 //		syncManager.addObject(myClient.getId(), currentPlayer);
 
@@ -192,6 +199,26 @@ public class Client extends SimpleApplication implements
 //				PlayerLeaveMessage.class, PlayerListMessage.class);
 	}
 
+	private void initKeys(Player player) {
+		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+
+		inputManager.addMapping("Shoot", new MouseButtonTrigger(
+				MouseInput.BUTTON_LEFT));
+
+		inputManager.addListener(player, "Up");
+		inputManager.addListener(player, "Down");
+		inputManager.addListener(player, "Left");
+		inputManager.addListener(player, "Right");
+		inputManager.addListener(player, "Jump");
+
+		inputManager.addListener(player, "Shoot");
+
+	}
+
 	/**
 	 * Client initialization using default constructor
 	 */
@@ -225,7 +252,7 @@ public class Client extends SimpleApplication implements
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
 
-		// centerwwwsdawsad
+		// center
 		settings.getWidth() / 2 - ch.getLineWidth() / 2,
 		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
@@ -238,32 +265,13 @@ public class Client extends SimpleApplication implements
 	 */
 	@Override
 	public void simpleUpdate(float tpf) {
-		updateFpsText();
-		// currentPlayer.right = true;
-		//PlayerSendMovementMessage message = currentPlayer.getUpdateMessage();
-		// LogHelper.info("Client[" + myClient.getId() +
-		// "] is sending message: [" + message + "]");
-		// myClient.send(message);
-		//currentPlayer.characterControl.setWalkDirection(message.getDirection());
-		updateVelocityMessage();
 
-		player = ((Player) worldManager.getPlayer(myClient.getId()));
-		player.updateCam();
-		player.updateModel();
-		//player.updateGravity();
-		PlayerSendMovementMessage msg = player.getUpdateMessage();
-		player.characterControl.setWalkDirection(msg.getDirection());
-		
-//		player = ((Player) worldManager.getPlayer((myClient.getId() + 1) % 2));
-//		if(player != null){
-//			player.updateCam();
-//			player.updateModel();
-//			//player.updateGravity();
-//			msg = player.getUpdateMessage();
-//			player.characterControl.setWalkDirection(msg.getDirection());
-//		}
-		//p.updateCam();
-//		currentPlayer.updateModel();
+			updateFpsText();
+			updateVelocityMessage();
+			
+			Player player = ((Player) worldManager.getPlayer(myClient.getId()));
+			SyncCharacterMessage msg = player.getSyncCharacterMessage();
+			myClient.send(msg);
 	}
 
 	public void simpleRender() {
@@ -288,7 +296,8 @@ public class Client extends SimpleApplication implements
 	 * Updates displayed velocity text
 	 */
 	private void updateVelocityMessage() {
-
+		player = ((Player) worldManager.getPlayer(myClient.getId()));
+		
 		if (counter % 1000 == 0) {
 			if (oldLocation != null && newLocation != null && oldTime != 0
 					&& newTime != 0) {
@@ -296,15 +305,24 @@ public class Client extends SimpleApplication implements
 			}
 
 			oldLocation = newLocation.clone();
-			//newLocation = p.getLocalTranslation();
+			newLocation = player.getLocalTranslation();
 
 			oldTime = newTime;
 			newTime = System.currentTimeMillis();
 
 			counter = 0;
+			
+			float distance = oldLocation.distance(newLocation);
+			long time = newTime - oldTime;
+			float velocity = distance / time;
+			velocityMessage = ("V: " + velocity +
+			 ", D: " + distance +
+			 ", P: " + newLocation +
+			 "F: " + counter);
 		}
 
 		// messageListener.NetworkMessageHandler(velocityMessage);
+		fpsText.setText(velocityMessage);
 		counter++;
 	}
 

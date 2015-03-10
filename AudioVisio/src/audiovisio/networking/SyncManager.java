@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import audiovisio.WorldManager;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
+import com.jme3.math.Vector3f;
 import com.jme3.network.MessageListener;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -34,6 +36,9 @@ import java.util.logging.Logger;
 
 
 
+
+
+import audiovisio.entities.Player;
 import audiovisio.networking.messages.*;
 import audiovisio.utils.LogHelper;
 
@@ -165,10 +170,18 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 }
                 BetterCharacterControl control = spat.getControl(BetterCharacterControl.class);
                 if (control != null) {
-                    SyncCharacterMessage msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation());
+                	SyncCharacterMessage msg;
+                	if( entry.getValue() instanceof Player){
+                		Player p = (Player) entry.getValue();
+//                		msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation(), p.getWalkDirection(), p.camDir);
+                		msg = p.getSyncCharacterMessage();
+                		LogHelper.info("SyncManager.sendSyncData Player is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
+                	}else{
+                		msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation(), control.getWalkDirection(), control.getViewDirection());
+                		LogHelper.info("SyncManager.sendSyncData Object is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
+                	}
+                	broadcast(msg);
                     
-                    broadcast(msg);
-                    LogHelper.info("Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
                 }
             }
 		}

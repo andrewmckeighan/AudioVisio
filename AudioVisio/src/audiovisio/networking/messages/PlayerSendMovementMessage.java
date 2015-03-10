@@ -1,5 +1,7 @@
 package audiovisio.networking.messages;
 
+import audiovisio.entities.Player;
+
 import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
@@ -12,7 +14,7 @@ import com.jme3.network.serializing.Serializable;
  * telling it what direction it is traveling in.
  */
 @Serializable
-public class PlayerSendMovementMessage extends AbstractMessage{
+public class PlayerSendMovementMessage extends PhysicsSyncMessage{
 	private Vector3f position;
 	private Vector3f direction;
 	
@@ -41,6 +43,12 @@ public class PlayerSendMovementMessage extends AbstractMessage{
 	
 	@Override
     public String toString() {
-        return String.format(position + ":" + direction);
+        return String.format("[" + position + ":" + direction + "]");
     }
+
+	@Override
+	public void applyData(Object player) {
+		((Player) player).update(this.position, this.direction);
+		
+	}
 }
