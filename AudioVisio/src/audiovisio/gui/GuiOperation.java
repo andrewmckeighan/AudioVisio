@@ -65,6 +65,7 @@ public class GuiOperation extends SimpleApplication implements ScreenController{
 	public String getIp() {
 		String temp = "";
 		try {
+			System.setProperty("java.net.preferIPv4Stack" , "true");
 			temp = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
 			LogHelper.warn("UnkownHostException" , e);
