@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class JSON2Tree {
+public class TreeHelper {
 
     public static DefaultMutableTreeNode getTree(JSONObject obj, String name) {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode(name);
@@ -21,19 +21,38 @@ public class JSON2Tree {
 
         JSONArray levelArr = (JSONArray) obj.get("level");
 
+        DefaultMutableTreeNode triggers = new DefaultMutableTreeNode("Triggers");
+        DefaultMutableTreeNode stairs = new DefaultMutableTreeNode("Stairs");
+        DefaultMutableTreeNode panels = new DefaultMutableTreeNode("Panels");
+        level.add(triggers);
+        level.add(stairs);
+        level.add(panels);
+
         for (Object entityObj : levelArr) {
             JSONObject entity = (JSONObject) entityObj;
             Vector3f loc = JSONHelper.readVector3f((JSONObject) entity.get("location"));
 
-            DefaultMutableTreeNode entityNode = new DefaultMutableTreeNode(loc);
             String type = (String) entity.get("type");
+
+            DefaultMutableTreeNode entityNode = new DefaultMutableTreeNode(type + " @ " + loc);
             entityNode.add(new DefaultMutableTreeNode(type));
+
+            DefaultMutableTreeNode location = new DefaultMutableTreeNode(loc);
+            location.add(new DefaultMutableTreeNode(loc.x));
+            location.add(new DefaultMutableTreeNode(loc.y));
+            location.add(new DefaultMutableTreeNode(loc.z));
+            entityNode.add(location);
 
             if (type.equalsIgnoreCase("stair")) {
                 entityNode.add(new DefaultMutableTreeNode(entity.get("direction")));
+                stairs.add(entityNode);
+            } else if (type.equalsIgnoreCase("trigger")) {
+                triggers.add(entityNode);
+            } else if (type.equalsIgnoreCase("panel")) {
+                panels.add(entityNode);
+            } else {
+                level.add(entityNode);
             }
-
-            level.add(entityNode);
         }
 
         return top;
