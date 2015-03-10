@@ -1,6 +1,6 @@
 package audiovisio;
 
-import audiovisio.gui.Gui;
+import audiovisio.gui.GuiScreen;
 import audiovisio.networking.Server;
 import audiovisio.networking.Client;
 import audiovisio.networking.utilities.GeneralUtilities;

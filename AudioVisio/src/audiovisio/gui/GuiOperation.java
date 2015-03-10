@@ -19,11 +19,11 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import audiovisio.networking.*;
 
-public class Main extends SimpleApplication implements ScreenController{
+public class GuiOperation extends SimpleApplication implements ScreenController{
 
 	private Nifty nifty;
-	static Main app = new Main();
-	public static void main(String args[]) {
+	static GuiOperation app = new GuiOperation();
+	public static void GUIStart() {
 //		Gui gui = new Gui();
 //		gui.start();
 //		niftyTest test = new niftyTest();

@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import audiovisio.utils.LogHelper;
 
-public class Gui {
+public class GuiScreen {
 
 	JPanel panel = new JPanel();// different screens
 	JPanel main = new JPanel();
@@ -37,7 +37,7 @@ public class Gui {
 
 	String ipString;
 
-	public Gui() {
+	public GuiScreen() {
 
 		f.setSize(1000, 700);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
