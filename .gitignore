@@ -15,5 +15,6 @@ dist
 .classpath
 .metadata
 .project
+.settings
 JMonkeyLib
 bin/
