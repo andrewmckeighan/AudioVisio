@@ -39,6 +39,7 @@ import com.jme3.network.Network;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.system.JmeContext;
 
 public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener{
 	private com.jme3.network.Server myServer;
@@ -58,6 +59,10 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	public Server(){
 
+	}
+	
+	public void startServer(){
+		this.start(JmeContext.Type.Headless);
 	}
 
 	/**

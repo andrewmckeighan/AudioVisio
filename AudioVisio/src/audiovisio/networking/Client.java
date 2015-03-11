@@ -73,7 +73,13 @@ public class Client extends SimpleApplication implements
 	public Client() {
 
 	}
-
+	
+	public void startClient()
+	{
+		this.setPauseOnLostFocus(false);
+    	this.start();
+	}
+	
 	/**
 	 * Client Initialization
 	 * 

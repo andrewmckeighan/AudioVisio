@@ -20,14 +20,19 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class GuiOperation extends SimpleApplication implements ScreenController{
 
 	private Nifty nifty;
-	static GuiOperation app = new GuiOperation();
-	public static void GUIStart() {
+	
+	public GuiOperation(){
+		
+	}
+	
+
+	public void GUIStart() {
 
 		AppSettings settings = new AppSettings(true);
 		settings.setAudioRenderer("LWJGL");
 		
-		app.setSettings(settings);
-		app.start();
+		this.setSettings(settings);
+		this.start();
 		
 	}
 
@@ -42,8 +47,8 @@ public class GuiOperation extends SimpleApplication implements ScreenController{
 		
 	}
 	
-	public void quitGame(){
-		app.stop();
+	public void quitGui(){
+		this.stop();
 	}
 	
 	public void initHost(){
@@ -72,30 +77,6 @@ public class GuiOperation extends SimpleApplication implements ScreenController{
 		}
 		return temp;
 	}
-	
-	public static void startServerAndClient() {
-		Server serverApp;
-		Client clientApp;
-		
-    	GeneralUtilities.setPort(11550);
-    	
-		serverApp = new Server();
-		serverApp.start(JmeContext.Type.Headless);
-    	clientApp = new Client();
-		clientApp.setPauseOnLostFocus(false);
-    	clientApp.start();
-   
-    }
-	
-	public static void startClient() {
-		app.stop();
-		Client clientApp;
-    	GeneralUtilities.setPort(11550);
-    	clientApp = new Client();
-		clientApp.setPauseOnLostFocus(false);
-    	clientApp.start();
-   
-    }
 	
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
