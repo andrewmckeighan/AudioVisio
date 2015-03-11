@@ -1,18 +1,13 @@
 package audiovisio.networking.listeners;
 
-import audiovisio.entities.Player;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.PlayerListMessage;
-import audiovisio.networking.messages.PlayerLocationMessage;
-import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.utils.LogHelper;
-
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import com.jme3.network.Server;
 
 public class ClientMessageListener implements MessageListener<Client> {
 	audiovisio.networking.Client myClient;
@@ -26,15 +21,7 @@ public class ClientMessageListener implements MessageListener<Client> {
 		if (message instanceof NetworkMessage) {
 
 		}
-//		if (message instanceof PlayerLocationMessage) {
-//			LogHelper.info("Client Received PlayerLocationMessage: " + message);
-//			PlayerLocationMessage msg = (PlayerLocationMessage) message;
-//			Player playerToUpdate = myClient.getPlayer(msg.getPlayerID());
-//			LogHelper.info("player's old info: " + playerToUpdate.getLocalTranslation() + ", " + playerToUpdate.characterControl.getWalkDirection());
-//			playerToUpdate.update(msg);
-//			LogHelper.info("player's new info: " + playerToUpdate.getLocalTranslation() + ", " + playerToUpdate.characterControl.getWalkDirection());
-//			return;
-//		}
+
 		if (message instanceof PlayerJoinMessage) {
 			LogHelper.info("Received PlayerJoinMessage");
 			PlayerJoinMessage msg = (PlayerJoinMessage) message;

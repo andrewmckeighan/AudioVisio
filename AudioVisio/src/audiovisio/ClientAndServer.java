@@ -12,10 +12,6 @@ public class ClientAndServer {
 
     public static void startServerAndClient() {
     	GeneralUtilities.setPort(11550);
-    	//Server start- put in condition
-
-		//Gui mainScreen = new Gui();
-		//mainScreen.start();
 
     	//Server Start
 		serverApp = new Server();

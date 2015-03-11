@@ -1,6 +1,6 @@
 package audiovisio;
 
-import audiovisio.gui.Gui;
+import audiovisio.gui.GuiScreen;
 import audiovisio.networking.Server;
 import audiovisio.networking.Client;
 import audiovisio.networking.utilities.GeneralUtilities;
@@ -18,10 +18,11 @@ public class AudioVisio {
     	GeneralUtilities.setPort(11550);
 		LogHelper.setLevel(Level.FINE);
 
+		//Client Start
     	clientApp = new Client();
 		clientApp.setPauseOnLostFocus(false);
     	clientApp.start();
-   
+
     }
 
 }
