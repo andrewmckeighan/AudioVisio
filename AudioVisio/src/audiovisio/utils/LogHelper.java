@@ -1,7 +1,6 @@
 package audiovisio.utils;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class LogHelper {
 	private static Logger LOGGER = Logger.getLogger("AudioVisio");
@@ -37,4 +36,8 @@ public class LogHelper {
 	public static void setLevel(Level level) {
 		LOGGER.setLevel(level);
 	}
+
+    public static void init() {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$s %2$s %5$s%6$s%n");
+    }
 }

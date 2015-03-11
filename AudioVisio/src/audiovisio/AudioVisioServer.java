@@ -13,6 +13,7 @@ public class AudioVisioServer {
 	
 	public static void main(String[] args) {
 		GeneralUtilities.setPort(11550);
+        LogHelper.init();
 		LogHelper.setLevel(Level.FINE);
 		
 		serverApp = new Server();

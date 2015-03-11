@@ -16,6 +16,7 @@ public class AudioVisio {
 
     public static void main(String[] args) {
     	GeneralUtilities.setPort(11550);
+        LogHelper.init();
 		LogHelper.setLevel(Level.FINE);
 
 		//Client Start
