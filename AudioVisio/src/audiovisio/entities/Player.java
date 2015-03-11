@@ -2,6 +2,7 @@ package audiovisio.entities;
 
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
+import audiovisio.utils.PrintHelper;
 
 import org.json.simple.JSONObject;
 
@@ -12,6 +13,8 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+
+import java.text.DecimalFormat;
 
 /**
  * This class defines the player object and contains all methods to manage the
@@ -185,10 +188,9 @@ public class Player extends MovingEntity implements ActionListener {
     public SyncCharacterMessage getSyncCharacterMessage() {
         //TODO: determine if this if is needed.
         if (this.isServer()) {
-            SyncCharacterMessage msg = new SyncCharacterMessage(this.getID(),
+            return new SyncCharacterMessage(this.getID(),
                     this.characterControl, this.getLocalTranslation(),
                     this.getWalkDirection(), this.camDir);
-            return msg;
         }
         this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
         this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
@@ -210,10 +212,9 @@ public class Player extends MovingEntity implements ActionListener {
 
         this.setWalkDirection(walkDirection);
 
-        SyncCharacterMessage msg = new SyncCharacterMessage(this.getID(),
+        return new SyncCharacterMessage(this.getID(),
                 this.characterControl, this.getLocalTranslation(),
                 this.getWalkDirection(), this.camDir);
-        return msg;
     }
 
     public void updateCam() {
@@ -263,4 +264,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.walkDirection = walkDirection;
     }
 
+    @Override
+    public String toString(){
+        return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) + "walking: " + PrintHelper.printVector3f(this.walkDirection) + "looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
+    }
 }

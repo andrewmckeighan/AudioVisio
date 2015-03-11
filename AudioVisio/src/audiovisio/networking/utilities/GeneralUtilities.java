@@ -3,6 +3,10 @@ package audiovisio.networking.utilities;
 import audiovisio.networking.messages.*;
 
 import com.jme3.network.serializing.Serializer;
+import com.jme3.math.Vector3f;
+
+import java.text.DecimalFormat;
+
 
 public class GeneralUtilities {
 	

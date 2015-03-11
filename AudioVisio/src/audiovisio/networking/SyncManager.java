@@ -135,7 +135,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
             if (client != null) {
                 WorldManager wm = (WorldManager) objectMap.get(-1L);
                 SyncCharacterMessage msg = (SyncCharacterMessage) message;
-                wm.addPlayer(msg.syncId, msg.location);
+                wm.addPlayer(msg.syncId);
             }
 			LogHelper.warn("Cannot find obj in message: " + message + " with ID: " + message.syncId);
 		}
@@ -155,8 +155,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 	}
 
 	protected void sendSyncData() {
-        for (Iterator<Entry<Long, Object>> iter = objectMap.entrySet().iterator(); iter.hasNext();) {
-            Entry<Long, Object> entry = iter.next();
+        for (Entry<Long, Object> entry : objectMap.entrySet()) {
 			if (entry.getValue() instanceof Spatial) {
                 Spatial spat = (Spatial) entry.getValue();
                 PhysicsRigidBody body = spat.getControl(RigidBodyControl.class);
@@ -173,7 +172,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 	SyncCharacterMessage msg;
                 	if( entry.getValue() instanceof Player){
                 		Player p = (Player) entry.getValue();
-//                		msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation(), p.getWalkDirection(), p.camDir);
                 		msg = p.getSyncCharacterMessage();
                 		LogHelper.info("SyncManager.sendSyncData Player is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
                 	}else{
@@ -231,8 +229,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
         }else if(server != null){
             app.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
-                    for (Iterator<SyncMessageValidator> it = validators.iterator(); it.hasNext();) {
-                        SyncMessageValidator syncMessageValidator = it.next();
+                    for (SyncMessageValidator syncMessageValidator : validators) {
                         if (!syncMessageValidator.checkMessage((PhysicsSyncMessage) message)) {
                             return null;
                         }

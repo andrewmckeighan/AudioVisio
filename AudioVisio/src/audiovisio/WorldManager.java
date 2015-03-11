@@ -75,19 +75,17 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return true;
     }
 
-	public void addPlayer(long playerID, Vector3f spawnLocation) {
+	public void addPlayer(long playerID) {
 		LogHelper.info("adding player: ");
 		Player player = new Player();
 		player.setID(playerID);
 		if(isServer()){
-			syncManager.broadcast(new PlayerJoinMessage(playerID, spawnLocation));
+			syncManager.broadcast(new PlayerJoinMessage(playerID));
 			player.setServer(true);
 		}
 		
-        player.createModel(assetManager);
+        player.setModel(player.createModel(assetManager));
         player.setCam(app.getCamera());
-        //player.initKeys(app.getInputManager());
-        player.setLocalTranslation(spawnLocation);
 		syncManager.addObject(playerID, player);
 		player.addToScene(rootNode, space);
 		players.put(playerID, player);

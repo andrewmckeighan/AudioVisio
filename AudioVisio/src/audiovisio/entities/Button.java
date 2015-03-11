@@ -35,13 +35,9 @@ import com.jme3.scene.shape.Cylinder;
 public class Button extends InteractableEntity  {
 
 	public final float MASS = 0f;
-
 	public Cylinder shape;
-
 	// rootNode.attachChild(this.geometry);
-
 	public RigidBodyControl collision; // (physics)
-
 	// RigidBodyControl (CollisionShape shape, float mass)
 	// buttonGeometry.addControl(collision)
 

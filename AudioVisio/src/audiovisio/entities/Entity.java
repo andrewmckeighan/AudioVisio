@@ -28,7 +28,7 @@ public class Entity extends Node{
     public String name;
     public Spatial model;
     
-    private long ID;
+    protected long ID;
 
     public Entity(){
 
@@ -81,4 +81,8 @@ public class Entity extends Node{
 		ID = iD;
 	}
 
+    @Override
+    public String toString(){
+        return "Entity[" + this.ID + "]";
+    }
 }

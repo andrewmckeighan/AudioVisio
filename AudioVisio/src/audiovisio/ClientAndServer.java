@@ -1,5 +1,6 @@
 package audiovisio;
 
+import audiovisio.utils.LogHelper;
 import com.jme3.system.JmeContext;
 
 import audiovisio.networking.Client;
@@ -12,6 +13,7 @@ public class ClientAndServer {
 
     public static void startServerAndClient() {
     	GeneralUtilities.setPort(11550);
+        LogHelper.init();
 
     	//Server Start
 		serverApp = new Server();
