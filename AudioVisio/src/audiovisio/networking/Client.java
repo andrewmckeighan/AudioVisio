@@ -49,9 +49,6 @@ public class Client extends SimpleApplication implements
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private Player player;
-	//private Player networkedPlayer;
-	private Vector3f camDir = new Vector3f();
-	private Vector3f camLeft = new Vector3f();
 	private Vector3f oldLocation;
 	private Vector3f newLocation = new Vector3f();
 	private long oldTime;
@@ -140,7 +137,7 @@ public class Client extends SimpleApplication implements
 		// compound collision shape and a static RigidBodyControl with mass
 		// zero.
 		CollisionShape sceneShape = CollisionShapeFactory
-				.createMeshShape((Node) sceneModel);
+				.createMeshShape(sceneModel);
 		landscape = new RigidBodyControl(sceneShape, 0);
 		sceneModel.setLocalScale(2f);
 
@@ -157,7 +154,7 @@ public class Client extends SimpleApplication implements
 //		currentPlayer.setCam(cam);
 //		currentPlayer.createModel(assetManager);
 		
-		worldManager.addPlayer(myClient.getId(), new Vector3f(0, 30, 0));
+		worldManager.addPlayer(myClient.getId());
 		initKeys((Player) worldManager.getPlayer(myClient.getId()));
 
 //		syncManager.addObject(myClient.getId(), currentPlayer);
@@ -304,7 +301,8 @@ public class Client extends SimpleApplication implements
 				oldLocation.distance(newLocation);
 			}
 
-			oldLocation = newLocation.clone();
+            assert newLocation != null;
+            oldLocation = newLocation.clone();
 			newLocation = player.getLocalTranslation();
 
 			oldTime = newTime;
@@ -321,7 +319,6 @@ public class Client extends SimpleApplication implements
 			 "F: " + counter);
 		}
 
-		// messageListener.NetworkMessageHandler(velocityMessage);
 		fpsText.setText(velocityMessage);
 		counter++;
 	}
@@ -363,11 +360,4 @@ public class Client extends SimpleApplication implements
 
 	}
 
-	public Player getPlayer(int ID) {
-		if (ID == myClient.getId())
-			//return p;
-			return null;
-		else
-			return null;
-	}
 }

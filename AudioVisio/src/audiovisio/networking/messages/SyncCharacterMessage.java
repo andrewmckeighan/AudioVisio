@@ -45,6 +45,6 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
 
     @Override
     public String toString() {
-        return String.format("[" + "Obj: " + this.syncId + ", located: " + this.location + ", walking: " + this.walkDirection + ", looking: " + this.viewDirection + "]");
+        return String.format("Obj: " + this.syncId + ", located: " + this.location + ", walking: " + this.walkDirection + ", looking: " + this.viewDirection);
     }
 }

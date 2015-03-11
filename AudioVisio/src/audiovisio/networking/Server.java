@@ -151,7 +151,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				if (players.size() < 2) {
 					
 					LogHelper.info("Sent PlayerJoinMessage: " + conn.getId());
-					worldManager.addPlayer(conn.getId(), Player.SPAWN_LOCATION);
+					worldManager.addPlayer(conn.getId());
 					players.put(conn.getId(), (Player) worldManager.getPlayer(conn.getId()));
 					
 					Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
@@ -184,12 +184,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	@Override
 	public void simpleUpdate(float tpf){
-//		for (Entry<Integer, Player> entry : this.players.entrySet()) {
-//			PlayerLocationMessage message = entry.getValue().getLocationMessage(entry.getKey());
-//
-//			myServer.broadcast(message);
-//			LogHelper.info("Server is sending message: [" + message + "] to, client [" + entry.getKey() + "]");
-//		}
+
 	}
 	
 
