@@ -78,9 +78,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 	public void addPlayer(long playerID, Vector3f spawnLocation) {
 		LogHelper.info("adding player: ");
 		Player player = new Player();
+		player.setID(playerID);
 		if(isServer()){
 			syncManager.broadcast(new PlayerJoinMessage(playerID, spawnLocation));
-			player.isServer = true;
+			player.setServer(true);
 		}
 		
         player.createModel(assetManager);

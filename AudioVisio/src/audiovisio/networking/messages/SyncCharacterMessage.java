@@ -35,7 +35,7 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
 
     public void applyData(Object character) {
         LogHelper.info("SyncCharacterMessage.applyData " + this);
-        ((Player) character).update(location, walkDirection);
+        ((Player) character).update(this.location, this.walkDirection);
 
 //        ((Spatial) character).getControl(BetterCharacterControl.class).setWalkDirection(walkDirection);
 //        ((Spatial) character).getControl(BetterCharacterControl.class).setViewDirection(viewDirection);

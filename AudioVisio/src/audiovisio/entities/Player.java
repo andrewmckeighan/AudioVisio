@@ -1,376 +1,266 @@
 package audiovisio.entities;
 
-import org.json.simple.JSONObject;
-
-import sun.rmi.runtime.Log;
-import audiovisio.networking.messages.PlayerLocationMessage;
-import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 
+import org.json.simple.JSONObject;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.CharacterControl;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.input.ChaseCamera;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 
+/**
+ * This class defines the player object and contains all methods to manage the
+ * player as an entity.
+ *
+ * @author Taylor Premo
+ *
+ */
 public class Player extends MovingEntity implements ActionListener {
 
-	public final static Vector3f SPAWN_LOCATION = new Vector3f(0, 5, 0);
-	private final static String DEFAULT_MODEL = "Models/Oto/Oto.mesh.xml";
-	private static final Vector3f CAMERA_OFFSET = new Vector3f(0, 5, 0);
-	private static final Vector3f GRAVITY = new Vector3f(0, -9.81f, 0);
-	private static final Vector3f PLAYER_OFFSET = CAMERA_OFFSET.divide(2);
+    // Constants
+    public static final Vector3f SPAWN_LOCATION     = new Vector3f(0, 5, 0);
+    public static final Vector3f GRAVITY            = new Vector3f(0, -9.81f, 0);
+    public static final String DEFAULT_MODEL        = "Models/Oto/Oto.mesh.xml";
+    public static final Vector3f CAMERA_OFFSET      = new Vector3f(0, 5, 0);
+    public static final Vector3f MODEL_OFFSET       = CAMERA_OFFSET.divide(2);
 
-	public BetterCharacterControl characterControl;
-	private Camera playerCamera;
-	public Vector3f camDir = new Vector3f();
-	private Vector3f camLeft = new Vector3f();
-	private Vector3f walkDirection = new Vector3f();
+    //Key Listeners
+    private boolean up                              = false;
+    private boolean down                            = false;
+    private boolean left                            = false;
+    private boolean right                           = false;
 
-	public boolean up = false;
-	public boolean down = false;
-	public boolean left = false;
-	public boolean right = false;
+    //Instance Variables
+    private boolean isServer                        = false;
+    private Node model                              = null;
+    private BetterCharacterControl characterControl = null;
+    private Vector3f savedLocation                  = SPAWN_LOCATION;
+    private Camera playerCamera                     = null;
+    private Vector3f camDir                         = new Vector3f();
+    private Vector3f camLeft                        = new Vector3f();
+    private Vector3f walkDirection                  = new Vector3f();
 
-	public Node model;
-	public Mesh mesh;
-	private Vector3f savedLocation;
+    /**
+     * Primary constructor for Player. Adds the model and generates a characterControl.
+     *
+     * @param  playerModel   The modal node for the Player to use. Uses AssetManager to generate, so it must be passed in.
+     * @param  spawnLocation The starting location for the Player to appear in.
+     */
+    public Player(Node playerModel, Vector3f spawnLocation) {
+        if (playerModel != null) {
+            this.model = playerModel;
+            this.model.setLocalScale(0.2f);
+            this.model.setLocalTranslation(spawnLocation);
+            this.attachChild(this.model);
+        }
 
-	public boolean isServer = false;
+        this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
+        characterControl.setJumpForce(new Vector3f(0, 0, 0));
+        characterControl.setGravity(GRAVITY);
 
-	/**
-	 * creates a player with a given model, and spawn point.
-	 *
-	 * @param playerModel
-	 * @param spawnLocation
-	 */
-	public Player(Node playerModel, Vector3f spawnLocation) {
-		if (playerModel != null) {
-			this.model = playerModel;
-			this.model.setLocalScale(0.2f);
-			this.model.setLocalTranslation(spawnLocation);
-			this.attachChild(this.model);
-		}
+        this.characterControl.warp(spawnLocation);
+        this.setLocalTranslation(spawnLocation);
+        this.addControl(this.characterControl);
 
-		this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
-		characterControl.setJumpForce(new Vector3f(0, 0, 0));
-		characterControl.setGravity(GRAVITY);
+        this.move(spawnLocation);
+    }
 
-		this.characterControl.warp(spawnLocation);
-		this.setLocalTranslation(spawnLocation);
-		this.addControl(this.characterControl);
-
-		this.move(new Vector3f());
-	}
-
-	/**
-	 * creates a player with a given model
-	 *
-	 * @param playerModel
-	 */
-	public Player(Node playerModel) {
-		this(playerModel, SPAWN_LOCATION);
-	}
-
-	/**
-	 * Creates the collision for player, and sets the physics parameters for the
-	 * player.
-	 */
-	public Player() {
-		this(null, SPAWN_LOCATION);
-	}
-
-	/**
-	 * generates the default model for the player.
-	 *
-	 * @param assetManager
-	 */
-	public void createModel(AssetManager assetManager) {
-		Node myCharacter = (Node) assetManager.loadModel(DEFAULT_MODEL);
-		this.model = myCharacter;
-
-		this.model.setLocalScale(0.5f);
-		this.model.setLocalTranslation(SPAWN_LOCATION);
-
-		// this.model.addControl(this.characterControl);
-		this.attachChild(this.model);
-	}
-
-	/**
-	 * adds the player to the rootNode and PhysicsSpace of the client.
-	 *
-	 * @param root
-	 * @param physics
-	 */
-	public void addToScene(Node root, PhysicsSpace physics) {
-		addToScene(root);
-		if(this.model != null){
-			root.attachChild(this.model);
-		}
-		physics.add(this);
-		//physics.add(this.characterControl);
-	}
-
-	public void load(JSONObject obj) {
-		super.load(obj);
-
-		// TODO
-	}
-
-	/**
-	 * action handler for when the user moves/shoots
-	 *
-	 * @param binding
-	 *            the keyword for the action.
-	 * @param isPressed
-	 * @param tpf
-	 *            time per frame
-	 */
-	public void onAction(String binding, boolean isPressed, float tpf) {
-		if (binding.equals("Up")) {
-			this.up = isPressed;
-		} else if (binding.equals("Down")) {
-			this.down = isPressed;
-		} else if (binding.equals("Left")) {
-			this.left = isPressed;
-		} else if (binding.equals("Right")) {
-			this.right = isPressed;
-		} else if (binding.equals("Jump")) {
-			if (isPressed) {
-				characterControl.jump();
-			}
-		}
-		if (binding.equals("Shoot") && !isPressed) {
-			// TODO
-			// CollisionResults results = new CollisionResults();
-
-			// Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-
-			/*
-			 * shootables.collideWith(ray, results);
-			 *
-			 * if(results.size() > 0){ CollisionResult closest =
-			 * results.getClosestCollision(); // Let's interact - we mark the
-			 * hit with a red dot.
-			 * mark.setLocalTranslation(closest.getContactPoint());
-			 * rootNode.attachChild(mark);
-			 *
-			 * Geometry collisionGeometry = closest.getGeometry();
-			 * System.out.println("name: " + collisionGeometry.getName());
-			 * if(collisionGeometry.getName().equals("button")){
-			 * System.out.println("name: " + collisionGeometry.getMaterial());
-			 * Material mat1 = new Material(assetManager,
-			 * "Common/MatDefs/Misc/Unshaded.j3md"); mat1.setColor("Color",
-			 * ColorRGBA.randomColor()); collisionGeometry.setMaterial(mat1);
-			 *
-			 * String boxName = collisionGeometry.getName(); for(Geometry door :
-			 * doorList){ if(door.getName().equals(boxName)){
-			 * rootNode.detachChild(door);
-			 * bulletAppState.getPhysicsSpace().remove(door.getControl(0));
-			 * break; } } } }
-			 */
-		}
-	}
-
-	/**
-	 * updates the players position based on the message received from the
-	 * server
-	 *
-	 * @param cam
-	 *            players camera
-	 * @param walkDirection
-	 *            direction the player is going to move
-	 */
-	public void update(Vector3f position, Vector3f direction) {
-		this.savedLocation = position;
-		this.setWalkDirection(direction);
-
-		this.characterControl.warp(this.savedLocation);
-		this.characterControl.setWalkDirection(direction);
-
-		if (this.playerCamera != null) {
-			this.playerCamera.setLocation(this.getLocalTranslation().add(CAMERA_OFFSET));
-		}
-
-	}
-
-	/**
-	 * Updates the players direction based on the message received from the
-	 * client
-	 *
-	 * @param msg
-	 *            The message sent from the client
-	 */
-	public void update(PlayerSendMovementMessage msg) {
-		this.update(msg.getPosition(), msg.getDirection());
-	}
-
-	public void update(PlayerLocationMessage msg) {
-		this.update(msg.getPosition(), msg.getDirection());
-	}
-
-	/**
-	 * generates where the player is trying to move based on keypresses, and
-	 * returns that message.
-	 *
-	 * @param cam
-	 *            camera that the player uses.
-	 * @param camDir
-	 *            vector directed straight forward of the player
-	 * @param camLeft
-	 *            vector directed straight left of the player
-	 * @return the message that is sent to the server
-	 */
-	public PlayerSendMovementMessage getUpdateMessage() {
-		this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
-		this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
+    public Player(Node playerModel) {
+        this(playerModel, SPAWN_LOCATION);
+    }
 
 
-		Vector3f walkDirection = new Vector3f(0, 0, 0);
+    public Player() {
+        this(null, SPAWN_LOCATION);
+    }
 
-		if(!this.isServer){
-			if (this.up) {
-				walkDirection.addLocal(this.camDir);
-			}
-			if (this.down) {
-				walkDirection.addLocal(this.camDir.negate());
-			}
-			if (this.left) {
-				walkDirection.addLocal(this.camLeft);
-			}
-			if (this.right) {
-				walkDirection.addLocal(this.camLeft.negate());
-			}
+    /**
+     * Creates the Model for the player, needs to use the asset manager so we aren't handling this in the constructor.
+     * @param  assetManager The Apps AssetManager used to load the model
+     * @param  model        The location of the model file to load
+     * @return              The Node object that was loaded.
+     */
+    public static Node createModel(AssetManager assetManager, String model) {
+        return (Node) assetManager.loadModel(model);
+    }
 
-			this.setWalkDirection(walkDirection);
-		}
+    public static Node createModel(AssetManager assetManager) {
+        return createModel(assetManager, DEFAULT_MODEL);
+    }
 
-		PlayerSendMovementMessage msg = new PlayerSendMovementMessage(this.getLocalTranslation(),
-				this.getWalkDirection());
-		LogHelper.info("PlayerSendMovementMessage: " + msg);
-		return msg;
-	}
+    /**
+     * attaches the model to the player object
+     * @param model model to be attached
+     */
+    public void setModel(Node model, Vector3f location) {
+        this.model = model;
 
-	public PlayerLocationMessage getLocationMessage(int ID) {
-		return new PlayerLocationMessage(ID, this.getLocalTranslation(),
-				this.characterControl.getWalkDirection());
-	}
+        this.model.setLocalScale(0.5f);
+        this.model.setLocalTranslation(location);
 
-	public Camera getCam() {
-		return this.playerCamera;
-	}
+        this.attachChild(this.model);
+    }
 
-	public void setCam(Camera cam) {
-		this.playerCamera = cam;
-	}
+    public void setModel(Node model) {
+        setModel(model, SPAWN_LOCATION);
+    }
 
-	public void updateLocalTranslation() {
-		this.setLocalTranslation(this.savedLocation);
-		if (this.model != null) {
-			this.model.setLocalTranslation(this.savedLocation);
-		}
-	}
+    /**
+     * Adds the Player object to the apps rootNode and PhysicsSpace.
+     * @param root    The root node of the app
+     * @param physics Physics space of the app
+     */
+    public void addToScene(Node root, PhysicsSpace physics) {
+        addToScene(root);
+        if (this.model != null) {
+            root.attachChild(this.model);
+        } else {
+            LogHelper.warn("Player.addToScene: this.model is null!");
+        }
+        physics.add(this);
+    }
 
-	public void updateCam() {
-		if (this.playerCamera != null) {
-			this.playerCamera.setLocation(this.getWorldTranslation().add(CAMERA_OFFSET));
-		}
-	}
+    /**
+     * TODO
+     * @param obj [description]
+     */
+    public void load(JSONObject obj) {
+        super.load(obj);
+        // TODO
+    }
 
-	public void updateModel() {
-		if (this.model != null) {
-			this.model.setLocalTranslation(this.getWorldTranslation().add(PLAYER_OFFSET));
-		}else{
-			System.out.println("no model!");
-		}
-	}
+    /**
+     * ActionHandler for the Player, sets flags for the hotkeys that directly affect the player object.
+     * @param binding   key causing the action
+     * @param isPressed true = is pressed
+     * @param tpf       time per frame
+     */
+    public void onAction(String binding, boolean isPressed, float tpf) {
+        if (binding.equals("Up")) {
+            this.up = isPressed;
+        } else if (binding.equals("Down")) {
+            this.down = isPressed;
+        } else if (binding.equals("Left")) {
+            this.left = isPressed;
+        } else if (binding.equals("Right")) {
+            this.right = isPressed;
+        } else if (binding.equals("Jump")) {
+            if (isPressed) {
+                characterControl.jump();
+            }
+        }
+        if (binding.equals("Shoot") && !isPressed) {
+            //TODO
+        }
+    }
 
-	/**
-	 * Initialization for key mapping
-	 * @param inputManager
-	 * @param inputManager
-	 */
-	public void initKeys(InputManager inputManager) {
-		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-		inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+    /**
+     * sets the players positon and direction, used to sync a player with a message sent from a different server/client
+     * @param position  position to set
+     * @param direction walkDirection to set
+     */
+    public void update(Vector3f position, Vector3f direction) {
+        this.savedLocation = position;
+        this.setWalkDirection(direction);
 
-		inputManager.addMapping("Shoot", new MouseButtonTrigger(
-				MouseInput.BUTTON_LEFT));
+        this.characterControl.warp(this.savedLocation);
+        this.characterControl.setWalkDirection(direction);
 
-		inputManager.addListener(this, "Up");
-		inputManager.addListener(this, "Down");
-		inputManager.addListener(this, "Left");
-		inputManager.addListener(this, "Right");
-		inputManager.addListener(this, "Jump");
+        if (this.playerCamera != null) {
+            this.playerCamera.setLocation(this.getLocalTranslation().add(
+                                              CAMERA_OFFSET));
+        }
 
-		inputManager.addListener(this, "Shoot");
+    }
 
-	}
+    /**
+     * Generates a message containing all the info needed to update the character on the other server/client.
+     * @return new SyncCharacterMessage to send to other server/client.
+     */
+    public SyncCharacterMessage getSyncCharacterMessage() {
+        //TODO: determine if this if is needed.
+        if (this.isServer()) {
+            SyncCharacterMessage msg = new SyncCharacterMessage(this.getID(),
+                    this.characterControl, this.getLocalTranslation(),
+                    this.getWalkDirection(), this.camDir);
+            return msg;
+        }
+        this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
+        this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
 
-	/**
-	 * @return the walkDirection
-	 */
-	public Vector3f getWalkDirection() {
-		return walkDirection;
-	}
+        Vector3f walkDirection = new Vector3f(0, 0, 0);
 
-	/**
-	 * @param walkDirection the walkDirection to set
-	 */
-	public void setWalkDirection(Vector3f walkDirection) {
-		this.walkDirection = walkDirection;
-	}
+        if (this.up) {
+            walkDirection.addLocal(this.camDir);
+        }
+        if (this.down) {
+            walkDirection.addLocal(this.camDir.negate());
+        }
+        if (this.left) {
+            walkDirection.addLocal(this.camLeft);
+        }
+        if (this.right) {
+            walkDirection.addLocal(this.camLeft.negate());
+        }
 
-	public SyncCharacterMessage getSyncCharacterMessage() {
-		if(this.isServer){
-			SyncCharacterMessage msg = new SyncCharacterMessage(this.ID, this.characterControl, this.getLocalTranslation(),
-					this.getWalkDirection(), this.camDir);
-			return msg;
-		}
-		this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
-		this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
+        this.setWalkDirection(walkDirection);
 
-		Vector3f walkDirection = new Vector3f(0, 0, 0);
+        SyncCharacterMessage msg = new SyncCharacterMessage(this.getID(),
+                this.characterControl, this.getLocalTranslation(),
+                this.getWalkDirection(), this.camDir);
+        return msg;
+    }
 
-		if (this.up) {
-			walkDirection.addLocal(this.camDir);
-		}
-		if (this.down) {
-			walkDirection.addLocal(this.camDir.negate());
-		}
-		if (this.left) {
-			walkDirection.addLocal(this.camLeft);
-		}
-		if (this.right) {
-			walkDirection.addLocal(this.camLeft.negate());
-		}
+    public void updateCam() {
+        if (this.playerCamera != null) {
+            this.playerCamera.setLocation(this.getWorldTranslation().add(
+                                              CAMERA_OFFSET));
+        }
+    }
 
-		this.setWalkDirection(walkDirection);
+    public void updateLocalTranslation() {
+        this.setLocalTranslation(this.savedLocation);
+        if (this.model != null) {
+            this.model.setLocalTranslation(this.savedLocation);
+        }
+    }
 
-		SyncCharacterMessage msg = new SyncCharacterMessage(this.ID, this.characterControl, this.getLocalTranslation(),
-				this.getWalkDirection(), this.camDir);
-		LogHelper.info("	walkDir: " + walkDirection);
-		LogHelper.info("SyncCharacterMessage: " + msg);
-		return msg;
-	}
+    public void updateModel() {
+        if (this.model != null) {
+            this.model.setLocalTranslation(this.getWorldTranslation().add(
+                                               MODEL_OFFSET));
+        } else {
+            LogHelper.warn("no model!");
+        }
+    }
+
+    public boolean isServer() {
+        return isServer;
+    }
+
+    public void setServer(boolean isServer) {
+        this.isServer = isServer;
+    }
+
+    public Camera getCam() {
+        return this.playerCamera;
+    }
+
+    public void setCam(Camera cam) {
+        this.playerCamera = cam;
+    }
+
+    public Vector3f getWalkDirection() {
+        return walkDirection;
+    }
+
+    public void setWalkDirection(Vector3f walkDirection) {
+        this.walkDirection = walkDirection;
+    }
 
 }

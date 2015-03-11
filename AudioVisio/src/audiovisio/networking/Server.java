@@ -150,7 +150,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 				LogHelper.info("connectionAdded() for connection: " + conn.getId());
 				if (players.size() < 2) {
 					
-					LogHelper.info("Sent PlayerJoinMessage");
+					LogHelper.info("Sent PlayerJoinMessage: " + conn.getId());
 					worldManager.addPlayer(conn.getId(), Player.SPAWN_LOCATION);
 					players.put(conn.getId(), (Player) worldManager.getPlayer(conn.getId()));
 					

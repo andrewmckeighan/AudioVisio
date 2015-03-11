@@ -28,7 +28,7 @@ public class Entity extends Node{
     public String name;
     public Spatial model;
     
-    public int ID;
+    private long ID;
 
     public Entity(){
 
@@ -65,6 +65,20 @@ public class Entity extends Node{
      */
 	public void collisionTrigger(Entity entityB) {
 		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @return the iD
+	 */
+	public long getID() {
+		return ID;
+	}
+
+	/**
+	 * @param iD the iD to set
+	 */
+	public void setID(long iD) {
+		ID = iD;
 	}
 
 }
