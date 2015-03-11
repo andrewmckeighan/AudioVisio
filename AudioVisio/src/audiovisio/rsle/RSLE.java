@@ -12,6 +12,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+/**
+ * A VERY simple level editor used to edit the level json files.
+ * This is NOT intended to be used as the actual level editor. It is
+ * intended to make development of the level system easier. This is
+ * true for everything in this package.
+ *
+ * The editor works by parsing the JSON file and creating a tree
+ * structure from it. Please note that the classes in the level
+ * package only care about the information saved in the level file
+ * and need to be updated to match the classes in the actual
+ * {@link audiovisio.level} package. They should NOT contain anything
+ * else. They do not care about how the items are represented in the
+ * world.
+ *
+ * @author Matt Gerst
+ */
 public class RSLE extends JPanel implements TreeSelectionListener, ActionListener {
     private JTree tree;
     protected JMenuBar menuBar;
@@ -40,6 +56,10 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         createMenu(menuBar);
     }
 
+    /**
+     * Create the menu system for the editor
+     * @param menu The menu bar to attach the menus to
+     */
     private void createMenu(JMenuBar menu) {
         file = new JMenu("File");
         file.setMnemonic(KeyEvent.VK_F);
@@ -70,6 +90,9 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         file.add(exit);
     }
 
+    /**
+     * Called when the selected item in the Tree has changed.
+     */
     public void valueChanged(TreeSelectionEvent e) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 
@@ -78,14 +101,9 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         System.out.println(node);
     }
 
-    private void createNodes(DefaultMutableTreeNode top) {
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode("Level 1");
-        top.add(node);
-
-        DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("Level 1.1");
-        node.add(node1);
-    }
-
+    /**
+     * Create and show the JFrame that contains the editor
+     */
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Really Simple Level Editor");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -106,6 +124,9 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         });
     }
 
+    /**
+     * Called when a menu item has been clicked.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Exit")) {
