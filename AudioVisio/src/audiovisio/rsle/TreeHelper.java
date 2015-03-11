@@ -1,5 +1,8 @@
 package audiovisio.rsle;
 
+import audiovisio.rsle.level.Panel;
+import audiovisio.rsle.level.Stair;
+import audiovisio.rsle.level.Trigger;
 import audiovisio.utils.JSONHelper;
 import com.jme3.math.Vector3f;
 import org.json.simple.JSONArray;
@@ -7,6 +10,11 @@ import org.json.simple.JSONObject;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+/**
+ * A class to contain helper methods when building the Tree
+ *
+ * @author Matt Gerst
+ */
 public class TreeHelper {
 
     public static DefaultMutableTreeNode getTree(JSONObject obj, String name) {
@@ -30,31 +38,26 @@ public class TreeHelper {
 
         for (Object entityObj : levelArr) {
             JSONObject entity = (JSONObject) entityObj;
-            Vector3f loc = JSONHelper.readVector3f((JSONObject) entity.get("location"));
-
             String type = (String) entity.get("type");
 
-            DefaultMutableTreeNode entityNode = new DefaultMutableTreeNode(type + " @ " + loc);
-            entityNode.add(new DefaultMutableTreeNode(type));
-
-            DefaultMutableTreeNode location = new DefaultMutableTreeNode(loc);
-            location.add(new DefaultMutableTreeNode(loc.x));
-            location.add(new DefaultMutableTreeNode(loc.y));
-            location.add(new DefaultMutableTreeNode(loc.z));
-            entityNode.add(location);
-
-            if (type.equalsIgnoreCase("stair")) {
-                entityNode.add(new DefaultMutableTreeNode(entity.get("direction")));
-                stairs.add(entityNode);
+            if (type.equalsIgnoreCase("panel")) {
+                Panel panel = Panel.fromJSON(entity);
+                panel.attachToTree(panels);
+            } else if (type.equalsIgnoreCase("stair")) {
+                Stair stair = Stair.fromJSON(entity);
+                stair.attachToTree(stairs);
             } else if (type.equalsIgnoreCase("trigger")) {
-                triggers.add(entityNode);
-            } else if (type.equalsIgnoreCase("panel")) {
-                panels.add(entityNode);
-            } else {
-                level.add(entityNode);
+                Trigger trigger = Trigger.fromJSON(entity);
+                trigger.attachToTree(triggers);
             }
         }
 
         return top;
+    }
+
+    private static void addLocation(DefaultMutableTreeNode top, Vector3f loc) {
+        top.add(new DefaultMutableTreeNode(loc.x));
+        top.add(new DefaultMutableTreeNode(loc.y));
+        top.add(new DefaultMutableTreeNode(loc.z));
     }
 }
