@@ -4,6 +4,7 @@ import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 
+import com.jme3.math.Quaternion;
 import org.json.simple.JSONObject;
 
 import com.jme3.asset.AssetManager;
@@ -175,6 +176,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.characterControl.setWalkDirection(direction);
 
         this.model.setLocalTranslation(position.add(MODEL_OFFSET));
+
+        this.model.setLocalRotation(this.playerCamera.getRotation());
 
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(

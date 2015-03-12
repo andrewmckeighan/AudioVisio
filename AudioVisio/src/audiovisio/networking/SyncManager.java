@@ -171,7 +171,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     Player p = (Player) entry.getValue();
                     SyncCharacterMessage msg = p.getSyncCharacterMessage();
                     LogHelper.info("SyncManager.sendSyncData Player is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
-                    LogHelper.warn("");
                     broadcast(msg);
                 }
             }
