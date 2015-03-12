@@ -86,7 +86,7 @@ public class Server extends SimpleApplication implements
         // Networking //
         ////////////////
         SyncManager syncManager = new SyncManager(this, myServer);
-        syncManager.setSyncFrequency(NetworkUtils.NETWORK_SYNC_FREQUENCY);
+        syncManager.setServerSyncFrequency(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         stateManager.attach(syncManager);
 
         worldManager = new WorldManager(this, rootNode);
