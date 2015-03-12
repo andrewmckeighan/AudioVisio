@@ -96,7 +96,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 		stateManager.attach(worldManager);
 		syncManager.addObject(-1, worldManager);
 		syncManager.setMessageTypes(SyncCharacterMessage.class,
-				SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
+                SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 
 		/* Shouldn't need the rest of this method */
 
@@ -174,9 +174,14 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 			@Override
 			public void connectionRemoved(com.jme3.network.Server server,
 					HostedConnection conn) {
-				if (players.containsKey(conn.getId()))
-					players.remove(conn.getId());
+				if (players.containsKey(conn.getId())) {
+                    players.remove(conn.getId());
+                }
 				worldManager.removePlayer(conn.getId());
+
+                if(players.isEmpty()){
+                    myServer.close();
+                }
 			}
 		});
 
