@@ -272,7 +272,9 @@ public class Player extends MovingEntity implements ActionListener {
     @Override
     public String toString(){
         try {
-            return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) + "walking: " + PrintHelper.printVector3f(this.walkDirection) + "looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
+            return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) +
+                    " walking: " + PrintHelper.printVector3f(this.walkDirection) +
+                    " looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
         }catch (NullPointerException nullException){
             return "Player has not been fully created yet.";
         }
