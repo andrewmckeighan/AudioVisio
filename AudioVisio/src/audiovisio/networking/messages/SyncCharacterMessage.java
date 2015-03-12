@@ -34,13 +34,11 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
     }
 
     public void applyData(Object character) {
-        LogHelper.info("SyncCharacterMessage.applyData " + this);
-        ((Player) character).update(this.location, this.walkDirection);
+        assert  character instanceof Player;
+        assert ((Player) character).getID() == this.syncId;
 
-//        ((Spatial) character).getControl(BetterCharacterControl.class).setWalkDirection(walkDirection);
-//        ((Spatial) character).getControl(BetterCharacterControl.class).setViewDirection(viewDirection);
-//        ((Spatial) character).setLocalTranslation(location);
-//        ((Player) character).model.setLocalTranslation(((Spatial) character).getWorldTranslation());
+        LogHelper.finer("SyncCharacterMessage.applyData " + this + ":" + character);
+        ((Player) character).update(this.location, this.walkDirection);
     }
 
     @Override

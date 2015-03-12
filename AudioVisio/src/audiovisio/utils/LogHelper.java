@@ -7,6 +7,10 @@ public class LogHelper {
     private static final boolean DUMP_STACK = true;
     private static final Level LEVEL = Level.WARNING;
 
+    public static void finest(String msg) {LOGGER.log(Level.FINEST, msg);}
+
+    public static void finer(String msg) {LOGGER.log(Level.FINER, msg);}
+
 	public static void fine(String msg) {
 		LOGGER.log(Level.FINE, msg);
 	}

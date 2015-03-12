@@ -46,47 +46,45 @@ import audiovisio.utils.LogHelper;
 
 public class SyncManager extends AbstractAppState implements MessageListener {
 
-	private Server server;
-	private Client client;
-	private float syncFrequency = 0.1f;
-
-	double time = 0;
-	double offset = Double.MIN_VALUE;
-	private double maxDelay = 0.4;
-	
+    double time = 0;
+    double offset = Double.MIN_VALUE;
+//    double offset =  0.1f;
     LinkedList<SyncMessageValidator> validators = new LinkedList<SyncMessageValidator>();
+    float timer = 0f;
+    LinkedList<PhysicsSyncMessage> messageQueue = new LinkedList<PhysicsSyncMessage>();
+    HashMap<Long, Object> objectMap = new HashMap<Long, Object>();
+    Application app;
+    private Server server;
+    private Client client;
+    private float syncFrequency = 0.1f;
+    private double maxDelay = 0.4;
 
-	float timer = 0f;
-	LinkedList<PhysicsSyncMessage> messageQueue = new LinkedList<PhysicsSyncMessage>();
-	HashMap<Long, Object> objectMap = new HashMap<Long, Object>();
+    public SyncManager(Application app, Server server) {
+        this.app = app;
+        this.server = server;
+    }
 
-	Application app;
+    public SyncManager(Application app, Client client) {
+        this.app = app;
+        this.client = client;
+    }
 
-	public SyncManager(Application app, Server server){
-		this.app = app;
-		this.server = server;
-	}
+    /**
+     * updates the manager, sends messages to the client in order.
+     * or syncs the info on the server periodically.
+     *
+     * @param tpf time per frame
+     */
+    @Override
+    public void update(float tpf) {
+        time += tpf;
 
-	public SyncManager(Application app, Client client) {
-		this.app = app;
-		this.client = client;
-	}
+        if (time < 0) {
+            time = 0;//prevent overflow;
+        }
 
-	/**
-	 * updates the manager, sends messages to the client in order.
-	 * or syncs the info on the server periodically.
-	 * @param tpf time per frame
-	 */
-	@Override
-	public void update(float tpf){
-		time += tpf;
-
-		if (time < 0){
-			time = 0;//prevent overflow;
-		}
-
-		if(client != null){
-			for (Iterator<PhysicsSyncMessage> iter = messageQueue.iterator(); iter.hasNext();) {
+        if (client != null) {
+            for (Iterator<PhysicsSyncMessage> iter = messageQueue.iterator(); iter.hasNext(); ) {
                 PhysicsSyncMessage message = iter.next();
                 if (message.time >= time + offset) {
                     handleMessage(message);
@@ -94,69 +92,69 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 }
             }
 
-		} else if (server != null){
-			timer += tpf;
-			if(timer >= syncFrequency){
-				sendSyncData();
-				timer = 0;
-			}
-		}
-	}
+        } else if (server != null) {
+            timer += tpf;
+            if (timer >= syncFrequency) {
+                sendSyncData();
+                timer = 0;
+            }
+        }
+    }
 
-	public void addObject(long id, Object object){
-		objectMap.put(id, object);
-	}
+    public void addObject(long id, Object object) {
+        objectMap.put(id, object);
+    }
 
-	public void removeObject(Object obj){
-		for (Iterator<Entry<Long, Object>> iter = objectMap.entrySet().iterator(); iter.hasNext();) {
+    public void removeObject(Object obj) {
+        for (Iterator<Entry<Long, Object>> iter = objectMap.entrySet().iterator(); iter.hasNext(); ) {
             Entry<Long, Object> entry = iter.next();
 
-			if(entry.getValue() == obj){
-				iter.remove();
-				return;
-			}
-		}
-	}
+            if (entry.getValue() == obj) {
+                iter.remove();
+                return;
+            }
+        }
+    }
 
-	public void removeObject(long id) {
-		objectMap.remove(id);
-	}
+    public void removeObject(long id) {
+        objectMap.remove(id);
+    }
 
-	public void clearObjects(){
-		objectMap.clear();
-	}
+    public void clearObjects() {
+        objectMap.clear();
+    }
 
-	protected void handleMessage(PhysicsSyncMessage message){
-		Object obj = objectMap.get(message.syncId);
+    protected void handleMessage(PhysicsSyncMessage message) {
+        Object obj = objectMap.get(message.syncId);
 
-		if(obj != null){
-			message.applyData(obj);
-		}else{
+        if (obj != null) {
+            message.applyData(obj);
+        } else {
             if (client != null) {
                 WorldManager wm = (WorldManager) objectMap.get(-1L);
                 SyncCharacterMessage msg = (SyncCharacterMessage) message;
                 wm.addPlayer(msg.syncId);
             }
-			LogHelper.warn("Cannot find obj in message: " + message + " with ID: " + message.syncId);
-		}
-	}
-	
-	protected void enqueueMessage(PhysicsSyncMessage message) {
-		if(offset == Double.MIN_VALUE){
-			offset = this.time - message.time;
-		}
-		double delay = (message.time + offset) - time;
-		if(delay < maxDelay){
-			offset -= delay - maxDelay;
-		}else if(delay < 0){
-			offset -= delay;
-		}
-		messageQueue.add(message);
-	}
+            LogHelper.warn("Cannot find obj in message: " + message + " with ID: " + message.syncId);
+        }
+    }
 
-	protected void sendSyncData() {
+    protected void enqueueMessage(PhysicsSyncMessage message) {
+        if (offset == Double.MIN_VALUE) {
+            offset = this.time - message.time;
+        }
+        double delay = (message.time + offset) - time;
+        if (delay < maxDelay) {
+            offset -= delay - maxDelay;
+        } else if (delay < 0) {
+            offset -= delay;
+        }
+        messageQueue.add(message);
+    }
+
+    protected void sendSyncData() {
         for (Entry<Long, Object> entry : objectMap.entrySet()) {
-			if (entry.getValue() instanceof Spatial) {
+            if (entry.getValue() instanceof Spatial) {
                 Spatial spat = (Spatial) entry.getValue();
                 PhysicsRigidBody body = spat.getControl(RigidBodyControl.class);
                 if (body == null) {
@@ -169,35 +167,30 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 }
                 BetterCharacterControl control = spat.getControl(BetterCharacterControl.class);
                 if (control != null) {
-                	SyncCharacterMessage msg;
-                	if( entry.getValue() instanceof Player){
-                		Player p = (Player) entry.getValue();
-                		msg = p.getSyncCharacterMessage();
-                		LogHelper.info("SyncManager.sendSyncData Player is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
-                	}else{
-                		msg = new SyncCharacterMessage(entry.getKey(), control, spat.getLocalTranslation(), control.getWalkDirection(), control.getViewDirection());
-                		LogHelper.info("SyncManager.sendSyncData Object is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
-                	}
-                	broadcast(msg);
-                    
+                    assert entry.getValue() instanceof Player;
+                    Player p = (Player) entry.getValue();
+                    SyncCharacterMessage msg = p.getSyncCharacterMessage();
+                    LogHelper.info("SyncManager.sendSyncData Player is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
+                    LogHelper.warn("");
+                    broadcast(msg);
                 }
             }
-		}
-	}
+        }
+    }
 
-	public void broadcast(PhysicsSyncMessage message){
-		if(server == null){
-			LogHelper.severe("broadcasting from client: " + message);
-			return;
-		}
+    public void broadcast(PhysicsSyncMessage message) {
+        if (server == null) {
+            LogHelper.severe("broadcasting from client: " + message);
+            return;
+        }
 
-		message.time = time;
-		server.broadcast(message);
-	}
-
-    public void send(HostedConnection client, PhysicsSyncMessage message){
         message.time = time;
-        if (client == null){
+        server.broadcast(message);
+    }
+
+    public void send(HostedConnection client, PhysicsSyncMessage message) {
+        message.time = time;
+        if (client == null) {
             LogHelper.severe("Client is null when sending: " + message);
             return;
         }
@@ -205,7 +198,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
         client.send(message);
     }
 
-    public void setMessageTypes(Class... classes){
+    public void setMessageTypes(Class... classes) {
         if (server != null) {
             server.removeMessageListener(this);
             server.addMessageListener(this, classes);
@@ -215,9 +208,9 @@ public class SyncManager extends AbstractAppState implements MessageListener {
         }
     }
 
-    public void messageReceived(Object source, final Message message){
+    public void messageReceived(Object source, final Message message) {
         assert (message instanceof PhysicsSyncMessage);
-        if(client != null){
+        if (client != null) {
             app.enqueue(new Callable<Void>() {
 
                 public Void call() throws Exception {
@@ -226,7 +219,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 }
             });
 
-        }else if(server != null){
+        } else if (server != null) {
             app.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     for (SyncMessageValidator syncMessageValidator : validators) {

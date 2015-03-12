@@ -20,6 +20,9 @@ public class PrintHelper {
     }
 
     public static String printVector3f(Vector3f vec){
+        if(vec == null){
+            return "[null]";
+        }
         return "[" + printFormat(vec.x) + ", " + printFormat(vec.y) + ", " + printFormat(vec.z) + "]";
     }
 

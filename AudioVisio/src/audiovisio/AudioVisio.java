@@ -30,16 +30,16 @@ public class AudioVisio extends SimpleApplication{
     	
     	GeneralUtilities.setPort(11550);
     	LogHelper.init();
-    	LogHelper.setLevel(Level.FINE);
+        LogHelper.setLevel(Level.INFO);
 	
 		//Client Start
-    	
 		clientApp.setPauseOnLostFocus(false);
     	clientApp.start();
     	
-    	//gui = new MenuAppState();
     	
-    	//gui.setEnabled(true);
+    	gui = new MenuAppState();
+		gui.setEnabled(true);
+
     	
     }
 

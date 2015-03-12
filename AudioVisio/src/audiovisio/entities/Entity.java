@@ -28,7 +28,7 @@ public class Entity extends Node{
     public String name;
     public Spatial model;
     
-    protected long ID;
+    protected long ID = -2;
 
     public Entity(){
 
