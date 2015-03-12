@@ -91,7 +91,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     iter.remove();
                 }
             }
-
         } else if (server != null) {
             timer += tpf;
             if (timer >= syncFrequency) {
@@ -170,7 +169,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     assert entry.getValue() instanceof Player;
                     Player p = (Player) entry.getValue();
                     SyncCharacterMessage msg = p.getSyncCharacterMessage();
-                    LogHelper.info("SyncManager.sendSyncData Player is Sending obj (" + msg.syncId + ") sync to " + msg.location + " walking " + msg.walkDirection + " looking " + msg.viewDirection);
+                    LogHelper.info("SyncManager.sendSyncData " + msg);
                     broadcast(msg);
                 }
             }

@@ -7,14 +7,13 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import com.jme3.scene.Spatial;
+
 
 @Serializable
 public class SyncCharacterMessage extends PhysicsSyncMessage {
 
     public Vector3f location = new Vector3f();
     public Vector3f walkDirection = new Vector3f();
-    public Vector3f viewDirection = new Vector3f();
     public Quaternion rotation = new Quaternion();
 
     public SyncCharacterMessage() {}
@@ -26,11 +25,10 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
         this.rotation = rotation;
     }
 
-    public void readData(BetterCharacterControl character, Vector3f location, Vector3f walkDirection, Vector3f camDir) {
+    public void readData(BetterCharacterControl character, Vector3f location, Vector3f walkDirection, Quaternion rotation) {
         this.location = location;
         this.walkDirection.set(character.getWalkDirection());
-        //this.viewDirection.set(character.getViewDirection());
-        this.viewDirection = camDir;
+        this.rotation = rotation;
         this.walkDirection = walkDirection;
     }
 
@@ -44,6 +42,6 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
 
     @Override
     public String toString() {
-        return String.format("Obj: " + this.syncId + ", located: " + this.location + ", walking: " + this.walkDirection + ", looking: " + this.viewDirection);
+        return String.format("Obj: " + this.syncId + ", located: " + this.location + ", walking: " + this.walkDirection + ", looking: " + this.rotation);
     }
 }

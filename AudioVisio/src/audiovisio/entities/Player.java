@@ -4,18 +4,17 @@ import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 
-import com.jme3.math.Quaternion;
-import org.json.simple.JSONObject;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Quaternion;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 
-import java.text.DecimalFormat;
+import org.json.simple.JSONObject;
+
 
 /**
  * This class defines the player object and contains all methods to manage the
@@ -176,8 +175,6 @@ public class Player extends MovingEntity implements ActionListener {
         this.characterControl.setWalkDirection(direction);
 
         this.model.setLocalTranslation(position.add(MODEL_OFFSET));
-
-
 
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(
