@@ -2,6 +2,7 @@ package audiovisio.networking.messages;
 
 import audiovisio.entities.Player;
 
+import audiovisio.utils.LogHelper;
 import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
@@ -48,7 +49,8 @@ public class PlayerSendMovementMessage extends PhysicsSyncMessage{
 
 	@Override
 	public void applyData(Object player) {
-		((Player) player).update(this.position, this.direction);
+        LogHelper.warn("This message is not used! Please switch to SyncCharacterMessage!");
+		//((Player) player).update(this.position, this.direction);
 		
 	}
 }

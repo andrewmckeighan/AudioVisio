@@ -168,7 +168,7 @@ public class Player extends MovingEntity implements ActionListener {
      * @param position  position to set
      * @param direction walkDirection to set
      */
-    public void update(Vector3f position, Vector3f direction) {
+    public void update(Vector3f position, Vector3f direction, Quaternion rotation) {
         this.savedLocation = position;
         this.setWalkDirection(direction);
 
@@ -177,11 +177,14 @@ public class Player extends MovingEntity implements ActionListener {
 
         this.model.setLocalTranslation(position.add(MODEL_OFFSET));
 
-        this.model.setLocalRotation(this.playerCamera.getRotation());
+
 
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(
                                               CAMERA_OFFSET));
+            this.model.setLocalRotation(this.playerCamera.getRotation());
+        }else{
+            this.model.setLocalRotation(rotation);
         }
 
     }
@@ -194,8 +197,8 @@ public class Player extends MovingEntity implements ActionListener {
         //TODO: determine if this if is needed.
         if (this.isServer()) {
             return new SyncCharacterMessage(this.getID(),
-                    this.characterControl, this.getLocalTranslation(),
-                    this.getWalkDirection(), this.camDir);
+                    this.getLocalTranslation(),
+                    this.getWalkDirection(), this.model.getLocalRotation());
         }
         this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
         this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
@@ -218,8 +221,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.setWalkDirection(walkDirection);
 
         return new SyncCharacterMessage(this.getID(),
-                this.characterControl, this.getLocalTranslation(),
-                this.getWalkDirection(), this.camDir);
+                this.getLocalTranslation(),
+                this.getWalkDirection(), this.playerCamera.getRotation());
     }
 
     public void updateCam() {
