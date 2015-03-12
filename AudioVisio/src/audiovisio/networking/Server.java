@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-//import audiovisio.networking.utilities.GeneralUtilities;
+//import audiovisio.networking.utilities.GeneralUtilities; //TODO is this needed?
 
 /**
  * This class manages the server, Addin abd removing players,
@@ -39,14 +39,18 @@ import java.util.Map;
  * @author James Larson
  * @author Matt Gerst
  */
-public class Server extends SimpleApplication implements PhysicsCollisionListener, ActionListener {
+
+public class Server extends SimpleApplication implements
+        PhysicsCollisionListener, ActionListener {
+
+    //Networking
     private com.jme3.network.Server myServer;
     private WorldManager worldManager;
 
+    //Players
     private Map<Integer, Player> players = new HashMap<Integer, Player>();
 
-    public Server() {
-    }
+    public Server() {}
 
     public void startServer() {
         this.start(JmeContext.Type.Headless);
@@ -54,7 +58,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 
     /**
-     * Initilzes all variables used to run the server, is called on Jmonkey on this.start()
+     * Initializes all variables used to run the server, is called on Jmonkey on this.start()
      *
      * TODO clean up myServer.addConnectionListener
      */
@@ -78,7 +82,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
         stateManager.attach(bulletAppState);
         final PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace(); //TODO why is this final?
 
-        // create sync manager
+        ////////////////
+        // Networking //
+        ////////////////
         SyncManager syncManager = new SyncManager(this, myServer);
         syncManager.setSyncFrequency(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         stateManager.attach(syncManager);
@@ -89,11 +95,11 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 
-		/* Shouldn't need the rest of this method */
+		// TODO: Shouldn't need the rest of this method
 
-        // /////////////////////
-        // Load Scene (map) //
-        // /////////////////////
+        ///////////////////////
+        //Load Scene (map) //
+        ///////////////////////
         assetManager.registerLocator("town.zip", ZipLocator.class);
         Spatial sceneModel = assetManager.loadModel("main.scene");
         sceneModel.setLocalScale(2f);
@@ -134,6 +140,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
         physicsSpace.addCollisionListener(this);
         physicsSpace.add(landscape);
 
+        //TODO move this somewhere more appropriate
         myServer.addConnectionListener(new ConnectionListener() {
 
             /**
@@ -175,29 +182,22 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
                 }
             }
         });
-
-//		myServer.addMessageListener(messageListener, PlayerJoinMessage.class, PlayerLeaveMessage.class,
-//				PlayerListMessage.class);
     }
 
-    /**
-     * Handles App updates on server to client
-     */
     @Override
-    public void simpleUpdate(float tpf) {
+    public void simpleUpdate(float tpf) {}
 
-    }
-
-
-
-    /**
-     * Override default server destruction method
-     */
     @Override
     public void destroy() {
         myServer.close();
         super.destroy();
     }
+
+    /**
+     * TODO
+     * Handles custom collision events, typically between two entities.
+     * @param event The Event object, contains both nodes that collided along with other relevant information.
+     */
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
@@ -225,14 +225,9 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
     @Override
     public void onAction(String arg0, boolean arg1, float arg2) {
-        // TODO Auto-generated method stub
+        // TODO Method is needed in order to implement actionListener.
     }
 
-    /**
-     * Get a player by the connection ID
-     *
-     * @param id The connection ID
-     */
     public Player getPlayer(int id) {
         return players.get(id);
     }

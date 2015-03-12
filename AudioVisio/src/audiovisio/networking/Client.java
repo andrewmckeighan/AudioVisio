@@ -109,9 +109,9 @@ public class Client extends SimpleApplication implements
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
         flyCam.setMoveSpeed(100);
 
-        //////////////////////////
-        // Physics Sync Manager //
-        //////////////////////////
+        //////////////////
+        // Sync Manager //
+        //////////////////
         SyncManager syncManager = new SyncManager(this, myClient);
         syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
