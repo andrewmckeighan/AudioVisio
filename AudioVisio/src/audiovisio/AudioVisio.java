@@ -29,11 +29,9 @@ public class AudioVisio {
     	
     	GeneralUtilities.setPort(11550);
     	LogHelper.init();
-
-		LogHelper.setLevel(Level.FINE);
+        LogHelper.setLevel(Level.INFO);
 	
 		//Client Start
-    	
 		clientApp.setPauseOnLostFocus(false);
     	clientApp.start();
     	

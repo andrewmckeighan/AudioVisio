@@ -76,18 +76,23 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     }
 
 	public void addPlayer(long playerID) {
-		LogHelper.info("adding player: ");
+		LogHelper.fine("adding player: ");
 		Player player = new Player();
 		player.setID(playerID);
 		if(isServer()){
 			syncManager.broadcast(new PlayerJoinMessage(playerID));
 			player.setServer(true);
-		}
+		}else {
+            assert this.app instanceof audiovisio.networking.Client;
+            if ( ( (audiovisio.networking.Client) this.app).getId() == playerID) {
+                player.setCam(app.getCamera());
+            }
+        }
 		
         player.setModel(player.createModel(assetManager));
-        player.setCam(app.getCamera());
 		syncManager.addObject(playerID, player);
 		player.addToScene(rootNode, space);
+        LogHelper.info(playerID + ":" + player);
 		players.put(playerID, player);
 	}
 

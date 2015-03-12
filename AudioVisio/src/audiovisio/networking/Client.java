@@ -366,4 +366,7 @@ public class Client extends SimpleApplication implements
 
 	}
 
+    public long getId() {
+        return this.myClient.getId();
+    }
 }

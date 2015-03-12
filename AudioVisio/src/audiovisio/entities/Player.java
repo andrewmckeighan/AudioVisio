@@ -174,6 +174,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.characterControl.warp(this.savedLocation);
         this.characterControl.setWalkDirection(direction);
 
+        this.model.setLocalTranslation(position);
+
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(
                                               CAMERA_OFFSET));
@@ -266,6 +268,10 @@ public class Player extends MovingEntity implements ActionListener {
 
     @Override
     public String toString(){
-        return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) + "walking: " + PrintHelper.printVector3f(this.walkDirection) + "looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
+        try {
+            return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) + "walking: " + PrintHelper.printVector3f(this.walkDirection) + "looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
+        }catch (NullPointerException nullException){
+            return "Player has not been fully created yet.";
+        }
     }
 }
