@@ -38,7 +38,7 @@ import com.jme3.scene.shape.Sphere;
 
 import java.io.IOException;
 
-//import audiovisio.networking.utilities.GeneralUtilities;
+//import audiovisio.networking.utilities.GeneralUtilities; //TODO is this needed?
 
 /**
  * This class manages the client, sending messages to the server,
@@ -88,30 +88,30 @@ public class Client extends SimpleApplication implements
             System.exit(1);
         }
 
-        // /////////////
+        /////////////
         // Physics //
-        // /////////////
+        /////////////
         BulletAppState bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
         PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
-        // /////////////////////
+        //////////////////////
         // Load Scene (map) //
-        // /////////////////////
+        //////////////////////
         assetManager.registerLocator("town.zip", ZipLocator.class);
         Spatial sceneModel = assetManager.loadModel("main.scene");
         sceneModel.setLocalScale(2f);
 
-        // ///////////////////
+        ///////////////////
         // Create Camera //
-        // ///////////////////
+        ///////////////////
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
         flyCam.setMoveSpeed(100);
 
-        // ///////////////////////
+        //////////////////////////
         // Physics Sync Manager //
-        // ///////////////////////
+        //////////////////////////
         SyncManager syncManager = new SyncManager(this, myClient);
         syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
@@ -122,9 +122,9 @@ public class Client extends SimpleApplication implements
         stateManager.attach(worldManager);
         syncManager.addObject(-1, worldManager);
 
-        // //////////////
+        //////////////
         // Lighting //
-        // //////////////
+        //////////////
         AmbientLight ambientLight = new AmbientLight();
         ambientLight.setColor(ColorRGBA.White.mult(1.3f));
 
@@ -141,9 +141,9 @@ public class Client extends SimpleApplication implements
         RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.setLocalScale(2f);
 
-        // ///////////////////////
+        ///////////////////////
         // Generate entities //
-        // ///////////////////////
+        ///////////////////////
         Button testButton = new Button(0f, 1f, 0f);
         testButton.createMaterial(assetManager);
 
@@ -153,30 +153,30 @@ public class Client extends SimpleApplication implements
         worldManager.addPlayer(myClient.getId());
         initKeys((Player) worldManager.getPlayer(myClient.getId()));
 
-        // ///////////////////////
+        ////////////////////////////
         // Initialization Methods //
-        // ///////////////////////
+        ////////////////////////////
         //TODO may be moved to Player/elsewhere
         initCrossHairs(); // a "+" in the middle of the screen to help aiming
         //initMark(); // a red sphere to mark the hit
 
-        // /////////////////////////
+        ///////////////////////////
         // Add entities to Scene //
-        // /////////////////////////
+        ///////////////////////////
         //TODO this will probably be moved into WorldManager.
         testButton.addToScene(rootNode, physicsSpace);
         testLever.addToScene(rootNode, physicsSpace);
 
-        // ////////////////////////////
+        /////////////////////////////
         // Add objects to rootNode //
-        // ////////////////////////////
+        /////////////////////////////
         rootNode.attachChild(sceneModel);
         rootNode.addLight(ambientLight);
         rootNode.addLight(directionalLight);
 
-        // /////////////////////////////////
+        /////////////////////////////////
         // Add objects to physicsSpace //
-        // /////////////////////////////////
+        /////////////////////////////////
         physicsSpace.addCollisionListener(this);
         physicsSpace.add(landscape);
     }
@@ -187,9 +187,9 @@ public class Client extends SimpleApplication implements
 
     /**
      * Gives mappings to all hotkeys and actions by the user.
-     * Adds apropriate listeners to the player.
+     * Adds appropriate listeners to the player.
      *
-     * @param player The player entitiy that is affected by this clients inputs.
+     * @param player The player entity that is affected by this clients inputs.
      */
 
     private void initKeys(Player player) {
@@ -274,7 +274,7 @@ public class Client extends SimpleApplication implements
     private void updateMessage() {
         Player player = ((Player) worldManager.getPlayer(myClient.getId()));
 
-        if (counter % 1000 == 0) {
+        if (counter % 1000 == 0) { //We only update once every 1000 frames so that the player can actually move.
             assert newLocation != null;
             if (oldLocation != null && oldTime != 0
                     && newTime != 0) {
@@ -310,7 +310,7 @@ public class Client extends SimpleApplication implements
     }
 
     /**
-     * TODO
+     * TODO rewrite
      * Handles collisions of entities
      *
      * @param event The collision event containing the two nodes that have collided.
