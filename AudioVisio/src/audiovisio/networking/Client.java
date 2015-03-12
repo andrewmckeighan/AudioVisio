@@ -54,18 +54,17 @@ public class Client extends SimpleApplication implements
 
     //Networking
     private com.jme3.network.Client myClient = null;
-    private WorldManager worldManager = new WorldManager(this, rootNode);
+    private WorldManager worldManager        = null;
 
     //On Screen Message
-    private CharSequence velocityMessage = "";
-    private Vector3f oldLocation = null;
-    private Vector3f newLocation = new Vector3f();
-    private long oldTime = 0;
-    private long newTime = 0;
-    private int counter = 0;
+    private CharSequence velocityMessage     = "";
+    private Vector3f oldLocation             = null;
+    private Vector3f newLocation             = new Vector3f();
+    private long oldTime                     = 0;
+    private long newTime                     = 0;
+    private int counter                      = 0;
 
-    public Client() {
-    }
+    public Client() {}
 
     public void startClient() {
         this.setPauseOnLostFocus(false);
@@ -73,7 +72,7 @@ public class Client extends SimpleApplication implements
     }
 
     /**
-     * Initilizes all variables used to run the client, is called by Jmonkey on this.start()
+     * Initializes all variables used to run the client, is called by Jmonkey on this.start()
      *
      * @param IP The IP address of the server we are connecting to.
      */
