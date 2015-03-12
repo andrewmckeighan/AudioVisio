@@ -3,7 +3,6 @@ package audiovisio.networking;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import audiovisio.WorldManager;
 import audiovisio.entities.Button;
@@ -14,11 +13,9 @@ import audiovisio.networking.listeners.ServerMessageListener;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.PlayerListMessage;
-import audiovisio.networking.messages.PlayerLocationMessage;
-import audiovisio.networking.messages.PlayerSendMovementMessage;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.networking.messages.SyncRigidBodyMessage;
-import audiovisio.networking.utilities.GeneralUtilities;
+import audiovisio.utils.NetworkUtils;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.SimpleApplication;
@@ -31,12 +28,9 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.math.Vector3f;
 import com.jme3.network.ConnectionListener;
-import com.jme3.network.Filters;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.JmeContext;
@@ -70,10 +64,10 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 	 */
 	@Override
 	public void simpleInitApp(){
-		GeneralUtilities.initializeSerializables();
+		NetworkUtils.initializeSerializables();
 
 		try{
-			myServer = Network.createServer(GeneralUtilities.getPort());
+			myServer = Network.createServer(NetworkUtils.getPort());
 			myServer.start();
 			
 			
@@ -89,7 +83,7 @@ public class Server extends SimpleApplication implements PhysicsCollisionListene
 
 		// create sync manager
 		syncManager = new SyncManager(this, myServer);
-		syncManager.setSyncFrequency(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
+		syncManager.setSyncFrequency(NetworkUtils.NETWORK_SYNC_FREQUENCY);
 		stateManager.attach(syncManager);
 
 		worldManager = new WorldManager(this, rootNode);

@@ -3,9 +3,6 @@ package audiovisio.gui;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import audiovisio.networking.Client;
-import audiovisio.networking.Server;
-import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.Application;
@@ -14,7 +11,6 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
-import com.jme3.system.JmeContext;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;

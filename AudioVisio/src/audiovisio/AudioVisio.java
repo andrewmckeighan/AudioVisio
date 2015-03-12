@@ -1,21 +1,16 @@
 package audiovisio;
 
 
-import audiovisio.networking.utilities.GeneralUtilities;
+import audiovisio.utils.NetworkUtils;
 import audiovisio.states.ClientAppState;
 import audiovisio.states.MenuAppState;
 import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.networking.Client;
-import audiovisio.networking.utilities.GeneralUtilities;
-import audiovisio.utils.LogHelper;
-
-
 
 
 import java.util.logging.Level;
 
-import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 
 public class AudioVisio extends SimpleApplication{
@@ -28,7 +23,7 @@ public class AudioVisio extends SimpleApplication{
 
     public static void main(String[] args) {
     	
-    	GeneralUtilities.setPort(11550);
+    	NetworkUtils.setPort(11550);
     	LogHelper.init();
         LogHelper.setLevel(Level.INFO);
 	

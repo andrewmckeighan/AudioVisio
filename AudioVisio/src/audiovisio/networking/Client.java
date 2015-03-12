@@ -1,7 +1,6 @@
 package audiovisio.networking;
 
 import java.io.IOException;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import audiovisio.WorldManager;
@@ -11,7 +10,7 @@ import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.networking.listeners.ClientMessageListener;
 import audiovisio.networking.messages.*;
-import audiovisio.networking.utilities.GeneralUtilities;
+import audiovisio.utils.NetworkUtils;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.SimpleApplication;
@@ -35,7 +34,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
@@ -84,10 +82,10 @@ public class Client extends SimpleApplication implements
 	 *            Specified server connection IP address
 	 */
 	public void simpleInitApp(String IP) {
-		GeneralUtilities.initializeSerializables();
+		NetworkUtils.initializeSerializables();
 
 		try {
-			myClient = Network.connectToServer(IP, GeneralUtilities.getPort());
+			myClient = Network.connectToServer(IP, NetworkUtils.getPort());
 			myClient.start();
 		} catch (IOException e) {
 			LogHelper.severe("Error on client start", e);
@@ -119,7 +117,7 @@ public class Client extends SimpleApplication implements
 		// Physics Sync Manager //
 		// ///////////////////////
 		syncManager = new SyncManager(this, myClient);
-		syncManager.setMaxDelay(GeneralUtilities.NETWORK_SYNC_FREQUENCY);
+		syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
 		syncManager.setMessageTypes(SyncCharacterMessage.class,
 				SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 		stateManager.attach(syncManager);
