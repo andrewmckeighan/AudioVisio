@@ -1,5 +1,6 @@
 package audiovisio.rsle.level;
 
+import audiovisio.rsle.editor.EditorNode;
 import audiovisio.utils.JSONHelper;
 import com.jme3.math.Vector3f;
 import org.json.simple.JSONObject;
@@ -21,7 +22,7 @@ public class Trigger extends LevelItem {
     @Override
     public void attachToTree(DefaultMutableTreeNode parent) {
         DefaultMutableTreeNode trigger = new DefaultMutableTreeNode(this);
-        trigger.add(new DefaultMutableTreeNode(this.ID));
+        trigger.add(new DefaultMutableTreeNode(new EditorNode("ID", ID)));
         this.location.attachToTree(trigger);
 
         parent.add(trigger);

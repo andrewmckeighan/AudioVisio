@@ -24,7 +24,7 @@ import java.awt.event.KeyEvent;
  * and need to be updated to match the classes in the actual
  * {@link audiovisio.level} package. They should NOT contain anything
  * else. They do not care about how the items are represented in the
- * world.
+ * world. They do not pass go, they do not collect $200.
  *
  * @author Matt Gerst
  */
