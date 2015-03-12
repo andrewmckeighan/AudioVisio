@@ -36,8 +36,8 @@ public class AudioVisio extends SimpleApplication{
 		clientApp.setPauseOnLostFocus(false);
     	clientApp.start();
     	
-    	gui = new MenuAppState();
-    	gui.setEnabled(true);
+//    	gui = new MenuAppState();
+//    	gui.setEnabled(true);
     	
     }
 

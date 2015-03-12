@@ -47,8 +47,8 @@ import audiovisio.utils.LogHelper;
 public class SyncManager extends AbstractAppState implements MessageListener {
 
     double time = 0;
-//    double offset = Double.MIN_VALUE;
-    double offset =  0.1f;
+    double offset = Double.MIN_VALUE;
+//    double offset =  0.1f;
     LinkedList<SyncMessageValidator> validators = new LinkedList<SyncMessageValidator>();
     float timer = 0f;
     LinkedList<PhysicsSyncMessage> messageQueue = new LinkedList<PhysicsSyncMessage>();

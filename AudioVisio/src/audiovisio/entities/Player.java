@@ -174,7 +174,7 @@ public class Player extends MovingEntity implements ActionListener {
         this.characterControl.warp(this.savedLocation);
         this.characterControl.setWalkDirection(direction);
 
-        this.model.setLocalTranslation(position);
+        this.model.setLocalTranslation(position.add(MODEL_OFFSET));
 
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(
