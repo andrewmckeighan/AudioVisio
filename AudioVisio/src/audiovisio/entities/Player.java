@@ -4,18 +4,17 @@ import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 
-import com.jme3.math.Quaternion;
-import org.json.simple.JSONObject;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Quaternion;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 
-import java.text.DecimalFormat;
+import org.json.simple.JSONObject;
+
 
 /**
  * This class defines the player object and contains all methods to manage the
@@ -168,7 +167,7 @@ public class Player extends MovingEntity implements ActionListener {
      * @param position  position to set
      * @param direction walkDirection to set
      */
-    public void update(Vector3f position, Vector3f direction) {
+    public void update(Vector3f position, Vector3f direction, Quaternion rotation) {
         this.savedLocation = position;
         this.setWalkDirection(direction);
 
@@ -177,11 +176,12 @@ public class Player extends MovingEntity implements ActionListener {
 
         this.model.setLocalTranslation(position.add(MODEL_OFFSET));
 
-        this.model.setLocalRotation(this.playerCamera.getRotation());
-
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(
                                               CAMERA_OFFSET));
+            this.model.setLocalRotation(this.playerCamera.getRotation());
+        }else{
+            this.model.setLocalRotation(rotation);
         }
 
     }
@@ -194,8 +194,8 @@ public class Player extends MovingEntity implements ActionListener {
         //TODO: determine if this if is needed.
         if (this.isServer()) {
             return new SyncCharacterMessage(this.getID(),
-                    this.characterControl, this.getLocalTranslation(),
-                    this.getWalkDirection(), this.camDir);
+                    this.getLocalTranslation(),
+                    this.getWalkDirection(), this.model.getLocalRotation());
         }
         this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
         this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
@@ -218,8 +218,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.setWalkDirection(walkDirection);
 
         return new SyncCharacterMessage(this.getID(),
-                this.characterControl, this.getLocalTranslation(),
-                this.getWalkDirection(), this.camDir);
+                this.getLocalTranslation(),
+                this.getWalkDirection(), this.playerCamera.getRotation());
     }
 
     public void updateCam() {
@@ -272,7 +272,9 @@ public class Player extends MovingEntity implements ActionListener {
     @Override
     public String toString(){
         try {
-            return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) + "walking: " + PrintHelper.printVector3f(this.walkDirection) + "looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
+            return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) +
+                    " walking: " + PrintHelper.printVector3f(this.walkDirection) +
+                    " looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
         }catch (NullPointerException nullException){
             return "Player has not been fully created yet.";
         }
