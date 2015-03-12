@@ -34,11 +34,12 @@ public class AudioVisio extends SimpleApplication{
 	
 		//Client Start
     	
-		//clientApp.setPauseOnLostFocus(false);
-    	//clientApp.start();
+		clientApp.setPauseOnLostFocus(false);
+    	clientApp.start();
     	
-    	gui = new MenuAppState();
-    	gui.setEnabled(true);
+    	//gui = new MenuAppState();
+    	
+    	//gui.setEnabled(true);
     	
     }
 
@@ -57,7 +58,6 @@ public class AudioVisio extends SimpleApplication{
 
 	@Override
 	public void simpleInitApp() {
-		// TODO Auto-generated method stub
-		
+		stateManager.attach(gui);
 	}
 }

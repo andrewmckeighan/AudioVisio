@@ -9,12 +9,12 @@ import com.jme3.app.state.AppStateManager;
 
 public class MenuAppState extends AbstractAppState{
 
-	public GuiOperation app = new GuiOperation();
+	public SimpleApplication app;
 
 	 @Override
 	 public void initialize(AppStateManager stateManager, Application app){
 		 super.initialize(stateManager, app);
-		 this.app = (GuiOperation)app;
+		 this.app = (SimpleApplication) app;
 	 }
 	 
 	 @Override
@@ -29,7 +29,7 @@ public class MenuAppState extends AbstractAppState{
 			 app.start();
 		 }
 		 else{
-			 app.quitGui();
+			 
 		 }
 	 }
 	 
