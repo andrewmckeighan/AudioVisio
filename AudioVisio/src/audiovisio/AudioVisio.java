@@ -6,18 +6,19 @@ import audiovisio.states.ClientAppState;
 import audiovisio.states.MenuAppState;
 import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
-
 import audiovisio.networking.Client;
 import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
 
 
+
 import java.util.logging.Level;
 
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 
-public class AudioVisio {
+public class AudioVisio extends SimpleApplication{
 
 	static Client clientApp = new Client();
 	
@@ -35,8 +36,8 @@ public class AudioVisio {
 		clientApp.setPauseOnLostFocus(false);
     	clientApp.start();
     	
-    	//gui = new MenuAppState();
-    	//gui.setEnabled(true);
+    	gui = new MenuAppState();
+    	gui.setEnabled(true);
     	
     }
 
@@ -51,5 +52,11 @@ public class AudioVisio {
 		client.app.startClient();
 		server.setEnabled(true);
 		server.app.startServer();
+	}
+
+	@Override
+	public void simpleInitApp() {
+		// TODO Auto-generated method stub
+		
 	}
 }
