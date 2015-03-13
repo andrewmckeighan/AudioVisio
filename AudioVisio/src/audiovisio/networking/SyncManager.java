@@ -96,6 +96,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 
     /**
      * Applies the transformation stored inside the message to the object in objectMap that has the same ID as the message.
+     *
      * @param message The message that was received.
      */
 
@@ -116,6 +117,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 
     /**
      * Adds the message received to the queue of messages that the client will handle.
+     *
      * @param message The message that was received.
      */
     protected void enqueueMessage(PhysicsSyncMessage message) {
@@ -179,7 +181,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
     /**
      * Sends the message from the client to the server.
      *
-     * @param client client sending the message
+     * @param client  client sending the message
      * @param message message to be sent.
      */
 
@@ -199,7 +201,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      * If client is receiving, adds to the queue.
      * If server is receiving, broadcast to all clients and then handle.
      *
-     * @param source Needed to implement MessageListener, currently not used.
+     * @param source  Needed to implement MessageListener, currently not used.
      * @param message The message that was received.
      */
 
@@ -231,6 +233,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 
     /**
      * Sets what classes the SyncManager will listen for and handle.
+     *
      * @param classes the message classes to be handled by this.
      */
 

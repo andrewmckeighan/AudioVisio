@@ -8,7 +8,6 @@ import audiovisio.entities.Player;
 import audiovisio.networking.messages.*;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
-
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -44,11 +43,11 @@ public class Server extends SimpleApplication implements
         PhysicsCollisionListener, ActionListener {
 
     //Networking
-    private com.jme3.network.Server myServer;
-    private WorldManager worldManager;
+    private com.jme3.network.Server myServer = null;
+    private WorldManager worldManager        = null;
 
     //Players
-    private Map<Integer, Player> players = new HashMap<Integer, Player>();
+    private Map<Integer, Player> players     = new HashMap<Integer, Player>();
 
     public Server() {}
 
@@ -95,7 +94,7 @@ public class Server extends SimpleApplication implements
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 
-		// TODO: Shouldn't need the rest of this method
+        // TODO: Shouldn't need the rest of this method
 
         ///////////////////////
         //Load Scene (map) //
@@ -185,7 +184,8 @@ public class Server extends SimpleApplication implements
     }
 
     @Override
-    public void simpleUpdate(float tpf) {}
+    public void simpleUpdate(float tpf) {
+    }
 
     @Override
     public void destroy() {
@@ -196,6 +196,7 @@ public class Server extends SimpleApplication implements
     /**
      * TODO
      * Handles custom collision events, typically between two entities.
+     *
      * @param event The Event object, contains both nodes that collided along with other relevant information.
      */
 

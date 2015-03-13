@@ -11,7 +11,6 @@ import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.networking.messages.SyncRigidBodyMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
-
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
@@ -64,7 +63,8 @@ public class Client extends SimpleApplication implements
     private long newTime                     = 0;
     private int counter                      = 0;
 
-    public Client() {}
+    public Client() {
+    }
 
     public void startClient() {
         this.setPauseOnLostFocus(false);
