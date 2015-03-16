@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 /**
  * Represents a panel in the world.
  */
-public class Panel {
+public class Panel implements ILevelItem {
 	/**
 	 * The location of the panel on the grid.
 	 */
@@ -26,6 +26,7 @@ public class Panel {
      * 
      * @param obj The JSONObject to load from
      */
+    @Override
     public void load(JSONObject obj) {
     	JSONObject location = (JSONObject) obj.get("location");
     	this.location = JSONHelper.readVector3f(location);
@@ -36,6 +37,7 @@ public class Panel {
      * 
      * @param obj The JSONObject to save to
      */
+    @Override
     public void save(JSONObject obj) {
     	obj.put("type", "panel");
     	JSONObject location = new JSONObject();

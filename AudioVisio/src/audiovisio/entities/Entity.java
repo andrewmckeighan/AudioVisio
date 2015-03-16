@@ -10,6 +10,7 @@
 
 package audiovisio.entities;
 
+import audiovisio.level.ILevelItem;
 import org.json.simple.JSONObject;
 
 import audiovisio.utils.JSONHelper;
@@ -20,7 +21,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
-public class Entity extends Node{
+public class Entity extends Node implements ILevelItem{
 
     public Geometry geometry;
     private RigidBodyControl physics;

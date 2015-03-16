@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.level.ILevelItem;
 import org.json.simple.JSONObject;
 
 public class Door extends InteractableEntity {
