@@ -5,6 +5,7 @@ import audiovisio.utils.JSONHelper;
 import com.jme3.math.Vector3f;
 import org.json.simple.JSONObject;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -26,6 +27,11 @@ public class Trigger extends LevelItem {
         this.location.attachToTree(trigger);
 
         parent.add(trigger);
+    }
+
+    @Override
+    public void getEditor(JPanel panel) {
+        location.getEditor(panel);
     }
 
     public static Trigger fromJSON(JSONObject obj) {

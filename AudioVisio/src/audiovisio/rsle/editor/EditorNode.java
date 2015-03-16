@@ -21,6 +21,10 @@ public class EditorNode {
         return (Integer) value;
     }
 
+    public float getFloat() {
+        return (Float) value;
+    }
+
     public String getString() {
         return (String) value;
     }

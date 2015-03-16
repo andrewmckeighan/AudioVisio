@@ -1,6 +1,8 @@
 package audiovisio.rsle;
 
 import audiovisio.level.LevelReader;
+import audiovisio.rsle.editor.IEditable;
+import audiovisio.rsle.level.LevelItem;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -37,6 +39,8 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
     private JMenuItem save;
     private JMenuItem exit;
 
+    private JPanel editor = new JPanel();
+
     public RSLE() {
         super(new GridLayout(1,0));
         setSize(600, 400);
@@ -51,6 +55,10 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
 
         JScrollPane treeView = new JScrollPane(tree);
         add(treeView);
+
+        GridLayout layout = new GridLayout(5,1);
+        editor.setLayout(layout);
+        add(editor);
 
         menuBar = new JMenuBar();
         createMenu(menuBar);
@@ -98,7 +106,20 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
 
         if (node == null) return;
 
-        System.out.println(node);
+        if (node.getUserObject() instanceof IEditable) {
+            editor.removeAll();
+            ((IEditable) node.getUserObject()).getEditor(editor);
+
+            addEditorButtons(editor);
+            editor.validate();
+
+            System.out.println("Node selected: " + node);
+        }
+    }
+
+    private static void addEditorButtons(JPanel panel) {
+        JButton save = new JButton("Save");
+        panel.add(save);
     }
 
     /**

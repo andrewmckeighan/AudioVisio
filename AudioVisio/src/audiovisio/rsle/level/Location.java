@@ -1,9 +1,12 @@
 package audiovisio.rsle.level;
 
 import audiovisio.rsle.editor.EditorNode;
+import audiovisio.rsle.editor.IEditable;
 import com.jme3.math.Vector3f;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 
 /**
  * A wrapper around a Vector3 that will handle its
@@ -11,7 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author Matt Gerst
  */
-public class Location {
+public class Location implements IEditable {
 	/**
 	 * The location vector to be represented.
 	 */
@@ -20,6 +23,10 @@ public class Location {
     private DefaultMutableTreeNode x;
     private DefaultMutableTreeNode y;
     private DefaultMutableTreeNode z;
+
+    private JTextField xField;
+    private JTextField yField;
+    private JTextField zField;
     
     /**
      * Create a new Location instances. Handles
@@ -48,6 +55,30 @@ public class Location {
         loc.add(z);
 
         parent.add(loc);
+    }
+
+    public void getEditor(JPanel panel) {
+        JPanel group = new JPanel(new GridLayout(3,2));
+        group.setBorder(BorderFactory.createTitledBorder("Location"));
+
+        JLabel xLbl = new JLabel("X:");
+        JLabel yLbl = new JLabel("Y:");
+        JLabel zLbl = new JLabel("Z:");
+
+        xField = new JTextField(Float.toString(((EditorNode) x.getUserObject()).getFloat()), 5);
+        yField = new JTextField(Float.toString(((EditorNode) y.getUserObject()).getFloat()), 5);
+        zField = new JTextField(Float.toString(((EditorNode) z.getUserObject()).getFloat()), 5);
+
+        group.add(xLbl);
+        group.add(xField);
+
+        group.add(yLbl);
+        group.add(yField);
+
+        group.add(zLbl);
+        group.add(zField);
+
+        panel.add(group);
     }
 
     @Override

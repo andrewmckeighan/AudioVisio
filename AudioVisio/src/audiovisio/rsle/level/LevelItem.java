@@ -1,7 +1,9 @@
 package audiovisio.rsle.level;
 
+import audiovisio.rsle.editor.IEditable;
 import com.jme3.math.Vector3f;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -11,7 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author Matt Gerst
  */
-public abstract class LevelItem {
+public abstract class LevelItem implements IEditable {
     public int ID;
     public Location location;
 
