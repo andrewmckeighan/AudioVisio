@@ -5,9 +5,13 @@ import audiovisio.rsle.editor.IEditable;
 import audiovisio.rsle.level.LevelItem;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -30,96 +34,128 @@ import java.awt.event.KeyEvent;
  *
  * @author Matt Gerst
  */
-public class RSLE extends JPanel implements TreeSelectionListener, ActionListener {
+public class RSLE extends JPanel implements ActionListener {
     private JTree tree;
     protected JMenuBar menuBar;
-    private JMenu file;
-    private JMenuItem newLevel;
-    private JMenuItem openLevel;
-    private JMenuItem save;
-    private JMenuItem exit;
 
     private JPanel editor = new JPanel();
+
+    // MENU ITEMS
+    private JMenu file;
+    private JMenuItem file_new;
+    private JMenuItem file_open;
+    private JMenuItem file_save;
+    private JMenuItem file_save_as;
+    private JMenuItem file_close;
+    private JMenuItem file_exit;
+
+    // EDIT ITEMS
+    private JMenu edit;
+    private JMenuItem edit_copy;
+    private JMenuItem edit_cut;
+    private JMenuItem edit_paste;
+
+    // ADD ITEMS
+    private JMenu add;
+    private JMenuItem add_trigger;
+    private JMenu add_panels;
+    private JMenuItem add_panels_panel;
+    private JMenuItem add_panels_stair;
+    private JMenuItem add_door;
 
     public RSLE() {
         super(new GridLayout(1,0));
         setSize(600, 400);
 
-        // Create the nodes.
-        DefaultMutableTreeNode top = TreeHelper.getTree(LevelReader.loadJsonFile("../example_level.json"), "example_level.json");
-
-        tree = new JTree(top);
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-
-        tree.addTreeSelectionListener(this);
-
-        JScrollPane treeView = new JScrollPane(tree);
-        add(treeView);
-
-        GridLayout layout = new GridLayout(5,1);
-        editor.setLayout(layout);
-        add(editor);
-
         menuBar = new JMenuBar();
-        createMenu(menuBar);
+        createMenu();
+
+        tree = new JTree();
+        tree.setEditable(false);
+
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("RSLE");
+        DefaultTreeModel model = new DefaultTreeModel(rootNode);
+        tree.setModel(model);
+        add(tree);
     }
 
-    /**
-     * Create the menu system for the editor
-     * @param menu The menu bar to attach the menus to
-     */
-    private void createMenu(JMenuBar menu) {
+    private void createMenu() {
+        createFileMenu();
+        createEditMenu();
+        createAddMenu();
+    }
+
+    private void createFileMenu() {
         file = new JMenu("File");
         file.setMnemonic(KeyEvent.VK_F);
-        menu.add(file);
 
-        newLevel = new JMenuItem("New");
-        newLevel.setMnemonic(KeyEvent.VK_N);
-        newLevel.addActionListener(this);
-        file.add(newLevel);
+        file_new = new JMenuItem("New");
+        file_new.addActionListener(this);
+        file.add(file_new);
 
-        openLevel = new JMenuItem("Open");
-        openLevel.setMnemonic(KeyEvent.VK_O);
-        openLevel.setEnabled(false);
-        openLevel.addActionListener(this);
-        file.add(openLevel);
+        file_open = new JMenuItem("Open");
+        file.add(file_open);
 
-        save = new JMenuItem("Save");
-        save.setMnemonic(KeyEvent.VK_S);
-        save.setEnabled(false);
-        save.addActionListener(this);
-        file.add(save);
+        file_save = new JMenuItem("Save");
+        file_save.setEnabled(false);
+        file.add(file_save);
 
-        file.add(new JSeparator());
+        file_save_as = new JMenuItem("Save As");
+        file_save_as.setEnabled(false);
+        file.add(file_save_as);
 
-        exit = new JMenuItem("Exit");
-        exit.setMnemonic(KeyEvent.VK_X);
-        exit.addActionListener(this);
-        file.add(exit);
+        file.addSeparator();
+
+        file_close = new JMenuItem("Close");
+        file_close.setEnabled(false);
+        file_close.addActionListener(this);
+        file.add(file_close);
+
+        file_exit = new JMenuItem("Exit");
+        file_exit.addActionListener(this);
+        file.add(file_exit);
+
+        menuBar.add(file);
     }
 
-    /**
-     * Called when the selected item in the Tree has changed.
-     */
-    public void valueChanged(TreeSelectionEvent e) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+    private void createEditMenu() {
+        edit = new JMenu("Edit");
 
-        if (node == null) return;
+        edit_copy = new JMenuItem("Copy");
+        edit_copy.setEnabled(false);
+        edit.add(edit_copy);
 
-        if (node.getUserObject() instanceof IEditable) {
-            editor.removeAll();
-            ((IEditable) node.getUserObject()).getEditor(editor);
+        edit_cut = new JMenuItem("Cut");
+        edit_cut.setEnabled(false);
+        edit.add(edit_cut);
 
-            addEditorButtons(editor);
-            editor.validate();
+        edit_paste = new JMenuItem("Paste");
+        edit_paste.setEnabled(false);
+        edit.add(edit_paste);
 
-            System.out.println("Node selected: " + node);
-        }
+        menuBar.add(edit);
     }
 
-    private static void addEditorButtons(JPanel panel) {
-        JButton save = new JButton("Save");
-        panel.add(save);
+    private void createAddMenu() {
+        add = new JMenu("Add");
+        add.setEnabled(false);
+
+        add_trigger = new JMenuItem("Add Trigger");
+        add.add(add_trigger);
+
+        add_panels = new JMenu("Add Panel...");
+
+        add_panels_panel = new JMenuItem("Panel");
+        add_panels.add(add_panels_panel);
+
+        add_panels_stair = new JMenuItem("Stair");
+        add_panels.add(add_panels_stair);
+        add.add(add_panels);
+
+        add_door = new JMenuItem("Add Door");
+        add.add(add_door);
+
+        menuBar.add(add);
     }
 
     /**
@@ -145,13 +181,26 @@ public class RSLE extends JPanel implements TreeSelectionListener, ActionListene
         });
     }
 
-    /**
-     * Called when a menu item has been clicked.
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Exit")) {
-            System.exit(1);
+        if (e.getActionCommand().equals(file_exit.getActionCommand())) {
+            System.exit(0);
+        }
+        else if (e.getActionCommand().equals(file_new.getActionCommand())) {
+            tree.setEditable(true);
+            file_save.setEnabled(true);
+            file_save_as.setEnabled(true);
+            file_close.setEnabled(true);
+
+            add.setEnabled(true);
+        }
+        else if (e.getActionCommand().equals(file_close.getActionCommand())) {
+            tree.setEditable(false);
+            file_save.setEnabled(false);
+            file_save_as.setEnabled(false);
+            file_close.setEnabled(false);
+
+            add.setEnabled(false);
         }
     }
 }
