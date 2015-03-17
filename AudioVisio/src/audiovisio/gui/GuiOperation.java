@@ -3,25 +3,36 @@ package audiovisio.gui;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import audiovisio.networking.Client;
-import audiovisio.networking.Server;
-import audiovisio.networking.utilities.GeneralUtilities;
 import audiovisio.utils.LogHelper;
 
+import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
-import com.jme3.system.JmeContext;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class GuiOperation extends SimpleApplication implements ScreenController{
+public class GuiOperation extends AbstractAppState implements ScreenController{
 
 	private Nifty nifty;
-	static GuiOperation app = new GuiOperation();
-	public static void GUIStart() {
+	
+	SimpleApplication app;
+	
+	public GuiOperation(){
+		
+	}
+	
+	 @Override
+	 public void initialize(AppStateManager stateManager, Application app){
+		 super.initialize(stateManager, app);
+		 this.app = (SimpleApplication)app;
+	 }
+
+	public void GUIStart() {
 
 		AppSettings settings = new AppSettings(true);
 		settings.setAudioRenderer("LWJGL");
@@ -32,17 +43,17 @@ public class GuiOperation extends SimpleApplication implements ScreenController{
 	}
 
 	public void simpleInitApp() {
-		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager,
-				inputManager, audioRenderer, guiViewPort);
+		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
+				app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
 		nifty = niftyDisplay.getNifty();
 		nifty.fromXml("audiovisio/gui/baselayer.xml", "start", this);
-		guiViewPort.addProcessor(niftyDisplay);
-		flyCam.setEnabled(false);
-		inputManager.setCursorVisible(true);
+		app.getGuiViewPort().addProcessor(niftyDisplay);
+		app.getFlyByCamera().setEnabled(false);
+		app.getInputManager().setCursorVisible(true);
 		
 	}
 	
-	public void quitGame(){
+	public void quitGui(){
 		app.stop();
 	}
 	
@@ -72,42 +83,21 @@ public class GuiOperation extends SimpleApplication implements ScreenController{
 		}
 		return temp;
 	}
-	
-	public static void startServerAndClient() {
-		Server serverApp;
-		Client clientApp;
-		
-    	GeneralUtilities.setPort(11550);
-    	
-		serverApp = new Server();
-		serverApp.start(JmeContext.Type.Headless);
-    	clientApp = new Client();
-		clientApp.setPauseOnLostFocus(false);
-    	clientApp.start();
-   
-    }
-	
-	public static void startClient() {
-		app.stop();
-		Client clientApp;
-    	GeneralUtilities.setPort(11550);
-    	clientApp = new Client();
-		clientApp.setPauseOnLostFocus(false);
-    	clientApp.start();
-   
-    }
-	
+
+
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
 		// TODO Auto-generated method stub
 		
 	}
 
+
 	@Override
 	public void onEndScreen() {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	@Override
 	public void onStartScreen() {

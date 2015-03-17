@@ -5,14 +5,14 @@ import com.jme3.system.JmeContext;
 
 import audiovisio.networking.Client;
 import audiovisio.networking.Server;
-import audiovisio.networking.utilities.GeneralUtilities;
+import audiovisio.utils.NetworkUtils;
 
 public class ClientAndServer {
 	private static Server serverApp;
 	private static Client clientApp;
 
     public static void startServerAndClient() {
-    	GeneralUtilities.setPort(11550);
+    	NetworkUtils.setPort(11550);
         LogHelper.init();
 
     	//Server Start

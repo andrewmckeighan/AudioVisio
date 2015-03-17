@@ -7,38 +7,45 @@ import audiovisio.networking.messages.PhysicsSyncMessage;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.utils.LogHelper;
-
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.collision.PhysicsCollisionObject;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.network.Client;
 import com.jme3.network.Server;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 import java.util.HashMap;
-import java.util.Map;
+
+/**
+ * This class manages the list of players between servers and clients.
+ *
+ * Keeps a list of player entities and their ID. All worldManagers have identical lists,
+ * so changes will be the same through all instances of the game.
+ */
 
 public class WorldManager extends AbstractAppState implements SyncMessageValidator {
 
-    private Server server;
-    private Client client;
-    private long myPlayerId = -2;
-    private Node rootNode;
+    // Networking
+    private SyncManager syncManager   = null;
+    private Server server             = null;
 
-    //private HashMap<Long, Spatial> entities = new HashMap<Long, Spatial>();
+    // SimpleAppState references.
+    private Node rootNode             = null;
+    private Application app           = null;
+    private AssetManager assetManager = null;
+    private PhysicsSpace space        = null;
+
+    // Lists
     private HashMap<Long, Player> players = new HashMap<Long, Player>();
-    private int newId = 0;
-    private Application app;
-    private AssetManager assetManager;
-    private PhysicsSpace space;
-    private SyncManager syncManager;
 
+    /**
+     * Constructor, Gets references to the simpleApplication and the root node.
+     *
+     * @param app      The owners Application.
+     * @param rootNode The owners rootNode.
+     */
     public WorldManager(Application app, Node rootNode) {
         this.app = app;
         this.rootNode = rootNode;
@@ -46,6 +53,85 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         this.space = app.getStateManager().getState(BulletAppState.class).getPhysicsSpace();
         this.server = app.getStateManager().getState(SyncManager.class).getServer();
         syncManager = app.getStateManager().getState(SyncManager.class);
+    }
+
+    /**
+     * Creates a new player entity and adds it to the players map.
+     *
+     * If this manager is owned by the server, it broadcasts the message to clients.
+     *
+     * @param playerID Unique id of the player, matches the clients ID.
+     */
+
+    public void addPlayer(long playerID) {
+        LogHelper.fine("adding player: ");
+        Player player = new Player();
+        player.setID(playerID);
+        if (isServer()) {
+            syncManager.broadcast(new PlayerJoinMessage(playerID));
+            player.setServer(true);
+        } else {
+            assert this.app instanceof audiovisio.networking.Client;
+            if (((audiovisio.networking.Client) this.app).getId() == playerID) {
+                player.setCam(app.getCamera());
+            }
+        }
+
+        player.setModel(player.createModel(assetManager));
+        syncManager.addObject(playerID, player);
+        player.addToScene(rootNode, space);
+        LogHelper.info(playerID + ":" + player);
+        players.put(playerID, player);
+    }
+
+    /**
+     * Removes the player from the syncManager.
+     *
+     * TODO: why doesn't this remove from players?
+     * (or why does addPlayer add to players?)
+     *
+     * @param id ID of the player to remove.
+     */
+
+    public void removePlayer(long id) {
+        LogHelper.info("removing player: " + id);
+        if (isServer()) {
+            syncManager.broadcast(new PlayerLeaveMessage(id));
+        }
+        syncManager.removeObject(id);
+        Player player = players.remove(id);
+        if (player == null) {
+            LogHelper.warn("tried to remove player who wasn't there: " + id);
+            return;
+        }
+        //TODO?
+        if (!isServer()) {
+            //remove player from scene
+        }
+        player.removeFromParent();
+        space.removeAll(player);
+    }
+
+    public Spatial getPlayer(long syncID) {
+        return players.get(syncID);
+    }
+
+    //TODO
+    public void loadLevel() {
+    }
+
+
+    //TODO
+    @Override
+    public boolean checkMessage(PhysicsSyncMessage message) {
+//        if (message.syncId >= 0 && getEntity(message.syncId) == null) {
+//            return false;
+//        }
+        return true;
+    }
+
+    public Server getServer() {
+        return this.server;
     }
 
     public boolean isServer() {
@@ -56,9 +142,6 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         this.server = server;
     }
 
-    public void loadLevel() {
-    }
-
     public SyncManager getSyncManager() {
         return syncManager;
     }
@@ -66,55 +149,4 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     public PhysicsSpace getPhysicsSpace() {
         return space;
     }
-
-    @Override
-    public boolean checkMessage(PhysicsSyncMessage message) {
-//        if (message.syncId >= 0 && getEntity(message.syncId) == null) {
-//            return false;
-//        }
-        return true;
-    }
-
-	public void addPlayer(long playerID) {
-		LogHelper.info("adding player: ");
-		Player player = new Player();
-		player.setID(playerID);
-		if(isServer()){
-			syncManager.broadcast(new PlayerJoinMessage(playerID));
-			player.setServer(true);
-		}
-		
-        player.setModel(player.createModel(assetManager));
-        player.setCam(app.getCamera());
-		syncManager.addObject(playerID, player);
-		player.addToScene(rootNode, space);
-		players.put(playerID, player);
-	}
-
-    public Spatial getPlayer(long syncID) {
-        return players.get(syncID);
-    }
-
-	public void removePlayer(long id) {
-		LogHelper.info("removing player: " + id);
-		if(isServer()){
-			syncManager.broadcast(new PlayerLeaveMessage(id));
-		}
-		syncManager.removeObject(id);
-		Player player = players.remove(id);
-		if(player == null){
-			LogHelper.warn("tried to remove player who wasn't there: " + id);
-			return;
-		}
-		//TODO?
-		if(!isServer()){
-			//remove player from scene
-		}
-		player.removeFromParent();
-		space.removeAll(player);
-	}
-
-	public Server getServer() {
-		return this.server;
-	}
 }
