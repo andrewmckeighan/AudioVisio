@@ -1,5 +1,7 @@
 package audiovisio.level;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
 
 import audiovisio.utils.JSONHelper;
@@ -10,6 +12,8 @@ import com.jme3.math.Vector3f;
  * Represents a panel in the world.
  */
 public class Panel implements ILevelItem {
+    private Node model;
+
 	/**
 	 * The location of the panel on the grid.
 	 */
@@ -19,6 +23,10 @@ public class Panel implements ILevelItem {
 
     public Panel(Vector3f location){
         this.location = location;
+    }
+
+    public void initialize(AssetManager assetManager) {
+        model = (Node) assetManager.loadModel("Models/Level/Panel/Panel.j3o");
     }
     
     /**
