@@ -176,9 +176,11 @@ public class Server extends SimpleApplication implements
                 }
                 worldManager.removePlayer(conn.getId());
 
-                if (players.isEmpty()) {
+                if (players.isEmpty() || players.size() == 0) {
                     myServer.close();
                 }
+
+//                LogHelper.info(players.size() + players.toString());
             }
         });
     }

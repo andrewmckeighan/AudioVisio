@@ -10,6 +10,7 @@
 
 package audiovisio.entities;
 
+import com.jme3.effect.ParticleEmitter;
 import org.json.simple.JSONObject;
 
 import audiovisio.utils.JSONHelper;

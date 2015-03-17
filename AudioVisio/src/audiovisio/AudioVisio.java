@@ -32,8 +32,8 @@ public class AudioVisio extends SimpleApplication{
     	clientApp.start();
     	
     	
-    	gui = new MenuAppState();
-		gui.setEnabled(true);
+//    	gui = new MenuAppState();
+//		gui.setEnabled(true);
 
     	
     }

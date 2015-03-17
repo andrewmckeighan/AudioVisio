@@ -1,6 +1,8 @@
 package audiovisio;
 
+import audiovisio.entities.AudioPlayer;
 import audiovisio.entities.Player;
+import audiovisio.entities.VisualPlayer;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.SyncMessageValidator;
 import audiovisio.networking.messages.PhysicsSyncMessage;
@@ -65,7 +67,12 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 
     public void addPlayer(long playerID) {
         LogHelper.fine("adding player: ");
-        Player player = new Player();
+        Player player;
+        if(playerID % 2 == 0) {
+            player = new AudioPlayer();
+        } else {
+            player = new VisualPlayer();
+        }
         player.setID(playerID);
         if (isServer()) {
             syncManager.broadcast(new PlayerJoinMessage(playerID));
@@ -80,6 +87,9 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         player.setModel(player.createModel(assetManager));
         syncManager.addObject(playerID, player);
         player.addToScene(rootNode, space);
+        player.setRootNode(rootNode);
+        player.setAssetManager(assetManager);
+        player.init();
         LogHelper.info(playerID + ":" + player);
         players.put(playerID, player);
     }

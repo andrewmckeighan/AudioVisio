@@ -7,6 +7,7 @@ import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Quaternion;
@@ -14,6 +15,11 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 
 import org.json.simple.JSONObject;
+
+/**
+ * TODO: make sure all parameters of Player are children of player, and handled entirely within player.
+ * TODO: implement footSteps as a test, decide on class later.
+ */
 
 
 /**
@@ -27,10 +33,11 @@ public class Player extends MovingEntity implements ActionListener {
 
     // Constants
     public static final Vector3f SPAWN_LOCATION     = new Vector3f(0, 5, 0);
-    public static final Vector3f GRAVITY            = new Vector3f(0, -9.81f, 0);
+    public static final Vector3f GRAVITY            = new Vector3f(0, -9.81f, 0); //TODO make this not aweful
     public static final String DEFAULT_MODEL        = "Models/Oto/Oto.mesh.xml";
     public static final Vector3f CAMERA_OFFSET      = new Vector3f(0, 5, 0);
     public static final Vector3f MODEL_OFFSET       = CAMERA_OFFSET.divide(2);
+    private static final Vector3f JUMP_FORCE        = new Vector3f(0, 2, 0);
 
     //Key Listeners
     private boolean up                              = false;
@@ -38,15 +45,22 @@ public class Player extends MovingEntity implements ActionListener {
     private boolean left                            = false;
     private boolean right                           = false;
 
-    //Instance Variables
-    private boolean isServer                        = false;
+    //Children
     private Node model                              = null;
     private BetterCharacterControl characterControl = null;
-    private Vector3f savedLocation                  = SPAWN_LOCATION;
     private Camera playerCamera                     = null;
+    public Particle footSteps                       = null;
+
+    //refrences
+    private Node rootNode                           = null;
+    private AssetManager assetManager               = null;
+
+    //Instance Variables
+    private boolean isServer                        = false;
+    private Vector3f walkDirection                  = new Vector3f(); //TODO is walk & save direction needed?
+    private Vector3f savedLocation                  = SPAWN_LOCATION;
     private Vector3f camDir                         = new Vector3f();
     private Vector3f camLeft                        = new Vector3f();
-    private Vector3f walkDirection                  = new Vector3f();
 
     /**
      * Primary constructor for Player. Adds the model and generates a characterControl.
@@ -56,14 +70,11 @@ public class Player extends MovingEntity implements ActionListener {
      */
     public Player(Node playerModel, Vector3f spawnLocation) {
         if (playerModel != null) {
-            this.model = playerModel;
-            this.model.setLocalScale(0.2f);
-            this.model.setLocalTranslation(spawnLocation);
-            this.attachChild(this.model);
+            this.setModel(playerModel, spawnLocation);
         }
 
         this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
-        characterControl.setJumpForce(new Vector3f(0, 0, 0));
+        characterControl.setJumpForce(JUMP_FORCE);
         characterControl.setGravity(GRAVITY);
 
         this.characterControl.warp(spawnLocation);
@@ -71,6 +82,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.addControl(this.characterControl);
 
         this.move(spawnLocation);
+
+        this.footSteps = new Particle();
     }
 
     public Player(Node playerModel) {
@@ -125,6 +138,7 @@ public class Player extends MovingEntity implements ActionListener {
         } else {
             LogHelper.warn("Player.addToScene: this.model is null!");
         }
+
         physics.add(this);
     }
 
@@ -163,25 +177,55 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     /**
-     * sets the players positon and direction, used to sync a player with a message sent from a different server/client
+     * sets the players position and direction, used to sync a player with a message sent from a different server/client
+     * TODO: see what all this.move can handle.
+     *
      * @param position  position to set
      * @param direction walkDirection to set
      */
     public void update(Vector3f position, Vector3f direction, Quaternion rotation) {
-        this.savedLocation = position;
-        this.setWalkDirection(direction);
+//        this.savedLocation = position;
+//        this.setWalkDirection(direction);
 
-        this.characterControl.warp(this.savedLocation);
+//        this.move(position);
+
+//        this.characterControl.warp(position);
         this.characterControl.setWalkDirection(direction);
 
-        this.model.setLocalTranslation(position.add(MODEL_OFFSET));
+        if(this.model != null) {
+            this.model.setLocalTranslation(position.add(MODEL_OFFSET));
+        }
+
+        if(this.footSteps != null && this.footSteps.emitter != null){
+//            this.footSteps.setLocalTranslation(position);
+//            this.footSteps.move(position);
+            this.footSteps.emitter.setLocalTranslation(position);
+//            this.footSteps.emitter.move(position);
+        }
 
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getLocalTranslation().add(
                                               CAMERA_OFFSET));
-            this.model.setLocalRotation(this.playerCamera.getRotation());
+//            this.model.setLocalRotation(this.playerCamera.getRotation());//TODO remove y coord from rotation/set a max
+            if(this.model != null) {
+                this.model.removeFromParent();
+                this.model = null;
+            }
         }else{
-            this.model.setLocalRotation(rotation);
+            if(this.model != null) {
+                this.model.setLocalRotation(rotation);
+            }
+        }
+
+        if(this instanceof VisualPlayer){
+            if(this.model != null) {
+                this.model = null;
+            }
+        }
+        if(this instanceof AudioPlayer){
+            if(this.footSteps != null){
+                this.footSteps = null;
+            }
         }
 
     }
@@ -191,11 +235,18 @@ public class Player extends MovingEntity implements ActionListener {
      * @return new SyncCharacterMessage to send to other server/client.
      */
     public SyncCharacterMessage getSyncCharacterMessage() {
+        Quaternion q;
+        if(this.model != null) {
+            q = this.model.getLocalRotation();
+        } else {
+            q = new Quaternion(0, 0, 0, 0);
+        }
+
         //TODO: determine if this if is needed.
         if (this.isServer()) {
             return new SyncCharacterMessage(this.getID(),
                     this.getLocalTranslation(),
-                    this.getWalkDirection(), this.model.getLocalRotation());
+                    this.getWalkDirection(), q);
         }
         this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
         this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
@@ -278,5 +329,17 @@ public class Player extends MovingEntity implements ActionListener {
         }catch (NullPointerException nullException){
             return "Player has not been fully created yet.";
         }
+    }
+
+    public void setRootNode(Node rootNode) {
+        this.rootNode = rootNode;
+    }
+
+    public void setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
+
+    public void init(){
+        this.footSteps.init(this.rootNode, this.assetManager);
     }
 }

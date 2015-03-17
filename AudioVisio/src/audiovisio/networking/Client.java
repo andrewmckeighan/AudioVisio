@@ -151,7 +151,11 @@ public class Client extends SimpleApplication implements
         testLever.createMaterial(assetManager);
 
         worldManager.addPlayer(myClient.getId());
-        initKeys((Player) worldManager.getPlayer(myClient.getId()));
+        Player p = (Player) worldManager.getPlayer(myClient.getId());
+
+        initKeys(p);
+
+
 
         ////////////////////////////
         // Initialization Methods //
@@ -164,8 +168,8 @@ public class Client extends SimpleApplication implements
         // Add entities to Scene //
         ///////////////////////////
         //TODO this will probably be moved into WorldManager.
-        testButton.addToScene(rootNode, physicsSpace);
-        testLever.addToScene(rootNode, physicsSpace);
+//        testButton.addToScene(rootNode, physicsSpace);
+//        testLever.addToScene(rootNode, physicsSpace);
 
         /////////////////////////////
         // Add objects to rootNode //
