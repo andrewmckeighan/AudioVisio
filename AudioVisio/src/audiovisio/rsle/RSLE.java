@@ -2,6 +2,8 @@ package audiovisio.rsle;
 
 import audiovisio.level.LevelReader;
 import audiovisio.rsle.editor.IEditable;
+import audiovisio.rsle.editor.LevelDialog;
+import audiovisio.rsle.editor.NodeEditor;
 import audiovisio.rsle.level.LevelItem;
 
 import javax.swing.*;
@@ -10,9 +12,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +36,7 @@ import java.awt.event.KeyEvent;
  */
 public class RSLE extends JPanel implements ActionListener {
     private JTree tree;
+    private DefaultTreeModel treeModel;
     protected JMenuBar menuBar;
 
     private JPanel editor = new JPanel();
@@ -72,10 +73,11 @@ public class RSLE extends JPanel implements ActionListener {
 
         tree = new JTree();
         tree.setEditable(false);
+        tree.setCellEditor(new NodeEditor(tree, (DefaultTreeCellRenderer) tree.getCellRenderer()));
 
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("RSLE");
-        DefaultTreeModel model = new DefaultTreeModel(rootNode);
-        tree.setModel(model);
+        treeModel = new DefaultTreeModel(rootNode);
+        tree.setModel(treeModel);
         add(tree);
     }
 
@@ -187,12 +189,37 @@ public class RSLE extends JPanel implements ActionListener {
             System.exit(0);
         }
         else if (e.getActionCommand().equals(file_new.getActionCommand())) {
-            tree.setEditable(true);
-            file_save.setEnabled(true);
-            file_save_as.setEnabled(true);
-            file_close.setEnabled(true);
+            LevelDialog levelDialog = new LevelDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+            levelDialog.setVisible(true);
 
-            add.setEnabled(true);
+            if (levelDialog.getStatus()) {
+                DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(levelDialog.getName());
+                treeModel.setRoot(newRoot);
+
+                DefaultMutableTreeNode name = new DefaultMutableTreeNode(levelDialog.getName());
+                DefaultMutableTreeNode author = new DefaultMutableTreeNode(levelDialog.getAuthor());
+                DefaultMutableTreeNode version = new DefaultMutableTreeNode(levelDialog.getVersion());
+                newRoot.add(name);
+                newRoot.add(author);
+                newRoot.add(version);
+
+                DefaultMutableTreeNode level = new DefaultMutableTreeNode("Level");
+                DefaultMutableTreeNode triggers = new DefaultMutableTreeNode("Triggers");
+                DefaultMutableTreeNode panels = new DefaultMutableTreeNode("Panels");
+                DefaultMutableTreeNode entities = new DefaultMutableTreeNode("Entities");
+
+                level.add(triggers);
+                level.add(panels);
+                level.add(entities);
+                newRoot.add(level);
+
+                tree.setEditable(true);
+                file_save.setEnabled(true);
+                file_save_as.setEnabled(true);
+                file_close.setEnabled(true);
+
+                add.setEnabled(true);
+            }
         }
         else if (e.getActionCommand().equals(file_close.getActionCommand())) {
             tree.setEditable(false);
