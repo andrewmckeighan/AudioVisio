@@ -26,11 +26,23 @@ public class LevelNode extends DefaultMutableTreeNode {
         return this.container;
     }
 
+    public boolean isPair() {
+        return userObject instanceof Pair;
+    }
+
+    public Object getValue() {
+        if (isPair()) {
+            return ((Pair) userObject).getValue();
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         if (userObject instanceof Pair) {
             Pair<String, Object> obj = (Pair<String, Object>) userObject;
-            return String.format("%s: %s", obj.getKey(), obj.getValue());
+//            return String.format("%s: %s", obj.getKey(), obj.getValue());
+            return obj.getValue().toString();
         }
 
         if (userObject != null) {

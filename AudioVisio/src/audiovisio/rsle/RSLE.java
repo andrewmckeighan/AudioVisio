@@ -1,8 +1,10 @@
 package audiovisio.rsle;
 
-import audiovisio.rsle.editor.LevelDialog;
+import audiovisio.rsle.editor.dialogs.NewLevelDialog;
 import audiovisio.rsle.editor.LevelNode;
-import audiovisio.rsle.editor.NodeEditor;
+import audiovisio.rsle.editor.LevelNodeEditor;
+import audiovisio.rsle.editor.LevelNodeRenderer;
+import audiovisio.rsle.editor.dialogs.NewTriggerDialog;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -59,6 +61,15 @@ public class RSLE extends JPanel implements ActionListener {
     private JMenuItem add_panels_stair;
     private JMenuItem add_door;
 
+    // IMPORTANT NODES
+    private LevelNode levelName;
+    private LevelNode levelAuthor;
+    private LevelNode levelVersion;
+
+    private LevelNode triggers;
+    private LevelNode panels;
+    private LevelNode entities;
+
     public RSLE() {
         super(new GridLayout(1,0));
         setSize(600, 400);
@@ -68,13 +79,14 @@ public class RSLE extends JPanel implements ActionListener {
 
         tree = new JTree();
         tree.setEditable(false);
-        tree.setCellEditor(new NodeEditor(tree, (DefaultTreeCellRenderer) tree.getCellRenderer()));
+        tree.setCellRenderer(new LevelNodeRenderer());
+        tree.setCellEditor(new LevelNodeEditor(tree, (DefaultTreeCellRenderer) tree.getCellRenderer()));
         tree.setShowsRootHandles(true);
 
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("RSLE");
         treeModel = new DefaultTreeModel(rootNode);
         tree.setModel(treeModel);
-        add(tree);
+        add(new JScrollPane(tree));
     }
 
     private void createMenu() {
@@ -139,6 +151,7 @@ public class RSLE extends JPanel implements ActionListener {
         add.setEnabled(false);
 
         add_trigger = new JMenuItem("Add Trigger");
+        add_trigger.addActionListener(this);
         add.add(add_trigger);
 
         add_panels = new JMenu("Add Panel...");
@@ -185,24 +198,24 @@ public class RSLE extends JPanel implements ActionListener {
             System.exit(0);
         }
         else if (e.getActionCommand().equals(file_new.getActionCommand())) {
-            LevelDialog levelDialog = new LevelDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+            NewLevelDialog levelDialog = new NewLevelDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
             levelDialog.setVisible(true);
 
             if (levelDialog.getStatus()) {
                 DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(levelDialog.getName());
                 treeModel.setRoot(newRoot);
 
-                LevelNode name = new LevelNode("Name", levelDialog.getName(), false);
-                LevelNode author = new LevelNode("Author", levelDialog.getAuthor(), false);
-                LevelNode version = new LevelNode("Version", levelDialog.getVersion(), false);
-                newRoot.add(name);
-                newRoot.add(author);
-                newRoot.add(version);
+                levelName = new LevelNode("Name", levelDialog.getName(), false);
+                levelAuthor = new LevelNode("Author", levelDialog.getAuthor(), false);
+                levelVersion = new LevelNode("Version", levelDialog.getVersion(), false);
+                newRoot.add(levelName);
+                newRoot.add(levelAuthor);
+                newRoot.add(levelVersion);
 
                 LevelNode level = new LevelNode("Level", true);
-                LevelNode triggers = new LevelNode("Triggers", true);
-                LevelNode panels = new LevelNode("Panels", true);
-                LevelNode entities = new LevelNode("Entities", true);
+                triggers = new LevelNode("Triggers", true);
+                panels = new LevelNode("Panels", true);
+                entities = new LevelNode("Entities", true);
 
                 level.add(triggers);
                 level.add(panels);
@@ -224,6 +237,41 @@ public class RSLE extends JPanel implements ActionListener {
             file_close.setEnabled(false);
 
             add.setEnabled(false);
+
+            DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("RSLE");
+            treeModel.setRoot(newRoot);
+            triggers = null;
+            panels = null;
+            entities = null;
+            levelAuthor = null;
+            levelName = null;
+            levelVersion = null;
         }
+        else if (e.getActionCommand().equals(add_trigger.getActionCommand())) {
+            NewTriggerDialog triggerDialog = new NewTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+            triggerDialog.setVisible(true);
+
+            if (triggerDialog.getStatus()) {
+                String loc = triggerDialog.getLevelLocation();
+                int id = triggerDialog.getId();
+
+                LevelNode triggerNode = new LevelNode(String.format("#%d @ (%s)", id, loc), true);
+                LevelNode idNode = new LevelNode("ID", id, false);
+                LevelNode locNode = new LevelNode("Location", loc, false);
+
+                triggerNode.add(idNode);
+                triggerNode.add(locNode);
+
+                treeModel.insertNodeInto(triggerNode, triggers, 0);
+            }
+        }
+    }
+
+    private static int ID = 0;
+
+    public static int getNextID() {
+        int newId = ID;
+        ID++;
+        return newId;
     }
 }

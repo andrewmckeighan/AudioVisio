@@ -1,4 +1,4 @@
-package audiovisio.rsle.editor;
+package audiovisio.rsle.editor.dialogs;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 /**
  * @author Matt Gerst
  */
-public class LevelDialog extends JDialog implements ActionListener {
+public class NewLevelDialog extends JDialog implements ActionListener {
     JLabel lblName = new JLabel("Name");
     JLabel lblAuthor = new JLabel("Author");
     JLabel lblVersion = new JLabel("Version");
@@ -22,7 +22,7 @@ public class LevelDialog extends JDialog implements ActionListener {
 
     boolean status = false;
 
-    public LevelDialog(Frame owner, boolean modal) {
+    public NewLevelDialog(Frame owner, boolean modal) {
         super(owner, modal);
         init();
     }

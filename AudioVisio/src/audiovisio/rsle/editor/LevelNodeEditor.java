@@ -5,6 +5,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.EventObject;
@@ -12,9 +13,20 @@ import java.util.EventObject;
 /**
  * @author Matt Gerst
  */
-public class NodeEditor extends DefaultTreeCellEditor {
-    public NodeEditor(JTree tree, DefaultTreeCellRenderer renderer) {
+public class LevelNodeEditor extends DefaultTreeCellEditor {
+    public LevelNodeEditor(JTree tree, DefaultTreeCellRenderer renderer) {
         super(tree, renderer);
+    }
+
+    @Override
+    public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row) {
+        if (value instanceof LevelNode) {
+            if (((LevelNode) value).isPair()) {
+                value = ((LevelNode) value).getValue();
+            }
+        }
+
+        return super.getTreeCellEditorComponent(tree, value, isSelected, expanded, leaf, row);
     }
 
     @Override
