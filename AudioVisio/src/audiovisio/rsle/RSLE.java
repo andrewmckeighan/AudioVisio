@@ -4,6 +4,14 @@ import audiovisio.rsle.editor.dialogs.*;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor;
 import audiovisio.rsle.editor.LevelNodeRenderer;
+import audiovisio.utils.FileUtils;
+import audiovisio.utils.JSONHelper;
+import audiovisio.utils.LogHelper;
+import javafx.util.Pair;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -13,6 +21,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.*;
+import java.util.Enumeration;
 
 /**
  * A VERY simple level editor used to edit the level json files.
@@ -31,6 +41,8 @@ import java.awt.event.KeyEvent;
  * @author Matt Gerst
  */
 public class RSLE extends JPanel implements ActionListener {
+    public static final String CURRENT_LEVEL_FORMAT = "0.2";
+
     private JTree tree;
     private DefaultTreeModel treeModel;
     protected JMenuBar menuBar;
@@ -58,6 +70,7 @@ public class RSLE extends JPanel implements ActionListener {
     private JMenu add_panels;
     private JMenuItem add_panels_panel;
     private JMenuItem add_panels_stair;
+    private JMenuItem add_entities;
     private JMenuItem add_door;
 
     // IMPORTANT NODES
@@ -68,6 +81,8 @@ public class RSLE extends JPanel implements ActionListener {
     private LevelNode triggers;
     private LevelNode panels;
     private LevelNode entities;
+
+    private File loadedFile;
 
     public RSLE() {
         super(new GridLayout(1,0));
@@ -103,13 +118,16 @@ public class RSLE extends JPanel implements ActionListener {
         file.add(file_new);
 
         file_open = new JMenuItem("Open");
+        file_open.addActionListener(this);
         file.add(file_open);
 
         file_save = new JMenuItem("Save");
+        file_save.addActionListener(this);
         file_save.setEnabled(false);
         file.add(file_save);
 
         file_save_as = new JMenuItem("Save As");
+        file_save_as.addActionListener(this);
         file_save_as.setEnabled(false);
         file.add(file_save_as);
 
@@ -164,9 +182,12 @@ public class RSLE extends JPanel implements ActionListener {
         add_panels.add(add_panels_stair);
         add.add(add_panels);
 
-        add_door = new JMenuItem("Add Door");
+        add_entities = new JMenu("Add Entity...");
+
+        add_door = new JMenuItem("Door");
         add_door.addActionListener(this);
-        add.add(add_door);
+        add_entities.add(add_door);
+        add.add(add_entities);
 
         menuBar.add(add);
     }
@@ -196,25 +217,34 @@ public class RSLE extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(file_exit.getActionCommand())) {
+        if (e.getSource() == file_exit) {
             System.exit(0);
         }
-        else if (e.getActionCommand().equals(file_new.getActionCommand())) {
+        else if (e.getSource() == file_new) {
             actionNew();
         }
-        else if (e.getActionCommand().equals(file_close.getActionCommand())) {
+        else if (e.getSource() == file_open) {
+            actionOpen();
+        }
+        else if (e.getSource() == file_save) {
+            write(loadedFile);
+        }
+        else if (e.getSource() == file_save_as) {
+            actionSaveAs();
+        }
+        else if (e.getSource() == file_close) {
             actionClose();
         }
-        else if (e.getActionCommand().equals(add_trigger.getActionCommand())) {
+        else if (e.getSource() == add_trigger) {
             actionAddTrigger();
         }
-        else if (e.getActionCommand().equals(add_door.getActionCommand())) {
+        else if (e.getSource() == add_door) {
             actionAddDoor();
         }
-        else if (e.getActionCommand().equals(add_panels_panel.getActionCommand())) {
+        else if (e.getSource() == add_panels_panel) {
             actionAddPanel();
         }
-        else if (e.getActionCommand().equals(add_panels_stair.getActionCommand())) {
+        else if (e.getSource() == add_panels_stair) {
             actionAddStair();
         }
     }
@@ -245,11 +275,41 @@ public class RSLE extends JPanel implements ActionListener {
             newRoot.add(level);
 
             tree.setEditable(true);
-            file_save.setEnabled(true);
             file_save_as.setEnabled(true);
             file_close.setEnabled(true);
 
             add.setEnabled(true);
+        }
+    }
+
+    private void actionOpen() {
+        final JFileChooser fc = new JFileChooser();
+        fc.addChoosableFileFilter(new FileUtils.LevelFileFilter());
+
+        int returnVal = fc.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            loadedFile = fc.getSelectedFile();
+            load(loadedFile);
+            file_save.setEnabled(true);
+            file_save_as.setEnabled(true);
+            file_close.setEnabled(true);
+            add.setEnabled(true);
+        }
+    }
+
+    private void actionSaveAs() {
+        final JFileChooser fc = new JFileChooser();
+        fc.addChoosableFileFilter(new FileUtils.LevelFileFilter());
+
+        int returnVal = fc.showSaveDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            loadedFile = fc.getSelectedFile();
+            write(loadedFile);
+            file_save.setEnabled(true);
+
+            ((DefaultMutableTreeNode) treeModel.getRoot()).setUserObject(loadedFile.toString());
         }
     }
 
@@ -269,6 +329,8 @@ public class RSLE extends JPanel implements ActionListener {
         levelAuthor = null;
         levelName = null;
         levelVersion = null;
+
+        loadedFile = null;
     }
 
     private void actionAddTrigger() {
@@ -280,9 +342,11 @@ public class RSLE extends JPanel implements ActionListener {
             int id = triggerDialog.getId();
 
             LevelNode triggerNode = new LevelNode(String.format("#%d @ (%s)", id, loc), true);
+            LevelNode typeNode = new LevelNode("Type", "trigger", true);
             LevelNode idNode = new LevelNode("ID", id, false);
             LevelNode locNode = new LevelNode("Location", loc, false);
 
+            triggerNode.add(typeNode);
             triggerNode.add(idNode);
             triggerNode.add(locNode);
 
@@ -299,9 +363,11 @@ public class RSLE extends JPanel implements ActionListener {
             int id = doorDialog.getId();
 
             LevelNode doorNode = new LevelNode(String.format("#%d door @ (%s)", id, loc), true);
+            LevelNode typeNode = new LevelNode("Type", "door", true);
             LevelNode idNode = new LevelNode("ID", id, false);
             LevelNode locNode = new LevelNode("Location", loc, false);
 
+            doorNode.add(typeNode);
             doorNode.add(idNode);
             doorNode.add(locNode);
 
@@ -318,9 +384,11 @@ public class RSLE extends JPanel implements ActionListener {
             int id = panelDialog.getId();
 
             LevelNode panelNode = new LevelNode(String.format("#%d @ (%s)", id, loc), true);
+            LevelNode typeNode = new LevelNode("Type", "panel", true);
             LevelNode idNode = new LevelNode("ID", id, false);
             LevelNode locNode = new LevelNode("Location", loc, false);
 
+            panelNode.add(typeNode);
             panelNode.add(idNode);
             panelNode.add(locNode);
 
@@ -338,10 +406,12 @@ public class RSLE extends JPanel implements ActionListener {
             int id = stairDialog.getId();
 
             LevelNode stairNode = new LevelNode(String.format("#%d stair @ (%s)", id, loc), true);
+            LevelNode typeNode = new LevelNode("Type", "stair", true);
             LevelNode idNode = new LevelNode("ID", id, false);
             LevelNode dirNode = new LevelNode("Direction", dir, false);
             LevelNode locNode = new LevelNode("Location", loc, false);
 
+            stairNode.add(typeNode);
             stairNode.add(idNode);
             stairNode.add(dirNode);
             stairNode.add(locNode);
@@ -356,5 +426,196 @@ public class RSLE extends JPanel implements ActionListener {
         int newId = ID;
         ID++;
         return newId;
+    }
+
+    public void write(File file) {
+        JSONObject level = new JSONObject();
+        level.put("name", levelName.getValue());
+        level.put("author", levelAuthor.getValue());
+        level.put("version", levelVersion.getValue());
+        level.put("format", CURRENT_LEVEL_FORMAT);
+
+        JSONArray levelArr = new JSONArray();
+
+        Enumeration trigs = triggers.children();
+        while (trigs.hasMoreElements()) {
+            Object next = trigs.nextElement();
+            if (next instanceof LevelNode)
+            {
+                JSONObject trigObj = new JSONObject();
+                LevelNode trig = (LevelNode) next;
+
+                Enumeration keys = trig.children();
+                while (keys.hasMoreElements()) {
+                    LevelNode node = (LevelNode) keys.nextElement();
+                    Pair pair = (Pair) node.getUserObject();
+                    trigObj.put(((String)pair.getKey()).toLowerCase(), pair.getValue());
+                }
+
+                levelArr.add(trigObj);
+            }
+        }
+
+        Enumeration pnls = panels.children();
+        while (pnls.hasMoreElements()) {
+            Object next = pnls.nextElement();
+            if (next instanceof LevelNode) {
+                JSONObject pnlObj = new JSONObject();
+                LevelNode panel = (LevelNode) next;
+
+                Enumeration keys = panel.children();
+                while (keys.hasMoreElements()) {
+                    LevelNode node = (LevelNode) keys.nextElement();
+                    Pair pair = (Pair) node.getUserObject();
+                    pnlObj.put(((String)pair.getKey()).toLowerCase(), pair.getValue());
+                }
+
+                levelArr.add(pnlObj);
+            }
+        }
+
+        Enumeration enty = entities.children();
+        while (enty.hasMoreElements()) {
+            Object next = enty.nextElement();
+            if (next instanceof LevelNode) {
+                JSONObject entyObj = new JSONObject();
+                LevelNode entity = (LevelNode) next;
+
+                Enumeration keys = entity.children();
+                while (keys.hasMoreElements()) {
+                    LevelNode node = (LevelNode) keys.nextElement();
+                    Pair pair = (Pair) node.getUserObject();
+                    entyObj.put(((String)pair.getKey()).toLowerCase(), pair.getValue());
+                }
+
+                levelArr.add(entyObj);
+            }
+        }
+
+        level.put("level", levelArr);
+
+        try {
+            FileWriter fw = new FileWriter(file);
+            level.writeJSONString(fw);
+            fw.flush();
+            fw.close();
+            JOptionPane.showMessageDialog(this, "File successfully saved.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "There was an error writing to the file.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error Writing File");
+            e.printStackTrace();
+        }
+    }
+
+    public void load(File file) {
+        JSONParser parser = new JSONParser();
+
+        FileReader fileReader = null;
+        JSONObject obj = null;
+
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "There was an error opening the file", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            obj = (JSONObject) parser.parse(fileReader);
+            fileReader.close();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "The JSON file was in a bad format", "JSON Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "The JSON file could not be parsed", "JSON Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(file.getName());
+
+        levelName = new LevelNode("Name", obj.get("name"), false);
+        levelAuthor = new LevelNode("Author", obj.get("author"), false);
+        levelVersion = new LevelNode("Version", obj.get("version"), false);
+        rootNode.add(levelName);
+        rootNode.add(levelAuthor);
+        rootNode.add(levelVersion);
+
+        LevelNode level = new LevelNode("Level", true);
+        triggers = new LevelNode("Triggers", true);
+        panels = new LevelNode("Panels", true);
+        entities = new LevelNode("Entities", true);
+
+        JSONArray levelItems = (JSONArray) obj.get("level");
+        for (Object item : levelItems) {
+            JSONObject ito = (JSONObject) item;
+            String type = (String) ito.get("type");
+
+            if (type.equals("trigger")) {
+                int id = JSONHelper.getInt(ito, "id");
+                String location = (String) ito.get("location");
+                LevelNode trigger = new LevelNode(String.format("#%d @ (%s)", id, location), true);
+                LevelNode typeNode = new LevelNode("Type", "trigger", true);
+                LevelNode idNode = new LevelNode("ID", id, false);
+                LevelNode locNode = new LevelNode("Location", location, false);
+                trigger.add(typeNode);
+                trigger.add(idNode);
+                trigger.add(locNode);
+
+                triggers.add(trigger);
+            }
+
+            else if (type.equals("panel")) {
+                int id = JSONHelper.getInt(ito, "id");
+                String location = (String) ito.get("location");
+                LevelNode panel = new LevelNode(String.format("#%d @ (%s)", id, location), true);
+                LevelNode typeNode = new LevelNode("Type", "panel", true);
+                LevelNode idNode = new LevelNode("ID", id, false);
+                LevelNode locNode = new LevelNode("Location", location, false);
+                panel.add(typeNode);
+                panel.add(idNode);
+                panel.add(locNode);
+
+                panels.add(panel);
+            }
+
+            else if (type.equals("stair")) {
+                int id = JSONHelper.getInt(ito, "id");
+                String location = (String) ito.get("location");
+                String direction = (String) ito.get("direction");
+                LevelNode stair = new LevelNode(String.format("#%d stair @ (%s)", id, location), true);
+                LevelNode typeNode = new LevelNode("Type", "stair", true);
+                LevelNode idNode = new LevelNode("ID", id, false);
+                LevelNode dirNode = new LevelNode("Direction", direction, false);
+                LevelNode locNode = new LevelNode("Location", location, false);
+                stair.add(typeNode);
+                stair.add(idNode);
+                stair.add(dirNode);
+                stair.add(locNode);
+
+                panels.add(stair);
+            }
+
+            else if (type.equals("door")) {
+                int id = JSONHelper.getInt(ito, "id");
+                String location = (String) ito.get("location");
+                LevelNode door = new LevelNode(String.format("#%d stair @ (%s)", id, location), true);
+                LevelNode typeNode = new LevelNode("Type", "door", true);
+                LevelNode idNode = new LevelNode("ID", id, false);
+                LevelNode locNode = new LevelNode("Location", location, false);
+                door.add(typeNode);
+                door.add(idNode);
+                door.add(locNode);
+
+                entities.add(door);
+            }
+        }
+
+        level.add(triggers);
+        level.add(panels);
+        level.add(entities);
+        rootNode.add(level);
+
+        treeModel.setRoot(rootNode);
+        tree.setEditable(true);
     }
 }

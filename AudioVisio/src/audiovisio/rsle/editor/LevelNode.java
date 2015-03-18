@@ -34,7 +34,7 @@ public class LevelNode extends DefaultMutableTreeNode {
         if (isPair()) {
             return ((Pair) userObject).getValue();
         }
-        return null;
+        return userObject;
     }
 
     @Override
