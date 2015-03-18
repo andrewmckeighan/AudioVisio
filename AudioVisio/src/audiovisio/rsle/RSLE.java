@@ -1,10 +1,9 @@
 package audiovisio.rsle;
 
-import audiovisio.rsle.editor.dialogs.NewLevelDialog;
+import audiovisio.rsle.editor.dialogs.*;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor;
 import audiovisio.rsle.editor.LevelNodeRenderer;
-import audiovisio.rsle.editor.dialogs.NewTriggerDialog;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -157,13 +156,16 @@ public class RSLE extends JPanel implements ActionListener {
         add_panels = new JMenu("Add Panel...");
 
         add_panels_panel = new JMenuItem("Panel");
+        add_panels_panel.addActionListener(this);
         add_panels.add(add_panels_panel);
 
         add_panels_stair = new JMenuItem("Stair");
+        add_panels_stair.addActionListener(this);
         add_panels.add(add_panels_stair);
         add.add(add_panels);
 
         add_door = new JMenuItem("Add Door");
+        add_door.addActionListener(this);
         add.add(add_door);
 
         menuBar.add(add);
@@ -205,6 +207,15 @@ public class RSLE extends JPanel implements ActionListener {
         }
         else if (e.getActionCommand().equals(add_trigger.getActionCommand())) {
             actionAddTrigger();
+        }
+        else if (e.getActionCommand().equals(add_door.getActionCommand())) {
+            actionAddDoor();
+        }
+        else if (e.getActionCommand().equals(add_panels_panel.getActionCommand())) {
+            actionAddPanel();
+        }
+        else if (e.getActionCommand().equals(add_panels_stair.getActionCommand())) {
+            actionAddStair();
         }
     }
 
@@ -276,6 +287,66 @@ public class RSLE extends JPanel implements ActionListener {
             triggerNode.add(locNode);
 
             treeModel.insertNodeInto(triggerNode, triggers, 0);
+        }
+    }
+
+    private void actionAddDoor() {
+        NewDoorDialog doorDialog = new NewDoorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        doorDialog.setVisible(true);
+
+        if (doorDialog.getStatus()) {
+            String loc = doorDialog.getLevelLocation();
+            int id = doorDialog.getId();
+
+            LevelNode doorNode = new LevelNode(String.format("#%d door @ (%s)", id, loc), true);
+            LevelNode idNode = new LevelNode("ID", id, false);
+            LevelNode locNode = new LevelNode("Location", loc, false);
+
+            doorNode.add(idNode);
+            doorNode.add(locNode);
+
+            treeModel.insertNodeInto(doorNode, entities, 0);
+        }
+    }
+
+    private void actionAddPanel() {
+        NewPanelDialog panelDialog = new NewPanelDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        panelDialog.setVisible(true);
+
+        if (panelDialog.getStatus()) {
+            String loc = panelDialog.getLevelLocation();
+            int id = panelDialog.getId();
+
+            LevelNode panelNode = new LevelNode(String.format("#%d @ (%s)", id, loc), true);
+            LevelNode idNode = new LevelNode("ID", id, false);
+            LevelNode locNode = new LevelNode("Location", loc, false);
+
+            panelNode.add(idNode);
+            panelNode.add(locNode);
+
+            treeModel.insertNodeInto(panelNode, panels, 0);
+        }
+    }
+
+    private void actionAddStair() {
+        NewStairDialog stairDialog = new NewStairDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        stairDialog.setVisible(true);
+
+        if (stairDialog.getStatus()) {
+            String loc = stairDialog.getLevelLocation();
+            String dir = stairDialog.getDirection();
+            int id = stairDialog.getId();
+
+            LevelNode stairNode = new LevelNode(String.format("#%d stair @ (%s)", id, loc), true);
+            LevelNode idNode = new LevelNode("ID", id, false);
+            LevelNode dirNode = new LevelNode("Direction", dir, false);
+            LevelNode locNode = new LevelNode("Location", loc, false);
+
+            stairNode.add(idNode);
+            stairNode.add(dirNode);
+            stairNode.add(locNode);
+
+            treeModel.insertNodeInto(stairNode, panels, 0);
         }
     }
 

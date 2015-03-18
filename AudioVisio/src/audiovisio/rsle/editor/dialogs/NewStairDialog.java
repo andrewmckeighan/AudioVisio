@@ -8,29 +8,39 @@ import java.awt.*;
 /**
  * @author Matt Gerst
  */
-public class NewTriggerDialog extends NewDialog {
+public class NewStairDialog extends NewDialog {
     JLabel lblLocation = new JLabel("Location");
+    JLabel lblDirection = new JLabel("Direction");
 
     JTextField location = new JTextField("<x,y,z>");
+    JComboBox<String> direction = new JComboBox<String>();
 
     private int id;
 
-    public NewTriggerDialog(Frame owner, boolean modal) {
+    public NewStairDialog(Frame owner, boolean modal) {
         super(owner, modal);
         init();
     }
 
     @Override
     protected void init() {
-        this.setTitle("New Trigger");
-        this.setLayout(new GridLayout(2, 2));
+        this.setTitle("New Panel");
+        this.setLayout(new GridLayout(3, 2));
 
         this.add(lblLocation);
         this.add(location);
 
+        direction.addItem("NORTH");
+        direction.addItem("SOUTH");
+        direction.addItem("EAST");
+        direction.addItem("WEST");
+
+        this.add(lblDirection);
+        this.add(direction);
+
         super.init();
 
-        this.setSize(250, 60);
+        this.setSize(250, 90);
     }
 
     public int getId() {
@@ -41,8 +51,12 @@ public class NewTriggerDialog extends NewDialog {
         return location.getText();
     }
 
+    public String getDirection() {
+        return (String) direction.getSelectedItem();
+    }
+
     @Override
-    protected void okClicked() {
+    public void okClicked() {
         if (getLevelLocation().isEmpty())
             setStatus(false);
         else {
@@ -50,7 +64,4 @@ public class NewTriggerDialog extends NewDialog {
             setStatus(true);
         }
     }
-
-    @Override
-    protected void cancelClicked() {}
 }

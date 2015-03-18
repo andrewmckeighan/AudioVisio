@@ -33,7 +33,7 @@ public abstract class NewDialog extends JDialog implements ActionListener {
     }
 
     protected abstract void okClicked();
-    protected abstract void cancelClicked();
+    protected void cancelClicked() {}
 
     @Override
     public void actionPerformed(ActionEvent e) {

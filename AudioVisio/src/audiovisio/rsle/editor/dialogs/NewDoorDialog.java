@@ -8,21 +8,21 @@ import java.awt.*;
 /**
  * @author Matt Gerst
  */
-public class NewTriggerDialog extends NewDialog {
+public class NewDoorDialog extends NewDialog {
     JLabel lblLocation = new JLabel("Location");
 
     JTextField location = new JTextField("<x,y,z>");
 
     private int id;
 
-    public NewTriggerDialog(Frame owner, boolean modal) {
+    public NewDoorDialog(Frame owner, boolean modal) {
         super(owner, modal);
         init();
     }
 
     @Override
     protected void init() {
-        this.setTitle("New Trigger");
+        this.setTitle("New Door");
         this.setLayout(new GridLayout(2, 2));
 
         this.add(lblLocation);
