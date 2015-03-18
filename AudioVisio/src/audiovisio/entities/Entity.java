@@ -11,6 +11,7 @@
 package audiovisio.entities;
 
 import audiovisio.level.ILevelItem;
+import com.jme3.asset.AssetManager;
 import org.json.simple.JSONObject;
 
 import audiovisio.utils.JSONHelper;
@@ -44,6 +45,12 @@ public class Entity extends Node implements ILevelItem{
         this.position = JSONHelper.readVector3f(location);
         this.name = (String) obj.get("name");
     }
+
+    @Override
+    public void init(AssetManager assetManager) {}
+
+    @Override
+    public void start() {}
 
     @SuppressWarnings("unchecked")
     public void save(JSONObject obj){
