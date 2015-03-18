@@ -1,6 +1,6 @@
 package audiovisio.rsle.editor;
 
-import javafx.util.Pair;
+import audiovisio.utils.Pair;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

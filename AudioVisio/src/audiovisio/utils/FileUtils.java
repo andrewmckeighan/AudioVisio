@@ -9,7 +9,7 @@ public class FileUtils {
     /**
      * Get the extension of the file.
      * Taken from the oracle docs
-     * {@link http://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html}
+     * http://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
      */
     public static String getExtension(File f) {
         String ext = null;

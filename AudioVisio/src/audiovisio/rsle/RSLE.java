@@ -6,7 +6,7 @@ import audiovisio.rsle.editor.LevelNodeEditor;
 import audiovisio.rsle.editor.LevelNodeRenderer;
 import audiovisio.utils.FileUtils;
 import audiovisio.utils.JSONHelper;
-import javafx.util.Pair;
+import audiovisio.utils.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
