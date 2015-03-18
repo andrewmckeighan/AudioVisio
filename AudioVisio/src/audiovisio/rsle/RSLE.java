@@ -1,18 +1,13 @@
 package audiovisio.rsle;
 
-import audiovisio.level.LevelReader;
-import audiovisio.rsle.editor.IEditable;
 import audiovisio.rsle.editor.LevelDialog;
+import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.NodeEditor;
-import audiovisio.rsle.level.LevelItem;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,6 +69,7 @@ public class RSLE extends JPanel implements ActionListener {
         tree = new JTree();
         tree.setEditable(false);
         tree.setCellEditor(new NodeEditor(tree, (DefaultTreeCellRenderer) tree.getCellRenderer()));
+        tree.setShowsRootHandles(true);
 
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("RSLE");
         treeModel = new DefaultTreeModel(rootNode);
@@ -196,17 +192,17 @@ public class RSLE extends JPanel implements ActionListener {
                 DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(levelDialog.getName());
                 treeModel.setRoot(newRoot);
 
-                DefaultMutableTreeNode name = new DefaultMutableTreeNode(levelDialog.getName());
-                DefaultMutableTreeNode author = new DefaultMutableTreeNode(levelDialog.getAuthor());
-                DefaultMutableTreeNode version = new DefaultMutableTreeNode(levelDialog.getVersion());
+                LevelNode name = new LevelNode("Name", levelDialog.getName(), false);
+                LevelNode author = new LevelNode("Author", levelDialog.getAuthor(), false);
+                LevelNode version = new LevelNode("Version", levelDialog.getVersion(), false);
                 newRoot.add(name);
                 newRoot.add(author);
                 newRoot.add(version);
 
-                DefaultMutableTreeNode level = new DefaultMutableTreeNode("Level");
-                DefaultMutableTreeNode triggers = new DefaultMutableTreeNode("Triggers");
-                DefaultMutableTreeNode panels = new DefaultMutableTreeNode("Panels");
-                DefaultMutableTreeNode entities = new DefaultMutableTreeNode("Entities");
+                LevelNode level = new LevelNode("Level", true);
+                LevelNode triggers = new LevelNode("Triggers", true);
+                LevelNode panels = new LevelNode("Panels", true);
+                LevelNode entities = new LevelNode("Entities", true);
 
                 level.add(triggers);
                 level.add(panels);
