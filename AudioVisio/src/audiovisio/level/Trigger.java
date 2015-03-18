@@ -1,5 +1,6 @@
 package audiovisio.level;
 
+import com.jme3.asset.AssetManager;
 import org.json.simple.JSONObject;
 
 import audiovisio.utils.JSONHelper;
@@ -20,6 +21,16 @@ public class Trigger implements ILevelItem {
 		JSONObject location = (JSONObject) obj.get("location");
 		this.location = JSONHelper.readVector3f(location);
 	}
+
+    @Override
+    public void init(AssetManager assetManager) {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
 
     @Override
 	public void save(JSONObject obj) {

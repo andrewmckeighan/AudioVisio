@@ -39,7 +39,17 @@ public class Panel implements ILevelItem {
     	JSONObject location = (JSONObject) obj.get("location");
     	this.location = JSONHelper.readVector3f(location);
     }
-    
+
+    @Override
+    public void init(AssetManager assetManager) {
+        
+    }
+
+    @Override
+    public void start() {
+
+    }
+
     /**
      * Save the panel to a JSONObject
      * 
