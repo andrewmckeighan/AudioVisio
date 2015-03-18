@@ -51,7 +51,7 @@ public class Player extends MovingEntity implements ActionListener {
     private Camera playerCamera                     = null;
     public Particle footSteps                       = null;
 
-    //refrences
+    //references
     private Node rootNode                           = null;
     private AssetManager assetManager               = null;
 
@@ -192,15 +192,18 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.characterControl.warp(position);
         this.characterControl.setWalkDirection(direction);
 
+
+
         if(this.model != null) {
+//            LogHelper.info("test" + this.getLocalTranslation().add(MODEL_OFFSET) + ":" + position.add(MODEL_OFFSET));
+//            this.model.setLocalTranslation(this.getLocalTranslation().add(MODEL_OFFSET));
             this.model.setLocalTranslation(position.add(MODEL_OFFSET));
         }
 
         if(this.footSteps != null && this.footSteps.emitter != null){
-//            this.footSteps.setLocalTranslation(position);
-//            this.footSteps.move(position);
+//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.footSteps.emitter.setLocalTranslation(position);
-//            this.footSteps.emitter.move(position);
+            this.footSteps.emitter.setNumParticles((int) direction.length()*3+1);
         }
 
         if (this.playerCamera != null) {
@@ -219,11 +222,14 @@ public class Player extends MovingEntity implements ActionListener {
 
         if(this instanceof VisualPlayer){
             if(this.model != null) {
+                this.model.removeFromParent();
                 this.model = null;
             }
         }
+
         if(this instanceof AudioPlayer){
             if(this.footSteps != null){
+                this.footSteps.removeFromParent();
                 this.footSteps = null;
             }
         }
@@ -266,11 +272,11 @@ public class Player extends MovingEntity implements ActionListener {
             walkDirection.addLocal(this.camLeft.negate());
         }
 
-        this.setWalkDirection(walkDirection);
+//        this.setWalkDirection(walkDirection);
 
         return new SyncCharacterMessage(this.getID(),
                 this.getLocalTranslation(),
-                this.getWalkDirection(), this.playerCamera.getRotation());
+                walkDirection, this.playerCamera.getRotation());
     }
 
     public void updateCam() {

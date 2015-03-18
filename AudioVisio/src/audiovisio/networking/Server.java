@@ -125,8 +125,8 @@ public class Server extends SimpleApplication implements
         //Add entities to Scene //
         ///////////////////////////
 
-        testButton.addToScene(rootNode, physicsSpace);
-        testLever.addToScene(rootNode, physicsSpace);
+//        testButton.addToScene(rootNode, physicsSpace);
+//        testLever.addToScene(rootNode, physicsSpace);
 
         // ////////////////////////////
         // Add objects to rootNode //
@@ -149,6 +149,7 @@ public class Server extends SimpleApplication implements
             public void connectionAdded(com.jme3.network.Server server,
                                         HostedConnection conn) {
                 // DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
+                //TODO explain/fix this
                 LogHelper.info("connectionAdded() for connection: " + conn.getId());
                 if (players.size() < 2) {
 

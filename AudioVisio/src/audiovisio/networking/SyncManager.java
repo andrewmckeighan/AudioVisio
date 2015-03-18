@@ -108,6 +108,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
         } else {
             if (client != null) {
                 WorldManager wm = (WorldManager) objectMap.get(-1L);
+                assert message instanceof SyncCharacterMessage;
                 SyncCharacterMessage msg = (SyncCharacterMessage) message;
                 wm.addPlayer(msg.syncId);
             }

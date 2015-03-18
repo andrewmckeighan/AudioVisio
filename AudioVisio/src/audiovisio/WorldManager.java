@@ -81,15 +81,18 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             assert this.app instanceof audiovisio.networking.Client;
             if (((audiovisio.networking.Client) this.app).getId() == playerID) {
                 player.setCam(app.getCamera());
+                ((audiovisio.networking.Client) app).initKeys(player);
             }
         }
 
-        player.setModel(player.createModel(assetManager));
+        player.setModel(Player.createModel(assetManager));
         syncManager.addObject(playerID, player);
         player.addToScene(rootNode, space);
         player.setRootNode(rootNode);
         player.setAssetManager(assetManager);
-        player.init();
+        if(!this.isServer()) {
+            player.init();
+        }
         LogHelper.info(playerID + ":" + player);
         players.put(playerID, player);
     }
@@ -97,7 +100,6 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     /**
      * Removes the player from the syncManager.
      *
-     * TODO: why doesn't this remove from players?
      * (or why does addPlayer add to players?)
      *
      * @param id ID of the player to remove.

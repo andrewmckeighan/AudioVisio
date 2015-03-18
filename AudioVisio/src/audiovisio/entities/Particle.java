@@ -8,6 +8,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
+//TODO why do particles reset?
 public class Particle extends Entity{
     public ParticleEmitter emitter = null;
 
@@ -28,9 +29,10 @@ public class Particle extends Entity{
         fire.setStartSize(1.5f);
         fire.setEndSize(0.1f);
         fire.setGravity(0, 0, 0);
-        fire.setLowLife(1f);
-        fire.setHighLife(3f);
+        fire.setLowLife(20f);
+        fire.setHighLife(30f);
         fire.getParticleInfluencer().setVelocityVariation(0.3f);
+        fire.setInWorldSpace(true);//TODO this should prevent particles from moving when emitter moves.
 
         this.emitter = fire;
         node.attachChild(this.emitter);

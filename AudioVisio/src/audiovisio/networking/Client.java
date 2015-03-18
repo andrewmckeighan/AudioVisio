@@ -150,10 +150,10 @@ public class Client extends SimpleApplication implements
         Lever testLever = new Lever(3f, 5f, 3f);
         testLever.createMaterial(assetManager);
 
-        worldManager.addPlayer(myClient.getId());
-        Player p = (Player) worldManager.getPlayer(myClient.getId());
+//        worldManager.addPlayer(myClient.getId());
+//        Player p = (Player) worldManager.getPlayer(myClient.getId());
 
-        initKeys(p);
+//        initKeys(p);
 
 
 
@@ -196,7 +196,7 @@ public class Client extends SimpleApplication implements
      * @param player The player entity that is affected by this clients inputs.
      */
 
-    private void initKeys(Player player) {
+    public void initKeys(Player player) {
         inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
@@ -261,11 +261,14 @@ public class Client extends SimpleApplication implements
 
     @Override
     public void simpleUpdate(float tpf) {
-        updateMessage();
-
         Player player = ((Player) worldManager.getPlayer(myClient.getId()));
-        SyncCharacterMessage msg = player.getSyncCharacterMessage();
-        myClient.send(msg);
+        if (player != null) {
+
+            updateMessage(player);
+
+            SyncCharacterMessage msg = player.getSyncCharacterMessage();
+            myClient.send(msg);
+        }
     }
 
     /**
@@ -275,8 +278,7 @@ public class Client extends SimpleApplication implements
      * and the current frame #
      */
 
-    private void updateMessage() {
-        Player player = ((Player) worldManager.getPlayer(myClient.getId()));
+    private void updateMessage(Player player) {
 
         if (counter % 1000 == 0) { //We only update once every 1000 frames so that the player can actually move.
             assert newLocation != null;
@@ -297,7 +299,7 @@ public class Client extends SimpleApplication implements
             float distance = oldLocation.distance(newLocation);
             long time = newTime - oldTime;
             float velocity = distance / time;
-            velocityMessage = ("V: " + velocity +
+            velocityMessage = ("ID: " + this.getId() + "V: " + velocity +
                     ", D: " + distance +
                     ", P: " + newLocation +
                     "F: " + counter);
@@ -347,5 +349,13 @@ public class Client extends SimpleApplication implements
 
     public long getId() {
         return this.myClient.getId();
+    }
+
+    public boolean isAudioClient() {
+        return this.getId() % 2 == 0;
+    }
+
+    public boolean isVideoClient() {
+        return !this.isAudioClient();
     }
 }
