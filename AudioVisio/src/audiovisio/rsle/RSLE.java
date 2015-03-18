@@ -6,7 +6,6 @@ import audiovisio.rsle.editor.LevelNodeEditor;
 import audiovisio.rsle.editor.LevelNodeRenderer;
 import audiovisio.utils.FileUtils;
 import audiovisio.utils.JSONHelper;
-import audiovisio.utils.LogHelper;
 import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -73,6 +72,10 @@ public class RSLE extends JPanel implements ActionListener {
     private JMenuItem add_entities;
     private JMenuItem add_door;
 
+    // CREATE ITEMS
+    private JMenu create;
+    private JMenuItem create_floor;
+
     // IMPORTANT NODES
     private LevelNode levelName;
     private LevelNode levelAuthor;
@@ -107,6 +110,7 @@ public class RSLE extends JPanel implements ActionListener {
         createFileMenu();
         createEditMenu();
         createAddMenu();
+        createCreateMenu();
     }
 
     private void createFileMenu() {
@@ -147,6 +151,7 @@ public class RSLE extends JPanel implements ActionListener {
 
     private void createEditMenu() {
         edit = new JMenu("Edit");
+        edit.setMnemonic(KeyEvent.VK_E);
 
         edit_copy = new JMenuItem("Copy");
         edit_copy.setEnabled(false);
@@ -165,6 +170,7 @@ public class RSLE extends JPanel implements ActionListener {
 
     private void createAddMenu() {
         add = new JMenu("Add");
+        add.setMnemonic(KeyEvent.VK_A);
         add.setEnabled(false);
 
         add_trigger = new JMenuItem("Add Trigger");
@@ -190,6 +196,18 @@ public class RSLE extends JPanel implements ActionListener {
         add.add(add_entities);
 
         menuBar.add(add);
+    }
+
+    private void createCreateMenu() {
+        create = new JMenu("Create");
+        create.setMnemonic(KeyEvent.VK_C);
+        create.setEnabled(false);
+
+        create_floor = new JMenuItem("Create Floor");
+        create_floor.addActionListener(this);
+        create.add(create_floor);
+
+        menuBar.add(create);
     }
 
     /**
@@ -247,6 +265,9 @@ public class RSLE extends JPanel implements ActionListener {
         else if (e.getSource() == add_panels_stair) {
             actionAddStair();
         }
+        else if (e.getSource() == create_floor) {
+            actionCreateFloor();
+        }
     }
 
     private void actionNew() {
@@ -279,6 +300,7 @@ public class RSLE extends JPanel implements ActionListener {
             file_close.setEnabled(true);
 
             add.setEnabled(true);
+            create.setEnabled(true);
         }
     }
 
@@ -295,6 +317,7 @@ public class RSLE extends JPanel implements ActionListener {
             file_save_as.setEnabled(true);
             file_close.setEnabled(true);
             add.setEnabled(true);
+            create.setEnabled(true);
         }
     }
 
@@ -320,6 +343,7 @@ public class RSLE extends JPanel implements ActionListener {
         file_close.setEnabled(false);
 
         add.setEnabled(false);
+        create.setEnabled(false);
 
         DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("RSLE");
         treeModel.setRoot(newRoot);
@@ -417,6 +441,37 @@ public class RSLE extends JPanel implements ActionListener {
             stairNode.add(locNode);
 
             treeModel.insertNodeInto(stairNode, panels, 0);
+        }
+    }
+
+    private void actionCreateFloor() {
+        CreateFloorDialog floorDialog = new CreateFloorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        floorDialog.setVisible(true);
+
+        if (floorDialog.getStatus()) {
+            int startX = floorDialog.getStartX();
+            int startY = floorDialog.getStartY();
+            int sizeX = floorDialog.getSizeX();
+            int sizeY = floorDialog.getSizeY();
+            int z = floorDialog.getZPlane();
+
+            for (int i = startX; i < startX + sizeX; i++) {
+                for (int j = startY; j < startY + sizeY; j++) {
+                    String loc = String.format("%d,%d,%d", i, j, z);
+                    int id = RSLE.getNextID();
+
+                    LevelNode panelNode = new LevelNode(String.format("#%d @ (%s)", id, loc), true);
+                    LevelNode typeNode = new LevelNode("Type", "panel", true);
+                    LevelNode idNode = new LevelNode("ID", id, false);
+                    LevelNode locNode = new LevelNode("Location", loc, false);
+
+                    panelNode.add(typeNode);
+                    panelNode.add(idNode);
+                    panelNode.add(locNode);
+
+                    treeModel.insertNodeInto(panelNode, panels, 0);
+                }
+            }
         }
     }
 
