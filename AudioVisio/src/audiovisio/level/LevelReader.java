@@ -24,7 +24,7 @@ public class LevelReader {
      * @param fileName The file to load
      * @return The json object from the file
      */
-    private static JSONObject loadJsonFile(String fileName) {
+    public static JSONObject loadJsonFile(String fileName) {
     	JSONParser parser = new JSONParser();
     	
     	FileReader fileReader = null;

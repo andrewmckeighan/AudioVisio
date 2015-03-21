@@ -11,14 +11,25 @@ import audiovisio.entities.Door;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 
+/**
+ * Holds information about the items in a level.
+ *
+ * Handles the loading/saving of levels and items from the
+ * JSON files.
+ */
 public class Level {
 	
 	private String name;
 	private String author;
 	private String version;
 
+    private List<ILevelItem> levelItems = new ArrayList<ILevelItem>();
+
+    @Deprecated
     private List<Panel> panelList = new ArrayList<Panel>();
+    @Deprecated
     private List<Entity> entityList = new ArrayList<Entity>();
+    @Deprecated
     private List<Trigger> triggerList = new ArrayList<Trigger>();
     
     private String fileName;
@@ -69,27 +80,27 @@ public class Level {
     		if (type.equalsIgnoreCase("trigger")) {
     			Trigger trigger = new Trigger();
     			trigger.load(itemJson);
-    			triggerList.add(trigger);
+                levelItems.add(trigger);
     		} else if (type.equalsIgnoreCase("panel")) {
     			Panel panel = new Panel();
     			panel.load(itemJson);
-    			panelList.add(panel);
+                levelItems.add(panel);
     		} else if (type.equalsIgnoreCase("stair")) {
     			Stair stair = new Stair();
     			stair.load(itemJson);
-    			panelList.add(stair);
+                levelItems.add(stair);
     		} else if (type.equalsIgnoreCase("door")) {
     			Door door = new Door();
     			door.load(itemJson);
-    			entityList.add(door);
+                levelItems.add(door);
     		} else if (type.equalsIgnoreCase("button")) {
     			Button button = new Button();
     			button.load(itemJson);
-    			entityList.add(button);
+                levelItems.add(button);
     		} else if (type.equalsIgnoreCase("lever")) {
     			Lever lever = new Lever();
     			lever.load(itemJson);
-    			entityList.add(lever);
+                levelItems.add(lever);
     		}
     	}
     }
@@ -105,48 +116,60 @@ public class Level {
     	levelData.put("version", this.version);
     	
     	JSONArray level = new JSONArray();
-    	for (Panel panel : panelList) {
-    		JSONObject obj = new JSONObject();
-    		panel.save(obj);
-    		level.add(obj);
-    	}
-    	
-    	for (Trigger trigger : triggerList) {
-    		JSONObject obj = new JSONObject();
-    		trigger.save(obj);
-    		level.add(obj);
-    	}
-    	
-    	for (Entity entity : entityList) {
-    		JSONObject obj = new JSONObject();
-    		entity.save(obj);
-    		level.add(obj);
-    	}
+        for (ILevelItem item : levelItems) {
+            JSONObject obj = new JSONObject();
+            item.save(obj);
+            level.add(obj);
+        }
     	
     	levelData.put("level", level);
+    }
+
+    /**
+     * Add item to the level.
+     *
+     * @param item The item to add.
+     */
+    public void addItem(ILevelItem item) {
+        levelItems.add(item);
     }
     
 	/**
 	 * Get the list of panels in the level
 	 */
     public List<Panel> getPanels() {
-    	return panelList;
+    	List<Panel> panels = new ArrayList<Panel>();
+
+        for (ILevelItem item : levelItems) {
+            if (item instanceof Panel)
+                panels.add((Panel) item);
+        }
+
+        return panels;
     }
-    
+
     /**
      * Add a panel to the level.
-     * 
+     *
      * @param panel The panel to add
      */
+    @Deprecated
     public void addPanel(Panel panel) {
-    	panelList.add(panel);
+    	levelItems.add(panel);
     }
     
     /**
      * Get the list of entities in the level
      */
     public List<Entity> getEntities() {
-    	return entityList;
+    	List<Entity> entities = new ArrayList<Entity>();
+
+        for (ILevelItem item : levelItems) {
+            if (item instanceof Entity)
+                entities.add((Entity) item);
+        }
+
+        return entities;
     }
     
     /**
@@ -154,8 +177,9 @@ public class Level {
      * 
      * @param entity The entity to add
      */
+    @Deprecated
     public void addEntity(Entity entity) {
-    	entityList.add(entity);
+    	levelItems.add(entity);
     }
     
     /**
@@ -163,7 +187,14 @@ public class Level {
      * @return
      */
     public List<Trigger> getTriggers() {
-    	return triggerList;
+    	List<Trigger> triggers = new ArrayList<Trigger>();
+
+        for (ILevelItem item : levelItems) {
+            if (item instanceof Trigger)
+                triggers.add((Trigger) item);
+        }
+
+        return triggers;
     }   
     
     /**
@@ -171,8 +202,9 @@ public class Level {
      * 
      * @param trigger The trigger to add
      */
+    @Deprecated
     public void addTrigger(Trigger trigger) {
-    	triggerList.add(trigger);
+    	levelItems.add(trigger);
     }
     
     /**
