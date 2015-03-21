@@ -3,18 +3,17 @@ package audiovisio.entities;
 import org.json.simple.JSONObject;
 
 public class Door extends InteractableEntity {
-    private Boolean isOpen;
 
     public Door(){
-        this.isOpen = false;
+        this.state = false;
     }
 
     public Door(Boolean open){
-        this.isOpen = open;
+        this.state = open;
     }
 
     public Door(Boolean open, Boolean stuck){
-        this.isOpen = open;
+        this.state = open;
         this.stuck = stuck;
     }
 
@@ -22,7 +21,7 @@ public class Door extends InteractableEntity {
     public void load(JSONObject obj){
         super.load(obj);
 
-        this.isOpen = (Boolean) obj.get("isOpen");
+        this.state = (Boolean) obj.get("state");
     }
     
     @Override
@@ -30,13 +29,38 @@ public class Door extends InteractableEntity {
     	super.save(obj);
     	obj.put("type", "door");
     	
-    	obj.put("isOpen", this.isOpen);
+    	obj.put("state", this.state);
     }
 
     private void onTriggeredEvent(){
         if(!this.stuck){
-            this.isOpen = !this.isOpen;
+            this.state = !this.state;
         }
+    }
+
+    private void open(){
+        //TODO
+        this.state = true;
+    }
+
+    private void close(){
+        //TODO
+        this.state = false;
+    }
+
+//    @Override
+    private void update(Boolean state){
+        if(this.state == false){
+            if(state == true){
+                this.open();
+            }
+        }else{
+            if(state == false){
+                this.close();
+            }
+        }
+
+        this.state = state;
     }
 
 }

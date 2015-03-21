@@ -10,6 +10,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 
+import java.util.List;
+
 public class InteractableEntity extends Entity {
 
     private InteractableEntity linkedEntity;
@@ -18,6 +20,9 @@ public class InteractableEntity extends Entity {
     public Geometry geometry;
     public Material material;
     public RigidBodyControl physics;
+
+    private List<InteractableEntity> interactionList;
+    protected Boolean state;
 
 
     public InteractableEntity(){
@@ -78,4 +83,14 @@ public class InteractableEntity extends Entity {
 		this.geometry.setMaterial(randomMaterial);;
 	}
 
+    public void update(List<Long> idList, Boolean state) {
+        this.update(state);
+        for(Long id : idList){
+            this.interactionList.get(id.intValue()).update(state);
+        }
+    }
+
+    private void update(Boolean state) {
+        this.state = state;
+    }
 }

@@ -18,7 +18,6 @@ import org.json.simple.JSONObject;
 
 /**
  * TODO: make sure all parameters of Player are children of player, and handled entirely within player.
- * TODO: implement footSteps as a test, decide on class later.
  */
 
 
@@ -33,7 +32,7 @@ public class Player extends MovingEntity implements ActionListener {
 
     // Constants
     public static final Vector3f SPAWN_LOCATION     = new Vector3f(0, 5, 0);
-    public static final Vector3f GRAVITY            = new Vector3f(0, -9.81f, 0); //TODO make this not aweful
+    public static final Vector3f GRAVITY            = new Vector3f(0, -9.81f, 0); //TODO make this not awful
     public static final String DEFAULT_MODEL        = "Models/Oto/Oto.mesh.xml";
     public static final Vector3f CAMERA_OFFSET      = new Vector3f(0, 5, 0);
     public static final Vector3f MODEL_OFFSET       = CAMERA_OFFSET.divide(2);
@@ -57,7 +56,7 @@ public class Player extends MovingEntity implements ActionListener {
 
     //Instance Variables
     private boolean isServer                        = false;
-    private Vector3f walkDirection                  = new Vector3f(); //TODO is walk & save direction needed?
+    private Vector3f walkDirection                  = new Vector3f(); //TODO are walk & save directions needed?
     private Vector3f savedLocation                  = SPAWN_LOCATION;
     private Vector3f camDir                         = new Vector3f();
     private Vector3f camLeft                        = new Vector3f();

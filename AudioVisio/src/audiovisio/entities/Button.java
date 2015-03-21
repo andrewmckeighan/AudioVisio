@@ -88,4 +88,19 @@ public class Button extends InteractableEntity  {
 		super.save(obj);
 		obj.put("type", "button");
 	}
+
+//    @Override
+    private void update(Boolean state){
+        if(this.state == false){
+            if(state == true){
+                this.startPress();
+            }
+        }else{
+            if(state == false){
+                this.stopPress();
+            }
+        }
+
+        this.state = state;
+    }
 }
