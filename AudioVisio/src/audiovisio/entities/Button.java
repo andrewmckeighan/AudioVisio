@@ -12,26 +12,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Cylinder;
 
-//create geometry for our button
-// Box box = new Box(2,2,2);
-// Geometry buttonGeometry = new Geometry("button", box);
-// buttonGeometry.setMaterial(pondMat);
-// rootNode.attachChild(buttonGeometry);
-
-// //position our button
-// buttonGeometry.setLocalTranslation(new Vector3f(2f,2f,2f));
-
-// //make button physics
-// RigidBodyControl buttonPhysics = new RigidBodyControl(2f);
-
-// //add button physics to our space
-// buttonGeometry.addControl(buttonPhysics);
-// bulletAppState.getPhysicsSpace().add(buttonPhysics);
-
-// shootables = new Node("Shootables");
-// rootNode.attachChild(shootables);
-// shootables.attachChild(buttonGeometry);
-
+/**
+ * //TODO this needs to be easy to walk over! (maybe no physical collision?)
+ */
 public class Button extends InteractableEntity  {
 
 	public final float MASS = 0f;
@@ -65,9 +48,13 @@ public class Button extends InteractableEntity  {
 	}
 
 	public void startPress() {
+        //particles for startPress
+        //change color of button to something
 	}
 
 	public void stopPress() {
+        //particles for stopPress
+        //change the color again.
 
 	}
 
