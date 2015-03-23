@@ -1,5 +1,6 @@
 package audiovisio.networking;
 
+import audiovisio.AudioVisio;
 import audiovisio.WorldManager;
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
@@ -25,6 +26,7 @@ import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -63,6 +65,7 @@ public class Client extends AbstractAppState implements
 	private AssetManager AM;
 	private com.jme3.network.Client myClient = null;
 	private WorldManager worldManager = null;
+	private BitmapFont guiFont;
 
 	// On Screen Message
 	private CharSequence velocityMessage = "";
@@ -116,14 +119,14 @@ public class Client extends AbstractAppState implements
 		// ////////////////
 		// Sync Manager //
 		// ////////////////
-		SyncManager syncManager = new SyncManager(this, myClient);
+		SyncManager syncManager = new SyncManager(AV, myClient);
 		syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
 		syncManager.setMessageTypes(SyncCharacterMessage.class,
 				SyncRigidBodyMessage.class, PlayerJoinMessage.class,
 				PlayerLeaveMessage.class);
 		stateManager.attach(syncManager);
 
-		worldManager = new WorldManager(this, AV.getRootNode());
+		worldManager = new WorldManager(AV, AV.getRootNode());
 		stateManager.attach(worldManager);
 		syncManager.addObject(-1, worldManager);
 
@@ -253,16 +256,16 @@ public class Client extends AbstractAppState implements
 	 */
 
 	private void initCrossHairs() {
-		setDisplayStatView(false);
+		AV.setDisplayStatView(false);
 		guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
 		BitmapText ch = new BitmapText(guiFont, false);
 		ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
 		// center
-		settings.getWidth() / 2 - ch.getLineWidth() / 2,
-		settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-		guiNode.attachChild(ch);
+		AudioVisio.getWidth() / 2 - ch.getLineWidth() / 2,
+		AudioVisio.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+		AV.getGuiNode().attachChild(ch);
 
 	}
 
@@ -317,7 +320,7 @@ public class Client extends AbstractAppState implements
 					+ ", D: " + distance + ", P: " + newLocation + "F: " + counter);
 		}
 
-		fpsText.setText(velocityMessage);
+		fpsText().setText(velocityMessage);
 		counter++;
 	}
 
