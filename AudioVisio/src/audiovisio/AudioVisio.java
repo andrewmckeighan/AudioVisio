@@ -19,21 +19,26 @@ public class AudioVisio extends SimpleApplication{
 	static MenuAppState gui;
 	static ClientAppState client;
 	static ServerAppState server;
+	
+	public AudioVisio(){
+		
+	}
 
     public static void main(String[] args) {
+    	
+    	AudioVisio AV = new AudioVisio();
     	
     	NetworkUtils.setPort(11550);
     	LogHelper.init();
         LogHelper.setLevel(Level.INFO);
 	
 		//Client Start
-		clientApp.setPauseOnLostFocus(false);
-    	clientApp.start();
+		AV.setPauseOnLostFocus(false);
+		AV.start();
     	
     	
 //    	gui = new MenuAppState();
 //		gui.setEnabled(true);
-
     	
     }
 
@@ -42,13 +47,13 @@ public class AudioVisio extends SimpleApplication{
 		client.setEnabled(true);
 	}
 
-	public void serverAndClientInit(){
-		gui.setEnabled(false);
-		client.setEnabled(true);
-		client.app.startClient();
-		server.setEnabled(true);
-		server.app.startServer();
-	}
+//	public void serverAndClientInit(){
+//		gui.setEnabled(false);
+//		client.setEnabled(true);
+//		client.app.startClient();
+//		server.setEnabled(true);
+//		server.app.startServer();
+//	}
 
 	@Override
 	public void simpleInitApp() {
