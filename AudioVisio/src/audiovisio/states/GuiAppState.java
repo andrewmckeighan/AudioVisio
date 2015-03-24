@@ -10,6 +10,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.input.event.KeyInputEvent;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
 
@@ -42,7 +43,8 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
          this.app.getFlyByCamera().setEnabled(false);
          this.app.getInputManager().setCursorVisible(true);
 	 }
-
+	 
+	 
 	public void GUIStart() {
 
 		AppSettings settings = new AppSettings(true);
