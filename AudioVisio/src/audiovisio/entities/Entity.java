@@ -27,7 +27,6 @@ public class Entity extends Node implements ILevelItem{
     public Geometry geometry;
     private RigidBodyControl physics;
     public Vector3f position;
-    public String name;
     public Spatial model;
     
     protected long ID = -2;

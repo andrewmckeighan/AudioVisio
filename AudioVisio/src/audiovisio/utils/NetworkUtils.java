@@ -5,43 +5,44 @@ import audiovisio.networking.messages.*;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.math.Vector3f;
 
+import java.io.IOException;
 import java.net.*;
 import java.text.DecimalFormat;
 import java.util.Enumeration;
 
 
 public class NetworkUtils {
-	
-	public static int PORT;
+    
+    public static int PORT;
 
-	public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
-	
-	public static void initializeSerializables(){
-		// General Messages
-		Serializer.registerClass(NetworkMessage.class);
-		
-		// Client Messages
-		Serializer.registerClass(PlayerSendMovementMessage.class);
-		
-		// Server Messages
-		Serializer.registerClass(PlayerLocationMessage.class);
-		Serializer.registerClass(PlayerJoinMessage.class);
-		Serializer.registerClass(PlayerLeaveMessage.class);
-		Serializer.registerClass(PlayerListMessage.class);
+    public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
+    
+    public static void initializeSerializables(){
+        // General Messages
+        Serializer.registerClass(NetworkMessage.class);
+        
+        // Client Messages
+        Serializer.registerClass(PlayerSendMovementMessage.class);
+        
+        // Server Messages
+        Serializer.registerClass(PlayerLocationMessage.class);
+        Serializer.registerClass(PlayerJoinMessage.class);
+        Serializer.registerClass(PlayerLeaveMessage.class);
+        Serializer.registerClass(PlayerListMessage.class);
 
-		// Sync Messages
-		Serializer.registerClass(PhysicsSyncMessage.class);
-		Serializer.registerClass(SyncCharacterMessage.class);
-		Serializer.registerClass(SyncRigidBodyMessage.class);
-	}
-	
-	public static void setPort(int portNumber){
-		PORT = portNumber;
-	}
-	
-	public static int getPort(){
-		return PORT;
-	}
+        // Sync Messages
+        Serializer.registerClass(PhysicsSyncMessage.class);
+        Serializer.registerClass(SyncCharacterMessage.class);
+        Serializer.registerClass(SyncRigidBodyMessage.class);
+    }
+    
+    public static void setPort(int portNumber){
+        PORT = portNumber;
+    }
+    
+    public static int getPort(){
+        return PORT;
+    }
 
     /**
      * Get the LAN IP address of the current host.
@@ -78,4 +79,17 @@ public class NetworkUtils {
 
         return null;
     }
+
+    public static Boolean attemptConnection(com.jme3.network.NetworkClient Client){
+        for (int i = 0; i < 500; i++) {
+            try{
+                Client.connectToServer("127.0.0.1", NetworkUtils.getPort(), -1);
+                return true;
+            } catch (IOException e){}
+            try {
+                Thread.sleep(50l);
+            } catch (InterruptedException ex) {}
+        }
+        return false;
+    };
 }

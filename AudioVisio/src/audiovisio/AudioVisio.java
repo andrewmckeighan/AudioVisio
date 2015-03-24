@@ -7,6 +7,7 @@ import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.SimpleApplication;
+import com.jme3.network.NetworkClient;
 import com.jme3.system.JmeContext;
 
 import java.util.logging.Level;
@@ -14,7 +15,7 @@ import java.util.logging.Level;
 public class AudioVisio extends SimpleApplication{
 
 	static GuiAppState gui;
-	static ClientAppState client;
+	public static ClientAppState client;
 	static ServerAppState server;
 
     static JmeContext.Type appType = JmeContext.Type.Display;
@@ -79,4 +80,5 @@ public class AudioVisio extends SimpleApplication{
         client = new ClientAppState();
         stateManager.attach(client);
     }
+
 }

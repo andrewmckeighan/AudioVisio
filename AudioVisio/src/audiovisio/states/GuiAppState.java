@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import audiovisio.AudioVisio;
 import audiovisio.utils.LogHelper;
 
+import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -115,6 +116,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
         app.stopGui();
         AudioVisio.main(new String[]{"-server"});
         app.clientStart();
+        NetworkUtils.attemptConnection(app.client.myClient);
     }
 
 }

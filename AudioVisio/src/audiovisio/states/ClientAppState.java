@@ -40,6 +40,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
+import com.jme3.network.NetworkClient;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
@@ -64,7 +65,7 @@ public class ClientAppState extends AbstractAppState implements
 	private AudioVisio AV;
 	private InputManager IM;
 	private AssetManager AM;
-	private com.jme3.network.Client myClient = null;
+	public NetworkClient myClient = null;
 	private WorldManager worldManager = null;
 	private BitmapFont guiFont;
 
@@ -90,14 +91,15 @@ public class ClientAppState extends AbstractAppState implements
 		AV = (AudioVisio) app;
         AM = AV.getAssetManager();
         IM = AV.getInputManager();
-		try {
+//		try {
 			//myClient = Network.connectToServer(IP, NetworkUtils.getPort());
-			myClient = Network.connectToServer("127.0.0.1", NetworkUtils.getPort());
-			myClient.start();
-		} catch (IOException e) {
-			LogHelper.severe("Error on client start", e);
-			System.exit(1);
-		}
+//			myClient = Network.connectToServer("127.0.0.1", NetworkUtils.getPort());
+            myClient = Network.createClient();
+//			myClient.start();
+//		} catch (IOException e) {
+//			LogHelper.severe("Error on client start", e);
+//			System.exit(1);
+//		}
 		// ///////////
 		// Physics //
 		// ///////////
