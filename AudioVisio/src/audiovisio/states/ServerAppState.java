@@ -97,7 +97,7 @@ public class ServerAppState extends AbstractAppState implements
         syncManager.setServerSyncFrequency(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         stateManager.attach(syncManager);
 
-        worldManager = new WorldManager(AV, AV.getRootNode());
+        worldManager = new WorldManager(AV, null, AV.getRootNode());
         stateManager.attach(worldManager);
         syncManager.addObject(-1, worldManager);
         syncManager.setMessageTypes(SyncCharacterMessage.class,

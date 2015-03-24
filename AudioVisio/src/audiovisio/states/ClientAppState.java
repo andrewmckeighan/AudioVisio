@@ -127,7 +127,7 @@ public class ClientAppState extends AbstractAppState implements
 				PlayerLeaveMessage.class);
 		stateManager.attach(syncManager);
 
-		worldManager = new WorldManager(AV, AV.getRootNode());
+		worldManager = new WorldManager(AV, this, AV.getRootNode());
 		stateManager.attach(worldManager);
 		syncManager.addObject(-1, worldManager);
 

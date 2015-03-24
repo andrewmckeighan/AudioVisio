@@ -8,6 +8,7 @@ import audiovisio.networking.SyncMessageValidator;
 import audiovisio.networking.messages.PhysicsSyncMessage;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -36,6 +37,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     // SimpleAppState references.
     private Node rootNode             = null;
     private Application app           = null;
+    private ClientAppState client     = null;
     private AssetManager assetManager = null;
     private PhysicsSpace space        = null;
 
@@ -48,8 +50,9 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      * @param app      The owners Application.
      * @param rootNode The owners rootNode.
      */
-    public WorldManager(Application app, Node rootNode) {
+    public WorldManager(Application app, ClientAppState client, Node rootNode) {
         this.app = app;
+        this.client = client;
         this.rootNode = rootNode;
         this.assetManager = app.getAssetManager();
         this.space = app.getStateManager().getState(BulletAppState.class).getPhysicsSpace();
@@ -78,10 +81,12 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             syncManager.broadcast(new PlayerJoinMessage(playerID));
             player.setServer(true);
         } else {
-            assert this.app instanceof audiovisio.states.ClientAppState;
-            if (((audiovisio.states.ClientAppState) this.app).getId() == playerID) {
-                player.setCam(app.getCamera());
-                ((audiovisio.states.ClientAppState) app).initKeys(player);
+//            assert this.app instanceof audiovisio.states.ClientAppState;
+            if (client != null) {
+                if (client.getId() == playerID) {
+                    player.setCam(app.getCamera());
+                    client.initKeys(player);
+                }
             }
         }
 
