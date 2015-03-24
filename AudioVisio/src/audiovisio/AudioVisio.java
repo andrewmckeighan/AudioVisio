@@ -42,10 +42,10 @@ public class AudioVisio extends SimpleApplication{
     	
     }
 
-	public void clientInit(){
-		gui.setEnabled(false);
-		client.setEnabled(true);
-	}
+//	public void clientInit(){
+//		gui.setEnabled(false);
+//		client.setEnabled(true);
+//	}
 
 //	public void serverAndClientInit(){
 //		gui.setEnabled(false);
@@ -57,6 +57,7 @@ public class AudioVisio extends SimpleApplication{
 
 	@Override
 	public void simpleInitApp() {
+		gui = new MenuAppState();
 		stateManager.attach(gui);
 	}
 	

@@ -61,7 +61,7 @@ public class ClientAppState extends AbstractAppState implements
 		PhysicsCollisionListener {
 
 	// Networking
-	private SimpleApplication AV;
+	private AudioVisio AV;
 	private InputManager IM;
 	private AssetManager AM;
 	private com.jme3.network.Client myClient = null;
@@ -87,7 +87,7 @@ public class ClientAppState extends AbstractAppState implements
 	@Override
 	public void initialize(AppStateManager stateManager, Application app) {
 		NetworkUtils.initializeSerializables();
-		AV = (SimpleApplication) app;
+		AV = (AudioVisio) app;
 		try {
 			//myClient = Network.connectToServer(IP, NetworkUtils.getPort());
 			myClient = Network.connectToServer("127.0.0.1", NetworkUtils.getPort());
@@ -264,8 +264,8 @@ public class ClientAppState extends AbstractAppState implements
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation(
 		// center
-		AudioVisio.getWidth() / 2 - ch.getLineWidth() / 2,
-		AudioVisio.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+		AV.getWidth() / 2 - ch.getLineWidth() / 2,
+		AV.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		AV.getGuiNode().attachChild(ch);
 
 	}
@@ -321,7 +321,7 @@ public class ClientAppState extends AbstractAppState implements
 					+ ", D: " + distance + ", P: " + newLocation + "F: " + counter);
 		}
 
-		AudioVisio.setFPSText(velocityMessage);
+		AV.setFPSText(velocityMessage);
 		counter++;
 	}
 
