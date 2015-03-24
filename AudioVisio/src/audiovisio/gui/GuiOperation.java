@@ -66,6 +66,10 @@ public class GuiOperation extends AbstractAppState implements ScreenController{
 		nifty.gotoScreen("settings");
 	}
 	
+	public void initKeybind(){
+		nifty.gotoScreen("keybindings");
+	}
+	
 	public void goBack(){
 		nifty.fromXml("audiovisio/gui/baselayer.xml", "start");
 	}
