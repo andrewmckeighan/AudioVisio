@@ -7,9 +7,9 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 
 public class ServerMessageListener implements MessageListener<HostedConnection> {
-	audiovisio.networking.Server myServer;
+	audiovisio.states.ServerAppState myServer;
 
-	public ServerMessageListener(audiovisio.networking.Server myServer) {
+	public ServerMessageListener(audiovisio.states.ServerAppState myServer) {
 		this.myServer = myServer;
 	}
 

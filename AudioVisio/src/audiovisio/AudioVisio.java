@@ -3,10 +3,11 @@ package audiovisio;
 
 import audiovisio.utils.NetworkUtils;
 import audiovisio.states.ClientAppState;
+import audiovisio.states.ClientAppState;
 import audiovisio.states.MenuAppState;
 import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
-import audiovisio.networking.Client;
+
 
 
 import java.util.logging.Level;
@@ -15,8 +16,6 @@ import com.jme3.app.SimpleApplication;
 
 public class AudioVisio extends SimpleApplication{
 
-	static Client clientApp = new Client();
-	
 	static MenuAppState gui;
 	static ClientAppState client;
 	static ServerAppState server;
@@ -62,5 +61,9 @@ public class AudioVisio extends SimpleApplication{
 	
 	public int getHeight(){
 		return settings.getHeight();
+	}
+	
+	public void setFPSText(CharSequence text){
+		fpsText.setText(text);
 	}
 }

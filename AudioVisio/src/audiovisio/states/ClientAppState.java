@@ -1,4 +1,4 @@
-package audiovisio.networking;
+package audiovisio.states;
 
 import audiovisio.AudioVisio;
 import audiovisio.WorldManager;
@@ -6,6 +6,7 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.SyncCharacterMessage;
@@ -56,7 +57,7 @@ import java.io.IOException;
  * @author Matt Gerst
  */
 
-public class Client extends AbstractAppState implements
+public class ClientAppState extends AbstractAppState implements
 		PhysicsCollisionListener {
 
 	// Networking
@@ -75,7 +76,7 @@ public class Client extends AbstractAppState implements
 	private long newTime = 0;
 	private int counter = 0;
 
-	public Client() {
+	public ClientAppState() {
 	}
 
 	// public void startClient() {
@@ -320,7 +321,7 @@ public class Client extends AbstractAppState implements
 					+ ", D: " + distance + ", P: " + newLocation + "F: " + counter);
 		}
 
-		fpsText().setText(velocityMessage);
+		AudioVisio.setFPSText(velocityMessage);
 		counter++;
 	}
 

@@ -78,10 +78,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             syncManager.broadcast(new PlayerJoinMessage(playerID));
             player.setServer(true);
         } else {
-            assert this.app instanceof audiovisio.networking.Client;
-            if (((audiovisio.networking.Client) this.app).getId() == playerID) {
+            assert this.app instanceof audiovisio.states.ClientAppState;
+            if (((audiovisio.states.ClientAppState) this.app).getId() == playerID) {
                 player.setCam(app.getCamera());
-                ((audiovisio.networking.Client) app).initKeys(player);
+                ((audiovisio.states.ClientAppState) app).initKeys(player);
             }
         }
 

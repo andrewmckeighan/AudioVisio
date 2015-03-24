@@ -10,9 +10,9 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 
 public class ClientMessageListener implements MessageListener<Client> {
-	audiovisio.networking.Client myClient;
+	audiovisio.states.ClientAppState myClient;
 
-	public ClientMessageListener(audiovisio.networking.Client myClient) {
+	public ClientMessageListener(audiovisio.states.ClientAppState myClient) {
 		this.myClient = myClient;
 	}
 
