@@ -30,6 +30,14 @@ public class GuiOperation extends AbstractAppState implements ScreenController{
 	 public void initialize(AppStateManager stateManager, Application app){
 		 super.initialize(stateManager, app);
 		 this.app = (SimpleApplication)app;
+
+         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
+                 app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
+         nifty = niftyDisplay.getNifty();
+         nifty.fromXml("audiovisio/gui/baselayer.xml", "start", this);
+         this.app.getGuiViewPort().addProcessor(niftyDisplay);
+         this.app.getFlyByCamera().setEnabled(false);
+         this.app.getInputManager().setCursorVisible(true);
 	 }
 
 	public void GUIStart() {
@@ -39,17 +47,6 @@ public class GuiOperation extends AbstractAppState implements ScreenController{
 		
 		app.setSettings(settings);
 		app.start();
-		
-	}
-
-	public void simpleInitApp() {
-		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
-				app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
-		nifty = niftyDisplay.getNifty();
-		nifty.fromXml("audiovisio/gui/baselayer.xml", "start", this);
-		app.getGuiViewPort().addProcessor(niftyDisplay);
-		app.getFlyByCamera().setEnabled(false);
-		app.getInputManager().setCursorVisible(true);
 		
 	}
 	

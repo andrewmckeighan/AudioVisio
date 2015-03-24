@@ -1,6 +1,7 @@
 package audiovisio;
 
 
+import audiovisio.gui.GuiOperation;
 import audiovisio.utils.NetworkUtils;
 import audiovisio.states.ClientAppState;
 import audiovisio.states.ClientAppState;
@@ -16,7 +17,7 @@ import com.jme3.app.SimpleApplication;
 
 public class AudioVisio extends SimpleApplication{
 
-	static MenuAppState gui;
+	static GuiOperation gui;
 	static ClientAppState client;
 	static ServerAppState server;
 	
@@ -57,7 +58,7 @@ public class AudioVisio extends SimpleApplication{
 
 	@Override
 	public void simpleInitApp() {
-		gui = new MenuAppState();
+		gui = new GuiOperation();
 		stateManager.attach(gui);
 	}
 	
