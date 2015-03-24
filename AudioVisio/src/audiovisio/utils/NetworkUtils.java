@@ -2,6 +2,7 @@ package audiovisio.utils;
 
 import audiovisio.networking.messages.*;
 
+import com.jme3.network.NetworkClient;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.math.Vector3f;
 
@@ -80,12 +81,15 @@ public class NetworkUtils {
         return null;
     }
 
-    public static Boolean attemptConnection(com.jme3.network.NetworkClient Client){
+    public static Boolean attemptConnection(NetworkClient client){
+        LogHelper.info("attemptConnection");
         for (int i = 0; i < 500; i++) {
             try{
-                Client.connectToServer("127.0.0.1", NetworkUtils.getPort(), -1);
+                client.connectToServer("127.0.0.1", PORT, PORT);
                 return true;
-            } catch (IOException e){}
+            } catch (IOException e){
+                LogHelper.info(String.format("Attempt %d to connect to server", i));
+            }
             try {
                 Thread.sleep(50l);
             } catch (InterruptedException ex) {}

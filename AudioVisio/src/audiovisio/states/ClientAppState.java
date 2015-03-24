@@ -42,8 +42,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
-//import audiovisio.networking.utilities.GeneralUtilities; //TODO is this needed?
-
 /**
  * This class manages the client, sending messages to the server, and all
  * methods to work with Jmonkey's SimpleApplication.
@@ -60,9 +58,8 @@ public class ClientAppState extends AbstractAppState implements
     private AudioVisio   AV;
     private InputManager IM;
     private AssetManager AM;
-    public  NetworkClient myClient     = null;
+    public  NetworkClient myClient     = Network.createClient();
     private WorldManager  worldManager = null;
-    private BitmapFont guiFont;
 
     // On Screen Message
     private CharSequence velocityMessage = "";
@@ -81,7 +78,6 @@ public class ClientAppState extends AbstractAppState implements
         AV = (AudioVisio) app;
         AM = AV.getAssetManager();
         IM = AV.getInputManager();
-        myClient = Network.createClient();
 
         // ///////////
         // Physics //
@@ -146,24 +142,11 @@ public class ClientAppState extends AbstractAppState implements
         Lever testLever = new Lever(3f, 5f, 3f);
         testLever.createMaterial(AM);
 
-        // worldManager.addPlayer(myClient.getId());
-        // Player p = (Player) worldManager.getPlayer(myClient.getId());
-
-        // initKeys(p);
-
         // //////////////////////////
         // Initialization Methods //
         // //////////////////////////
         // TODO may be moved to Player/elsewhere
         initCrossHairs(); // a "+" in the middle of the screen to help aiming
-        // initMark(); // a red sphere to mark the hit
-
-        // /////////////////////////
-        // Add entities to Scene //
-        // /////////////////////////
-        // TODO this will probably be moved into WorldManager.
-        // testButton.addToScene(rootNode, physicsSpace);
-        // testLever.addToScene(rootNode, physicsSpace);
 
         // ///////////////////////////
         // Add objects to rootNode //
@@ -228,7 +211,7 @@ public class ClientAppState extends AbstractAppState implements
 
     private void initCrossHairs(){
         AV.setDisplayStatView(false);
-        guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
+        BitmapFont guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+"); // crosshairs
@@ -296,7 +279,12 @@ public class ClientAppState extends AbstractAppState implements
 
     @Override
     public void cleanup(){
-        myClient.close();
+        if (myClient.isConnected()){
+            myClient.close();
+        }
+
+        AudioVisio.stopServer();
+        System.exit(0);
     }
 
     /**
