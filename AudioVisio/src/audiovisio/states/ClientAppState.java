@@ -88,6 +88,8 @@ public class ClientAppState extends AbstractAppState implements
 	public void initialize(AppStateManager stateManager, Application app) {
 		NetworkUtils.initializeSerializables();
 		AV = (AudioVisio) app;
+        AM = AV.getAssetManager();
+        IM = AV.getInputManager();
 		try {
 			//myClient = Network.connectToServer(IP, NetworkUtils.getPort());
 			myClient = Network.connectToServer("127.0.0.1", NetworkUtils.getPort());

@@ -3,6 +3,7 @@ package audiovisio.states;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import audiovisio.AudioVisio;
 import audiovisio.utils.LogHelper;
 
 import com.jme3.app.Application;
@@ -21,6 +22,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	private Nifty nifty;
 	
 	SimpleApplication app;
+    AppStateManager stateManager;
 	
 	public GuiAppState(){
 		
@@ -30,6 +32,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	 public void initialize(AppStateManager stateManager, Application app){
 		 super.initialize(stateManager, app);
 		 this.app = (SimpleApplication)app;
+         this.stateManager = stateManager;
 
          NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
                  app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
@@ -105,5 +108,11 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		// TODO Auto-generated method stub
 		
 	}
+
+    public void clientAndServerInit() {
+        stateManager.detach(this);
+        AudioVisio.main(new String[]{"-server"});
+        stateManager.attach(new ClientAppState());
+    }
 
 }

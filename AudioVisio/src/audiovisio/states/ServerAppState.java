@@ -75,6 +75,7 @@ public class ServerAppState extends AbstractAppState implements
         NetworkUtils.initializeSerializables();
         
         AV = (SimpleApplication) app;
+        AM = AV.getAssetManager();
         try {
             myServer = Network.createServer(NetworkUtils.getPort());
             myServer.start();
