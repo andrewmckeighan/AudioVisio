@@ -1,4 +1,4 @@
-package audiovisio.gui;
+package audiovisio.states;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,13 +16,13 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class GuiOperation extends AbstractAppState implements ScreenController{
+public class GuiAppState extends AbstractAppState implements ScreenController{
 
 	private Nifty nifty;
 	
 	SimpleApplication app;
 	
-	public GuiOperation(){
+	public GuiAppState(){
 		
 	}
 	
@@ -34,7 +34,7 @@ public class GuiOperation extends AbstractAppState implements ScreenController{
          NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
                  app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
          nifty = niftyDisplay.getNifty();
-         nifty.fromXml("audiovisio/gui/baselayer.xml", "start", this);
+         nifty.fromXml("Interface/baselayer.xml", "start", this);
          this.app.getGuiViewPort().addProcessor(niftyDisplay);
          this.app.getFlyByCamera().setEnabled(false);
          this.app.getInputManager().setCursorVisible(true);
@@ -71,7 +71,7 @@ public class GuiOperation extends AbstractAppState implements ScreenController{
 	}
 	
 	public void goBack(){
-		nifty.fromXml("audiovisio/gui/baselayer.xml", "start");
+		nifty.fromXml("Interface/baselayer.xml", "start");
 	}
 	
 	public String getIp() {

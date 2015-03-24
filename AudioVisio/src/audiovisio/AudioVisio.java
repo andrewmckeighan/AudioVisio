@@ -1,23 +1,18 @@
 package audiovisio;
 
 
-import audiovisio.gui.GuiOperation;
-import audiovisio.utils.NetworkUtils;
 import audiovisio.states.ClientAppState;
-import audiovisio.states.ClientAppState;
-import audiovisio.states.MenuAppState;
+import audiovisio.states.GuiAppState;
 import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
-
-
+import audiovisio.utils.NetworkUtils;
+import com.jme3.app.SimpleApplication;
 
 import java.util.logging.Level;
 
-import com.jme3.app.SimpleApplication;
-
 public class AudioVisio extends SimpleApplication{
 
-	static GuiOperation gui;
+	static GuiAppState gui;
 	static ClientAppState client;
 	static ServerAppState server;
 	
@@ -26,7 +21,6 @@ public class AudioVisio extends SimpleApplication{
 	}
 
     public static void main(String[] args) {
-    	
     	AudioVisio AV = new AudioVisio();
     	
     	NetworkUtils.setPort(11550);
@@ -36,29 +30,11 @@ public class AudioVisio extends SimpleApplication{
 		//Client Start
 		AV.setPauseOnLostFocus(false);
 		AV.start();
-    	
-    	
-//    	gui = new MenuAppState();
-//		gui.setEnabled(true);
-    	
     }
-
-//	public void clientInit(){
-//		gui.setEnabled(false);
-//		client.setEnabled(true);
-//	}
-
-//	public void serverAndClientInit(){
-//		gui.setEnabled(false);
-//		client.setEnabled(true);
-//		client.app.startClient();
-//		server.setEnabled(true);
-//		server.app.startServer();
-//	}
 
 	@Override
 	public void simpleInitApp() {
-		gui = new GuiOperation();
+		gui = new GuiAppState();
 		stateManager.attach(gui);
 	}
 	
