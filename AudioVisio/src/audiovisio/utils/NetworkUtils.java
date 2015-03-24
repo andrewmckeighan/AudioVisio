@@ -17,7 +17,7 @@ public class NetworkUtils {
 
     public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
     
-    public static void initializeSerializables(){
+    public static synchronized void initializeSerializables(){
         // General Messages
         Serializer.registerClass(NetworkMessage.class);
         
