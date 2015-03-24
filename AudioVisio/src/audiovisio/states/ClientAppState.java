@@ -11,11 +11,8 @@ import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.networking.messages.SyncRigidBodyMessage;
-import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
-
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -45,338 +42,305 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 
-import java.io.IOException;
-
 //import audiovisio.networking.utilities.GeneralUtilities; //TODO is this needed?
 
 /**
  * This class manages the client, sending messages to the server, and all
  * methods to work with Jmonkey's SimpleApplication.
- * 
+ *
  * @author Taylor Premo
  * @author James Larson
  * @author Matt Gerst
  */
 
 public class ClientAppState extends AbstractAppState implements
-		PhysicsCollisionListener {
+        PhysicsCollisionListener {
 
-	// Networking
-	private AudioVisio AV;
-	private InputManager IM;
-	private AssetManager AM;
-	public NetworkClient myClient = null;
-	private WorldManager worldManager = null;
-	private BitmapFont guiFont;
+    // Networking
+    private AudioVisio   AV;
+    private InputManager IM;
+    private AssetManager AM;
+    public  NetworkClient myClient     = null;
+    private WorldManager  worldManager = null;
+    private BitmapFont guiFont;
 
-	// On Screen Message
-	private CharSequence velocityMessage = "";
-	private Vector3f oldLocation = null;
-	private Vector3f newLocation = new Vector3f();
-	private long oldTime = 0;
-	private long newTime = 0;
-	private int counter = 0;
+    // On Screen Message
+    private CharSequence velocityMessage = "";
+    private Vector3f     oldLocation     = null;
+    private Vector3f     newLocation     = new Vector3f();
+    private long         oldTime         = 0;
+    private long         newTime         = 0;
+    private int          counter         = 0;
 
-	public ClientAppState() {
-	}
+    public ClientAppState(){
+    }
 
-	// public void startClient() {
-	// this.setPauseOnLostFocus(false);
-	// this.start();
-	// }
-	
-	@Override
-	public void initialize(AppStateManager stateManager, Application app) {
-		NetworkUtils.initializeSerializables();
-		AV = (AudioVisio) app;
+    @Override
+    public void initialize( AppStateManager stateManager, Application app ){
+        NetworkUtils.initializeSerializables();
+        AV = (AudioVisio) app;
         AM = AV.getAssetManager();
         IM = AV.getInputManager();
-//		try {
-			//myClient = Network.connectToServer(IP, NetworkUtils.getPort());
-//			myClient = Network.connectToServer("127.0.0.1", NetworkUtils.getPort());
-            myClient = Network.createClient();
-//			myClient.start();
-//		} catch (IOException e) {
-//			LogHelper.severe("Error on client start", e);
-//			System.exit(1);
-//		}
-		// ///////////
-		// Physics //
-		// ///////////
-		BulletAppState bulletAppState = new BulletAppState();
-		stateManager.attach(bulletAppState);
+        myClient = Network.createClient();
 
-		PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+        // ///////////
+        // Physics //
+        // ///////////
+        BulletAppState bulletAppState = new BulletAppState();
+        stateManager.attach(bulletAppState);
 
-		// ////////////////////
-		// Load Scene (map) //
-		// ////////////////////
-		AM.registerLocator("town.zip", ZipLocator.class);
-		Spatial sceneModel = AM.loadModel("main.scene");
-		sceneModel.setLocalScale(2f);
+        PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
-		// /////////////////
-		// Create Camera //
-		// /////////////////
-		AV.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-		AV.getFlyByCamera().setMoveSpeed(100);
+        // ////////////////////
+        // Load Scene (map) //
+        // ////////////////////
+        AM.registerLocator("town.zip", ZipLocator.class);
+        Spatial sceneModel = AM.loadModel("main.scene");
+        sceneModel.setLocalScale(2f);
 
-		// ////////////////
-		// Sync Manager //
-		// ////////////////
-		SyncManager syncManager = new SyncManager(AV, myClient);
-		syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
-		syncManager.setMessageTypes(SyncCharacterMessage.class,
-				SyncRigidBodyMessage.class, PlayerJoinMessage.class,
-				PlayerLeaveMessage.class);
-		stateManager.attach(syncManager);
+        // /////////////////
+        // Create Camera //
+        // /////////////////
+        AV.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        AV.getFlyByCamera().setMoveSpeed(100);
 
-		worldManager = new WorldManager(AV, this, AV.getRootNode());
-		stateManager.attach(worldManager);
-		syncManager.addObject(-1, worldManager);
+        // ////////////////
+        // Sync Manager //
+        // ////////////////
+        SyncManager syncManager = new SyncManager(AV, myClient);
+        syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
+        syncManager.setMessageTypes(SyncCharacterMessage.class,
+                SyncRigidBodyMessage.class, PlayerJoinMessage.class,
+                PlayerLeaveMessage.class);
+        stateManager.attach(syncManager);
 
-		// ////////////
-		// Lighting //
-		// ////////////
-		AmbientLight ambientLight = new AmbientLight();
-		ambientLight.setColor(ColorRGBA.White.mult(1.3f));
+        worldManager = new WorldManager(AV, this, AV.getRootNode());
+        stateManager.attach(worldManager);
+        syncManager.addObject(-1, worldManager);
 
-		DirectionalLight directionalLight = new DirectionalLight();
-		directionalLight.setColor(ColorRGBA.White);
-		directionalLight.setDirection(new Vector3f(2.8f, -2.8f, -2.8f)
-				.normalizeLocal());
+        // ////////////
+        // Lighting //
+        // ////////////
+        AmbientLight ambientLight = new AmbientLight();
+        ambientLight.setColor(ColorRGBA.White.mult(1.3f));
 
-		// We set up collision detection for the scene by creating a
-		// compound collision shape and a static RigidBodyControl with mass
-		// zero.
-		CollisionShape sceneShape = CollisionShapeFactory
-				.createMeshShape(sceneModel);
-		RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
-		sceneModel.setLocalScale(2f);
+        DirectionalLight directionalLight = new DirectionalLight();
+        directionalLight.setColor(ColorRGBA.White);
+        directionalLight.setDirection(new Vector3f(2.8f, -2.8f, -2.8f)
+                .normalizeLocal());
 
-		// /////////////////////
-		// Generate entities //
-		// /////////////////////
-		Button testButton = new Button(0f, 1f, 0f);
-		testButton.createMaterial(AM);
+        // We set up collision detection for the scene by creating a
+        // compound collision shape and a static RigidBodyControl with mass
+        // zero.
+        CollisionShape sceneShape = CollisionShapeFactory
+                .createMeshShape(sceneModel);
+        RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
+        sceneModel.setLocalScale(2f);
 
-		Lever testLever = new Lever(3f, 5f, 3f);
-		testLever.createMaterial(AM);
+        // /////////////////////
+        // Generate entities //
+        // /////////////////////
+        Button testButton = new Button(0f, 1f, 0f);
+        testButton.createMaterial(AM);
 
-		// worldManager.addPlayer(myClient.getId());
-		// Player p = (Player) worldManager.getPlayer(myClient.getId());
+        Lever testLever = new Lever(3f, 5f, 3f);
+        testLever.createMaterial(AM);
 
-		// initKeys(p);
+        // worldManager.addPlayer(myClient.getId());
+        // Player p = (Player) worldManager.getPlayer(myClient.getId());
 
-		// //////////////////////////
-		// Initialization Methods //
-		// //////////////////////////
-		// TODO may be moved to Player/elsewhere
-		initCrossHairs(); // a "+" in the middle of the screen to help aiming
-		// initMark(); // a red sphere to mark the hit
+        // initKeys(p);
 
-		// /////////////////////////
-		// Add entities to Scene //
-		// /////////////////////////
-		// TODO this will probably be moved into WorldManager.
-		// testButton.addToScene(rootNode, physicsSpace);
-		// testLever.addToScene(rootNode, physicsSpace);
+        // //////////////////////////
+        // Initialization Methods //
+        // //////////////////////////
+        // TODO may be moved to Player/elsewhere
+        initCrossHairs(); // a "+" in the middle of the screen to help aiming
+        // initMark(); // a red sphere to mark the hit
 
-		// ///////////////////////////
-		// Add objects to rootNode //
-		// ///////////////////////////
-		AV.getRootNode().attachChild(sceneModel);
-		AV.getRootNode().addLight(ambientLight);
-		AV.getRootNode().addLight(directionalLight);
+        // /////////////////////////
+        // Add entities to Scene //
+        // /////////////////////////
+        // TODO this will probably be moved into WorldManager.
+        // testButton.addToScene(rootNode, physicsSpace);
+        // testLever.addToScene(rootNode, physicsSpace);
 
-		// ///////////////////////////////
-		// Add objects to physicsSpace //
-		// ///////////////////////////////
-		physicsSpace.addCollisionListener(this);
-		physicsSpace.add(landscape);
-	}
+        // ///////////////////////////
+        // Add objects to rootNode //
+        // ///////////////////////////
+        AV.getRootNode().attachChild(sceneModel);
+        AV.getRootNode().addLight(ambientLight);
+        AV.getRootNode().addLight(directionalLight);
 
-	/**
-	 * Initializes all variables used to run the client, is called by Jmonkey on
-	 * this.start()
-	 * 
-	 * @param IP
-	 *            The IP address of the server we are connecting to.
-	 */
+        // ///////////////////////////////
+        // Add objects to physicsSpace //
+        // ///////////////////////////////
+        physicsSpace.addCollisionListener(this);
+        physicsSpace.add(landscape);
+    }
 
-	public void simpleInitApp(String IP) {
+    /**
+     * Gives mappings to all hotkeys and actions by the user. Adds appropriate
+     * listeners to the player.
+     *
+     * @param player The player entity that is affected by this clients inputs.
+     */
 
-	}
+    public void initKeys( Player player ){
+        IM.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+        IM.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+        IM.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+        IM.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+        IM.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
 
-	public void simpleInitApp() {
-		simpleInitApp("127.0.0.1");
-	}
+        IM.addMapping("Shoot", new MouseButtonTrigger(
+                MouseInput.BUTTON_LEFT));
 
-	/**
-	 * Gives mappings to all hotkeys and actions by the user. Adds appropriate
-	 * listeners to the player.
-	 * 
-	 * @param player
-	 *            The player entity that is affected by this clients inputs.
-	 */
+        IM.addListener(player, "Up");
+        IM.addListener(player, "Down");
+        IM.addListener(player, "Left");
+        IM.addListener(player, "Right");
+        IM.addListener(player, "Jump");
 
-	public void initKeys(Player player) {
-		IM.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-		IM.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-		IM.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-		IM.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-		IM.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+        IM.addListener(player, "Shoot");
 
-		IM.addMapping("Shoot", new MouseButtonTrigger(
-				MouseInput.BUTTON_LEFT));
+    }
 
-		IM.addListener(player, "Up");
-		IM.addListener(player, "Down");
-		IM.addListener(player, "Left");
-		IM.addListener(player, "Right");
-		IM.addListener(player, "Jump");
+    /**
+     * Creates a sphere to show where on an object the player 'shoots' (where
+     * the ray from their camera collides with the closest valid object.) TODO
+     * may be moved.
+     */
 
-		IM.addListener(player, "Shoot");
+    private void initMark(){
+        Sphere sphere = new Sphere(30, 30, 0.2f);
+        Geometry mark = new Geometry("BOOM!", sphere);
+        Material mark_mat = new Material(AM, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat.setColor("Color", ColorRGBA.Red);
+        mark.setMaterial(mark_mat);
 
-	}
+    }
 
-	/**
-	 * Creates a sphere to show where on an object the player 'shoots' (where
-	 * the ray from their camera collides with the closest valid object.) TODO
-	 * may be moved.
-	 */
+    /**
+     * Creates a '+' char on the center of the screen and adds it to the
+     * 'guiNode' TODO may be moved
+     */
 
-	private void initMark() {
-		Sphere sphere = new Sphere(30, 30, 0.2f);
-		Geometry mark = new Geometry("BOOM!", sphere);
-		Material mark_mat = new Material(AM, "Common/MatDefs/Misc/Unshaded.j3md");
-		mark_mat.setColor("Color", ColorRGBA.Red);
-		mark.setMaterial(mark_mat);
+    private void initCrossHairs(){
+        AV.setDisplayStatView(false);
+        guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+"); // crosshairs
+        ch.setLocalTranslation(
+                // center
+                AV.getWidth() / 2 - ch.getLineWidth() / 2,
+                AV.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        AV.getGuiNode().attachChild(ch);
 
-	}
+    }
 
-	/**
-	 * Creates a '+' char on the center of the screen and adds it to the
-	 * 'guiNode' TODO may be moved
-	 */
+    /**
+     * Handles updates made to the client every frame.
+     *
+     * Specifically, generates an on screen message: updateMessage(); and
+     * creates a message to send to the server with the players information.
+     *
+     * @param tpf time per frame
+     */
 
-	private void initCrossHairs() {
-		AV.setDisplayStatView(false);
-		guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
-		BitmapText ch = new BitmapText(guiFont, false);
-		ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-		ch.setText("+"); // crosshairs
-		ch.setLocalTranslation(
-		// center
-		AV.getWidth() / 2 - ch.getLineWidth() / 2,
-		AV.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-		AV.getGuiNode().attachChild(ch);
+    @Override
+    public void update( float tpf ){
+        Player player = ((Player) worldManager.getPlayer(myClient.getId()));
+        if (player != null){
 
-	}
+            updateMessage(player);
 
-	/**
-	 * Handles updates made to the client every frame.
-	 * 
-	 * Specifically, generates an on screen message: updateMessage(); and
-	 * creates a message to send to the server with the players information.
-	 * 
-	 * @param tpf
-	 *            time per frame
-	 */
+            SyncCharacterMessage msg = player.getSyncCharacterMessage();
+            myClient.send(msg);
+        }
+    }
 
-	@Override
-	public void update(float tpf) {
-		Player player = ((Player) worldManager.getPlayer(myClient.getId()));
-		if (player != null) {
+    /**
+     * Creates on screen text that displays the users velocity, distance moved
+     * since last update, current position, and the current frame #
+     */
 
-			updateMessage(player);
+    private void updateMessage( Player player ){
 
-			SyncCharacterMessage msg = player.getSyncCharacterMessage();
-			myClient.send(msg);
-		}
-	}
+        if (counter % 1000 == 0){ // We only update once every 1000 frames so
+            // that the player can actually move.
+            assert newLocation != null;
+            if (oldLocation != null && oldTime != 0 && newTime != 0){
+                oldLocation.distance(newLocation);
+            }
 
-	/**
-	 * Creates on screen text that displays the users velocity, distance moved
-	 * since last update, current position, and the current frame #
-	 */
+            oldLocation = newLocation.clone();
+            newLocation = player.getLocalTranslation();
 
-	private void updateMessage(Player player) {
+            oldTime = newTime;
+            newTime = System.currentTimeMillis();
 
-		if (counter % 1000 == 0) { // We only update once every 1000 frames so
-									// that the player can actually move.
-			assert newLocation != null;
-			if (oldLocation != null && oldTime != 0 && newTime != 0) {
-				oldLocation.distance(newLocation);
-			}
+            counter = 0;
 
-			oldLocation = newLocation.clone();
-			newLocation = player.getLocalTranslation();
+            float distance = oldLocation.distance(newLocation);
+            long time = newTime - oldTime;
+            float velocity = distance / time;
+            velocityMessage = ("ID: " + this.getId() + "V: " + velocity
+                    + ", D: " + distance + ", P: " + newLocation + "F: " + counter);
+        }
 
-			oldTime = newTime;
-			newTime = System.currentTimeMillis();
+        AV.setFPSText(velocityMessage);
+        counter++;
+    }
 
-			counter = 0;
+    @Override
+    public void cleanup(){
+        myClient.close();
+    }
 
-			float distance = oldLocation.distance(newLocation);
-			long time = newTime - oldTime;
-			float velocity = distance / time;
-			velocityMessage = ("ID: " + this.getId() + "V: " + velocity
-					+ ", D: " + distance + ", P: " + newLocation + "F: " + counter);
-		}
+    /**
+     * TODO rewrite Handles collisions of entities
+     *
+     * @param event The collision event containing the two nodes that have
+     *              collided.
+     */
 
-		AV.setFPSText(velocityMessage);
-		counter++;
-	}
+    @Override
+    public void collision( PhysicsCollisionEvent event ){
+        if (event.getNodeA().getParent() instanceof Entity
+                && event.getNodeB().getParent() instanceof Entity){
+            Entity entityA = (Entity) event.getNodeA().getParent();
+            Entity entityB = (Entity) event.getNodeB().getParent();
+            entityA.collisionTrigger(entityB);
+            entityB.collisionTrigger(entityA);
+            if ("button".equals(event.getNodeA().getName())){
 
-	@Override
-	public void cleanup() {
-		myClient.close();
-	}
+                if ("Oto-ogremesh".equals(event.getNodeB().getName())){
+                    Button b = (Button) event.getNodeA().getParent();
+                    b.startPress();
+                }
+            }
+            if ("button".equals(event.getNodeB().getName())){
 
-	/**
-	 * TODO rewrite Handles collisions of entities
-	 * 
-	 * @param event
-	 *            The collision event containing the two nodes that have
-	 *            collided.
-	 */
+                if ("Oto-ogremesh".equals(event.getNodeA().getName())){
+                    Button b = (Button) event.getNodeB().getParent();
+                    b.startPress();
+                }
+            }
+        }
 
-	@Override
-	public void collision(PhysicsCollisionEvent event) {
-		if (event.getNodeA().getParent() instanceof Entity
-				&& event.getNodeB().getParent() instanceof Entity) {
-			Entity entityA = (Entity) event.getNodeA().getParent();
-			Entity entityB = (Entity) event.getNodeB().getParent();
-			entityA.collisionTrigger(entityB);
-			entityB.collisionTrigger(entityA);
-			if ("button".equals(event.getNodeA().getName())) {
+    }
 
-				if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
-					Button b = (Button) event.getNodeA().getParent();
-					b.startPress();
-				}
-			}
-			if ("button".equals(event.getNodeB().getName())) {
+    public long getId(){
+        return this.myClient.getId();
+    }
 
-				if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
-					Button b = (Button) event.getNodeB().getParent();
-					b.startPress();
-				}
-			}
-		}
+    public boolean isAudioClient(){
+        return this.getId() % 2 == 0;
+    }
 
-	}
-
-	public long getId() {
-		return this.myClient.getId();
-	}
-
-	public boolean isAudioClient() {
-		return this.getId() % 2 == 0;
-	}
-
-	public boolean isVideoClient() {
-		return !this.isAudioClient();
-	}
+    public boolean isVideoClient(){
+        return !this.isAudioClient();
+    }
 }

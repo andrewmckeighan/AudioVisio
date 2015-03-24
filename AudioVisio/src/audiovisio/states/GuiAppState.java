@@ -79,7 +79,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	public void goBack(){
 		nifty.fromXml("Interface/baselayer.xml", "start");
 	}
-	
+
 	public String getIp() {
 		String temp = "";
 		try {
@@ -114,6 +114,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 
     public void clientAndServerInit() {
         app.stopGui();
+		setEnabled(false);
         AudioVisio.main(new String[]{"-server"});
         app.clientStart();
         NetworkUtils.attemptConnection(app.client.myClient);

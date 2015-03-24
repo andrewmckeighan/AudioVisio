@@ -14,9 +14,9 @@ import java.util.logging.Level;
 
 public class AudioVisio extends SimpleApplication{
 
-	static GuiAppState gui;
-	public static ClientAppState client;
-	static ServerAppState server;
+	GuiAppState gui;
+	public ClientAppState client;
+	ServerAppState server;
 
     static JmeContext.Type appType = JmeContext.Type.Display;
 
