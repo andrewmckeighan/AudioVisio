@@ -22,7 +22,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 
 	private Nifty nifty;
 	
-	SimpleApplication app;
+	AudioVisio app;
     AppStateManager stateManager;
 	
 	public GuiAppState(){
@@ -32,7 +32,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	 @Override
 	 public void initialize(AppStateManager stateManager, Application app){
 		 super.initialize(stateManager, app);
-		 this.app = (SimpleApplication)app;
+		 this.app = (AudioVisio)app;
          this.stateManager = stateManager;
 
          NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
@@ -112,9 +112,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	}
 
     public void clientAndServerInit() {
-        stateManager.detach(this);
+        app.stopGui();
         AudioVisio.main(new String[]{"-server"});
-        stateManager.attach(new ClientAppState());
+        app.clientStart();
     }
 
 }

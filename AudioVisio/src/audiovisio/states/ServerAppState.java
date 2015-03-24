@@ -72,6 +72,7 @@ public class ServerAppState extends AbstractAppState implements
 
     @Override
     public void initialize(AppStateManager stateManager, Application app){
+        LogHelper.info("Starting server...");
         NetworkUtils.initializeSerializables();
         
         AV = (SimpleApplication) app;

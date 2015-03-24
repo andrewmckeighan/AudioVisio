@@ -47,8 +47,7 @@ public class AudioVisio extends SimpleApplication{
 	@Override
 	public void simpleInitApp() {
         if (startServer) {
-            server = new ServerAppState();
-            stateManager.attach(server);
+            serverStart();
         } else {
             gui = new GuiAppState();
             stateManager.attach(gui);
@@ -66,4 +65,18 @@ public class AudioVisio extends SimpleApplication{
 	public void setFPSText(CharSequence text){
 		fpsText.setText(text);
 	}
+
+    public void stopGui() {
+        stateManager.detach(gui);
+    }
+
+    public void serverStart() {
+        server = new ServerAppState();
+        stateManager.attach(server);
+    }
+
+    public void clientStart() {
+        client = new ClientAppState();
+        stateManager.attach(client);
+    }
 }
