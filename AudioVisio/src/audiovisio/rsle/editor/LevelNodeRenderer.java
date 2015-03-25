@@ -17,7 +17,7 @@ public class LevelNodeRenderer extends DefaultTreeCellRenderer {
             LevelNode node = (LevelNode) value;
             if (node.isPair()) {
                 Pair pair = (Pair)node.getUserObject();
-                setText(String.format("%s: %s", pair.getKey(), pair.getValue()));
+                this.setText(String.format("%s: %s", pair.getKey(), pair.getValue()));
                 return this;
             }
         }

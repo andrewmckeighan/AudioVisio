@@ -21,64 +21,64 @@ public class CreateFloorDialog extends NewDialog {
 
     public CreateFloorDialog(Frame owner, boolean modal) {
         super(owner, modal);
-        init();
+        this.init();
     }
 
     @Override
     protected void init() {
-        this.setTitle("Create Floor");
-        this.setLayout(new GridLayout(6, 2));
+        this.setTitle( "Create Floor" );
+        this.setLayout( new GridLayout( 6, 2 ) );
 
-        this.add(lblStartX);
-        this.add(startX);
+        this.add(this.lblStartX);
+        this.add(this.startX);
 
-        this.add(lblStartY);
-        this.add(startY);
+        this.add(this.lblStartY);
+        this.add(this.startY);
 
-        this.add(lblSizeX);
-        this.add(sizeX);
+        this.add(this.lblSizeX);
+        this.add(this.sizeX);
 
-        this.add(lblSizeY);
-        this.add(sizeY);
+        this.add(this.lblSizeY);
+        this.add(this.sizeY);
 
-        this.add(lblZPlane);
-        this.add(zPlane);
+        this.add(this.lblZPlane);
+        this.add(this.zPlane);
 
         super.init();
 
-        this.setSize(250, 180);
+        this.setSize( 250, 180 );
     }
 
     public int getStartX() {
-        return Integer.parseInt(startX.getText());
+        return Integer.parseInt(this.startX.getText());
     }
 
     public int getStartY() {
-        return Integer.parseInt(startY.getText());
+        return Integer.parseInt(this.startY.getText());
     }
 
     public int getSizeX() {
-        return Integer.parseInt(sizeX.getText());
+        return Integer.parseInt(this.sizeX.getText());
     }
 
     public int getSizeY() {
-        return Integer.parseInt(sizeY.getText());
+        return Integer.parseInt(this.sizeY.getText());
     }
 
     public int getZPlane() {
-        return Integer.parseInt(zPlane.getText());
+        return Integer.parseInt(this.zPlane.getText());
     }
 
     @Override
     protected void okClicked() {
-        if (startX.getText().isEmpty()
-                || startY.getText().isEmpty()
-                || sizeX.getText().isEmpty()
-                || sizeY.getText().isEmpty()
-                || zPlane.getText().isEmpty())
-            setStatus(false);
-        else {
-            setStatus(true);
+        if (this.startX.getText().isEmpty()
+                || this.startY.getText().isEmpty()
+                || this.sizeX.getText().isEmpty()
+                || this.sizeY.getText().isEmpty()
+                || this.zPlane.getText().isEmpty()) {
+            this.setStatus( false );
+        } else {
+            this.setStatus(true);
         }
     }
 }

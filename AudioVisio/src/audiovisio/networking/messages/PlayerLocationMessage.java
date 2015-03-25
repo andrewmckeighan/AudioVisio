@@ -21,7 +21,7 @@ public class PlayerLocationMessage extends AbstractMessage {
 	private Vector3f direction;
 	
 	public PlayerLocationMessage() {
-		setReliable(false);
+        this.setReliable(false);
 	}
 	
 	/**
@@ -33,25 +33,25 @@ public class PlayerLocationMessage extends AbstractMessage {
 		this.playerID = playerID;
 		this.position = position;
 		this.direction = direction;
-		
-		setReliable(false);
+
+        this.setReliable(false);
 	}
 	
 	public int getPlayerID() {
-		return playerID;
+		return this.playerID;
 	}
 	
 	public Vector3f getDirection() {
-		return direction;
+		return this.direction;
 	}
 	
 	public Vector3f getPosition() {
-		return position;
+		return this.position;
 	}
 	
 	@Override
     public String toString() {
-        return String.format(playerID + ":" + position + ":" + direction);
+        return String.format(this.playerID + ":" + this.position + ":" + this.direction);
     }
 
 }

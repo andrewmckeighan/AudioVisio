@@ -8,18 +8,17 @@ public class LevelNode extends DefaultMutableTreeNode {
     private boolean container;
 
     public LevelNode(boolean container) {
-        super();
         this.container = container;
     }
 
     public LevelNode(Object userObject, boolean container) {
         this(container);
-        setUserObject(userObject);
+        this.setUserObject(userObject);
     }
 
     public LevelNode(String key, Object value, boolean container) {
         this(container);
-        setUserObject(new Pair<String, Object>(key, value));
+        this.setUserObject(new Pair<String, Object>(key, value));
     }
 
     public boolean isContainer() {
@@ -27,26 +26,26 @@ public class LevelNode extends DefaultMutableTreeNode {
     }
 
     public boolean isPair() {
-        return userObject instanceof Pair;
+        return this.userObject instanceof Pair;
     }
 
     public Object getValue() {
-        if (isPair()) {
-            return ((Pair) userObject).getValue();
+        if (this.isPair()) {
+            return ((Pair) this.userObject).getValue();
         }
-        return userObject;
+        return this.userObject;
     }
 
     @Override
     public String toString() {
-        if (userObject instanceof Pair) {
-            Pair<String, Object> obj = (Pair<String, Object>) userObject;
+        if (this.userObject instanceof Pair) {
+            Pair<String, Object> obj = (Pair<String, Object>) this.userObject;
 //            return String.format("%s: %s", obj.getKey(), obj.getValue());
             return obj.getValue().toString();
         }
 
-        if (userObject != null) {
-            return userObject.toString();
+        if (this.userObject != null) {
+            return this.userObject.toString();
         }
 
         return super.toString();

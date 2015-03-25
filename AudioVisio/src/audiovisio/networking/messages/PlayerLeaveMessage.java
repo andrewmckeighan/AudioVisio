@@ -17,7 +17,7 @@ public class PlayerLeaveMessage extends PhysicsSyncMessage {
 	private long playerID;
 	
 	public PlayerLeaveMessage() {
-		setReliable(true);
+        this.setReliable(true);
 	}
 
 	/**
@@ -27,11 +27,11 @@ public class PlayerLeaveMessage extends PhysicsSyncMessage {
 		this.syncId = -1;
 		this.playerID = id;
 
-		setReliable(true);
+        this.setReliable(true);
 	}
 
 	public long getPlayerID() {
-		return playerID;
+		return this.playerID;
 	}
 
 	@Override

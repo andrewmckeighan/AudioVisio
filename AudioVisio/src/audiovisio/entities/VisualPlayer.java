@@ -8,7 +8,7 @@ public class VisualPlayer extends Player {
 
     }
 
-    public void load(JSONObject obj){
+    public void load( JSONObject obj ){
         super.load(obj);
 
     }

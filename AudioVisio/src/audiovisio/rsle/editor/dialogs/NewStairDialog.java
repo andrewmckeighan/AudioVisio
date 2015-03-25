@@ -19,7 +19,7 @@ public class NewStairDialog extends NewDialog {
 
     public NewStairDialog(Frame owner, boolean modal) {
         super(owner, modal);
-        init();
+        this.init();
     }
 
     @Override
@@ -27,16 +27,16 @@ public class NewStairDialog extends NewDialog {
         this.setTitle("New Panel");
         this.setLayout(new GridLayout(3, 2));
 
-        this.add(lblLocation);
-        this.add(location);
+        this.add(this.lblLocation);
+        this.add(this.location);
 
-        direction.addItem("NORTH");
-        direction.addItem("SOUTH");
-        direction.addItem("EAST");
-        direction.addItem("WEST");
+        this.direction.addItem("NORTH");
+        this.direction.addItem("SOUTH");
+        this.direction.addItem("EAST");
+        this.direction.addItem("WEST");
 
-        this.add(lblDirection);
-        this.add(direction);
+        this.add(this.lblDirection);
+        this.add(this.direction);
 
         super.init();
 
@@ -44,24 +44,24 @@ public class NewStairDialog extends NewDialog {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public String getLevelLocation() {
-        return location.getText();
+        return this.location.getText();
     }
 
     public String getDirection() {
-        return (String) direction.getSelectedItem();
+        return (String) this.direction.getSelectedItem();
     }
 
     @Override
     public void okClicked() {
-        if (getLevelLocation().isEmpty())
-            setStatus(false);
+        if (this.getLevelLocation().isEmpty())
+            this.setStatus(false);
         else {
-            id = RSLE.getNextID();
-            setStatus(true);
+            this.id = RSLE.getNextID();
+            this.setStatus(true);
         }
     }
 }

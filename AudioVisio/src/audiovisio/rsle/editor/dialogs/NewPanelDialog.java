@@ -17,7 +17,7 @@ public class NewPanelDialog extends NewDialog {
 
     public NewPanelDialog(Frame owner, boolean modal) {
         super(owner, modal);
-        init();
+        this.init();
     }
 
     @Override
@@ -25,8 +25,8 @@ public class NewPanelDialog extends NewDialog {
         this.setTitle("New Panel");
         this.setLayout(new GridLayout(2, 2));
 
-        this.add(lblLocation);
-        this.add(location);
+        this.add(this.lblLocation);
+        this.add(this.location);
 
         super.init();
 
@@ -34,20 +34,20 @@ public class NewPanelDialog extends NewDialog {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public String getLevelLocation() {
-        return location.getText();
+        return this.location.getText();
     }
 
     @Override
     public void okClicked() {
-        if (getLevelLocation().isEmpty())
-            setStatus(false);
+        if (this.getLevelLocation().isEmpty())
+            this.setStatus(false);
         else {
-            id = RSLE.getNextID();
-            setStatus(true);
+            this.id = RSLE.getNextID();
+            this.setStatus(true);
         }
     }
 }

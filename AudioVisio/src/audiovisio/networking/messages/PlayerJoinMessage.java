@@ -17,7 +17,7 @@ public class PlayerJoinMessage extends PhysicsSyncMessage {
 	private long playerID;
 	
 	public PlayerJoinMessage() {
-		setReliable(true);
+        this.setReliable(true);
 	}
 	
 	/**
@@ -26,8 +26,8 @@ public class PlayerJoinMessage extends PhysicsSyncMessage {
 	public PlayerJoinMessage(long playerID) {
 		this.syncId = -1;
 		this.playerID = playerID;
-		
-		setReliable(true);
+
+        this.setReliable(true);
 	}
 	
 	public long getPlayerID() {
@@ -37,6 +37,6 @@ public class PlayerJoinMessage extends PhysicsSyncMessage {
 	@Override
 	public void applyData(Object object) {
 		WorldManager manager = (WorldManager) object;
-		manager.addPlayer(playerID);
+		manager.addPlayer(this.playerID);
 	}
 }

@@ -15,7 +15,7 @@ import audiovisio.utils.LogHelper;
 public class LevelReader {
 
     public static Level read(String fileName){
-    	return new Level(loadJsonFile(fileName), fileName);
+    	return new Level(LevelReader.loadJsonFile(fileName), fileName);
     }
 
     /**

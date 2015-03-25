@@ -45,7 +45,7 @@ public class LevelNodeEditor extends DefaultTreeCellEditor {
                 }
                 if (path.getLastPathComponent() instanceof DefaultMutableTreeNode) {
                     DefaultMutableTreeNode last = (DefaultMutableTreeNode) path.getLastPathComponent();
-                    return Collections.list(last.children()).size() == 0; // Only allow leaf nodes to be editable.
+                    return Collections.list( last.children() ).isEmpty(); // Only allow leaf nodes to be editable.
                 }
                 return path.getPathCount() > 1; // root is not editable
             }

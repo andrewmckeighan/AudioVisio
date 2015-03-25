@@ -13,13 +13,12 @@ import java.util.logging.Level;
 
 public class AudioVisio extends SimpleApplication {
 
-    GuiAppState gui;
-    public ClientAppState client;
-    ServerAppState server;
-
     public static AudioVisio serverInstance;
-    static JmeContext.Type appType     = JmeContext.Type.Display;
-    static boolean         startServer = false;
+    static JmeContext.Type appType = JmeContext.Type.Display;
+    static boolean startServer;
+    public ClientAppState client;
+    GuiAppState gui;
+    ServerAppState server;
 
     public AudioVisio(){
 
@@ -33,56 +32,55 @@ public class AudioVisio extends SimpleApplication {
         LogHelper.setLevel(Level.INFO);
 
         if (args.length == 1){
-            if (args[0].equals("-server")){
-                startServer = true;
-                appType = JmeContext.Type.Headless;
-                serverInstance = AV;
+            if ("-server".equals(args[0])){
+                AudioVisio.startServer = true;
+                AudioVisio.appType = JmeContext.Type.Headless;
+                AudioVisio.serverInstance = AV;
             }
         }
 
         //Client Start
         AV.setPauseOnLostFocus(false);
-        AV.start(appType);
+        AV.start(AudioVisio.appType);
+    }
+
+    public static void stopServer(){
+        if (AudioVisio.serverInstance != null){ AudioVisio.serverInstance.stop(); }
     }
 
     @Override
     public void simpleInitApp(){
-        if (startServer){
-            serverStart();
+        if (AudioVisio.startServer){
+            this.serverStart();
         } else {
-            gui = new GuiAppState();
-            stateManager.attach(gui);
+            this.gui = new GuiAppState();
+            this.stateManager.attach(this.gui);
         }
     }
 
     public int getWidth(){
-        return settings.getWidth();
+        return this.settings.getWidth();
     }
 
     public int getHeight(){
-        return settings.getHeight();
+        return this.settings.getHeight();
     }
 
     public void setFPSText( CharSequence text ){
-        fpsText.setText(text);
+        this.fpsText.setText(text);
     }
 
     public void stopGui(){
-        stateManager.detach(gui);
+        this.stateManager.detach(this.gui);
     }
 
     public void serverStart(){
-        server = new ServerAppState();
-        stateManager.attach(server);
+        this.server = new ServerAppState();
+        this.stateManager.attach(this.server);
     }
 
     public void clientStart(){
-        client = new ClientAppState();
-        stateManager.attach(client);
-    }
-
-    public static void stopServer(){
-        if (serverInstance != null)
-            serverInstance.stop();
+        this.client = new ClientAppState();
+        this.stateManager.attach(this.client);
     }
 }

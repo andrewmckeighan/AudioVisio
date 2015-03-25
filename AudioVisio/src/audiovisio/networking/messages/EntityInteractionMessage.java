@@ -34,6 +34,6 @@ public class EntityInteractionMessage extends PhysicsSyncMessage {
         assert triggeredEntity instanceof InteractableEntity;
 
         LogHelper.finer("EntityInteractionMessage: " + this + ":" + triggeredEntity);
-        ((InteractableEntity) triggeredEntity).update(interactionList, state);
+        ((InteractableEntity) triggeredEntity).update(this.interactionList, this.state);
     }
 }

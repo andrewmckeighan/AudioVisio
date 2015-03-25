@@ -26,7 +26,7 @@ public class Panel implements ILevelItem {
     }
 
     public void initialize(AssetManager assetManager) {
-        model = (Node) assetManager.loadModel("Models/Level/Panel/Panel.j3o");
+        this.model = (Node) assetManager.loadModel("Models/Level/Panel/Panel.j3o");
     }
     
     /**

@@ -59,8 +59,8 @@ public class Level {
     	this.name = (String) obj.get("name");
     	this.author = (String) obj.get("author");
     	this.version = (String) obj.get("version");
-    	
-    	levelData = obj;
+
+        this.levelData = obj;
     	
     	this.fileName = fileName;
     }
@@ -71,36 +71,36 @@ public class Level {
      * initializes them.
      */
     public void loadLevel() {
-    	JSONArray level = (JSONArray) levelData.get("level");
+    	JSONArray level = (JSONArray) this.levelData.get("level");
     	
     	for (Object item : level) {
     		JSONObject itemJson = (JSONObject) item;
     		String type = (String) itemJson.get("type");
     		
-    		if (type.equalsIgnoreCase("trigger")) {
+    		if (type.equalsIgnoreCase( "trigger" )) {
     			Trigger trigger = new Trigger();
     			trigger.load(itemJson);
-                levelItems.add(trigger);
-    		} else if (type.equalsIgnoreCase("panel")) {
+                this.levelItems.add(trigger);
+    		} else if (type.equalsIgnoreCase( "panel" )) {
     			Panel panel = new Panel();
     			panel.load(itemJson);
-                levelItems.add(panel);
-    		} else if (type.equalsIgnoreCase("stair")) {
+                this.levelItems.add(panel);
+    		} else if (type.equalsIgnoreCase( "stair" )) {
     			Stair stair = new Stair();
     			stair.load(itemJson);
-                levelItems.add(stair);
-    		} else if (type.equalsIgnoreCase("door")) {
+                this.levelItems.add(stair);
+    		} else if (type.equalsIgnoreCase( "door" )) {
     			Door door = new Door();
     			door.load(itemJson);
-                levelItems.add(door);
-    		} else if (type.equalsIgnoreCase("button")) {
+                this.levelItems.add(door);
+    		} else if (type.equalsIgnoreCase( "button" )) {
     			Button button = new Button();
     			button.load(itemJson);
-                levelItems.add(button);
-    		} else if (type.equalsIgnoreCase("lever")) {
+                this.levelItems.add(button);
+    		} else if (type.equalsIgnoreCase( "lever" )) {
     			Lever lever = new Lever();
     			lever.load(itemJson);
-                levelItems.add(lever);
+                this.levelItems.add(lever);
     		}
     	}
     }
@@ -109,20 +109,20 @@ public class Level {
      * Save the level to the levelData JSONObject.
      */
 	public void saveLevel() {
-    	levelData = new JSONObject();
-    	
-    	levelData.put("name", this.name);
-    	levelData.put("author", this.author);
-    	levelData.put("version", this.version);
+        this.levelData = new JSONObject();
+
+        this.levelData.put("name", this.name);
+        this.levelData.put("author", this.author);
+        this.levelData.put("version", this.version);
     	
     	JSONArray level = new JSONArray();
-        for (ILevelItem item : levelItems) {
+        for (ILevelItem item : this.levelItems) {
             JSONObject obj = new JSONObject();
             item.save(obj);
             level.add(obj);
         }
-    	
-    	levelData.put("level", level);
+
+        this.levelData.put("level", level);
     }
 
     /**
@@ -131,7 +131,7 @@ public class Level {
      * @param item The item to add.
      */
     public void addItem(ILevelItem item) {
-        levelItems.add(item);
+        this.levelItems.add(item);
     }
     
 	/**
@@ -140,9 +140,10 @@ public class Level {
     public List<Panel> getPanels() {
     	List<Panel> panels = new ArrayList<Panel>();
 
-        for (ILevelItem item : levelItems) {
-            if (item instanceof Panel)
-                panels.add((Panel) item);
+        for (ILevelItem item : this.levelItems) {
+            if (item instanceof Panel) {
+                panels.add( (Panel) item );
+            }
         }
 
         return panels;
@@ -155,7 +156,7 @@ public class Level {
      */
     @Deprecated
     public void addPanel(Panel panel) {
-    	levelItems.add(panel);
+        this.levelItems.add(panel);
     }
     
     /**
@@ -164,9 +165,10 @@ public class Level {
     public List<Entity> getEntities() {
     	List<Entity> entities = new ArrayList<Entity>();
 
-        for (ILevelItem item : levelItems) {
-            if (item instanceof Entity)
-                entities.add((Entity) item);
+        for (ILevelItem item : this.levelItems) {
+            if (item instanceof Entity) {
+                entities.add( (Entity) item );
+            }
         }
 
         return entities;
@@ -179,7 +181,7 @@ public class Level {
      */
     @Deprecated
     public void addEntity(Entity entity) {
-    	levelItems.add(entity);
+        this.levelItems.add(entity);
     }
     
     /**
@@ -189,9 +191,10 @@ public class Level {
     public List<Trigger> getTriggers() {
     	List<Trigger> triggers = new ArrayList<Trigger>();
 
-        for (ILevelItem item : levelItems) {
-            if (item instanceof Trigger)
-                triggers.add((Trigger) item);
+        for (ILevelItem item : this.levelItems) {
+            if (item instanceof Trigger) {
+                triggers.add( (Trigger) item );
+            }
         }
 
         return triggers;
@@ -204,7 +207,7 @@ public class Level {
      */
     @Deprecated
     public void addTrigger(Trigger trigger) {
-    	levelItems.add(trigger);
+        this.levelItems.add(trigger);
     }
     
     /**

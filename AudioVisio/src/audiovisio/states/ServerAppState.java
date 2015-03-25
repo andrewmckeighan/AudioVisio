@@ -49,15 +49,15 @@ public class ServerAppState extends AbstractAppState implements
         PhysicsCollisionListener, ActionListener {
 
     //Networking
-    private com.jme3.network.Server myServer = null;
-    private WorldManager worldManager        = null;
-    private SimpleApplication AV;
-    private AssetManager AM;
+    private com.jme3.network.Server myServer;
+    private WorldManager            worldManager;
+    private SimpleApplication       AV;
+    private AssetManager            AM;
 
     //Players
-    private Map<Integer, Player> players     = new HashMap<Integer, Player>();
+    private Map<Integer, Player> players = new HashMap<Integer, Player>();
 
-    public ServerAppState() {}
+    public ServerAppState(){}
 
 //    public void startServer() {
 //        this.start(JmeContext.Type.Headless);
@@ -71,16 +71,16 @@ public class ServerAppState extends AbstractAppState implements
      */
 
     @Override
-    public void initialize(AppStateManager stateManager, Application app){
+    public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting server...");
         NetworkUtils.initializeSerializables();
-        
-        AV = (SimpleApplication) app;
-        AM = AV.getAssetManager();
-        try {
-            myServer = Network.createServer(NetworkUtils.getPort());
-            myServer.start();
-        } catch (IOException e) {
+
+        this.AV = (SimpleApplication) app;
+        this.AM = this.AV.getAssetManager();
+        try{
+            this.myServer = Network.createServer(NetworkUtils.getPort());
+            this.myServer.start();
+        } catch (IOException e){
             LogHelper.severe("Error on server start", e);
             System.exit(1);
         }
@@ -95,13 +95,13 @@ public class ServerAppState extends AbstractAppState implements
         ////////////////
         // Networking //
         ////////////////
-        SyncManager syncManager = new SyncManager(AV, myServer);
+        SyncManager syncManager = new SyncManager(this.AV, this.myServer);
         syncManager.setServerSyncFrequency(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         stateManager.attach(syncManager);
 
-        worldManager = new WorldManager(AV, null, AV.getRootNode());
-        stateManager.attach(worldManager);
-        syncManager.addObject(-1, worldManager);
+        this.worldManager = new WorldManager(this.AV, null, this.AV.getRootNode());
+        stateManager.attach(this.worldManager);
+        syncManager.addObject(-1, this.worldManager);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
 
@@ -110,8 +110,8 @@ public class ServerAppState extends AbstractAppState implements
         ///////////////////////
         //Load Scene (map) //
         ///////////////////////
-        AM.registerLocator("town.zip", ZipLocator.class);
-        Spatial sceneModel = AM.loadModel("main.scene");
+        this.AM.registerLocator("town.zip", ZipLocator.class);
+        Spatial sceneModel = this.AM.loadModel("main.scene");
         sceneModel.setLocalScale(2f);
 
         // /////////////
@@ -142,7 +142,7 @@ public class ServerAppState extends AbstractAppState implements
         // ////////////////////////////
         // Add objects to rootNode //
         // ////////////////////////////
-        AV.getRootNode().attachChild(sceneModel);
+        this.AV.getRootNode().attachChild(sceneModel);
 
         // /////////////////////////////////
         // Add objects to physicsSpace //
@@ -151,24 +151,24 @@ public class ServerAppState extends AbstractAppState implements
         physicsSpace.add(landscape);
 
         //TODO move this somewhere more appropriate
-        myServer.addConnectionListener(new ConnectionListener() {
+        this.myServer.addConnectionListener(new ConnectionListener() {
 
             /**
              * Handles adding connections to Server
              */
             @Override
-            public void connectionAdded(com.jme3.network.Server server,
-                                        HostedConnection conn) {
+            public void connectionAdded( com.jme3.network.Server server,
+                                         HostedConnection conn ){
                 // DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
                 //TODO explain/fix this
                 LogHelper.info("connectionAdded() for connection: " + conn.getId());
-                if (players.size() < 2) {
+                if (ServerAppState.this.players.size() < 2){
 
                     LogHelper.info("Sent PlayerJoinMessage: " + conn.getId());
-                    worldManager.addPlayer(conn.getId());
-                    players.put(conn.getId(), (Player) worldManager.getPlayer(conn.getId()));
+                    ServerAppState.this.worldManager.addPlayer(conn.getId());
+                    ServerAppState.this.players.put(conn.getId(), (Player) ServerAppState.this.worldManager.getPlayer(conn.getId()));
 
-                    Integer[] list = players.keySet().toArray(new Integer[players.keySet().size()]);
+                    Integer[] list = ServerAppState.this.players.keySet().toArray(new Integer[ServerAppState.this.players.keySet().size()]);
                     conn.send(new PlayerListMessage(list));
                     LogHelper.info("Sent PlayerListMessage");
                 } else {
@@ -181,25 +181,27 @@ public class ServerAppState extends AbstractAppState implements
              * Handles Removing connections from server
              */
             @Override
-            public void connectionRemoved(com.jme3.network.Server server,
-                                          HostedConnection conn) {
-                if (players.containsKey(conn.getId())) {
-                    players.remove(conn.getId());
+            public void connectionRemoved( com.jme3.network.Server server,
+                                           HostedConnection conn ){
+                if (ServerAppState.this.players.containsKey(conn.getId())){
+                    ServerAppState.this.players.remove(conn.getId());
                 }
-                worldManager.removePlayer(conn.getId());
+                ServerAppState.this.worldManager.removePlayer(conn.getId());
 
-                if (players.isEmpty() || players.size() == 0) {
-                    myServer.close();
+                if (ServerAppState.this.players.isEmpty() || ServerAppState.this.players.isEmpty()){
+                    ServerAppState.this.myServer.close();
                 }
 
 //                LogHelper.info(players.size() + players.toString());
             }
         });
+
+        LogHelper.info("Server done initializing...");
     }
 
     @Override
     public void cleanup() {
-        myServer.close();
+        this.myServer.close();
     }
 
     /**
@@ -239,7 +241,7 @@ public class ServerAppState extends AbstractAppState implements
     }
 
     public Player getPlayer(int id) {
-        return players.get(id);
+        return this.players.get(id);
     }
 
 }

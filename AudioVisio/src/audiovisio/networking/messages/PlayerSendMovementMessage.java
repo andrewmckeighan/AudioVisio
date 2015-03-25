@@ -20,7 +20,7 @@ public class PlayerSendMovementMessage extends PhysicsSyncMessage{
 	private Vector3f direction;
 	
 	public PlayerSendMovementMessage(){
-		setReliable(false);
+        this.setReliable(false);
 	}
 
 	/**
@@ -30,21 +30,21 @@ public class PlayerSendMovementMessage extends PhysicsSyncMessage{
 	public PlayerSendMovementMessage(Vector3f position, Vector3f direction){
 		this.position = position;
 		this.direction = direction;
-		
-		setReliable(false);
+
+        this.setReliable(false);
 	}
 	
 	public Vector3f getPosition() {
-		return position;
+		return this.position;
 	}
 	
 	public Vector3f getDirection(){
-		return direction;
+		return this.direction;
 	}
 	
 	@Override
     public String toString() {
-        return String.format("[" + position + ":" + direction + "]");
+        return String.format("[" + this.position + ":" + this.direction + "]");
     }
 
 	@Override

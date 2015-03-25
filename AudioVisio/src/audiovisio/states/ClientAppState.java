@@ -11,6 +11,7 @@ import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.networking.messages.SyncRigidBodyMessage;
+import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -58,26 +59,27 @@ public class ClientAppState extends AbstractAppState implements
     private AudioVisio   AV;
     private InputManager IM;
     private AssetManager AM;
-    public  NetworkClient myClient     = Network.createClient();
-    private WorldManager  worldManager = null;
+    public NetworkClient myClient = Network.createClient();
+    private WorldManager worldManager;
 
     // On Screen Message
     private CharSequence velocityMessage = "";
-    private Vector3f     oldLocation     = null;
-    private Vector3f     newLocation     = new Vector3f();
-    private long         oldTime         = 0;
-    private long         newTime         = 0;
-    private int          counter         = 0;
+    private Vector3f oldLocation;
+    private Vector3f newLocation = new Vector3f();
+    private long oldTime;
+    private long newTime;
+    private int  counter;
 
     public ClientAppState(){
     }
 
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
+        LogHelper.info("Starting client...");
         NetworkUtils.initializeSerializables();
-        AV = (AudioVisio) app;
-        AM = AV.getAssetManager();
-        IM = AV.getInputManager();
+        this.AV = (AudioVisio) app;
+        this.AM = this.AV.getAssetManager();
+        this.IM = this.AV.getInputManager();
 
         // ///////////
         // Physics //
@@ -90,29 +92,29 @@ public class ClientAppState extends AbstractAppState implements
         // ////////////////////
         // Load Scene (map) //
         // ////////////////////
-        AM.registerLocator("town.zip", ZipLocator.class);
-        Spatial sceneModel = AM.loadModel("main.scene");
+        this.AM.registerLocator("town.zip", ZipLocator.class);
+        Spatial sceneModel = this.AM.loadModel("main.scene");
         sceneModel.setLocalScale(2f);
 
         // /////////////////
         // Create Camera //
         // /////////////////
-        AV.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-        AV.getFlyByCamera().setMoveSpeed(100);
+        this.AV.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        this.AV.getFlyByCamera().setMoveSpeed(100);
 
         // ////////////////
         // Sync Manager //
         // ////////////////
-        SyncManager syncManager = new SyncManager(AV, myClient);
+        SyncManager syncManager = new SyncManager(this.AV, this.myClient);
         syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class,
                 PlayerLeaveMessage.class);
         stateManager.attach(syncManager);
 
-        worldManager = new WorldManager(AV, this, AV.getRootNode());
-        stateManager.attach(worldManager);
-        syncManager.addObject(-1, worldManager);
+        this.worldManager = new WorldManager(this.AV, this, this.AV.getRootNode());
+        stateManager.attach(this.worldManager);
+        syncManager.addObject(-1, this.worldManager);
 
         // ////////////
         // Lighting //
@@ -137,29 +139,30 @@ public class ClientAppState extends AbstractAppState implements
         // Generate entities //
         // /////////////////////
         Button testButton = new Button(0f, 1f, 0f);
-        testButton.createMaterial(AM);
+        testButton.createMaterial(this.AM);
 
         Lever testLever = new Lever(3f, 5f, 3f);
-        testLever.createMaterial(AM);
+        testLever.createMaterial(this.AM);
 
         // //////////////////////////
         // Initialization Methods //
         // //////////////////////////
         // TODO may be moved to Player/elsewhere
-        initCrossHairs(); // a "+" in the middle of the screen to help aiming
+        this.initCrossHairs(); // a "+" in the middle of the screen to help aiming
 
         // ///////////////////////////
         // Add objects to rootNode //
         // ///////////////////////////
-        AV.getRootNode().attachChild(sceneModel);
-        AV.getRootNode().addLight(ambientLight);
-        AV.getRootNode().addLight(directionalLight);
+        this.AV.getRootNode().attachChild(sceneModel);
+        this.AV.getRootNode().addLight(ambientLight);
+        this.AV.getRootNode().addLight(directionalLight);
 
         // ///////////////////////////////
         // Add objects to physicsSpace //
         // ///////////////////////////////
         physicsSpace.addCollisionListener(this);
         physicsSpace.add(landscape);
+        LogHelper.info("Client done initializing...");
     }
 
     /**
@@ -170,22 +173,22 @@ public class ClientAppState extends AbstractAppState implements
      */
 
     public void initKeys( Player player ){
-        IM.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        IM.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        IM.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        IM.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        IM.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+        this.IM.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+        this.IM.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+        this.IM.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+        this.IM.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+        this.IM.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
 
-        IM.addMapping("Shoot", new MouseButtonTrigger(
+        this.IM.addMapping("Shoot", new MouseButtonTrigger(
                 MouseInput.BUTTON_LEFT));
 
-        IM.addListener(player, "Up");
-        IM.addListener(player, "Down");
-        IM.addListener(player, "Left");
-        IM.addListener(player, "Right");
-        IM.addListener(player, "Jump");
+        this.IM.addListener(player, "Up");
+        this.IM.addListener(player, "Down");
+        this.IM.addListener(player, "Left");
+        this.IM.addListener(player, "Right");
+        this.IM.addListener(player, "Jump");
 
-        IM.addListener(player, "Shoot");
+        this.IM.addListener(player, "Shoot");
 
     }
 
@@ -198,7 +201,7 @@ public class ClientAppState extends AbstractAppState implements
     private void initMark(){
         Sphere sphere = new Sphere(30, 30, 0.2f);
         Geometry mark = new Geometry("BOOM!", sphere);
-        Material mark_mat = new Material(AM, "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mark_mat = new Material(this.AM, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat.setColor("Color", ColorRGBA.Red);
         mark.setMaterial(mark_mat);
 
@@ -210,16 +213,16 @@ public class ClientAppState extends AbstractAppState implements
      */
 
     private void initCrossHairs(){
-        AV.setDisplayStatView(false);
-        BitmapFont guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
+        this.AV.setDisplayStatView(false);
+        BitmapFont guiFont = this.AM.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+"); // crosshairs
         ch.setLocalTranslation(
                 // center
-                AV.getWidth() / 2 - ch.getLineWidth() / 2,
-                AV.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-        AV.getGuiNode().attachChild(ch);
+                this.AV.getWidth() / 2 - ch.getLineWidth() / 2,
+                this.AV.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        this.AV.getGuiNode().attachChild(ch);
 
     }
 
@@ -234,13 +237,13 @@ public class ClientAppState extends AbstractAppState implements
 
     @Override
     public void update( float tpf ){
-        Player player = ((Player) worldManager.getPlayer(myClient.getId()));
+        Player player = ((Player) this.worldManager.getPlayer(this.myClient.getId()));
         if (player != null){
 
-            updateMessage(player);
+            this.updateMessage(player);
 
             SyncCharacterMessage msg = player.getSyncCharacterMessage();
-            myClient.send(msg);
+            this.myClient.send(msg);
         }
     }
 
@@ -251,36 +254,36 @@ public class ClientAppState extends AbstractAppState implements
 
     private void updateMessage( Player player ){
 
-        if (counter % 1000 == 0){ // We only update once every 1000 frames so
+        if (this.counter % 1000 == 0){ // We only update once every 1000 frames so
             // that the player can actually move.
-            assert newLocation != null;
-            if (oldLocation != null && oldTime != 0 && newTime != 0){
-                oldLocation.distance(newLocation);
+            assert this.newLocation != null;
+            if (this.oldLocation != null && this.oldTime != 0 && this.newTime != 0){
+                this.oldLocation.distance(this.newLocation);
             }
 
-            oldLocation = newLocation.clone();
-            newLocation = player.getLocalTranslation();
+            this.oldLocation = this.newLocation.clone();
+            this.newLocation = player.getLocalTranslation();
 
-            oldTime = newTime;
-            newTime = System.currentTimeMillis();
+            this.oldTime = this.newTime;
+            this.newTime = System.currentTimeMillis();
 
-            counter = 0;
+            this.counter = 0;
 
-            float distance = oldLocation.distance(newLocation);
-            long time = newTime - oldTime;
+            float distance = this.oldLocation.distance(this.newLocation);
+            long time = this.newTime - this.oldTime;
             float velocity = distance / time;
-            velocityMessage = ("ID: " + this.getId() + "V: " + velocity
-                    + ", D: " + distance + ", P: " + newLocation + "F: " + counter);
+            this.velocityMessage = ("ID: " + this.getId() + "V: " + velocity
+                    + ", D: " + distance + ", P: " + this.newLocation + "F: " + this.counter);
         }
 
-        AV.setFPSText(velocityMessage);
-        counter++;
+        this.AV.setFPSText(this.velocityMessage);
+        this.counter++;
     }
 
     @Override
     public void cleanup(){
-        if (myClient.isConnected()){
-            myClient.close();
+        if (this.myClient.isConnected()){
+            this.myClient.close();
         }
 
         AudioVisio.stopServer();

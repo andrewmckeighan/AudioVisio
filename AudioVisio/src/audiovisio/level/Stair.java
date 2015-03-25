@@ -37,6 +37,6 @@ public class Stair extends Panel{
     	super.save(obj);
     	
     	obj.put("type", "stair");
-    	obj.put("direction", direction);
+    	obj.put("direction", this.direction);
     }
 }

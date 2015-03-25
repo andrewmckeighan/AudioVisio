@@ -38,11 +38,11 @@ public class NetworkUtils {
     }
     
     public static void setPort(int portNumber){
-        PORT = portNumber;
+        NetworkUtils.PORT = portNumber;
     }
     
     public static int getPort(){
-        return PORT;
+        return NetworkUtils.PORT;
     }
 
     /**
@@ -63,14 +63,18 @@ public class NetworkUtils {
                     if (addr instanceof Inet4Address) {
                         Inet4Address ipv4 = (Inet4Address) addr;
 
-                        if (ipv4.isLoopbackAddress())
+                        if (ipv4.isLoopbackAddress()) {
                             continue;
-                        if (ipv4.isLinkLocalAddress())
+                        }
+                        if (ipv4.isLinkLocalAddress()) {
                             continue;
-                        if (ipv4.isMulticastAddress())
+                        }
+                        if (ipv4.isMulticastAddress()) {
                             continue;
-                        if (ipv4.isSiteLocalAddress())
+                        }
+                        if (ipv4.isSiteLocalAddress()) {
                             return ipv4.getHostAddress();
+                        }
                     }
                 }
             }
@@ -85,15 +89,15 @@ public class NetworkUtils {
         LogHelper.info("attemptConnection");
         for (int i = 0; i < 500; i++) {
             try{
-                client.connectToServer("127.0.0.1", PORT, PORT);
+                client.connectToServer("127.0.0.1", NetworkUtils.PORT, NetworkUtils.PORT);
                 return true;
             } catch (IOException e){
                 LogHelper.info(String.format("Attempt %d to connect to server", i));
             }
             try {
-                Thread.sleep(50l);
+                Thread.sleep(50L);
             } catch (InterruptedException ex) {}
         }
         return false;
-    };
+    }
 }

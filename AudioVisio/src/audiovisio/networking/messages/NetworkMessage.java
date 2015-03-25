@@ -15,7 +15,7 @@ public class NetworkMessage extends AbstractMessage{
 	 * Default constructor- empty
 	 */
 	public NetworkMessage(){
-		setReliable(true);
+        this.setReliable(true);
 	}
 	/**
 	 * Constructor
@@ -24,13 +24,13 @@ public class NetworkMessage extends AbstractMessage{
 	public NetworkMessage(String message){
 		this.message = message;
 
-		setReliable(true);
+        this.setReliable(true);
 	}
 	
 	/**
 	 * @return Message contents
 	 */
 	public String getMessage(){
-		return message;
+		return this.message;
 	}
 }

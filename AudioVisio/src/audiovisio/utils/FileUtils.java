@@ -4,7 +4,7 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 public class FileUtils {
-    public final static String json = "json";
+    public static final String json = "json";
 
     /**
      * Get the extension of the file.

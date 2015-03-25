@@ -14,7 +14,7 @@ public class PlayerListMessage extends AbstractMessage {
 	private Integer[] playerList;
 	
 	public PlayerListMessage() {
-		setReliable(true);
+        this.setReliable(true);
 	}
 	
 	/**
@@ -23,10 +23,10 @@ public class PlayerListMessage extends AbstractMessage {
 	public PlayerListMessage(Integer[] objects) {
 		this.playerList = objects;
 
-		setReliable(true);
+        this.setReliable(true);
 	}
 	
 	public Integer[] getPlayerList() {
-		return playerList;
+		return this.playerList;
 	}
 }
