@@ -10,16 +10,16 @@ import com.jme3.scene.Node;
 
 //TODO why do particles reset?
 public class Particle extends Entity{
-    public ParticleEmitter emitter = null;
+    public ParticleEmitter emitter;
 
 
-    public void init(Node node, AssetManager assetManager){
+    public void init( Node node, AssetManager assetManager ){
 
         ParticleEmitter fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
         Material mat_red = new Material(assetManager,
-        "Common/MatDefs/Misc/Particle.j3md");
+                "Common/MatDefs/Misc/Particle.j3md");
         mat_red.setTexture("Texture", assetManager.loadTexture(
-        "Effects/Explosion/flame.png"));
+                "Effects/Explosion/flame.png"));
         fire.setMaterial(mat_red);
         fire.setImagesX(2);
         fire.setImagesY(2); // 2x2 texture animation

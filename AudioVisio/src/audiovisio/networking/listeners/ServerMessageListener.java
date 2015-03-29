@@ -13,13 +13,13 @@ public class ServerMessageListener implements MessageListener<HostedConnection> 
 		this.myServer = myServer;
 	}
 
-	@Override
-	public void messageReceived(HostedConnection source, Message message) {
-		if (message instanceof NetworkMessage) {
+    @Override
+    public void messageReceived( HostedConnection source, Message message ){
+        if (message instanceof NetworkMessage){
 
-		}
-		LogHelper.warn("Received unknown message type: "
-				+ message.getClass().getName());
-	}
+        }
+        LogHelper.warn("Received unknown message type: "
+                + message.getClass().getName());
+    }
 
 }

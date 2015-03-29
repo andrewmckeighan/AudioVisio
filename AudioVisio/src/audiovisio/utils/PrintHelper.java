@@ -16,14 +16,14 @@ public class PrintHelper {
     }
 
     public static String printFormat(float value){
-        return printFormat(DEFAULT_FLOAT_FORMAT, value);
+        return PrintHelper.printFormat(PrintHelper.DEFAULT_FLOAT_FORMAT, value);
     }
 
     public static String printVector3f(Vector3f vec){
         if(vec == null){
             return "[null]";
         }
-        return "[" + printFormat(vec.x) + ", " + printFormat(vec.y) + ", " + printFormat(vec.z) + "]";
+        return "[" + PrintHelper.printFormat(vec.x) + ", " + PrintHelper.printFormat(vec.y) + ", " + PrintHelper.printFormat(vec.z) + "]";
     }
 
 }

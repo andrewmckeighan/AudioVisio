@@ -8,77 +8,75 @@ import java.awt.*;
  */
 public class CreateFloorDialog extends NewDialog {
     JLabel lblStartX = new JLabel("Start X:");
-    JLabel lblStartY = new JLabel("Start Y:");
-    JLabel lblSizeX = new JLabel("Width:");
-    JLabel lblSizeY = new JLabel("Height:");
-    JLabel lblZPlane = new JLabel("Z:");
+    JLabel lblStartZ = new JLabel("Start Z:");
+    JLabel lblSizeX  = new JLabel("Width:");
+    JLabel lblSizeZ  = new JLabel("Height:");
+    JLabel lblYPlane = new JLabel("Y Level:");
 
     JTextField startX = new JTextField();
-    JTextField startY = new JTextField();
-    JTextField sizeX = new JTextField();
-    JTextField sizeY = new JTextField();
-    JTextField zPlane = new JTextField(0);
+    JTextField startZ = new JTextField();
+    JTextField sizeX  = new JTextField();
+    JTextField sizeZ  = new JTextField();
+    JTextField yPlane = new JTextField(0);
 
-    public CreateFloorDialog(Frame owner, boolean modal) {
+    public CreateFloorDialog( Frame owner, boolean modal ){
         super(owner, modal);
-        init();
+        this.init();
     }
 
     @Override
-    protected void init() {
+    protected void init(){
         this.setTitle("Create Floor");
         this.setLayout(new GridLayout(6, 2));
 
-        this.add(lblStartX);
-        this.add(startX);
+        this.add(this.lblStartX);
+        this.add(this.startX);
 
-        this.add(lblStartY);
-        this.add(startY);
+        this.add(this.lblStartZ);
+        this.add(this.startZ);
 
-        this.add(lblSizeX);
-        this.add(sizeX);
+        this.add(this.lblSizeX);
+        this.add(this.sizeX);
 
-        this.add(lblSizeY);
-        this.add(sizeY);
+        this.add(this.lblSizeZ);
+        this.add(this.sizeZ);
 
-        this.add(lblZPlane);
-        this.add(zPlane);
+        this.add(this.lblYPlane);
+        this.add(this.yPlane);
 
         super.init();
 
         this.setSize(250, 180);
     }
 
-    public int getStartX() {
-        return Integer.parseInt(startX.getText());
+    public int getStartX(){
+        return Integer.parseInt(this.startX.getText());
     }
 
-    public int getStartY() {
-        return Integer.parseInt(startY.getText());
+    public int getStartZ(){
+        return Integer.parseInt(this.startZ.getText());
     }
 
-    public int getSizeX() {
-        return Integer.parseInt(sizeX.getText());
+    public int getSizeX(){
+        return Integer.parseInt(this.sizeX.getText());
     }
 
-    public int getSizeY() {
-        return Integer.parseInt(sizeY.getText());
+    public int getSizeZ(){
+        return Integer.parseInt(this.sizeZ.getText());
     }
 
-    public int getZPlane() {
-        return Integer.parseInt(zPlane.getText());
+    public int getYPlane(){
+        return Integer.parseInt(this.yPlane.getText());
     }
 
     @Override
-    protected void okClicked() {
-        if (startX.getText().isEmpty()
-                || startY.getText().isEmpty()
-                || sizeX.getText().isEmpty()
-                || sizeY.getText().isEmpty()
-                || zPlane.getText().isEmpty())
-            setStatus(false);
-        else {
-            setStatus(true);
+    protected void okClicked(){
+        if (this.startX.getText().isEmpty()
+                || this.startZ.getText().isEmpty()
+                || this.sizeX.getText().isEmpty()
+                || this.sizeZ.getText().isEmpty()
+                || this.yPlane.getText().isEmpty()){ this.setStatus(false); } else {
+            this.setStatus(true);
         }
     }
 }

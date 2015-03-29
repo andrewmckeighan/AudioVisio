@@ -1,6 +1,7 @@
 package audiovisio.rsle.editor.dialogs;
 
-import audiovisio.rsle.RSLE;
+import audiovisio.rsle.editor.components.LocationField;
+import com.jme3.math.Vector3f;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,48 +10,59 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewDoorDialog extends NewDialog {
+    JLabel lblName     = new JLabel("Name");
+    JLabel lblState    = new JLabel("State");
     JLabel lblLocation = new JLabel("Location");
 
-    JTextField location = new JTextField("<x,y,z>");
+    JTextField    nameField     = new JTextField();
+    JCheckBox     stateField    = new JCheckBox();
+    LocationField locationField = new LocationField();
 
-    private int id;
-
-    public NewDoorDialog(Frame owner, boolean modal) {
+    public NewDoorDialog( Frame owner, boolean modal ){
         super(owner, modal);
-        init();
+        this.init();
     }
 
     @Override
-    protected void init() {
+    protected void init(){
         this.setTitle("New Door");
-        this.setLayout(new GridLayout(2, 2));
+        this.setLayout(new GridLayout(4, 2));
 
-        this.add(lblLocation);
-        this.add(location);
+        this.add(this.lblName);
+        this.add(this.nameField);
+
+        this.add(this.lblState);
+        this.add(this.stateField);
+
+        this.add(this.lblLocation);
+        this.add(this.locationField);
 
         super.init();
 
-        this.setSize(250, 60);
+        this.setSize(250, 120);
     }
 
-    public int getId() {
-        return id;
+    public Vector3f getLevelLocation(){
+        return this.locationField.getLocationVector();
     }
 
-    public String getLevelLocation() {
-        return location.getText();
+    public boolean getState(){
+        return this.stateField.isSelected();
+    }
+
+    public String getName(){
+        return this.nameField.getText();
     }
 
     @Override
-    protected void okClicked() {
-        if (getLevelLocation().isEmpty())
-            setStatus(false);
-        else {
-            id = RSLE.getNextID();
-            setStatus(true);
+    protected void okClicked(){
+        if (!this.locationField.isLocationValid() || this.nameField.getText().isEmpty()){
+            this.setStatus(false);
+        } else {
+            this.setStatus(true);
         }
     }
 
     @Override
-    protected void cancelClicked() {}
+    protected void cancelClicked(){}
 }

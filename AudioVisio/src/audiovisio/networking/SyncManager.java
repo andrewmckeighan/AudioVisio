@@ -36,28 +36,28 @@ import java.util.concurrent.Callable;
 public class SyncManager extends AbstractAppState implements MessageListener {
 
     //References
-    private Application app                             = null;
-    private Server server                               = null;
-    private Client client                               = null;
+    private Application app;
+    private Server      server;
+    private Client      client;
 
     //Lists
-    private LinkedList<PhysicsSyncMessage> messageQueue = new LinkedList<PhysicsSyncMessage>();
-    private LinkedList<SyncMessageValidator> validators = new LinkedList<SyncMessageValidator>();
-    private HashMap<Long, Object> objectMap             = new HashMap<Long, Object>();
+    private LinkedList<PhysicsSyncMessage>   messageQueue = new LinkedList<PhysicsSyncMessage>();
+    private LinkedList<SyncMessageValidator> validators   = new LinkedList<SyncMessageValidator>();
+    private HashMap<Long, Object>            objectMap    = new HashMap<Long, Object>();
 
     //Timers
-    private double time                                 = 0;
-    private float timeSinceLastSync                     = 0f;
-    private float serverSyncFrequency                   = 0.1f;
-    private double clientSyncOffset                     = Double.MIN_VALUE;
-    private double maxDelay                             = 0.4;
+    private double time;
+    private float  timeSinceLastSync;
+    private float  serverSyncFrequency = 0.1f;
+    private double clientSyncOffset    = Double.MIN_VALUE;
+    private double maxDelay            = 0.4;
 
-    public SyncManager(Application app, Server server) {
+    public SyncManager( Application app, Server server ){
         this.app = app;
         this.server = server;
     }
 
-    public SyncManager(Application app, Client client) {
+    public SyncManager( Application app, Client client ){
         this.app = app;
         this.client = client;
     }
@@ -70,26 +70,26 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      */
 
     @Override
-    public void update(float tpf) {
-        time += tpf;
+    public void update( float tpf ){
+        this.time += tpf;
 
-        if (time < 0) {
-            time = 0;//prevent overflow;
+        if (this.time < 0){
+            this.time = 0;//prevent overflow;
         }
 
-        if (client != null) {
-            for (Iterator<PhysicsSyncMessage> iter = messageQueue.iterator(); iter.hasNext(); ) {
+        if (this.client != null){
+            for (Iterator<PhysicsSyncMessage> iter = this.messageQueue.iterator(); iter.hasNext(); ){
                 PhysicsSyncMessage message = iter.next();
-                if (message.time >= time + clientSyncOffset) {
-                    handleMessage(message);
+                if (message.time >= this.time + this.clientSyncOffset){
+                    this.handleMessage(message);
                     iter.remove();
                 }
             }
-        } else if (server != null) {
-            timeSinceLastSync += tpf;
-            if (timeSinceLastSync >= serverSyncFrequency) {
-                sendSyncData();
-                timeSinceLastSync = 0;
+        } else if (this.server != null){
+            this.timeSinceLastSync += tpf;
+            if (this.timeSinceLastSync >= this.serverSyncFrequency){
+                this.sendSyncData();
+                this.timeSinceLastSync = 0;
             }
         }
     }
@@ -101,13 +101,13 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      */
 
     protected void handleMessage(PhysicsSyncMessage message) {
-        Object obj = objectMap.get(message.syncId);
+        Object obj = this.objectMap.get(message.syncId);
 
         if (obj != null) {
             message.applyData(obj);
         } else {
-            if (client != null) {
-                WorldManager wm = (WorldManager) objectMap.get(-1L);
+            if (this.client != null) {
+                WorldManager wm = (WorldManager) this.objectMap.get(-1L);
                 assert message instanceof SyncCharacterMessage;
                 SyncCharacterMessage msg = (SyncCharacterMessage) message;
                 wm.addPlayer(msg.syncId);
@@ -122,16 +122,16 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      * @param message The message that was received.
      */
     protected void enqueueMessage(PhysicsSyncMessage message) {
-        if (clientSyncOffset == Double.MIN_VALUE) {
-            clientSyncOffset = this.time - message.time;
+        if (this.clientSyncOffset == Double.MIN_VALUE) {
+            this.clientSyncOffset = this.time - message.time;
         }
-        double delay = (message.time + clientSyncOffset) - time;
-        if (delay < maxDelay) {
-            clientSyncOffset -= delay - maxDelay;
+        double delay = (message.time + this.clientSyncOffset) - this.time;
+        if (delay < this.maxDelay) {
+            this.clientSyncOffset -= delay - this.maxDelay;
         } else if (delay < 0) {
-            clientSyncOffset -= delay;
+            this.clientSyncOffset -= delay;
         }
-        messageQueue.add(message);
+        this.messageQueue.add(message);
     }
 
     /**
@@ -140,7 +140,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      */
 
     protected void sendSyncData() {
-        for (Entry<Long, Object> entry : objectMap.entrySet()) {
+        for (Entry<Long, Object> entry : this.objectMap.entrySet()) {
             if (entry.getValue() instanceof Spatial) {
                 Spatial spat = (Spatial) entry.getValue();
                 PhysicsRigidBody body = spat.getControl(RigidBodyControl.class);
@@ -149,7 +149,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 }
                 if (body != null && body.isActive()) {
                     SyncRigidBodyMessage msg = new SyncRigidBodyMessage(entry.getKey(), body);
-                    broadcast(msg);
+                    this.broadcast(msg);
                     continue;
                 }
                 BetterCharacterControl control = spat.getControl(BetterCharacterControl.class);
@@ -157,8 +157,8 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     assert entry.getValue() instanceof Player;
                     Player p = (Player) entry.getValue();
                     SyncCharacterMessage msg = p.getSyncCharacterMessage();
-                    LogHelper.info("SyncManager.sendSyncData " + msg);
-                    broadcast(msg);
+                    LogHelper.fine("SyncManager.sendSyncData " + msg);
+                    this.broadcast(msg);
                 }
             }
         }
@@ -170,13 +170,13 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      * @param message The message to be broadcast.
      */
     public void broadcast(PhysicsSyncMessage message) {
-        if (server == null) {
+        if (this.server == null) {
             LogHelper.severe("broadcasting from client: " + message);
             return;
         }
 
-        message.time = time;
-        server.broadcast(message);
+        message.time = this.time;
+        this.server.broadcast(message);
     }
 
     /**
@@ -187,7 +187,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      */
 
     public void send(HostedConnection client, PhysicsSyncMessage message) {
-        message.time = time;
+        message.time = this.time;
         if (client == null) {
             LogHelper.severe("Client is null when sending: " + message);
             return;
@@ -208,23 +208,23 @@ public class SyncManager extends AbstractAppState implements MessageListener {
 
     public void messageReceived(Object source, final Message message) {
         assert (message instanceof PhysicsSyncMessage);
-        if (client != null) {
-            app.enqueue(new Callable<Void>() {
-                public Void call() throws Exception {
-                    enqueueMessage((PhysicsSyncMessage) message);
+        if (this.client != null) {
+            this.app.enqueue(new Callable<Void>() {
+                public Void call() throws Exception{
+                    SyncManager.this.enqueueMessage((PhysicsSyncMessage) message);
                     return null;
                 }
             });
-        } else if (server != null) {
-            app.enqueue(new Callable<Void>() {
-                public Void call() throws Exception {
-                    for (SyncMessageValidator syncMessageValidator : validators) {
-                        if (!syncMessageValidator.checkMessage((PhysicsSyncMessage) message)) {
+        } else if (this.server != null) {
+            this.app.enqueue(new Callable<Void>() {
+                public Void call() throws Exception{
+                    for (SyncMessageValidator syncMessageValidator : SyncManager.this.validators){
+                        if (!syncMessageValidator.checkMessage((PhysicsSyncMessage) message)){
                             return null;
                         }
                     }
-                    broadcast((PhysicsSyncMessage) message);
-                    handleMessage((PhysicsSyncMessage) message);
+                    SyncManager.this.broadcast((PhysicsSyncMessage) message);
+                    SyncManager.this.handleMessage((PhysicsSyncMessage) message);
                     return null;
                 }
             });
@@ -239,25 +239,25 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      */
 
     public void setMessageTypes(Class... classes) {
-        if (server != null) {
-            server.removeMessageListener(this);
-            server.addMessageListener(this, classes);
-        } else if (client != null) {
-            client.removeMessageListener(this);
-            client.addMessageListener(this, classes);
+        if (this.server != null) {
+            this.server.removeMessageListener(this);
+            this.server.addMessageListener(this, classes);
+        } else if (this.client != null) {
+            this.client.removeMessageListener(this);
+            this.client.addMessageListener(this, classes);
         }
     }
 
     public void addObject(long id, Object object) {
-        objectMap.put(id, object);
+        this.objectMap.put(id, object);
     }
 
     public void removeObject(long id) {
-        objectMap.remove(id);
+        this.objectMap.remove(id);
     }
 
     public void removeObject(Object obj) {
-        for (Iterator<Entry<Long, Object>> iter = objectMap.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Entry<Long, Object>> iter = this.objectMap.entrySet().iterator(); iter.hasNext(); ) {
             Entry<Long, Object> entry = iter.next();
 
             if (entry.getValue() == obj) {
@@ -268,27 +268,27 @@ public class SyncManager extends AbstractAppState implements MessageListener {
     }
 
     public void clearObjects() {
-        objectMap.clear();
+        this.objectMap.clear();
     }
 
     public void addMessageValidator(SyncMessageValidator validator) {
-        validators.add(validator);
+        this.validators.add(validator);
     }
 
     public void removeMessageValidator(SyncMessageValidator validator) {
-        validators.remove(validator);
+        this.validators.remove(validator);
     }
 
     public Server getServer() {
-        return server;
+        return this.server;
     }
 
     public Client getClient() {
-        return client;
+        return this.client;
     }
 
     public double getMaxDelay() {
-        return maxDelay;
+        return this.maxDelay;
     }
 
     public void setMaxDelay(double maxDelay) {
@@ -296,7 +296,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
     }
 
     public float getServerSyncFrequency() {
-        return serverSyncFrequency;
+        return this.serverSyncFrequency;
     }
 
     public void setServerSyncFrequency(float serverSyncFrequency) {

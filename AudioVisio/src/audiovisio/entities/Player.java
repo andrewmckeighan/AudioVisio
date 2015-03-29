@@ -3,21 +3,19 @@ package audiovisio.entities;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.math.Vector3f;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-
 import org.json.simple.JSONObject;
 
 /**
  * TODO: make sure all parameters of Player are children of player, and handled entirely within player.
+ * TODO: format this to work with matt's level file reading system. (new, load, init, start).
  */
 
 
@@ -28,38 +26,48 @@ import org.json.simple.JSONObject;
  * @author Taylor Premo
  *
  */
+
+//TODO FIX GRAVITY
+//TODO FIX GRAVITY
+//TODO FIX GRAVITY
+//TODO FIX GRAVITY
+//TODO FIX GRAVITY
+//TODO FIX GRAVITY
+
+//TODO fix movement being twice as far as camera.
+//Does the online model move with the camera or actual location?
+
+
 public class Player extends MovingEntity implements ActionListener {
 
     // Constants
-    public static final Vector3f SPAWN_LOCATION     = new Vector3f(0, 5, 0);
-    public static final Vector3f GRAVITY            = new Vector3f(0, -9.81f, 0); //TODO make this not awful
-    public static final String DEFAULT_MODEL        = "Models/Oto/Oto.mesh.xml";
-    public static final Vector3f CAMERA_OFFSET      = new Vector3f(0, 5, 0);
-    public static final Vector3f MODEL_OFFSET       = CAMERA_OFFSET.divide(2);
-    private static final Vector3f JUMP_FORCE        = new Vector3f(0, 2, 0);
-
+    public static final  Vector3f DEFAULT_SPAWN_LOCATION = new Vector3f(0, 5, 0);
+    public static final  Vector3f GRAVITY                = new Vector3f(0, -9.81f, 0); //TODO make this not awful
+    public static final  String   DEFAULT_MODEL          = "Models/Oto/Oto.mesh.xml";
+    public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
+    public static final  Vector3f MODEL_OFFSET           = Player.CAMERA_OFFSET.divide(2);
+    private static final Vector3f JUMP_FORCE             = new Vector3f(0, 2, 0);
+    public  Particle               footSteps;
     //Key Listeners
-    private boolean up                              = false;
-    private boolean down                            = false;
-    private boolean left                            = false;
-    private boolean right                           = false;
-
+    private boolean                up;
+    private boolean                down;
+    private boolean                left;
+    private boolean                right;
     //Children
-    private Node model                              = null;
-    private BetterCharacterControl characterControl = null;
-    private Camera playerCamera                     = null;
-    public Particle footSteps                       = null;
-
+    private Node                   model;
+    private BetterCharacterControl characterControl;
+    private Camera                 playerCamera;
     //references
-    private Node rootNode                           = null;
-    private AssetManager assetManager               = null;
+    private Node                   rootNode;
+    private AssetManager           assetManager;
 
     //Instance Variables
-    private boolean isServer                        = false;
-    private Vector3f walkDirection                  = new Vector3f(); //TODO are walk & save directions needed?
-    private Vector3f savedLocation                  = SPAWN_LOCATION;
-    private Vector3f camDir                         = new Vector3f();
-    private Vector3f camLeft                        = new Vector3f();
+    private boolean isServer;
+    private Vector3f walkDirection = new Vector3f(); //TODO are walk & save directions needed?
+    private Vector3f savedLocation = Player.DEFAULT_SPAWN_LOCATION;
+    private Vector3f camDir        = new Vector3f();
+    private Vector3f camLeft       = new Vector3f();
+    private Vector3f spawn         = Player.DEFAULT_SPAWN_LOCATION;
 
     /**
      * Primary constructor for Player. Adds the model and generates a characterControl.
@@ -67,14 +75,16 @@ public class Player extends MovingEntity implements ActionListener {
      * @param  playerModel   The modal node for the Player to use. Uses AssetManager to generate, so it must be passed in.
      * @param  spawnLocation The starting location for the Player to appear in.
      */
-    public Player(Node playerModel, Vector3f spawnLocation) {
-        if (playerModel != null) {
+    public Player( Node playerModel, Vector3f spawnLocation ){
+        this.spawn = spawnLocation;
+
+        if (playerModel != null){
             this.setModel(playerModel, spawnLocation);
         }
 
         this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
-        characterControl.setJumpForce(JUMP_FORCE);
-        characterControl.setGravity(GRAVITY);
+        this.characterControl.setJumpForce(Player.JUMP_FORCE);
+        this.characterControl.setGravity(Player.GRAVITY);
 
         this.characterControl.warp(spawnLocation);
         this.setLocalTranslation(spawnLocation);
@@ -85,13 +95,13 @@ public class Player extends MovingEntity implements ActionListener {
         this.footSteps = new Particle();
     }
 
-    public Player(Node playerModel) {
-        this(playerModel, SPAWN_LOCATION);
+    public Player( Node playerModel) {
+        this(playerModel, Player.DEFAULT_SPAWN_LOCATION);
     }
 
 
     public Player() {
-        this(null, SPAWN_LOCATION);
+        this(null, Player.DEFAULT_SPAWN_LOCATION);
     }
 
     /**
@@ -105,7 +115,12 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public static Node createModel(AssetManager assetManager) {
-        return createModel(assetManager, DEFAULT_MODEL);
+        return Player.createModel(assetManager, Player.DEFAULT_MODEL);
+    }
+
+    public void setSpawn(Vector3f newSpawn) {
+        this.spawn = newSpawn;
+        this.setLocalTranslation(this.spawn);
     }
 
     /**
@@ -122,7 +137,7 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public void setModel(Node model) {
-        setModel(model, SPAWN_LOCATION);
+        this.setModel(model, this.spawn);
     }
 
     /**
@@ -131,7 +146,7 @@ public class Player extends MovingEntity implements ActionListener {
      * @param physics Physics space of the app
      */
     public void addToScene(Node root, PhysicsSpace physics) {
-        addToScene(root);
+        this.addToScene(root);
         if (this.model != null) {
             root.attachChild(this.model);
         } else {
@@ -143,10 +158,10 @@ public class Player extends MovingEntity implements ActionListener {
 
     /**
      * TODO
-     * @param obj [description]
+     * @param loadObj [description]
      */
-    public void load(JSONObject obj) {
-        super.load(obj);
+    public void load( JSONObject loadObj ){
+        super.load(loadObj);
         // TODO
     }
 
@@ -156,6 +171,7 @@ public class Player extends MovingEntity implements ActionListener {
      * @param isPressed true = is pressed
      * @param tpf       time per frame
      */
+    @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
         if (binding.equals("Up")) {
             this.up = isPressed;
@@ -167,7 +183,7 @@ public class Player extends MovingEntity implements ActionListener {
             this.right = isPressed;
         } else if (binding.equals("Jump")) {
             if (isPressed) {
-                characterControl.jump();
+                this.characterControl.jump();
             }
         }
         if (binding.equals("Shoot") && !isPressed) {
@@ -176,38 +192,39 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     /**
-     * sets the players position and direction, used to sync a player with a message sent from a different server/client
+     * sets the players location and direction, used to sync a player with a message sent from a different server/client
      * TODO: see what all this.move can handle.
      *
-     * @param position  position to set
+     * @param location  location to set
      * @param direction walkDirection to set
      */
-    public void update(Vector3f position, Vector3f direction, Quaternion rotation) {
-//        this.savedLocation = position;
+    public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
+//        this.savedLocation = location;
 //        this.setWalkDirection(direction);
 
-//        this.move(position);
+//        this.move(location);
 
-//        this.characterControl.warp(position);
+//        this.characterControl.warp(location);
         this.characterControl.setWalkDirection(direction);
 
 
 
         if(this.model != null) {
-//            LogHelper.info("test" + this.getLocalTranslation().add(MODEL_OFFSET) + ":" + position.add(MODEL_OFFSET));
+//            LogHelper.info("test" + this.getLocalTranslation().add(MODEL_OFFSET) + ":" + location.add(MODEL_OFFSET));
 //            this.model.setLocalTranslation(this.getLocalTranslation().add(MODEL_OFFSET));
-            this.model.setLocalTranslation(position.add(MODEL_OFFSET));
+            this.model.setLocalTranslation(location.add(Player.MODEL_OFFSET));
         }
 
         if(this.footSteps != null && this.footSteps.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
-            this.footSteps.emitter.setLocalTranslation(position);
+            this.footSteps.emitter.setLocalTranslation(location);
             this.footSteps.emitter.setNumParticles((int) direction.length()*3+1);
         }
 
         if (this.playerCamera != null) {
-            this.playerCamera.setLocation(this.getLocalTranslation().add(
-                                              CAMERA_OFFSET));
+            //TODO why isnt this location?
+            this.playerCamera.setLocation(location.add(
+                    Player.CAMERA_OFFSET));
 //            this.model.setLocalRotation(this.playerCamera.getRotation());//TODO remove y coord from rotation/set a max
             if(this.model != null) {
                 this.model.removeFromParent();
@@ -215,7 +232,9 @@ public class Player extends MovingEntity implements ActionListener {
             }
         }else{
             if(this.model != null) {
+//                rotation.set(rotation.getX(), 0, rotation.getZ(), 0);
                 this.model.setLocalRotation(rotation);
+
             }
         }
 
@@ -271,6 +290,8 @@ public class Player extends MovingEntity implements ActionListener {
             walkDirection.addLocal(this.camLeft.negate());
         }
 
+//        walkDirection.setY(walkDirection.getY() / 4);
+        walkDirection.setY(0); //Y movement will be done on 'jump'
 //        this.setWalkDirection(walkDirection);
 
         return new SyncCharacterMessage(this.getID(),
@@ -281,7 +302,7 @@ public class Player extends MovingEntity implements ActionListener {
     public void updateCam() {
         if (this.playerCamera != null) {
             this.playerCamera.setLocation(this.getWorldTranslation().add(
-                                              CAMERA_OFFSET));
+                    Player.CAMERA_OFFSET));
         }
     }
 
@@ -295,14 +316,14 @@ public class Player extends MovingEntity implements ActionListener {
     public void updateModel() {
         if (this.model != null) {
             this.model.setLocalTranslation(this.getWorldTranslation().add(
-                                               MODEL_OFFSET));
+                    Player.MODEL_OFFSET));
         } else {
             LogHelper.warn("no model!");
         }
     }
 
     public boolean isServer() {
-        return isServer;
+        return this.isServer;
     }
 
     public void setServer(boolean isServer) {
@@ -318,7 +339,7 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public Vector3f getWalkDirection() {
-        return walkDirection;
+        return this.walkDirection;
     }
 
     public void setWalkDirection(Vector3f walkDirection) {

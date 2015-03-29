@@ -1,6 +1,7 @@
 package audiovisio;
 
 import audiovisio.entities.AudioPlayer;
+import audiovisio.entities.InteractableEntity;
 import audiovisio.entities.Player;
 import audiovisio.entities.VisualPlayer;
 import audiovisio.networking.SyncManager;
@@ -20,6 +21,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class manages the list of players between servers and clients.
@@ -31,8 +34,8 @@ import java.util.HashMap;
 public class WorldManager extends AbstractAppState implements SyncMessageValidator {
 
     // Networking
-    private SyncManager syncManager   = null;
-    private Server server             = null;
+    private SyncManager syncManager;
+    private Server      server;
 
     // SimpleAppState references.
     private Node rootNode             = null;
@@ -42,7 +45,8 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     private PhysicsSpace space        = null;
 
     // Lists
-    private HashMap<Long, Player> players = new HashMap<Long, Player>();
+    private HashMap<Long, Player>             players             = new HashMap<Long, Player>();
+    private HashMap<Long, InteractableEntity> interactableHashMap = new HashMap<Long, InteractableEntity>();
 
     /**
      * Constructor, Gets references to the simpleApplication and the root node.
@@ -57,7 +61,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         this.assetManager = app.getAssetManager();
         this.space = app.getStateManager().getState(BulletAppState.class).getPhysicsSpace();
         this.server = app.getStateManager().getState(SyncManager.class).getServer();
-        syncManager = app.getStateManager().getState(SyncManager.class);
+        this.syncManager = app.getStateManager().getState(SyncManager.class);
     }
 
     /**
@@ -68,17 +72,17 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      * @param playerID Unique id of the player, matches the clients ID.
      */
 
-    public void addPlayer(long playerID) {
+    public void addPlayer( long playerID ){
         LogHelper.fine("adding player: ");
         Player player;
-        if(playerID % 2 == 0) {
+        if (playerID % 2 == 0){
             player = new AudioPlayer();
         } else {
             player = new VisualPlayer();
         }
         player.setID(playerID);
-        if (isServer()) {
-            syncManager.broadcast(new PlayerJoinMessage(playerID));
+        if (this.isServer()) {
+            this.syncManager.broadcast(new PlayerJoinMessage(playerID));
             player.setServer(true);
         } else {
 //            assert this.app instanceof audiovisio.states.ClientAppState;
@@ -90,16 +94,16 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             }
         }
 
-        player.setModel(Player.createModel(assetManager));
-        syncManager.addObject(playerID, player);
-        player.addToScene(rootNode, space);
-        player.setRootNode(rootNode);
-        player.setAssetManager(assetManager);
+        player.setModel(Player.createModel(this.assetManager));
+        this.syncManager.addObject(playerID, player);
+        player.addToScene(this.rootNode, this.space);
+        player.setRootNode(this.rootNode);
+        player.setAssetManager(this.assetManager);
         if(!this.isServer()) {
             player.init();
         }
         LogHelper.info(playerID + ":" + player);
-        players.put(playerID, player);
+        this.players.put(playerID, player);
     }
 
     /**
@@ -112,25 +116,25 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 
     public void removePlayer(long id) {
         LogHelper.info("removing player: " + id);
-        if (isServer()) {
-            syncManager.broadcast(new PlayerLeaveMessage(id));
+        if (this.isServer()) {
+            this.syncManager.broadcast(new PlayerLeaveMessage(id));
         }
-        syncManager.removeObject(id);
-        Player player = players.remove(id);
+        this.syncManager.removeObject(id);
+        Player player = this.players.remove(id);
         if (player == null) {
             LogHelper.warn("tried to remove player who wasn't there: " + id);
             return;
         }
         //TODO?
-        if (!isServer()) {
+        if (!this.isServer()) {
             //remove player from scene
         }
         player.removeFromParent();
-        space.removeAll(player);
+        this.space.removeAll(player);
     }
 
     public Spatial getPlayer(long syncID) {
-        return players.get(syncID);
+        return this.players.get(syncID);
     }
 
     //TODO
@@ -152,7 +156,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     }
 
     public boolean isServer() {
-        return server != null;
+        return this.server != null;
     }
 
     public void setServer(Server server) {
@@ -160,10 +164,15 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     }
 
     public SyncManager getSyncManager() {
-        return syncManager;
+        return this.syncManager;
     }
 
     public PhysicsSpace getPhysicsSpace() {
-        return space;
+        return this.space;
+    }
+
+    public List<InteractableEntity> getInteractableEntityList() {
+        //TODO
+        return new LinkedList<InteractableEntity>();
     }
 }

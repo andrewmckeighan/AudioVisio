@@ -1,11 +1,7 @@
 package audiovisio.networking.messages;
 
 import audiovisio.WorldManager;
-
-import com.jme3.math.Vector3f;
-import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
-import com.jme3.scene.Node;
 
 /**
  * Sent by the server to all connected players when a new client connects.
@@ -14,29 +10,29 @@ import com.jme3.scene.Node;
  */
 @Serializable
 public class PlayerJoinMessage extends PhysicsSyncMessage {
-	private long playerID;
-	
-	public PlayerJoinMessage() {
-		setReliable(true);
-	}
-	
-	/**
-	 * @param playerID The ID of the player who has just connected
-	 */
-	public PlayerJoinMessage(long playerID) {
-		this.syncId = -1;
-		this.playerID = playerID;
-		
-		setReliable(true);
-	}
-	
-	public long getPlayerID() {
-		return this.playerID;
-	}
+    private long playerID;
 
-	@Override
-	public void applyData(Object object) {
-		WorldManager manager = (WorldManager) object;
-		manager.addPlayer(playerID);
-	}
+    public PlayerJoinMessage(){
+        this.setReliable(true);
+    }
+
+    /**
+     * @param playerID The ID of the player who has just connected
+     */
+    public PlayerJoinMessage( long playerID ){
+        this.syncId = -1;
+        this.playerID = playerID;
+
+        this.setReliable(true);
+    }
+
+    public long getPlayerID(){
+        return this.playerID;
+    }
+
+    @Override
+    public void applyData( Object object ){
+        WorldManager manager = (WorldManager) object;
+        manager.addPlayer(this.playerID);
+    }
 }

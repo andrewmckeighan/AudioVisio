@@ -1,6 +1,6 @@
 package audiovisio.rsle.editor.dialogs;
 
-import audiovisio.rsle.RSLE;
+import com.jme3.math.Vector3f;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,43 +11,48 @@ import java.awt.*;
 public class NewPanelDialog extends NewDialog {
     JLabel lblLocation = new JLabel("Location");
 
-    JTextField location = new JTextField("<x,y,z>");
+    JPanel     pnlLocation = new JPanel(new GridLayout(1, 3));
+    JTextField xField      = new JTextField();
+    JTextField yField      = new JTextField();
+    JTextField zField      = new JTextField();
 
-    private int id;
-
-    public NewPanelDialog(Frame owner, boolean modal) {
+    public NewPanelDialog( Frame owner, boolean modal ){
         super(owner, modal);
-        init();
+
+        this.pnlLocation.add(this.xField);
+        this.pnlLocation.add(this.yField);
+        this.pnlLocation.add(this.zField);
+
+        this.init();
     }
 
     @Override
-    protected void init() {
+    protected void init(){
         this.setTitle("New Panel");
         this.setLayout(new GridLayout(2, 2));
 
-        this.add(lblLocation);
-        this.add(location);
+        this.add(this.lblLocation);
+        this.add(this.pnlLocation);
 
         super.init();
 
         this.setSize(250, 60);
     }
 
-    public int getId() {
-        return id;
-    }
+    public Vector3f getLevelLocation(){
+        float x = Float.parseFloat(this.xField.getText());
+        float y = Float.parseFloat(this.yField.getText());
+        float z = Float.parseFloat(this.zField.getText());
 
-    public String getLevelLocation() {
-        return location.getText();
+        return new Vector3f(x, y, z);
     }
 
     @Override
-    public void okClicked() {
-        if (getLevelLocation().isEmpty())
-            setStatus(false);
-        else {
-            id = RSLE.getNextID();
-            setStatus(true);
+    public void okClicked(){
+        if (this.xField.getText().isEmpty()
+                || this.yField.getText().isEmpty()
+                || this.zField.getText().isEmpty()){ this.setStatus(false); } else {
+            this.setStatus(true);
         }
     }
 }

@@ -4,11 +4,14 @@ import audiovisio.networking.messages.*;
 
 import com.jme3.network.NetworkClient;
 import com.jme3.network.serializing.Serializer;
-import com.jme3.math.Vector3f;
 
 import java.io.IOException;
 import java.net.*;
 import java.text.DecimalFormat;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Enumeration;
 
 

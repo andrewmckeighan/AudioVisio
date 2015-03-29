@@ -16,30 +16,30 @@ public class ClientMessageListener implements MessageListener<Client> {
 		this.myClient = myClient;
 	}
 
-	@Override
-	public void messageReceived(Client source, Message message) {
-		if (message instanceof NetworkMessage) {
+    @Override
+    public void messageReceived( Client source, Message message ){
+        if (message instanceof NetworkMessage){
 
-		}
+        }
 
-		if (message instanceof PlayerJoinMessage) {
-			LogHelper.info("Received PlayerJoinMessage");
-			PlayerJoinMessage msg = (PlayerJoinMessage) message;
-			LogHelper.info("Player " + msg.getPlayerID() + " has joined");
-			return;
-		}
-		if (message instanceof PlayerLeaveMessage) {
-			LogHelper.info("Received PlayerLeaveMessage");
-			PlayerLeaveMessage msg = (PlayerLeaveMessage) message;
-			LogHelper.info("Player " + msg.getPlayerID() + " has left");
-			return;
-		}
-		if (message instanceof PlayerListMessage) {
-			PlayerListMessage msg = (PlayerListMessage) message;
-			LogHelper.info("Received player list of size: " + msg.getPlayerList().length);
-			return;
-		}
-		LogHelper.warn("Received message of unknown type: " + message.getClass().getName());
-	}
+        if (message instanceof PlayerJoinMessage){
+            LogHelper.info("Received PlayerJoinMessage");
+            PlayerJoinMessage msg = (PlayerJoinMessage) message;
+            LogHelper.info("Player " + msg.getPlayerID() + " has joined");
+            return;
+        }
+        if (message instanceof PlayerLeaveMessage){
+            LogHelper.info("Received PlayerLeaveMessage");
+            PlayerLeaveMessage msg = (PlayerLeaveMessage) message;
+            LogHelper.info("Player " + msg.getPlayerID() + " has left");
+            return;
+        }
+        if (message instanceof PlayerListMessage){
+            PlayerListMessage msg = (PlayerListMessage) message;
+            LogHelper.info("Received player list of size: " + msg.getPlayerList().length);
+            return;
+        }
+        LogHelper.warn("Received message of unknown type: " + message.getClass().getName());
+    }
 
 }

@@ -2,6 +2,7 @@ package audiovisio.level;
 
 import static org.junit.Assert.*;
 
+import audiovisio.Items;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,8 @@ public class LevelTest {
 
 	@Test
 	public void testLevelLoaded() {
-		level.loadLevel();
+        Items.init();
+        level.loadLevel();
 		
 		assertEquals(2, level.getTriggers().size());
 		assertEquals(2, level.getPanels().size());

@@ -1,7 +1,6 @@
 package audiovisio.networking.messages;
 
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
@@ -22,21 +21,21 @@ public class SyncRigidBodyMessage extends PhysicsSyncMessage {
     public SyncRigidBodyMessage(long id, PhysicsRigidBody body) {
         this.syncId = id;
 
-        location = body.getPhysicsLocation(new Vector3f());
-        rotation = body.getPhysicsRotationMatrix(new Matrix3f());
-        linearVelocity = new Vector3f();
-        body.getLinearVelocity(linearVelocity);
-        angularVelocity = new Vector3f();
-        body.getAngularVelocity(angularVelocity);
+        this.location = body.getPhysicsLocation(new Vector3f());
+        this.rotation = body.getPhysicsRotationMatrix(new Matrix3f());
+        this.linearVelocity = new Vector3f();
+        body.getLinearVelocity(this.linearVelocity);
+        this.angularVelocity = new Vector3f();
+        body.getAngularVelocity(this.angularVelocity);
     }
 
     public void readData(PhysicsRigidBody body) {
-        location = body.getPhysicsLocation(new Vector3f());
-        rotation = body.getPhysicsRotationMatrix(new Matrix3f());
-        linearVelocity = new Vector3f();
-        body.getLinearVelocity(linearVelocity);
-        angularVelocity = new Vector3f();
-        body.getAngularVelocity(angularVelocity);
+        this.location = body.getPhysicsLocation(new Vector3f());
+        this.rotation = body.getPhysicsRotationMatrix(new Matrix3f());
+        this.linearVelocity = new Vector3f();
+        body.getLinearVelocity(this.linearVelocity);
+        this.angularVelocity = new Vector3f();
+        body.getAngularVelocity(this.angularVelocity);
     }
 
     public void applyData(Object body) {
@@ -44,9 +43,9 @@ public class SyncRigidBodyMessage extends PhysicsSyncMessage {
             return;
         }
         PhysicsRigidBody rigidBody = ((Spatial) body).getControl(RigidBodyControl.class);
-        rigidBody.setPhysicsLocation(location);
-        rigidBody.setPhysicsRotation(rotation);
-        rigidBody.setLinearVelocity(linearVelocity);
-        rigidBody.setAngularVelocity(angularVelocity);
+        rigidBody.setPhysicsLocation(this.location);
+        rigidBody.setPhysicsRotation(this.rotation);
+        rigidBody.setLinearVelocity(this.linearVelocity);
+        rigidBody.setAngularVelocity(this.angularVelocity);
     }
 }

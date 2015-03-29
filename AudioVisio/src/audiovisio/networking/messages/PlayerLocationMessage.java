@@ -16,42 +16,42 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerLocationMessage extends AbstractMessage {
-	private int playerID;
-	private Vector3f position;
-	private Vector3f direction;
-	
-	public PlayerLocationMessage() {
-		setReliable(false);
-	}
-	
-	/**
-	 * @param playerID The ID of the player being updated with this message
-	 * @param direction The direction the player is moving
-	 * @param position The position the player is currently in
-	 */
-	public PlayerLocationMessage(int playerID, Vector3f position, Vector3f direction) {
-		this.playerID = playerID;
-		this.position = position;
-		this.direction = direction;
-		
-		setReliable(false);
-	}
-	
-	public int getPlayerID() {
-		return playerID;
-	}
-	
-	public Vector3f getDirection() {
-		return direction;
-	}
-	
-	public Vector3f getPosition() {
-		return position;
-	}
-	
-	@Override
+    private int      playerID;
+    private Vector3f location;
+    private Vector3f direction;
+
+    public PlayerLocationMessage(){
+        this.setReliable(false);
+    }
+
+    /**
+     * @param playerID The ID of the player being updated with this message
+     * @param direction The direction the player is moving
+     * @param location The location the player is currently in
+     */
+    public PlayerLocationMessage( int playerID, Vector3f location, Vector3f direction ){
+        this.playerID = playerID;
+        this.location = location;
+        this.direction = direction;
+
+        this.setReliable(false);
+    }
+
+    public int getPlayerID(){
+        return this.playerID;
+    }
+
+    public Vector3f getDirection(){
+        return this.direction;
+    }
+
+    public Vector3f getlocation(){
+        return this.location;
+    }
+
+    @Override
     public String toString() {
-        return String.format(playerID + ":" + position + ":" + direction);
+        return String.format(this.playerID + ":" + this.location + ":" + this.direction);
     }
 
 }
