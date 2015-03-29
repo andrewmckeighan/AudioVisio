@@ -4,9 +4,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import audiovisio.AudioVisio;
+import audiovisio.StateExperiment;
 import audiovisio.utils.LogHelper;
-
 import audiovisio.utils.NetworkUtils;
+
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -19,25 +20,24 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class GuiAppState extends AbstractAppState implements ScreenController{
+public class GuiAppState3 extends AbstractAppState implements ScreenController{
 
 	private Nifty nifty;
 	
-	AudioVisio app;
+	StateExperiment app;
     AppStateManager stateManager;
-    NiftyJmeDisplay niftyDisplay;
 	
-	public GuiAppState(){
+	public GuiAppState3(){
 		
 	}
 	
 	 @Override
 	 public void initialize(AppStateManager stateManager, Application app){
 		 super.initialize(stateManager, app);
-		 this.app = (AudioVisio)app;
+		 this.app = (StateExperiment)app;
          this.stateManager = stateManager;
 
-         niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
+         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
                  app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
          nifty = niftyDisplay.getNifty();
          nifty.fromXml("Interface/baselayer.xml", "start", this);
@@ -62,7 +62,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	}
 	
 	public void initHost(){
-		nifty.gotoScreen("host");
+		app.switchState();
 	}
 	
 	public void initJoin(){
@@ -105,7 +105,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 
 	@Override
@@ -113,19 +112,13 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	public void cleanup() {
-		app.getGuiViewPort().removeProcessor(niftyDisplay);
-		app.getInputManager().setCursorVisible(false);
-	}
-
-    public void clientAndServerInit() {
-        app.stopGui();
-		setEnabled(false);
-        AudioVisio.main(new String[]{"-server"});
-        app.clientStart();
-        NetworkUtils.attemptConnection(app.client.myClient);
-    }
+//
+//    public void clientAndServerInit() {
+//        app.stopGui();
+//		setEnabled(false);
+//        AudioVisio.main(new String[]{"-server"});
+//        NetworkUtils.attemptConnection(app.client.myClient);
+//        app.clientStart();
+//    }
 
 }
