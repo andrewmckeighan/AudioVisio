@@ -87,6 +87,12 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		return temp;
 	}
 
+	public void clientInit() {
+		this.app.stopGui();
+		this.setEnabled(false);
+		this.app.clientStart();
+		NetworkUtils.attemptConnection(this.app.client.myClient);
+	}
 
 	@Override
 	public void bind( Nifty arg0, Screen arg1 ){

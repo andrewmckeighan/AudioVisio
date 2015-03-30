@@ -84,9 +84,13 @@ public class NetworkUtils {
         LogHelper.info("attemptConnection");
         for (int i = 0; i < 500; i++) {
             try{
+                if (client.isConnected()) {
+                    LogHelper.info("Actually connected");
+                    return true;
+                }
                 client.connectToServer("127.0.0.1", NetworkUtils.PORT, NetworkUtils.PORT);
-                LogHelper.info("Connected to Server!");
-                return true;
+                client.start();
+                continue;
             } catch (IOException e){
                 LogHelper.info(String.format("Attempt %d to connect to server", i));
             }
