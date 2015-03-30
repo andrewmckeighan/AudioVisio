@@ -3,7 +3,6 @@ package audiovisio.networking.listeners;
 import audiovisio.networking.messages.NetworkMessage;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
-import audiovisio.networking.messages.PlayerListMessage;
 import audiovisio.utils.LogHelper;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
@@ -32,11 +31,6 @@ public class ClientMessageListener implements MessageListener<Client> {
             LogHelper.info("Received PlayerLeaveMessage");
             PlayerLeaveMessage msg = (PlayerLeaveMessage) message;
             LogHelper.info("Player " + msg.getPlayerID() + " has left");
-            return;
-        }
-        if (message instanceof PlayerListMessage){
-            PlayerListMessage msg = (PlayerListMessage) message;
-            LogHelper.info("Received player list of size: " + msg.getPlayerList().length);
             return;
         }
         LogHelper.warn("Received message of unknown type: " + message.getClass().getName());

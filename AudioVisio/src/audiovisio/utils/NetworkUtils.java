@@ -28,7 +28,6 @@ public class NetworkUtils {
         Serializer.registerClass(PlayerLocationMessage.class);
         Serializer.registerClass(PlayerJoinMessage.class);
         Serializer.registerClass(PlayerLeaveMessage.class);
-        Serializer.registerClass(PlayerListMessage.class);
 
         // Sync Messages
         Serializer.registerClass(PhysicsSyncMessage.class);
@@ -90,7 +89,7 @@ public class NetworkUtils {
                 }
                 client.connectToServer("127.0.0.1", NetworkUtils.PORT, NetworkUtils.PORT);
                 client.start();
-                continue;
+                return true;
             } catch (IOException e){
                 LogHelper.info(String.format("Attempt %d to connect to server", i));
             }

@@ -168,9 +168,9 @@ public class ServerAppState extends AbstractAppState implements
                     ServerAppState.this.worldManager.addPlayer(conn.getId());
                     ServerAppState.this.players.put(conn.getId(), (Player) ServerAppState.this.worldManager.getPlayer(conn.getId()));
 
-                    Integer[] list = ServerAppState.this.players.keySet().toArray(new Integer[ServerAppState.this.players.keySet().size()]);
-                    conn.send(new PlayerListMessage(list));
-                    LogHelper.info("Sent PlayerListMessage");
+//                    Integer[] list = ServerAppState.this.players.keySet().toArray(new Integer[ServerAppState.this.players.keySet().size()]);
+//                    conn.send(new PlayerListMessage(list));
+//                    LogHelper.info("Sent PlayerListMessage");
                 } else {
                     conn.close("Too many clients connect to server");
                     LogHelper.severe("More than 2 players attempted to join");
