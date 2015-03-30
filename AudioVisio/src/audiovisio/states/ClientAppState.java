@@ -137,10 +137,8 @@ public class ClientAppState extends AbstractAppState implements
         // Generate entities //
         // /////////////////////
         Button testButton = new Button();
-        testButton.createMaterial(AM);
 
         Lever testLever = new Lever(3f, 5f, 3f);
-        testLever.createMaterial(AM);
 
         // //////////////////////////
         // Initialization Methods //
