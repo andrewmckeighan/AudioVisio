@@ -1,10 +1,13 @@
 package audiovisio.states;
 
+import audiovisio.Items;
 import audiovisio.WorldManager;
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.level.Level;
+import audiovisio.level.LevelReader;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.*;
 import audiovisio.utils.LogHelper;
@@ -40,6 +43,7 @@ import java.util.Map;
 
 public class ServerAppState extends AbstractAppState implements
         PhysicsCollisionListener, ActionListener {
+    Level currentLevel;
 
     //Networking
     private com.jme3.network.Server myServer;
@@ -67,6 +71,9 @@ public class ServerAppState extends AbstractAppState implements
     public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting server...");
         NetworkUtils.initializeSerializables();
+        Items.init();
+        currentLevel = LevelReader.read("test_level2.json");
+        currentLevel.loadLevel();
 
         this.AV = (SimpleApplication) app;
         this.AM = this.AV.getAssetManager();
@@ -189,6 +196,9 @@ public class ServerAppState extends AbstractAppState implements
             }
         });
         LogHelper.info("Server Started!");
+
+        this.currentLevel.init(this.AM, syncManager);
+        this.currentLevel.start(this.AV.getRootNode(), physicsSpace);
     }
 
     @Override
