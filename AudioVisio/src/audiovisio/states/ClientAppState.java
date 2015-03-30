@@ -54,6 +54,7 @@ public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
     public NetworkClient myClient = Network.createClient();
+
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;

@@ -13,13 +13,12 @@ import java.util.logging.Level;
 
 public class AudioVisio extends SimpleApplication {
 
-    GuiAppState gui;
-    public ClientAppState client;
-    ServerAppState server;
-
     public static AudioVisio serverInstance;
-    static JmeContext.Type appType     = JmeContext.Type.Display;
-    static boolean         startServer = false;
+    static JmeContext.Type appType = JmeContext.Type.Display;
+    static boolean        startServer;
+    public ClientAppState client;
+    GuiAppState gui;
+    ServerAppState server;
 
     public AudioVisio(){
 
@@ -29,61 +28,59 @@ public class AudioVisio extends SimpleApplication {
         AudioVisio AV = new AudioVisio();
 
         NetworkUtils.setPort(11550);
-        LogHelper.init();
+        LogHelper.init("rsle2Log.log");
         LogHelper.setLevel(Level.INFO);
 
         if (args.length == 1){
             if (args[0].equals("-server")){
-                startServer = true;
-                appType = JmeContext.Type.Headless;
-                serverInstance = AV;
+                AudioVisio.startServer = true;
+                AudioVisio.appType = JmeContext.Type.Headless;
+                AudioVisio.serverInstance = AV;
             }
         }
 
         //Client Start
         AV.setPauseOnLostFocus(false);
-        AV.start(appType);
-    }
-
-    @Override
-    public void simpleInitApp(){
-        if (startServer){
-            serverStart();
-        } else {
-            gui = new GuiAppState();
-            stateManager.attach(gui);
-        }
-    }
-    
-
-    public int getWidth(){
-        return settings.getWidth();
-    }
-
-    public int getHeight(){
-        return settings.getHeight();
-    }
-
-    public void setFPSText( CharSequence text ){
-        fpsText.setText(text);
-    }
-
-    public void stopGui(){
-        stateManager.detach(gui);
-    }
-
-    public void serverStart(){
-        server = new ServerAppState();
-        stateManager.attach(server);
-    }
-
-    public void clientStart(){
-        client = new ClientAppState();
-        stateManager.attach(client);
+        AV.start(AudioVisio.appType);
     }
 
     public static void stopServer(){
-        if (serverInstance != null)
-            serverInstance.stop();
+        if (AudioVisio.serverInstance != null){ AudioVisio.serverInstance.stop(); }
+    }
+    
+    @Override
+    public void simpleInitApp(){
+        if (AudioVisio.startServer){
+            this.serverStart();
+        } else {
+            this.gui = new GuiAppState();
+            this.stateManager.attach(this.gui);
+        }
+    }
+
+    public int getWidth(){
+        return this.settings.getWidth();
+    }
+
+    public int getHeight(){
+        return this.settings.getHeight();
+    }
+
+    public void setFPSText( CharSequence text ){
+        this.fpsText.setText(text);
+    }
+
+    public void stopGui(){
+        this.stateManager.detach(this.gui);
+    }
+
+    public void serverStart(){
+        this.server = new ServerAppState();
+        this.stateManager.attach(this.server);
+    }
+
+    public void clientStart(){
+        this.client = new ClientAppState();
+        this.stateManager.attach(this.client);
     }
 }

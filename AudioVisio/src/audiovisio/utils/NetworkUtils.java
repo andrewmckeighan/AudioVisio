@@ -1,13 +1,10 @@
 package audiovisio.utils;
 
 import audiovisio.networking.messages.*;
-
 import com.jme3.network.NetworkClient;
 import com.jme3.network.serializing.Serializer;
 
 import java.io.IOException;
-import java.net.*;
-import java.text.DecimalFormat;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -17,9 +14,8 @@ import java.util.Enumeration;
 
 public class NetworkUtils {
     
-    public static int PORT;
-
     public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
+    public static int PORT;
     
     public static synchronized void initializeSerializables(){
         // General Messages
@@ -39,13 +35,13 @@ public class NetworkUtils {
         Serializer.registerClass(SyncCharacterMessage.class);
         Serializer.registerClass(SyncRigidBodyMessage.class);
     }
-    
-    public static void setPort(int portNumber){
-        PORT = portNumber;
-    }
-    
+
     public static int getPort(){
-        return PORT;
+        return NetworkUtils.PORT;
+    }
+
+    public static void setPort( int portNumber ){
+        NetworkUtils.PORT = portNumber;
     }
 
     /**
@@ -88,7 +84,8 @@ public class NetworkUtils {
         LogHelper.info("attemptConnection");
         for (int i = 0; i < 500; i++) {
             try{
-                client.connectToServer("127.0.0.1", PORT, PORT);
+                client.connectToServer("127.0.0.1", NetworkUtils.PORT, NetworkUtils.PORT);
+                LogHelper.info("Connected to Server!");
                 return true;
             } catch (IOException e){
                 LogHelper.info(String.format("Attempt %d to connect to server", i));
@@ -97,6 +94,7 @@ public class NetworkUtils {
                 Thread.sleep(50l);
             } catch (InterruptedException ex) {}
         }
+        LogHelper.info("Unable to connect to server.");
         return false;
-    };
+    }
 }
