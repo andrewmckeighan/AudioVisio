@@ -1,29 +1,28 @@
 package audiovisio.states;
 
 import audiovisio.AudioVisio;
+import audiovisio.Items;
 import audiovisio.WorldManager;
 import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
-import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
+import audiovisio.level.Level;
+import audiovisio.level.LevelReader;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.networking.messages.SyncRigidBodyMessage;
+import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
@@ -39,7 +38,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
 import com.jme3.network.NetworkClient;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
 /**
@@ -54,30 +53,51 @@ import com.jme3.scene.shape.Sphere;
 public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
+    public NetworkClient myClient = Network.createClient();
     // Networking
-    private AudioVisio   AV;
-    private InputManager IM;
-    private AssetManager AM;
-    public  NetworkClient myClient     = Network.createClient();
-    private WorldManager  worldManager = null;
+    private AudioVisio   audioVisioApp;
+    private InputManager inputManager;
+    private AssetManager assetManager;
+    private Node         rootNode;
+    private WorldManager worldManager;
 
     // On Screen Message
     private CharSequence velocityMessage = "";
-    private Vector3f     oldLocation     = null;
-    private Vector3f     newLocation     = new Vector3f();
-    private long         oldTime         = 0;
-    private long         newTime         = 0;
-    private int          counter         = 0;
+    private Vector3f oldLocation;
+    private Vector3f newLocation = new Vector3f();
+    private long  oldTime;
+    private long  newTime;
+    private int   counter;
+    private Level level;
 
     public ClientAppState(){
     }
 
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
+        LogHelper.info("Starting client...");
         NetworkUtils.initializeSerializables();
-        AV = (AudioVisio) app;
-        AM = AV.getAssetManager();
-        IM = AV.getInputManager();
+        this.audioVisioApp = (AudioVisio) app;
+        this.rootNode = this.audioVisioApp.getRootNode();
+        this.assetManager = this.audioVisioApp.getAssetManager();
+        this.inputManager = this.audioVisioApp.getInputManager();
+
+        Items.init();
+
+        try{
+            this.level = LevelReader.read("test_level2.json");
+            this.level.loadLevel();
+        } catch (Exception e){
+            LogHelper.info("exception: ", e);
+        }
+//        try{
+////            this.myClient = Network.connectToServer(IP, NetworkUtils.getPort());
+//            this.myClient = Network.connectToServer("127.0.0.1", NetworkUtils.getPort());
+//            this.myClient.start();
+//        } catch (IOException e){
+//            LogHelper.severe("Error on client start", e);
+//            System.exit(1);
+//        }
 
         // ///////////
         // Physics //
@@ -90,29 +110,30 @@ public class ClientAppState extends AbstractAppState implements
         // ////////////////////
         // Load Scene (map) //
         // ////////////////////
-        AM.registerLocator("town.zip", ZipLocator.class);
-        Spatial sceneModel = AM.loadModel("main.scene");
-        sceneModel.setLocalScale(2f);
+//        this.assetManager.registerLocator("town.zip", ZipLocator.class);
+//        Spatial sceneModel = this.assetManager.loadModel("main.scene");
+//        sceneModel.setLocalScale(2f);
 
         // /////////////////
         // Create Camera //
         // /////////////////
-        AV.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-        AV.getFlyByCamera().setMoveSpeed(100);
+        this.audioVisioApp.getFlyByCamera().setEnabled(true);
+        this.audioVisioApp.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        this.audioVisioApp.getFlyByCamera().setMoveSpeed(100);
 
         // ////////////////
         // Sync Manager //
         // ////////////////
-        SyncManager syncManager = new SyncManager(AV, myClient);
+        SyncManager syncManager = new SyncManager(this.audioVisioApp, this.myClient);
         syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class,
                 PlayerLeaveMessage.class);
         stateManager.attach(syncManager);
 
-        worldManager = new WorldManager(AV, this, AV.getRootNode());
-        stateManager.attach(worldManager);
-        syncManager.addObject(-1, worldManager);
+        this.worldManager = new WorldManager(this.audioVisioApp, this, this.audioVisioApp.getRootNode());
+        stateManager.attach(this.worldManager);
+        syncManager.addObject(-1, this.worldManager);
 
         // ////////////
         // Lighting //
@@ -128,36 +149,41 @@ public class ClientAppState extends AbstractAppState implements
         // We set up collision detection for the scene by creating a
         // compound collision shape and a static RigidBodyControl with mass
         // zero.
-        CollisionShape sceneShape = CollisionShapeFactory
-                .createMeshShape(sceneModel);
-        RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
-        sceneModel.setLocalScale(2f);
+//        CollisionShape sceneShape = CollisionShapeFactory
+//                .createMeshShape(sceneModel);
+//        RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
+//        sceneModel.setLocalScale(2f);
 
-        // /////////////////////
-        // Generate entities //
-        // /////////////////////
-        Button testButton = new Button();
+//        // /////////////////////
+//        // Generate entities //
+//        // /////////////////////
+//        Button testButton = new Button();
 
-        Lever testLever = new Lever(3f, 5f, 3f);
+//        Lever testLever = new Lever(3f, 5f, 3f);
 
         // //////////////////////////
         // Initialization Methods //
         // //////////////////////////
         // TODO may be moved to Player/elsewhere
-        initCrossHairs(); // a "+" in the middle of the screen to help aiming
+        this.initCrossHairs(); // a "+" in the middle of the screen to help aiming
 
         // ///////////////////////////
         // Add objects to rootNode //
         // ///////////////////////////
-        AV.getRootNode().attachChild(sceneModel);
-        AV.getRootNode().addLight(ambientLight);
-        AV.getRootNode().addLight(directionalLight);
+//        rootNode.attachChild(sceneModel);
+        this.rootNode.addLight(ambientLight);
+        this.rootNode.addLight(directionalLight);
 
         // ///////////////////////////////
         // Add objects to physicsSpace //
         // ///////////////////////////////
         physicsSpace.addCollisionListener(this);
-        physicsSpace.add(landscape);
+//        physicsSpace.add(landscape);
+
+        this.level.init(this.assetManager, syncManager);
+        this.level.start(this.rootNode, physicsSpace);
+        LogHelper.info("Client Started!");
+
     }
 
     /**
@@ -168,22 +194,22 @@ public class ClientAppState extends AbstractAppState implements
      */
 
     public void initKeys( Player player ){
-        IM.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        IM.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        IM.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        IM.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        IM.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+        this.inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+        this.inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+        this.inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+        this.inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+        this.inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
 
-        IM.addMapping("Shoot", new MouseButtonTrigger(
+        this.inputManager.addMapping("Shoot", new MouseButtonTrigger(
                 MouseInput.BUTTON_LEFT));
 
-        IM.addListener(player, "Up");
-        IM.addListener(player, "Down");
-        IM.addListener(player, "Left");
-        IM.addListener(player, "Right");
-        IM.addListener(player, "Jump");
+        this.inputManager.addListener(player, "Up");
+        this.inputManager.addListener(player, "Down");
+        this.inputManager.addListener(player, "Left");
+        this.inputManager.addListener(player, "Right");
+        this.inputManager.addListener(player, "Jump");
 
-        IM.addListener(player, "Shoot");
+        this.inputManager.addListener(player, "Shoot");
 
     }
 
@@ -196,7 +222,7 @@ public class ClientAppState extends AbstractAppState implements
     private void initMark(){
         Sphere sphere = new Sphere(30, 30, 0.2f);
         Geometry mark = new Geometry("BOOM!", sphere);
-        Material mark_mat = new Material(AM, "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mark_mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat.setColor("Color", ColorRGBA.Red);
         mark.setMaterial(mark_mat);
 
@@ -208,16 +234,16 @@ public class ClientAppState extends AbstractAppState implements
      */
 
     private void initCrossHairs(){
-        AV.setDisplayStatView(false);
-        BitmapFont guiFont = AM.loadFont("Interface/Fonts/Default.fnt");
+        this.audioVisioApp.setDisplayStatView(false);
+        BitmapFont guiFont = this.assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+"); // crosshairs
         ch.setLocalTranslation(
                 // center
-                AV.getWidth() / 2 - ch.getLineWidth() / 2,
-                AV.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-        AV.getGuiNode().attachChild(ch);
+                this.audioVisioApp.getWidth() / 2 - ch.getLineWidth() / 2,
+                this.audioVisioApp.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        this.audioVisioApp.getGuiNode().attachChild(ch);
 
     }
 
@@ -232,14 +258,13 @@ public class ClientAppState extends AbstractAppState implements
 
     @Override
     public void update( float tpf ){
-        Player player = ((Player) worldManager.getPlayer(myClient.getId()));
+        Player player = ((Player) this.worldManager.getPlayer(this.myClient.getId()));
         if (player != null){
-
-            updateMessage(player);
-
+            this.updateMessage(player);
             SyncCharacterMessage msg = player.getSyncCharacterMessage();
-            myClient.send(msg);
+            this.myClient.send(msg);
         }
+
     }
 
     /**
@@ -249,36 +274,36 @@ public class ClientAppState extends AbstractAppState implements
 
     private void updateMessage( Player player ){
 
-        if (counter % 1000 == 0){ // We only update once every 1000 frames so
+        if (this.counter % 1000 == 0){ // We only update once every 1000 frames so
             // that the player can actually move.
-            assert newLocation != null;
-            if (oldLocation != null && oldTime != 0 && newTime != 0){
-                oldLocation.distance(newLocation);
+            assert this.newLocation != null;
+            if (this.oldLocation != null && this.oldTime != 0 && this.newTime != 0){
+                this.oldLocation.distance(this.newLocation);
             }
 
-            oldLocation = newLocation.clone();
-            newLocation = player.getLocalTranslation();
+            this.oldLocation = this.newLocation.clone();
+            this.newLocation = player.getLocalTranslation();
 
-            oldTime = newTime;
-            newTime = System.currentTimeMillis();
+            this.oldTime = this.newTime;
+            this.newTime = System.currentTimeMillis();
 
-            counter = 0;
+            this.counter = 0;
 
-            float distance = oldLocation.distance(newLocation);
-            long time = newTime - oldTime;
+            float distance = this.oldLocation.distance(this.newLocation);
+            long time = this.newTime - this.oldTime;
             float velocity = distance / time;
-            velocityMessage = ("ID: " + this.getId() + "V: " + velocity
-                    + ", D: " + distance + ", P: " + newLocation + "F: " + counter);
+            this.velocityMessage = ("ID: " + this.getId() + "V: " + velocity
+                    + ", D: " + distance + ", P: " + this.newLocation + "F: " + this.counter);
         }
 
-        AV.setFPSText(velocityMessage);
-        counter++;
+        this.audioVisioApp.setFPSText(this.velocityMessage);
+        this.counter++;
     }
 
     @Override
     public void cleanup(){
-        if (myClient.isConnected()){
-            myClient.close();
+        if (this.myClient.isConnected()){
+            this.myClient.close();
         }
 
         AudioVisio.stopServer();
