@@ -86,6 +86,14 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		}
 		return temp;
 	}
+	
+	
+	
+	public void setKeyBinding(String EventId){
+		
+	}
+	
+	
 
 	public void clientInit() {
 		this.app.stopGui();
