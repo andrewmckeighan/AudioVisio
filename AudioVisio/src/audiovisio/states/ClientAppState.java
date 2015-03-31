@@ -175,9 +175,9 @@ public class ClientAppState extends AbstractAppState implements
 //        RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
 //        sceneModel.setLocalScale(2f);
 
-//        // /////////////////////
+//        ///////////////////////
 //        // Generate entities //
-//        // /////////////////////
+//        ///////////////////////
 //        Button testButton = new Button();
 
 //        Lever testLever = new Lever(3f, 5f, 3f);

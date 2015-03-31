@@ -1,13 +1,17 @@
 package audiovisio.entities;
 
+import audiovisio.level.Level;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -47,6 +51,7 @@ public class Player extends MovingEntity implements ActionListener {
     public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
     public static final  Vector3f MODEL_OFFSET           = Player.CAMERA_OFFSET.divide(2);
     private static final Vector3f JUMP_FORCE             = new Vector3f(0, 2, 0);
+    private static final float MAX_SHOOT_DISTANCE = 5.0F;
     public  Particle               footSteps;
     //Key Listeners
     private boolean                up;
@@ -188,6 +193,19 @@ public class Player extends MovingEntity implements ActionListener {
         }
         if (binding.equals("Shoot") && !isPressed){
             //TODO
+            CollisionResults results = new CollisionResults();
+
+            Ray ray = new Ray(this.playerCamera.getLocation(), this.playerCamera.getDirection());
+
+            Node shootables = Level.shootables;
+            shootables.collideWith(ray, results);
+            if (results.size() > 0){
+                CollisionResult closest = results.getClosestCollision();
+                if (closest.getDistance() <= Player.MAX_SHOOT_DISTANCE){
+                    assert closest instanceof IShootables;
+                    closest.update();
+                }
+            }
         }
     }
 
