@@ -26,11 +26,16 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 
     }
 
-    @Override
-    public void initialize( AppStateManager stateManager, Application app ){
-        super.initialize(stateManager, app);
-        this.app = (AudioVisio) app;
-        this.stateManager = stateManager;
+	/**
+	 * Initializes variables to create a GuiAppState
+	 * @param stateManager State manager passed by the AudioVisio SimpleApplication.
+	 * @param app A SimpleApplication to implement the AppState in (AudioVisio).
+	 */
+	@Override
+	public void initialize( AppStateManager stateManager, Application app ){
+		super.initialize(stateManager, app);
+		this.app = (AudioVisio) app;
+		this.stateManager = stateManager;
 
         this.niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
                 app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
@@ -41,92 +46,133 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
         this.app.getInputManager().setCursorVisible(true);
     }
 
-    @Override
-    public void cleanup(){
-        this.app.getGuiViewPort().removeProcessor(this.niftyDisplay);
-        this.app.getInputManager().setCursorVisible(false);
-    }
+	/**
+	 * Sets variables to run the GuiAppState to false, closes the GuiAppState in the SimpleApplication.
+	 */
+	@Override
+	public void cleanup(){
+		this.app.getGuiViewPort().removeProcessor(this.niftyDisplay);
+		this.app.getInputManager().setCursorVisible(false);
+	}
 
-    public void GUIStart(){
+	/**
+	 * Starts the GUI from the GuiAppState, sets necessary member variables.
+	 */
+	public void GUIStart(){
 
-        AppSettings settings = new AppSettings(true);
-        settings.setAudioRenderer("LWJGL");
+		AppSettings settings = new AppSettings(true);
+		settings.setAudioRenderer("LWJGL");
 
-        this.app.setSettings(settings);
-        this.app.start();
+		this.app.setSettings(settings);
+		this.app.start();
 
-    }
+	}
 
-    public void quitGui(){
-        this.app.stop();
-    }
+	public void quitGui(){
+		this.app.stop();
+	}
 
-    public void initHost(){
-        this.nifty.gotoScreen("host");
-    }
+	/**
+	 * Switches the current screen to the "Host" screen.
+	 */
+	public void initHost(){
+		this.nifty.gotoScreen("host");
+	}
 
-    public void initJoin(){
-        this.nifty.gotoScreen("join");
-    }
+	/**
+	 * Switches the current screen to the "Join" screen.
+	 */
+	public void initJoin(){
+		this.nifty.gotoScreen("join");
+	}
 
-    public void initSettings(){
-        this.nifty.gotoScreen("settings");
-    }
+	/**
+	 * Switches the current screen to the settings menu.
+ 	 */
+	public void initSettings(){
+		this.nifty.gotoScreen("settings");
+	}
 
-    public void initKeybind(){
-        this.nifty.gotoScreen("keybindings");
-    }
+	/**
+	 * Switches the settings screen to the "Keybindings" screen.
+	 */
+	public void initKeybind(){
+		this.nifty.gotoScreen("keybindings");
+	}
 
-    public void goBack(){
-        this.nifty.fromXml("Interface/baselayer.xml", "start");
-    }
+	/**
+	 * Returns from one of the secondary menu screens to the "start screen".
+	 */
+	public void goBack(){
+		this.nifty.fromXml("Interface/baselayer.xml", "start");
+	}
 
-    public String getIp(){
-        String temp = "";
-        try{
-            System.setProperty("java.net.preferIPv4Stack", "true");
-            temp = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e){
-            LogHelper.warn("UnkownHostException", e);
-        }
-        return temp;
-    }
+	/**
+	 * @return Returns the java.net IPv4 IP address of the current user's computer.
+	 */
+	public String getIp(){
+		String temp = "";
+		try{
+			System.setProperty("java.net.preferIPv4Stack", "true");
+			temp = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e){
+			LogHelper.warn("UnkownHostException", e);
+		}
+		return temp;
+	}
 
-    public void setKeyBinding( String EventId ){
+	public void setKeyBinding( String EventId ){
 
-    }
+	}
 
-    public void clientInit(){
-        this.app.stopGui();
-        this.setEnabled(false);
-        this.app.clientStart();
-        NetworkUtils.attemptConnection(this.app.client.myClient);
-    }
+	/**
+	 * Switches to the ClientAppState from the current GuiAppState.
+	 */
+	public void clientInit(){
+		this.app.stopGui();
+		this.setEnabled(false);
+		this.app.clientStart();
+		NetworkUtils.attemptConnection(this.app.client.myClient);
+	}
 
-    @Override
-    public void bind( Nifty arg0, Screen arg1 ){
-        // TODO Auto-generated method stub
+	/**
+	 * Unimplemented method stub.
+	 * @param arg0
+	 * @param arg1
+	 */
+	@Override
+	public void bind( Nifty arg0, Screen arg1 ){
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    @Override
-    public void onStartScreen(){
-        // TODO Auto-generated method stub
+	/**
+	 * Unimplemented method stub.
+	 */
+	@Override
+	public void onStartScreen(){
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    @Override
-    public void onEndScreen(){
-        // TODO Auto-generated method stub
+	/**
+	 * Unimplemented method stub.
+	 */
+	@Override
+	public void onEndScreen(){
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    public void clientAndServerInit(){
-        this.app.stopGui();
-        this.setEnabled(false);
-        AudioVisio.main(new String[]{ "-server" });
-        this.app.clientStart();
-        NetworkUtils.attemptConnection(this.app.client.myClient);
-    }
+	/**
+	 * Switches to the ClientAppState and ServerAppState from the current GuiAppState.
+	 */
+	public void clientAndServerInit(){
+		this.app.stopGui();
+		this.setEnabled(false);
+		AudioVisio.main(new String[]{ "-server" });
+		this.app.clientStart();
+		NetworkUtils.attemptConnection(this.app.client.myClient);
+	}
 
 }

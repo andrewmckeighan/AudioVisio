@@ -145,6 +145,11 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     public void loadLevel() {
     }
 
+    /**
+     *
+     * @param message
+     * @return
+     */
     //TODO
     @Override
     public boolean checkMessage(PhysicsSyncMessage message) {
@@ -154,22 +159,42 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public Server getServer() {
         return this.server;
     }
 
+    /**
+     *
+     * @param server
+     */
     public void setServer( Server server ){
         this.server = server;
     }
 
+    /**
+     *
+     * @return
+     */
     public SyncManager getSyncManager() {
         return this.syncManager;
     }
 
+    /**
+     *
+     * @return
+     */
     public PhysicsSpace getPhysicsSpace() {
         return this.space;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<InteractableEntity> getInteractableEntityList(){
         //TODO
         return new LinkedList<InteractableEntity>();

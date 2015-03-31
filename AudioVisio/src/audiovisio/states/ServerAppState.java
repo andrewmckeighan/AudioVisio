@@ -227,11 +227,21 @@ public class ServerAppState extends AbstractAppState implements
         }
     }
 
+    /**
+     * Unimplemented method stub.
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     */
     @Override
     public void onAction(String arg0, boolean arg1, float arg2) {
         // TODO Method is needed in order to implement actionListener.
     }
 
+    /**
+     * @param id
+     * @return
+     */
     public Player getPlayer(int id) {
         return this.players.get(id);
     }
