@@ -18,9 +18,6 @@ public class NetworkUtils {
     public static int PORT;
     
     public static synchronized void initializeSerializables(){
-        // General Messages
-        Serializer.registerClass(NetworkMessage.class);
-        
         // Client Messages
         Serializer.registerClass(PlayerSendMovementMessage.class);
         

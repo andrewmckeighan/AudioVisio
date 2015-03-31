@@ -9,12 +9,18 @@ import org.junit.Test;
 public class LevelTest {
 	
 	Level level;
-	
+
+	/**
+	 *
+	 */
 	@Before
 	public void setUp() {
 		level = LevelReader.read("../example_level.json");
 	}
-	
+
+	/**
+	 *
+	 */
 	@Test
 	public void testLevel() {
 		assertEquals("Level Name", level.getName());
@@ -22,6 +28,9 @@ public class LevelTest {
 		assertEquals("1.0", level.getVersion());
 	}
 
+	/**
+	 *
+	 */
 	@Test
 	public void testLevelLoaded() {
         Items.init();
