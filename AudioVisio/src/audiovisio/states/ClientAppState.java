@@ -81,6 +81,11 @@ public class ClientAppState extends AbstractAppState implements
     public ClientAppState(){
     }
 
+    /**
+     * Initializes variables to create a ClientAppState. Then initializes the game inside of the Client.
+     * @param stateManager State manager passed by the AudioVisio SimpleApplication.
+     * @param app A SimpleApplication to implement the AppState in (AudioVisio).
+     */
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting client...");
@@ -298,6 +303,10 @@ public class ClientAppState extends AbstractAppState implements
         return this.myClient.getId();
     }
 
+
+    /**
+     * Closes all server connections, then ends the ServerAppState inside the SimpleApplication.
+     */
     @Override
     public void cleanup(){
         if (this.myClient.isConnected()){
