@@ -12,6 +12,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -39,7 +40,7 @@ public class Level {
     public static final String KEY_VISUAL_SPAWN = "p2";
 
     public static final long STARTING_ID = 10;
-    public static Node shootables;
+    public Node shootables;
     JSONObject levelData;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
@@ -157,6 +158,10 @@ public class Level {
 
                 Map<Long, ITriggerable> links = this.resolveLinks(item.getID(), linkable.getLinked());
                 linkable.resolveLinks(links);
+            }
+
+            if (item instanceof IShootable){
+                shootables.attachChild((Spatial) item);
             }
         }
     }

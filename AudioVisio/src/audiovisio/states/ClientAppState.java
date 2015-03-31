@@ -57,14 +57,14 @@ public class ClientAppState extends AbstractAppState implements
 
     public static final int FPS = 1;
     public static boolean isAudio;
+    public static Level   level;
+
     public NetworkClient myClient = Network.createClient();
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;
     private AssetManager assetManager;
     private Node         rootNode;
-    private Level level;
-
     private WorldManager worldManager;
 
     //On Screen Message

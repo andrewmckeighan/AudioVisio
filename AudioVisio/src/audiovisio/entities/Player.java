@@ -2,6 +2,7 @@ package audiovisio.entities;
 
 import audiovisio.level.Level;
 import audiovisio.networking.messages.SyncCharacterMessage;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
@@ -197,12 +198,12 @@ public class Player extends MovingEntity implements ActionListener {
 
             Ray ray = new Ray(this.playerCamera.getLocation(), this.playerCamera.getDirection());
 
-            Node shootables = Level.shootables;
+            Node shootables = ClientAppState.level.shootables;
             shootables.collideWith(ray, results);
             if (results.size() > 0){
                 CollisionResult closest = results.getClosestCollision();
                 if (closest.getDistance() <= Player.MAX_SHOOT_DISTANCE){
-                    assert closest instanceof IShootables;
+                    assert closest instanceof IShootable;
                     closest.update();
                 }
             }
