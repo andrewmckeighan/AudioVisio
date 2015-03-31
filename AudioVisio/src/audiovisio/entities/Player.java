@@ -198,7 +198,7 @@ public class Player extends MovingEntity implements ActionListener {
 
             Ray ray = new Ray(this.playerCamera.getLocation(), this.playerCamera.getDirection());
 
-            Node shootables = ClientAppState.level.shootables;
+            Node shootables = ClientAppState.level.getShootables();
             shootables.collideWith(ray, results);
             if (results.size() > 0){
                 CollisionResult closest = results.getClosestCollision();

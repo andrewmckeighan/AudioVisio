@@ -40,7 +40,7 @@ public class Level {
     public static final String KEY_VISUAL_SPAWN = "p2";
 
     public static final long STARTING_ID = 10;
-    public Node shootables;
+    public static Node shootables;
     JSONObject levelData;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
@@ -428,5 +428,9 @@ public class Level {
 
     public ILevelItem getItem( Long id ){
         return this.levelItems.get(id);
+    }
+
+    public Node getShootables() {
+        return this.shootables;
     }
 }
