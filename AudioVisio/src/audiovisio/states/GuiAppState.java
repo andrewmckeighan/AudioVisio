@@ -90,8 +90,14 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		}
 		return temp;
 	}
-
-
+	
+	
+	
+	public void setKeyBinding(String EventId){
+		
+	}
+	
+	
 	@Override
 	public void bind(Nifty arg0, Screen arg1) {
 		// TODO Auto-generated method stub
