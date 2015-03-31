@@ -77,6 +77,8 @@ public class ClientAppState extends AbstractAppState implements
     private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
     private float updateCounter;
 
+    //private static int ID;
+
     public ClientAppState(){
     }
 
@@ -297,6 +299,15 @@ public class ClientAppState extends AbstractAppState implements
         this.audioVisioApp.setFPSText(this.velocityMessage);
         this.counter++;
     }
+
+//    public int getID(){
+//        return ID;
+//    }
+//
+//    public void setId(int ID){
+//        this.ID = ID;
+//    }
+
 
     public long getId(){
         return this.myClient.getId();
