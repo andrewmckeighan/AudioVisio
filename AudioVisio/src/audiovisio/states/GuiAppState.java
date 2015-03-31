@@ -68,7 +68,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 
 	}
 
-	public void quitGui(){
+	public void quitAudioVisio(){
 		this.app.stop();
 	}
 
