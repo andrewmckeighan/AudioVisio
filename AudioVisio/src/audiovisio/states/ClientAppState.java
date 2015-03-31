@@ -56,6 +56,7 @@ public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
     public static final int FPS = 1;
+    public static boolean isAudio;
     public NetworkClient myClient = Network.createClient();
     // Networking
     private AudioVisio   audioVisioApp;
@@ -79,9 +80,21 @@ public class ClientAppState extends AbstractAppState implements
     public ClientAppState(){
     }
 
+    public long getID(){
+        return this.myClient.getId();
+    }
+
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
-        LogHelper.info("Starting client...");
+        LogHelper.info("Starting client: " + this.myClient.getId());
+        while (this.myClient.getId() == -1){
+            try{
+                Thread.sleep(100);
+            } catch (InterruptedException e){
+                LogHelper.warn("Thread.sleep interuppted in client init, ", e);
+            }
+        }
+        ClientAppState.isAudio = this.myClient.getId() % 2 == 0;
 
         this.audioVisioApp = (AudioVisio) app;
         this.rootNode = this.audioVisioApp.getRootNode();
@@ -188,6 +201,8 @@ public class ClientAppState extends AbstractAppState implements
 
         this.level.init(this.assetManager, syncManager);
         this.level.start(this.rootNode, physicsSpace);
+
+
         LogHelper.info("Client Started!");
 
     }

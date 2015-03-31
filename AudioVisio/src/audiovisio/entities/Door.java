@@ -2,6 +2,7 @@ package audiovisio.entities;
 
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
@@ -48,6 +49,48 @@ public class Door extends InteractableEntity {
     }
 
     @Override
+    public void save( JSONObject codeObj ){
+        super.save(codeObj);
+        codeObj.put(JSONHelper.KEY_TYPE, "door");
+
+        codeObj.put(Door.KEY_STATE, this.state);
+        codeObj.put(Door.KEY_EDGE, this.direction.toString());
+    }
+
+    @Override
+    public void update( Boolean state ){
+        if (!this.state){
+            if (state){
+                this.open();
+            }
+        } else {
+            if (!state){
+                this.close();
+            }
+        }
+
+        this.state = state;
+    }
+
+    private void open(){
+        assert this.state;
+
+//        this.geometry.scale(0.0F);
+        this.rootNode.detachChild(this);
+        this.physicsSpace.remove(this);
+
+    }
+
+    private void close(){
+        //TODO
+        assert !this.state;
+
+//        this.geometry.scale(1.0F);
+        this.rootNode.attachChild(this);
+        this.physicsSpace.add(this);
+    }
+
+    @Override
     public void init( AssetManager assetManager ){
         Box shape = Door.SHAPE;
 
@@ -84,20 +127,13 @@ public class Door extends InteractableEntity {
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        rootNode.attachChild(this);
+        if (!ClientAppState.isAudio){
+            rootNode.attachChild(this);
+        }
         physics.add(this);
     }
 
     @Override
-    public void save( JSONObject codeObj ){
-        super.save(codeObj);
-        codeObj.put(JSONHelper.KEY_TYPE, "door");
-
-        codeObj.put(Door.KEY_STATE, this.state);
-        codeObj.put(Door.KEY_EDGE, this.direction.toString());
-    }
-
-    @Override
     public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d door @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "door", true);
@@ -113,57 +149,6 @@ public class Door extends InteractableEntity {
         root.add(locationNode);
 
         return root;
-    }
-
-    private void open(){
-        assert this.state;
-
-//        this.geometry.scale(0.0F);
-        this.rootNode.detachChild(this);
-        this.physicsSpace.remove(this);
-
-    }
-
-    private void close(){
-        //TODO
-        assert !this.state;
-
-//        this.geometry.scale(1.0F);
-        this.rootNode.attachChild(this);
-        this.physicsSpace.add(this);
-    }
-
-    @Override
-    public LevelNode getLevelNode(){
-        LevelNode root = new LevelNode(String.format("#%d door @ %s", this.ID, this.location), true);
-        LevelNode typeNode = new LevelNode("Type", "door", true);
-        LevelNode idNode = new LevelNode("ID", this.ID, false);
-        LevelNode nameNode = new LevelNode("Name", this.name, false);
-        LevelNode stateNode = new LevelNode("State", this.state, false);
-        LevelNode locationNode = LevelUtils.vector2node(this.location);
-
-        root.add(typeNode);
-        root.add(idNode);
-        root.add(nameNode);
-        root.add(stateNode);
-        root.add(locationNode);
-
-        return root;
-    }
-
-    @Override
-    public void update( Boolean state ){
-        if (!this.state){
-            if (state){
-                this.open();
-            }
-        } else {
-            if (!state){
-                this.close();
-            }
-        }
-
-        this.state = state;
     }
 
 

@@ -2,6 +2,7 @@ package audiovisio.entities;
 
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
@@ -86,7 +87,9 @@ public class Lever extends InteractableEntity {
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        rootNode.attachChild(this);
+        if (!ClientAppState.isAudio){
+            rootNode.attachChild(this);
+        }
         physics.add(this);
     }
 

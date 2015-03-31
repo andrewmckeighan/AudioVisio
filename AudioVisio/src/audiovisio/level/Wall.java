@@ -4,14 +4,12 @@ import audiovisio.rsle.editor.LevelNode;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import org.json.simple.JSONObject;
 
@@ -70,12 +68,6 @@ public class Wall extends Panel {
 
         this.physics = new RigidBodyControl(0);
         this.geometry.addControl(this.physics);
-    }
-
-    @Override
-    public void start( Node rootNode, PhysicsSpace physics ){
-        rootNode.attachChild(this.geometry);
-        physics.add(this.physics);
     }
 
     @Override

@@ -3,6 +3,7 @@ package audiovisio.entities;
 import audiovisio.level.Level;
 import audiovisio.networking.messages.TriggerActionMessage;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import audiovisio.utils.LogHelper;
@@ -49,7 +50,11 @@ public class Button extends InteractableEntity {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        rootNode.attachChild(this);
+        this.rootNode = rootNode;
+        this.physicsSpace = physics;
+        if (!ClientAppState.isAudio){
+            rootNode.attachChild(this);
+        }
         physics.add(this);
     }
 
@@ -188,7 +193,7 @@ public class Button extends InteractableEntity {
                 this.geometry.getMaterial().setColor("updatedColor", ColorRGBA.randomColor());
             }
         } catch (IllegalArgumentException argumentException){
-            LogHelper.warn("Material not defined", argumentException);
+            // LogHelper.warn("Material not defined", argumentException);
         }
     }
 
