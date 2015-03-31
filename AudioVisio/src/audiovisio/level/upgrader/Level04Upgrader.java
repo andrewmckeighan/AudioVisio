@@ -18,14 +18,14 @@ public class Level04Upgrader implements ILevelUpgrader {
 
         JSONArray level = (JSONArray) obj.get("level");
 
-        for (Object oItem : level) {
+        for (Object oItem : level){
             JSONObject item = (JSONObject) oItem;
 
             // This feels a little hacky...
             String type = (String) item.get("type");
 
             ILevelItem iT = LevelRegistry.getItemForType(type);
-            if (iT instanceof InteractableEntity) {
+            if (iT instanceof InteractableEntity){
                 item.put(InteractableEntity.KEY_LINKED, new JSONArray());
             }
         }

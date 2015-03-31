@@ -78,16 +78,8 @@ public class LogHelper {
         }
     }
 
-    public static void toggleStackDump() {
+    public static void toggleStackDump(){
         LogHelper.DUMP_STACK = !LogHelper.DUMP_STACK;
-    }
-
-    public static void divider(){
-        String s = "";
-        for (int i = 0; i < LogHelper.DIVIDER_SIZE; i++){
-            s += "=";
-        }
-        LogHelper.LOGGER.log(Level.INFO, s);
     }
 
     public static void divider( String msg ){
@@ -103,5 +95,13 @@ public class LogHelper {
         s += "=";
         LogHelper.LOGGER.log(Level.INFO, s);
         LogHelper.divider();
+    }
+
+    public static void divider(){
+        String s = "";
+        for (int i = 0; i < LogHelper.DIVIDER_SIZE; i++){
+            s += "=";
+        }
+        LogHelper.LOGGER.log(Level.INFO, s);
     }
 }

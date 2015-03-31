@@ -4,6 +4,11 @@ public class Pair<K, V> {
     private K key;
     private V value;
 
+    public Pair( K var1, V var2 ){
+        this.key = var1;
+        this.value = var2;
+    }
+
     public K getKey() {
         return this.key;
     }
@@ -12,17 +17,8 @@ public class Pair<K, V> {
         return this.value;
     }
 
-    public void setValue(V value) {
+    public void setValue( V value ){
         this.value = value;
-    }
-
-    public Pair(K var1, V var2) {
-        this.key = var1;
-        this.value = var2;
-    }
-
-    public String toString() {
-        return this.key + "=" + this.value;
     }
 
     public int hashCode() {
@@ -54,5 +50,9 @@ public class Pair<K, V> {
 
             return true;
         }
+    }
+
+    public String toString(){
+        return this.key + "=" + this.value;
     }
 }

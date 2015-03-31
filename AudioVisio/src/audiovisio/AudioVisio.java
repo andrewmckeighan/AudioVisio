@@ -14,6 +14,7 @@ import java.util.logging.Level;
 public class AudioVisio extends SimpleApplication {
 
     public static AudioVisio serverInstance;
+    public static String level = "demo_level.json";
     static JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
@@ -31,6 +32,8 @@ public class AudioVisio extends SimpleApplication {
         LogHelper.init("rsle2Log.log");
         LogHelper.setLevel(Level.INFO);
 
+        NetworkUtils.initializeSerializables();
+
         if (args.length == 1){
             if (args[0].equals("-server")){
                 AudioVisio.startServer = true;
@@ -47,7 +50,7 @@ public class AudioVisio extends SimpleApplication {
     public static void stopServer(){
         if (AudioVisio.serverInstance != null){ AudioVisio.serverInstance.stop(); }
     }
-    
+
     @Override
     public void simpleInitApp(){
         if (AudioVisio.startServer){
@@ -56,6 +59,11 @@ public class AudioVisio extends SimpleApplication {
             this.gui = new GuiAppState();
             this.stateManager.attach(this.gui);
         }
+    }
+
+    public void serverStart(){
+        this.server = new ServerAppState();
+        this.stateManager.attach(this.server);
     }
 
     public int getWidth(){
@@ -72,11 +80,6 @@ public class AudioVisio extends SimpleApplication {
 
     public void stopGui(){
         this.stateManager.detach(this.gui);
-    }
-
-    public void serverStart(){
-        this.server = new ServerAppState();
-        this.stateManager.attach(this.server);
     }
 
     public void clientStart(){

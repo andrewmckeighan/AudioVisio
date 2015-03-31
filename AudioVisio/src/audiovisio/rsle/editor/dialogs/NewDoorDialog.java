@@ -10,8 +10,8 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewDoorDialog extends NewDialog {
-    JLabel lblName     = new JLabel("Name");
-    JLabel lblState    = new JLabel("State");
+    JLabel lblName  = new JLabel("Name");
+    JLabel lblState = new JLabel("State");
     JLabel lblLocation = new JLabel("Location");
 
     JTextField    nameField     = new JTextField();
@@ -42,18 +42,6 @@ public class NewDoorDialog extends NewDialog {
         this.setSize(250, 120);
     }
 
-    public Vector3f getLevelLocation(){
-        return this.locationField.getLocationVector();
-    }
-
-    public boolean getState(){
-        return this.stateField.isSelected();
-    }
-
-    public String getName(){
-        return this.nameField.getText();
-    }
-
     @Override
     protected void okClicked(){
         if (!this.locationField.isLocationValid() || this.nameField.getText().isEmpty()){
@@ -65,4 +53,16 @@ public class NewDoorDialog extends NewDialog {
 
     @Override
     protected void cancelClicked(){}
+
+    public Vector3f getLevelLocation(){
+        return this.locationField.getLocationVector();
+    }
+
+    public boolean getState(){
+        return this.stateField.isSelected();
+    }
+
+    public String getName(){
+        return this.nameField.getText();
+    }
 }

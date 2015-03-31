@@ -37,14 +37,6 @@ public class NewButtonDialog extends NewDialog {
         this.setSize(250, 90);
     }
 
-    public Vector3f getLevelLocation(){
-        return this.locationField.getLocationVector();
-    }
-
-    public String getName(){
-        return this.nameField.getText();
-    }
-
     @Override
     protected void okClicked(){
         if (!this.locationField.isLocationValid() || this.nameField.getText().isEmpty()){
@@ -52,5 +44,13 @@ public class NewButtonDialog extends NewDialog {
         } else {
             this.setStatus(true);
         }
+    }
+
+    public Vector3f getLevelLocation(){
+        return this.locationField.getLocationVector();
+    }
+
+    public String getName(){
+        return this.nameField.getText();
     }
 }

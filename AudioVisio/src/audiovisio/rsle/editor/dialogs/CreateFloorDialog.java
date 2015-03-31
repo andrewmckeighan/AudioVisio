@@ -49,6 +49,17 @@ public class CreateFloorDialog extends NewDialog {
         this.setSize(250, 180);
     }
 
+    @Override
+    protected void okClicked(){
+        if (this.startX.getText().isEmpty()
+                || this.startZ.getText().isEmpty()
+                || this.sizeX.getText().isEmpty()
+                || this.sizeZ.getText().isEmpty()
+                || this.yPlane.getText().isEmpty()){ this.setStatus(false); } else {
+            this.setStatus(true);
+        }
+    }
+
     public int getStartX(){
         return Integer.parseInt(this.startX.getText());
     }
@@ -67,16 +78,5 @@ public class CreateFloorDialog extends NewDialog {
 
     public int getYPlane(){
         return Integer.parseInt(this.yPlane.getText());
-    }
-
-    @Override
-    protected void okClicked(){
-        if (this.startX.getText().isEmpty()
-                || this.startZ.getText().isEmpty()
-                || this.sizeX.getText().isEmpty()
-                || this.sizeZ.getText().isEmpty()
-                || this.yPlane.getText().isEmpty()){ this.setStatus(false); } else {
-            this.setStatus(true);
-        }
     }
 }

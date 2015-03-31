@@ -81,6 +81,11 @@ public class InteractableEntity extends Entity implements ITriggerable {
         if (this.linkedIds != null){ this.linkedIds.add(id); }
     }
 
+    @Override
+    public void update( Boolean state ){
+        this.state = state;
+    }
+
     public Entity getLinkedEntity(){
         return this.linkedEntity;
     }
@@ -108,11 +113,6 @@ public class InteractableEntity extends Entity implements ITriggerable {
         for (Long id : idList){
             this.interactionMap.get(id).update(state);
         }
-    }
-
-    @Override
-    public void update( Boolean state ){
-        this.state = state;
     }
 
     public void update( TriggerActionMessage message ){

@@ -12,7 +12,7 @@ public class Items {
     /**
      * Add our level items to the Level Registry.
      */
-    public static void init() {
+    public static void init(){
         LevelRegistry.registerItem("panel", Panel.class);
         LevelRegistry.registerItem("stair", Stair.class);
         LevelRegistry.registerItem("trigger", Trigger.class);

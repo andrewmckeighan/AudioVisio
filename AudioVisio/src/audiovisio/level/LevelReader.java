@@ -57,7 +57,7 @@ public class LevelReader {
 
             LevelVersions.init();
 
-            if (obj.get(Level.KEY_FORMAT) == null) {
+            if (obj.get(Level.KEY_FORMAT) == null){
                 // Assume the default is ver 0.2
                 obj.put(Level.KEY_FORMAT, "0.2");
             }

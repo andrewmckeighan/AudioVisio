@@ -38,7 +38,7 @@ public class Stair extends Panel{
     }
 
     @Override
-    public LevelNode getLevelNode() {
+    public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d stair @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "stair", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);

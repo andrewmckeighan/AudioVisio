@@ -38,11 +38,11 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     private Server      server;
 
     // SimpleAppState references.
-    private Node rootNode             = null;
-    private Application app           = null;
-    private ClientAppState client     = null;
-    private AssetManager assetManager = null;
-    private PhysicsSpace space        = null;
+    private Node           rootNode;
+    private Application    app;
+    private ClientAppState client;
+    private AssetManager   assetManager;
+    private PhysicsSpace   space;
 
     // Lists
     private HashMap<Long, Player>             players             = new HashMap<Long, Player>();
@@ -54,7 +54,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      * @param app      The owners Application.
      * @param rootNode The owners rootNode.
      */
-    public WorldManager(Application app, ClientAppState client, Node rootNode) {
+    public WorldManager( Application app, ClientAppState client, Node rootNode ){
         this.app = app;
         this.client = client;
         this.rootNode = rootNode;
@@ -86,10 +86,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             player.setServer(true);
         } else {
 //            assert this.app instanceof audiovisio.states.ClientAppState;
-            if (client != null) {
-                if (client.getId() == playerID) {
-                    player.setCam(app.getCamera());
-                    client.initKeys(player);
+            if (this.client != null){
+                if (this.client.getId() == playerID){
+                    player.setCam(this.app.getCamera());
+                    this.client.initKeys(player);
                 }
             }
         }
@@ -104,6 +104,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         }
         LogHelper.info(playerID + ":" + player);
         this.players.put(playerID, player);
+    }
+
+    public boolean isServer(){
+        return this.server != null;
     }
 
     /**
@@ -141,7 +145,6 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     public void loadLevel() {
     }
 
-
     //TODO
     @Override
     public boolean checkMessage(PhysicsSyncMessage message) {
@@ -155,11 +158,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return this.server;
     }
 
-    public boolean isServer() {
-        return this.server != null;
-    }
-
-    public void setServer(Server server) {
+    public void setServer( Server server ){
         this.server = server;
     }
 
@@ -171,7 +170,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return this.space;
     }
 
-    public List<InteractableEntity> getInteractableEntityList() {
+    public List<InteractableEntity> getInteractableEntityList(){
         //TODO
         return new LinkedList<InteractableEntity>();
     }

@@ -32,10 +32,6 @@ public abstract class NewDialog extends JDialog implements ActionListener {
         this.status = status;
     }
 
-    protected abstract void okClicked();
-
-    protected void cancelClicked(){}
-
     @Override
     public void actionPerformed( ActionEvent e ){
         this.setVisible(false);
@@ -46,4 +42,8 @@ public abstract class NewDialog extends JDialog implements ActionListener {
             this.cancelClicked();
         }
     }
+
+    protected abstract void okClicked();
+
+    protected void cancelClicked(){}
 }

@@ -28,23 +28,22 @@ import org.json.simple.JSONObject;
 
 public class Entity extends Node implements ILevelItem {
     public static final String KEY_NAME = "name";
-    public Vector3f location;
+    public Vector3f     location;
     public Node         rootNode;
     public PhysicsSpace physicsSpace;
+    public Vector3f     position;
+    public String       name;
+    public Spatial      model;
     //Read from JSON
     protected long ID = Long.MIN_VALUE;
     protected Geometry         geometry;
     //TODO are the below needed?
     protected RigidBodyControl physics;
     //read from files
-    protected String modelFile = "";
+    protected String modelFile      = "";
     protected String materialString = "";
     protected Material  material;
     protected ColorRGBA color;
-
-    public Vector3f position;
-    public String name;
-    public Spatial model;
 
     /**
      * Create and instance of Entity class,
@@ -109,17 +108,6 @@ public class Entity extends Node implements ILevelItem {
     }
 
     /**
-     * add the entities to rootNode so they are rendered in the game space.
-     *
-     * @param root rootNode from simpleApplication
-     */
-    public void addToScene( Node root ){
-        root.attachChild(this);
-    }
-
-
-
-    /**
      * @return the iD
      */
     @Override
@@ -135,6 +123,14 @@ public class Entity extends Node implements ILevelItem {
         this.ID = id;
     }
 
+    /**
+     * add the entities to rootNode so they are rendered in the game space.
+     *
+     * @param root rootNode from simpleApplication
+     */
+    public void addToScene( Node root ){
+        root.attachChild(this);
+    }
 
     @Override
     public String toString(){

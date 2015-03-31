@@ -12,9 +12,7 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
-import com.jme3.network.Client;
 import com.jme3.network.*;
-import com.jme3.network.Server;
 import com.jme3.scene.Spatial;
 
 import java.util.HashMap;
@@ -117,24 +115,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
     }
 
     /**
-     * Adds the message received to the queue of messages that the client will handle.
-     *
-     * @param message The message that was received.
-     */
-    protected void enqueueMessage(PhysicsSyncMessage message) {
-        if (this.clientSyncOffset == Double.MIN_VALUE) {
-            this.clientSyncOffset = this.time - message.time;
-        }
-        double delay = (message.time + this.clientSyncOffset) - this.time;
-        if (delay < this.maxDelay) {
-            this.clientSyncOffset -= delay - this.maxDelay;
-        } else if (delay < 0) {
-            this.clientSyncOffset -= delay;
-        }
-        this.messageQueue.add(message);
-    }
-
-    /**
      * Creates a SyncCharacterMessage and broadcasts it to the clients.
      * May be modified to handle more messages in the future.
      */
@@ -230,6 +210,24 @@ public class SyncManager extends AbstractAppState implements MessageListener {
             });
 
         }
+    }
+
+    /**
+     * Adds the message received to the queue of messages that the client will handle.
+     *
+     * @param message The message that was received.
+     */
+    protected void enqueueMessage( PhysicsSyncMessage message ){
+        if (this.clientSyncOffset == Double.MIN_VALUE){
+            this.clientSyncOffset = this.time - message.time;
+        }
+        double delay = (message.time + this.clientSyncOffset) - this.time;
+        if (delay < this.maxDelay){
+            this.clientSyncOffset -= delay - this.maxDelay;
+        } else if (delay < 0){
+            this.clientSyncOffset -= delay;
+        }
+        this.messageQueue.add(message);
     }
 
     /**

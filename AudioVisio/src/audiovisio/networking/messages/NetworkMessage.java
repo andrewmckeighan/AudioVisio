@@ -20,6 +20,7 @@ public class NetworkMessage extends AbstractMessage{
 
     /**
      * Constructor
+     *
      * @param message Message contents
      */
     public NetworkMessage( String message ){

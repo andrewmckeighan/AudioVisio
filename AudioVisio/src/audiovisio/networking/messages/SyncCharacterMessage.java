@@ -2,7 +2,6 @@ package audiovisio.networking.messages;
 
 import audiovisio.entities.Player;
 import audiovisio.utils.LogHelper;
-
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;

@@ -24,10 +24,6 @@ public class LevelNode extends DefaultMutableTreeNode {
     private ILevelItem sourceItem;
     private Level      sourceLevel;
 
-    public LevelNode( boolean container ){
-        this.container = container;
-    }
-
     /**
      * Create a new instance of LevelNode
      *
@@ -37,6 +33,10 @@ public class LevelNode extends DefaultMutableTreeNode {
     public LevelNode( Object userObject, boolean container ){
         this(container);
         this.setUserObject(userObject);
+    }
+
+    public LevelNode( boolean container ){
+        this.container = container;
     }
 
     /**
@@ -63,15 +63,6 @@ public class LevelNode extends DefaultMutableTreeNode {
     }
 
     /**
-     * Is the data for this node a Pair?
-     *
-     * @return true if a pair, false otherwise
-     */
-    public boolean isPair(){
-        return this.userObject instanceof Pair;
-    }
-
-    /**
      * Set the source item for the node. This is usually the
      * ILevelItem and is intended to be used by editors.
      *
@@ -79,14 +70,6 @@ public class LevelNode extends DefaultMutableTreeNode {
      */
     public void setSourceItem( ILevelItem item ){
         this.sourceItem = item;
-    }
-
-    public Level getSourceLevel(){
-        return this.sourceLevel;
-    }
-
-    public void setSourceLevel( Level level ){
-        this.sourceLevel = level;
     }
 
     /**
@@ -101,6 +84,15 @@ public class LevelNode extends DefaultMutableTreeNode {
             return ((Pair) this.userObject).getValue();
         }
         return this.userObject;
+    }
+
+    /**
+     * Is the data for this node a Pair?
+     *
+     * @return true if a pair, false otherwise
+     */
+    public boolean isPair(){
+        return this.userObject instanceof Pair;
     }
 
     public void setValue( Object obj ){
@@ -121,6 +113,14 @@ public class LevelNode extends DefaultMutableTreeNode {
         } else {
             throw new IllegalStateException("Should not be setting a value that isn't a pair");
         }
+    }
+
+    public Level getSourceLevel(){
+        return this.sourceLevel;
+    }
+
+    public void setSourceLevel( Level level ){
+        this.sourceLevel = level;
     }
 
     public Object getKey(){

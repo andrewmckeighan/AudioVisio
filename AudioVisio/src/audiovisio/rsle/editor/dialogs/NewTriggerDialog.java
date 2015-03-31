@@ -40,14 +40,6 @@ public class NewTriggerDialog extends NewDialog {
         this.setSize(250, 60);
     }
 
-    public Vector3f getLevelLocation(){
-        float x = Float.parseFloat(this.xField.getText());
-        float y = Float.parseFloat(this.yField.getText());
-        float z = Float.parseFloat(this.zField.getText());
-
-        return new Vector3f(x, y, z);
-    }
-
     @Override
     protected void okClicked(){
         if (this.xField.getText().isEmpty() || this.yField.getText().isEmpty() || this.zField.getText().isEmpty()){
@@ -59,4 +51,12 @@ public class NewTriggerDialog extends NewDialog {
 
     @Override
     protected void cancelClicked(){}
+
+    public Vector3f getLevelLocation(){
+        float x = Float.parseFloat(this.xField.getText());
+        float y = Float.parseFloat(this.yField.getText());
+        float z = Float.parseFloat(this.zField.getText());
+
+        return new Vector3f(x, y, z);
+    }
 }

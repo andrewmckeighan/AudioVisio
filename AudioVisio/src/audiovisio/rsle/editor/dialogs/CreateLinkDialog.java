@@ -19,13 +19,6 @@ public class CreateLinkDialog extends NewDialog {
         this.init();
     }
 
-    public void setValidIds(Set<Long> ids) {
-        for (Long id : ids) {
-            this.from.addItem(id);
-            this.to.addItem(id);
-        }
-    }
-
     @Override
     protected void init(){
         this.setTitle("Create Link");
@@ -42,16 +35,23 @@ public class CreateLinkDialog extends NewDialog {
         this.setSize(250, 90);
     }
 
-    public Long getFrom() {
-        return (Long) this.from.getSelectedItem();
-    }
-
-    public Long getTo() {
-        return (Long) this.from.getSelectedItem();
-    }
-
     @Override
     protected void okClicked(){
         this.setStatus(true);
+    }
+
+    public void setValidIds( Set<Long> ids ){
+        for (Long id : ids){
+            this.from.addItem(id);
+            this.to.addItem(id);
+        }
+    }
+
+    public Long getFrom(){
+        return (Long) this.from.getSelectedItem();
+    }
+
+    public Long getTo(){
+        return (Long) this.from.getSelectedItem();
     }
 }

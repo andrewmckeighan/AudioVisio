@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class Level {
     public static final VersionString CURRENT_LEVEL_FORMAT = new VersionString("0.4");
-    public static final Vector3f SCALE = new Vector3f(5.2F, 8.2F, 5.2F);
+    public static final Vector3f      SCALE                = new Vector3f(5.2F, 10.2F, 5.2F);
 
     public static final String KEY_NAME       = "name";
     public static final String KEY_AUTHOR     = "author";
@@ -45,7 +45,7 @@ public class Level {
     /**
      * Non-Player items will start at ID 10.
      */
-    private long NEXT_ID = Level.STARTING_ID;
+    private long     NEXT_ID      = Level.STARTING_ID;
     private String name;
     private String author;
     private String version;
@@ -160,18 +160,6 @@ public class Level {
         }
     }
 
-    /**
-     * Has the items in the level perform their game start methods.
-     *
-     * @param rootNode
-     */
-    public void start( Node rootNode, PhysicsSpace physics ){
-        LogHelper.info(String.format("Starting level '%s'", this.name));
-        for (ILevelItem item : this.levelItems.values()){
-            item.start(rootNode, physics);
-        }
-    }
-
     private Map<Long, ITriggerable> resolveLinks( Long parent, Set<Long> requested ){
         HashMap<Long, ITriggerable> links = new HashMap<Long, ITriggerable>();
 
@@ -197,6 +185,18 @@ public class Level {
         }
 
         return links;
+    }
+
+    /**
+     * Has the items in the level perform their game start methods.
+     *
+     * @param rootNode
+     */
+    public void start( Node rootNode, PhysicsSpace physics ){
+        LogHelper.info(String.format("Starting level '%s'", this.name));
+        for (ILevelItem item : this.levelItems.values()){
+            item.start(rootNode, physics);
+        }
     }
 
     /**
@@ -350,25 +350,6 @@ public class Level {
     }
 
     /**
-     * Get the next available ID for level objects.
-     *
-     * @return Next ID
-     */
-    public long getNextId(){
-        long curID = this.NEXT_ID;
-        this.NEXT_ID++;
-        return curID;
-    }
-
-    /**
-     * Reset the NEXT_ID counter to the starting ID for
-     * level objects.
-     */
-    public void resetNextId(){
-        this.NEXT_ID = Level.STARTING_ID;
-    }
-
-    /**
      * Regenerate the Ids for a level. This is intended to be
      * used by the level editors to help make ID numbers more
      * manageable. This currently does not deal with linked
@@ -389,6 +370,25 @@ public class Level {
             remappedIds.put(newId, oldId);
             item.setID(newId);
         }
+    }
+
+    /**
+     * Get the next available ID for level objects.
+     *
+     * @return Next ID
+     */
+    public long getNextId(){
+        long curID = this.NEXT_ID;
+        this.NEXT_ID++;
+        return curID;
+    }
+
+    /**
+     * Reset the NEXT_ID counter to the starting ID for
+     * level objects.
+     */
+    public void resetNextId(){
+        this.NEXT_ID = Level.STARTING_ID;
     }
 
     /**

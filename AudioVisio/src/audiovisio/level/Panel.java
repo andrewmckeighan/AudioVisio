@@ -37,23 +37,6 @@ public class Panel implements ILevelItem {
         this.location = location;
     }
 
-    public void initialize( AssetManager assetManager ){
-        Box shape = Panel.SHAPE;
-
-        this.geometry = new Geometry("Panel" + this.ID, shape);
-
-        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
-
-        Material randomMaterial = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
-//        this.material = randomMaterial;
-        this.geometry.setMaterial(randomMaterial);
-
-        this.physics = new RigidBodyControl(0);
-        this.geometry.addControl(this.physics);
-    }
-
     /**
      * Load the panel from a JSONObject
      *
@@ -71,6 +54,23 @@ public class Panel implements ILevelItem {
 //        this.model = assetManager.loadModel("Models/Level/Panel/Panel.j3o");
 //        this.model.setLocalTranslation(this.location);
         this.initialize(assetManager);
+    }
+
+    public void initialize( AssetManager assetManager ){
+        Box shape = Panel.SHAPE;
+
+        this.geometry = new Geometry("Panel" + this.ID, shape);
+
+        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
+
+        Material randomMaterial = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+//        this.material = randomMaterial;
+        this.geometry.setMaterial(randomMaterial);
+
+        this.physics = new RigidBodyControl(0);
+        this.geometry.addControl(this.physics);
     }
 
     @Override

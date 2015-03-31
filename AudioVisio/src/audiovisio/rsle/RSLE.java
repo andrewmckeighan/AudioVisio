@@ -35,7 +35,7 @@ import java.io.File;
  * @author Matt Gerst
  */
 public class RSLE extends JPanel implements ActionListener, MouseListener {
-    protected JMenuBar         menuBar;
+    protected JMenuBar menuBar;
     private   JTree            tree;
     private   DefaultTreeModel treeModel;
     private JPanel editor = new JPanel();
@@ -114,29 +114,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.ctxDelete.setMnemonic(KeyEvent.VK_D);
         this.ctxDelete.addActionListener(this);
         this.ctxMenu.add(this.ctxDelete);
-    }
-
-    /**
-     * Create and show the JFrame that contains the editor
-     */
-    private static void createAndShowGUI(){
-        JFrame frame = new JFrame("Really Simple Level Editor");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        RSLE rsle = new RSLE();
-        frame.add(rsle);
-        frame.pack();
-        frame.setJMenuBar(rsle.menuBar);
-        frame.setVisible(true);
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-    }
-
-    public static void main( String[] args ){
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run(){
-                RSLE.createAndShowGUI();
-            }
-        });
     }
 
     private void createMenu(){
@@ -259,6 +236,29 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.menuBar.add(this.create);
     }
 
+    public static void main( String[] args ){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run(){
+                RSLE.createAndShowGUI();
+            }
+        });
+    }
+
+    /**
+     * Create and show the JFrame that contains the editor
+     */
+    private static void createAndShowGUI(){
+        JFrame frame = new JFrame("Really Simple Level Editor");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        RSLE rsle = new RSLE();
+        frame.add(rsle);
+        frame.pack();
+        frame.setJMenuBar(rsle.menuBar);
+        frame.setVisible(true);
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+    }
+
     @Override
     public void actionPerformed( ActionEvent e ){
         if (e.getSource() == this.file_exit){
@@ -349,6 +349,68 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
+    /**
+     * Load the file from disk
+     *
+     * @param file The file to load
+     */
+    public void load( File file ){
+        try{
+            this.currentLevel = LevelReader.read(file);
+            this.currentLevel.loadLevel();
+            this.buildTree();
+
+            this.tree.setEditable(true);
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(this, "There was an error reading the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            LogHelper.severe("Error reading level file!", ex);
+        }
+    }
+
+    /**
+     * Build the JTree from the contents of Level.
+     */
+    private void buildTree(){
+        LevelNode rootNode = this.currentLevel.getLevelNode();
+        LevelNode level = new LevelNode("Level", true);
+        this.triggers = new LevelNode("Triggers", true);
+        this.panels = new LevelNode("Panels", true);
+        this.entities = new LevelNode("Entities", true);
+
+        for (ILevelItem item : this.currentLevel.getTriggers()){
+            if (item.getLevelNode() == null){
+                LogHelper.severe("ILevelItem '" + item + "' gives a null LevelNode()! Skipping..");
+                continue;
+            }
+            this.triggers.add(item.getLevelNode());
+        }
+
+        for (ILevelItem item : this.currentLevel.getPanels()){
+            if (item.getLevelNode() == null){
+                LogHelper.severe("ILevelItem '" + item + "' gives a null LevelNode()! Skipping..");
+                continue;
+            }
+            this.panels.add(item.getLevelNode());
+        }
+
+        for (ILevelItem item : this.currentLevel.getEntities()){
+            if (item.getLevelNode() == null){
+                LogHelper.severe("ILevelItem '" + item + "' gives a null LevelNode()! Skipping..");
+                continue;
+            }
+            this.entities.add(item.getLevelNode());
+        }
+
+        level.add(this.triggers);
+        level.add(this.panels);
+        level.add(this.entities);
+        rootNode.add(level);
+
+        this.treeModel.setRoot(rootNode);
+    }
+
+    // EDIT ACTIONS
+
     private void actionSaveAs(){
         final JFileChooser fc = new JFileChooser();
         fc.addChoosableFileFilter(new FileUtils.LevelFileFilter());
@@ -363,6 +425,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             ((DefaultMutableTreeNode) this.treeModel.getRoot()).setUserObject(this.loadedFile.toString());
         }
     }
+
+    // ADD ACTIONS
 
     private void actionClose(){
         this.tree.setEditable(false);
@@ -383,7 +447,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.loadedFile = null;
     }
 
-    // EDIT ACTIONS
+    // ADD > ENTITY ACTIONS
 
     private void actionEditRegenId(){
         if (this.currentLevel == null){
@@ -405,8 +469,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // ADD ACTIONS
-
     private void actionAddTrigger(){
         NewTriggerDialog triggerDialog = new NewTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         triggerDialog.setVisible(true);
@@ -421,8 +483,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
         }
     }
-
-    // ADD > ENTITY ACTIONS
 
     private void actionAddButton(){
         NewButtonDialog buttonDialog = new NewButtonDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -441,6 +501,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(button.getLevelNode(), this.entities, 0);
         }
     }
+
+    // ADD > PANEL ACTIONS
 
     private void actionAddDoor(){
         NewDoorDialog doorDialog = new NewDoorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -480,8 +542,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // ADD > PANEL ACTIONS
-
     private void actionAddPanel(){
         NewPanelDialog panelDialog = new NewPanelDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         panelDialog.setVisible(true);
@@ -496,6 +556,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(panel.getLevelNode(), this.panels, 0);
         }
     }
+
+    // CREATE ACTIONS
 
     private void actionAddStair(){
         NewStairDialog stairDialog = new NewStairDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -528,8 +590,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
         }
     }
-
-    // CREATE ACTIONS
 
     private void actionCreateFloor(){
         CreateFloorDialog floorDialog = new CreateFloorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -591,66 +651,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             JOptionPane.showMessageDialog(this, "There was an error saving the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LogHelper.severe("Error saving level file!", ex);
         }
-    }
-
-    /**
-     * Load the file from disk
-     *
-     * @param file The file to load
-     */
-    public void load( File file ){
-        try{
-            this.currentLevel = LevelReader.read(file);
-            this.currentLevel.loadLevel();
-            this.buildTree();
-
-            this.tree.setEditable(true);
-        } catch (Exception ex){
-            JOptionPane.showMessageDialog(this, "There was an error reading the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            LogHelper.severe("Error reading level file!", ex);
-        }
-    }
-
-    /**
-     * Build the JTree from the contents of Level.
-     */
-    private void buildTree(){
-        LevelNode rootNode = this.currentLevel.getLevelNode();
-        LevelNode level = new LevelNode("Level", true);
-        this.triggers = new LevelNode("Triggers", true);
-        this.panels = new LevelNode("Panels", true);
-        this.entities = new LevelNode("Entities", true);
-
-        for (ILevelItem item : this.currentLevel.getTriggers()){
-            if (item.getLevelNode() == null){
-                LogHelper.severe("ILevelItem '" + item + "' gives a null LevelNode()! Skipping..");
-                continue;
-            }
-            this.triggers.add(item.getLevelNode());
-        }
-
-        for (ILevelItem item : this.currentLevel.getPanels()){
-            if (item.getLevelNode() == null){
-                LogHelper.severe("ILevelItem '" + item + "' gives a null LevelNode()! Skipping..");
-                continue;
-            }
-            this.panels.add(item.getLevelNode());
-        }
-
-        for (ILevelItem item : this.currentLevel.getEntities()){
-            if (item.getLevelNode() == null){
-                LogHelper.severe("ILevelItem '" + item + "' gives a null LevelNode()! Skipping..");
-                continue;
-            }
-            this.entities.add(item.getLevelNode());
-        }
-
-        level.add(this.triggers);
-        level.add(this.panels);
-        level.add(this.entities);
-        rootNode.add(level);
-
-        this.treeModel.setRoot(rootNode);
     }
 
     @Override

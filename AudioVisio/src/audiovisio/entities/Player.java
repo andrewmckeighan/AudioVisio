@@ -69,6 +69,10 @@ public class Player extends MovingEntity implements ActionListener {
     private Vector3f camLeft       = new Vector3f();
     private Vector3f spawn         = Player.DEFAULT_SPAWN_LOCATION;
 
+    public Player( Node playerModel ){
+        this(playerModel, Player.DEFAULT_SPAWN_LOCATION);
+    }
+
     /**
      * Primary constructor for Player. Adds the model and generates a characterControl.
      *
@@ -95,39 +99,12 @@ public class Player extends MovingEntity implements ActionListener {
         this.footSteps = new Particle();
     }
 
-    public Player( Node playerModel) {
-        this(playerModel, Player.DEFAULT_SPAWN_LOCATION);
-    }
-
-
-    public Player() {
-        this(null, Player.DEFAULT_SPAWN_LOCATION);
-    }
-
-    /**
-     * Creates the Model for the player, needs to use the asset manager so we aren't handling this in the constructor.
-     * @param  assetManager The Apps AssetManager used to load the model
-     * @param  model        The location of the model file to load
-     * @return              The Node object that was loaded.
-     */
-    public static Node createModel(AssetManager assetManager, String model) {
-        return (Node) assetManager.loadModel(model);
-    }
-
-    public static Node createModel(AssetManager assetManager) {
-        return Player.createModel(assetManager, Player.DEFAULT_MODEL);
-    }
-
-    public void setSpawn(Vector3f newSpawn) {
-        this.spawn = newSpawn;
-        this.setLocalTranslation(this.spawn);
-    }
-
     /**
      * attaches the model to the player object
+     *
      * @param model model to be attached
      */
-    public void setModel(Node model, Vector3f location) {
+    public void setModel( Node model, Vector3f location ){
         this.model = model;
 
         this.model.setLocalScale(0.5f);
@@ -136,7 +113,30 @@ public class Player extends MovingEntity implements ActionListener {
         this.attachChild(this.model);
     }
 
-    public void setModel(Node model) {
+    public Player(){
+        this(null, Player.DEFAULT_SPAWN_LOCATION);
+    }
+
+    public static Node createModel( AssetManager assetManager ){
+        return Player.createModel(assetManager, Player.DEFAULT_MODEL);
+    }
+
+    /**
+     * Creates the Model for the player, needs to use the asset manager so we aren't handling this in the constructor.
+     * @param  assetManager The Apps AssetManager used to load the model
+     * @param  model        The location of the model file to load
+     * @return The Node object that was loaded.
+     */
+    public static Node createModel( AssetManager assetManager, String model ){
+        return (Node) assetManager.loadModel(model);
+    }
+
+    public void setSpawn( Vector3f newSpawn ){
+        this.spawn = newSpawn;
+        this.setLocalTranslation(this.spawn);
+    }
+
+    public void setModel( Node model ){
         this.setModel(model, this.spawn);
     }
 
@@ -145,9 +145,9 @@ public class Player extends MovingEntity implements ActionListener {
      * @param root    The root node of the app
      * @param physics Physics space of the app
      */
-    public void addToScene(Node root, PhysicsSpace physics) {
+    public void addToScene( Node root, PhysicsSpace physics ){
         this.addToScene(root);
-        if (this.model != null) {
+        if (this.model != null){
             root.attachChild(this.model);
         } else {
             LogHelper.warn("Player.addToScene: this.model is null!");
@@ -172,21 +172,21 @@ public class Player extends MovingEntity implements ActionListener {
      * @param tpf       time per frame
      */
     @Override
-    public void onAction(String binding, boolean isPressed, float tpf) {
-        if (binding.equals("Up")) {
+    public void onAction( String binding, boolean isPressed, float tpf ){
+        if (binding.equals("Up")){
             this.up = isPressed;
-        } else if (binding.equals("Down")) {
+        } else if (binding.equals("Down")){
             this.down = isPressed;
-        } else if (binding.equals("Left")) {
+        } else if (binding.equals("Left")){
             this.left = isPressed;
-        } else if (binding.equals("Right")) {
+        } else if (binding.equals("Right")){
             this.right = isPressed;
-        } else if (binding.equals("Jump")) {
-            if (isPressed) {
+        } else if (binding.equals("Jump")){
+            if (isPressed){
                 this.characterControl.jump();
             }
         }
-        if (binding.equals("Shoot") && !isPressed) {
+        if (binding.equals("Shoot") && !isPressed){
             //TODO
         }
     }
@@ -209,44 +209,44 @@ public class Player extends MovingEntity implements ActionListener {
 
 
 
-        if(this.model != null) {
+        if (this.model != null){
 //            LogHelper.info("test" + this.getLocalTranslation().add(MODEL_OFFSET) + ":" + location.add(MODEL_OFFSET));
 //            this.model.setLocalTranslation(this.getLocalTranslation().add(MODEL_OFFSET));
             this.model.setLocalTranslation(location.add(Player.MODEL_OFFSET));
         }
 
-        if(this.footSteps != null && this.footSteps.emitter != null){
+        if (this.footSteps != null && this.footSteps.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.footSteps.emitter.setLocalTranslation(location);
-            this.footSteps.emitter.setNumParticles((int) direction.length()*3+1);
+            this.footSteps.emitter.setNumParticles((int) direction.length() * 3 + 1);
         }
 
-        if (this.playerCamera != null) {
+        if (this.playerCamera != null){
             //TODO why isnt this location?
             this.playerCamera.setLocation(location.add(
                     Player.CAMERA_OFFSET));
 //            this.model.setLocalRotation(this.playerCamera.getRotation());//TODO remove y coord from rotation/set a max
-            if(this.model != null) {
+            if (this.model != null){
                 this.model.removeFromParent();
                 this.model = null;
             }
-        }else{
-            if(this.model != null) {
+        } else {
+            if (this.model != null){
 //                rotation.set(rotation.getX(), 0, rotation.getZ(), 0);
                 this.model.setLocalRotation(rotation);
 
             }
         }
 
-        if(this instanceof VisualPlayer){
-            if(this.model != null) {
+        if (this instanceof VisualPlayer){
+            if (this.model != null){
                 this.model.removeFromParent();
                 this.model = null;
             }
         }
 
-        if(this instanceof AudioPlayer){
-            if(this.footSteps != null){
+        if (this instanceof AudioPlayer){
+            if (this.footSteps != null){
                 this.footSteps.removeFromParent();
                 this.footSteps = null;
             }
@@ -258,16 +258,16 @@ public class Player extends MovingEntity implements ActionListener {
      * Generates a message containing all the info needed to update the character on the other server/client.
      * @return new SyncCharacterMessage to send to other server/client.
      */
-    public SyncCharacterMessage getSyncCharacterMessage() {
+    public SyncCharacterMessage getSyncCharacterMessage(){
         Quaternion q;
-        if(this.model != null) {
+        if (this.model != null){
             q = this.model.getLocalRotation();
         } else {
             q = new Quaternion(0, 0, 0, 0);
         }
 
         //TODO: determine if this if is needed.
-        if (this.isServer()) {
+        if (this.isServer()){
             return new SyncCharacterMessage(this.getID(),
                     this.getLocalTranslation(),
                     this.getWalkDirection(), q);
@@ -277,16 +277,16 @@ public class Player extends MovingEntity implements ActionListener {
 
         Vector3f walkDirection = new Vector3f(0, 0, 0);
 
-        if (this.up) {
+        if (this.up){
             walkDirection.addLocal(this.camDir);
         }
-        if (this.down) {
+        if (this.down){
             walkDirection.addLocal(this.camDir.negate());
         }
-        if (this.left) {
+        if (this.left){
             walkDirection.addLocal(this.camLeft);
         }
-        if (this.right) {
+        if (this.right){
             walkDirection.addLocal(this.camLeft.negate());
         }
 
@@ -299,22 +299,38 @@ public class Player extends MovingEntity implements ActionListener {
                 walkDirection, this.playerCamera.getRotation());
     }
 
-    public void updateCam() {
-        if (this.playerCamera != null) {
+    public boolean isServer(){
+        return this.isServer;
+    }
+
+    public void setServer( boolean isServer ){
+        this.isServer = isServer;
+    }
+
+    public Vector3f getWalkDirection(){
+        return this.walkDirection;
+    }
+
+    public void setWalkDirection( Vector3f walkDirection ){
+        this.walkDirection = walkDirection;
+    }
+
+    public void updateCam(){
+        if (this.playerCamera != null){
             this.playerCamera.setLocation(this.getWorldTranslation().add(
                     Player.CAMERA_OFFSET));
         }
     }
 
-    public void updateLocalTranslation() {
+    public void updateLocalTranslation(){
         this.setLocalTranslation(this.savedLocation);
-        if (this.model != null) {
+        if (this.model != null){
             this.model.setLocalTranslation(this.savedLocation);
         }
     }
 
-    public void updateModel() {
-        if (this.model != null) {
+    public void updateModel(){
+        if (this.model != null){
             this.model.setLocalTranslation(this.getWorldTranslation().add(
                     Player.MODEL_OFFSET));
         } else {
@@ -322,46 +338,30 @@ public class Player extends MovingEntity implements ActionListener {
         }
     }
 
-    public boolean isServer() {
-        return this.isServer;
-    }
-
-    public void setServer(boolean isServer) {
-        this.isServer = isServer;
-    }
-
-    public Camera getCam() {
+    public Camera getCam(){
         return this.playerCamera;
     }
 
-    public void setCam(Camera cam) {
+    public void setCam( Camera cam ){
         this.playerCamera = cam;
-    }
-
-    public Vector3f getWalkDirection() {
-        return this.walkDirection;
-    }
-
-    public void setWalkDirection(Vector3f walkDirection) {
-        this.walkDirection = walkDirection;
     }
 
     @Override
     public String toString(){
-        try {
+        try{
             return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) +
                     " walking: " + PrintHelper.printVector3f(this.walkDirection) +
                     " looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
-        }catch (NullPointerException nullException){
+        } catch (NullPointerException nullException){
             return "Player has not been fully created yet.";
         }
     }
 
-    public void setRootNode(Node rootNode) {
+    public void setRootNode( Node rootNode ){
         this.rootNode = rootNode;
     }
 
-    public void setAssetManager(AssetManager assetManager) {
+    public void setAssetManager( AssetManager assetManager ){
         this.assetManager = assetManager;
     }
 

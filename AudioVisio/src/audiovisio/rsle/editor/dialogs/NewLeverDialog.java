@@ -42,6 +42,15 @@ public class NewLeverDialog extends NewDialog {
         this.setSize(250, 120);
     }
 
+    @Override
+    protected void okClicked(){
+        if (!this.locationField.isLocationValid() || this.nameField.getText().isEmpty()){
+            this.setStatus(false);
+        } else {
+            this.setStatus(true);
+        }
+    }
+
     public Vector3f getLevelLocation(){
         return this.locationField.getLocationVector();
     }
@@ -52,14 +61,5 @@ public class NewLeverDialog extends NewDialog {
 
     public boolean getState(){
         return this.stateField.isSelected();
-    }
-
-    @Override
-    protected void okClicked(){
-        if (!this.locationField.isLocationValid() || this.nameField.getText().isEmpty()){
-            this.setStatus(false);
-        } else {
-            this.setStatus(true);
-        }
     }
 }

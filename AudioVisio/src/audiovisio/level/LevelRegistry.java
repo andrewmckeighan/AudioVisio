@@ -36,13 +36,15 @@ public class LevelRegistry {
      * of the item should set the appropriate value in the type field.
      * The item will not load correctly otherwise.
      *
-     * @param type The name of the type being added.
+     * @param type  The name of the type being added.
      * @param clazz A class that implements the ILevelItem interface.
+     *
      * @throws java.lang.IllegalArgumentException If the given class is null
      */
-    public static void registerItem(String type, Class<? extends ILevelItem> clazz) {
-        if (clazz == null)
+    public static void registerItem( String type, Class<? extends ILevelItem> clazz ){
+        if (clazz == null){
             throw new IllegalArgumentException("The registered class for type '" + type + "' cannot be null");
+        }
         ItemData id = new ItemData(type, clazz);
         LevelRegistry.items.put(type, id);
         LogHelper.info("Registered item " + clazz.getName() + " for type " + type);
@@ -52,26 +54,26 @@ public class LevelRegistry {
      * Get a new instance of the specified type.
      *
      * @param type The type of item wanted.
+     *
      * @return A instance of the class registered for the item type created with
-     *         its default constructor.
+     * its default constructor.
+     *
      * @throws java.lang.IllegalArgumentException Thrown when a type that is not registered
-     *         with the system has been requested
-     * @throws java.lang.RuntimeException Thrown when an error occurs creating the object
+     *                                            with the system has been requested
+     * @throws java.lang.RuntimeException         Thrown when an error occurs creating the object
      */
-    public static ILevelItem getItemForType(String type) {
+    public static ILevelItem getItemForType( String type ){
         ItemData data = LevelRegistry.items.get(type);
-        if (data == null)
-            throw new IllegalArgumentException("Invalid type " + type);
+        if (data == null){ throw new IllegalArgumentException("Invalid type " + type); }
         Class<? extends ILevelItem> clazz = data.itemClass;
-        if (clazz == null)
-            throw new IllegalArgumentException("Invalid type " + type);
+        if (clazz == null){ throw new IllegalArgumentException("Invalid type " + type); }
 
         ILevelItem item;
-        try {
+        try{
             item = clazz.newInstance();
-        } catch (InstantiationException e) {
+        } catch (InstantiationException e){
             throw new RuntimeException("Could not create class for type: " + type, e);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e){
             throw new RuntimeException("Could not create class for type: " + type, e);
         }
 
@@ -82,9 +84,10 @@ public class LevelRegistry {
      * Get the class registered for the specified type.
      *
      * @param type The type of the wanted class
+     *
      * @return The registered class if the type exists, null otherwise
      */
-    public static Class<? extends ILevelItem> getItemClassForType(String type) {
+    public static Class<? extends ILevelItem> getItemClassForType( String type ){
         return LevelRegistry.items.get(type) != null ? LevelRegistry.items.get(type).itemClass : null;
     }
 
@@ -98,7 +101,7 @@ public class LevelRegistry {
         String type;
         Class<? extends ILevelItem> itemClass;
 
-        public ItemData(String type, Class<? extends ILevelItem> clazz) {
+        public ItemData( String type, Class<? extends ILevelItem> clazz ){
             this.type = type;
             this.itemClass = clazz;
         }

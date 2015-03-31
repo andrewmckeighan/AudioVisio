@@ -10,10 +10,10 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewStairDialog extends NewDialog {
-    JLabel lblLocation  = new JLabel("Location");
+    JLabel lblLocation = new JLabel("Location");
     JLabel lblDirection = new JLabel("Direction");
 
-    LocationField     location  = new LocationField();
+    LocationField location = new LocationField();
     JComboBox<String> direction = new JComboBox<String>();
 
     private int id;
@@ -44,6 +44,13 @@ public class NewStairDialog extends NewDialog {
         this.setSize(250, 90);
     }
 
+    @Override
+    public void okClicked(){
+        if (!this.location.isLocationValid()){ this.setStatus(false); } else {
+            this.setStatus(true);
+        }
+    }
+
     public int getId(){
         return this.id;
     }
@@ -54,12 +61,5 @@ public class NewStairDialog extends NewDialog {
 
     public String getDirection(){
         return (String) this.direction.getSelectedItem();
-    }
-
-    @Override
-    public void okClicked(){
-        if (!this.location.isLocationValid()){ this.setStatus(false); } else {
-            this.setStatus(true);
-        }
     }
 }

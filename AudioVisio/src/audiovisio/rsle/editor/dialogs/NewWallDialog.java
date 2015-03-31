@@ -42,18 +42,18 @@ public class NewWallDialog extends NewDialog {
         this.setSize(250, 90);
     }
 
+    @Override
+    protected void okClicked(){
+        if (!this.location.isLocationValid()){ this.setStatus(false); } else {
+            this.setStatus(true);
+        }
+    }
+
     public Vector3f getLevelLocation(){
         return this.location.getLocationVector();
     }
 
     public String getDirection(){
         return (String) this.direction.getSelectedItem();
-    }
-
-    @Override
-    protected void okClicked(){
-        if (!this.location.isLocationValid()){ this.setStatus(false); } else {
-            this.setStatus(true);
-        }
     }
 }

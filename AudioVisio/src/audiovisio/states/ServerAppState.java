@@ -1,5 +1,6 @@
 package audiovisio.states;
 
+import audiovisio.AudioVisio;
 import audiovisio.Items;
 import audiovisio.WorldManager;
 import audiovisio.entities.Button;
@@ -70,10 +71,10 @@ public class ServerAppState extends AbstractAppState implements
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting server...");
-        NetworkUtils.initializeSerializables();
+
         Items.init();
-        currentLevel = LevelReader.read("test_level2.json");
-        currentLevel.loadLevel();
+        this.currentLevel = LevelReader.read(AudioVisio.level);
+        this.currentLevel.loadLevel();
 
         this.AV = (SimpleApplication) app;
         this.AM = this.AV.getAssetManager();
@@ -103,7 +104,8 @@ public class ServerAppState extends AbstractAppState implements
         stateManager.attach(this.worldManager);
         syncManager.addObject(-1, this.worldManager);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
-                SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class);
+                SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class,
+                TriggerActionMessage.class);
 
         // TODO: Shouldn't need the rest of this method
 

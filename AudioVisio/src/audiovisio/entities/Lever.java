@@ -31,13 +31,13 @@ public class Lever extends InteractableEntity {
         this(new Vector3f(0f, 0f, 0f));
     }
 
-    public Lever( float x, float y, float z ){
-        this(new Vector3f(x, y, z));
-    }
-
     public Lever( Vector3f location ){
         this.location = location;
         this.isOn = false;
+    }
+
+    public Lever( float x, float y, float z ){
+        this(new Vector3f(x, y, z));
     }
 
     public Lever( boolean stuck ){
@@ -61,20 +61,6 @@ public class Lever extends InteractableEntity {
     }
 
     @Override
-    public void load( JSONObject loadObj ){
-        super.load(loadObj);
-        this.isOn = (Boolean) loadObj.get(Lever.KEY_ISON);
-    }
-
-    @Override
-    public void save( JSONObject codeObj ){
-        super.save(codeObj);
-        codeObj.put(JSONHelper.KEY_TYPE, "lever");
-
-        codeObj.put(Lever.KEY_ISON, this.isOn);
-    }
-
-    @Override
     public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d lever @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "lever", true);
@@ -90,6 +76,20 @@ public class Lever extends InteractableEntity {
         root.add(locationNode);
 
         return root;
+    }
+
+    @Override
+    public void load( JSONObject loadObj ){
+        super.load(loadObj);
+        this.isOn = (Boolean) loadObj.get(Lever.KEY_ISON);
+    }
+
+    @Override
+    public void save( JSONObject codeObj ){
+        super.save(codeObj);
+        codeObj.put(JSONHelper.KEY_TYPE, "lever");
+
+        codeObj.put(Lever.KEY_ISON, this.isOn);
     }
 
     public void setOn( boolean state ){

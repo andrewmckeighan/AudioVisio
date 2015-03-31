@@ -31,16 +31,14 @@ public class VersionString implements Comparable<VersionString> {
             }
 
             int oPart;
-            if (i < oParts.length) {
+            if (i < oParts.length){
                 oPart = Integer.parseInt(oParts[i]);
             } else {
                 oPart = 0;
             }
 
-            if (myPart < oPart)
-                return -1;
-            if (myPart > oPart)
-                return 1;
+            if (myPart < oPart){ return -1; }
+            if (myPart > oPart){ return 1; }
         }
 
         return 0;
@@ -48,12 +46,9 @@ public class VersionString implements Comparable<VersionString> {
 
     @Override
     public boolean equals( Object obj ){
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (this.getClass() != obj.getClass())
-            return false;
+        if (this == obj){ return true; }
+        if (obj == null){ return false; }
+        if (this.getClass() != obj.getClass()){ return false; }
         return this.version.equals(((VersionString) obj).version);
     }
 

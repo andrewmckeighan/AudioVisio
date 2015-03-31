@@ -24,14 +24,6 @@ public class TextEditor extends JTextField implements CellEditor {
         this("", 5);
     }
 
-    public TextEditor( String s ){
-        this(s, 5);
-    }
-
-    public TextEditor( int w ){
-        this("", w);
-    }
-
     public TextEditor( String s, int w ){
         super(s, w);
         this.addActionListener(new ActionListener() {
@@ -44,13 +36,41 @@ public class TextEditor extends JTextField implements CellEditor {
         });
     }
 
+    protected void fireEditingStopped(){
+        if (this.listeners.size() > 0){
+            ChangeEvent ce = new ChangeEvent(this);
+            for (int i = this.listeners.size() - 1; i >= 0; i--){
+                ((CellEditorListener) this.listeners.elementAt(i)).editingStopped(ce);
+            }
+        }
+    }
+
+    public TextEditor( String s ){
+        this(s, 5);
+    }
+
+    public TextEditor( int w ){
+        this("", w);
+    }
+
     public void setNode( LevelNode node ){
         this.node = node;
     }
 
     @Override
-    public void cancelCellEditing(){
-        this.setText("");
+    public Object getCellEditorValue(){
+        return this.value;
+    }
+
+    @Override
+    public boolean isCellEditable( EventObject eo ){
+        return (eo == null)
+                || ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()));
+    }
+
+    @Override
+    public boolean shouldSelectCell( EventObject eo ){
+        return true;
     }
 
     @Override
@@ -69,22 +89,8 @@ public class TextEditor extends JTextField implements CellEditor {
     }
 
     @Override
-    public Object getCellEditorValue(){
-        return this.value;
-    }
-
-    @Override
-    public boolean isCellEditable( EventObject eo ){
-        if ((eo == null)
-                || ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean shouldSelectCell( EventObject eo ){
-        return true;
+    public void cancelCellEditing(){
+        this.setText("");
     }
 
     @Override
@@ -95,14 +101,5 @@ public class TextEditor extends JTextField implements CellEditor {
     @Override
     public void removeCellEditorListener( CellEditorListener cel ){
         this.listeners.removeElement(cel);
-    }
-
-    protected void fireEditingStopped(){
-        if (this.listeners.size() > 0){
-            ChangeEvent ce = new ChangeEvent(this);
-            for (int i = this.listeners.size() - 1; i >= 0; i--){
-                ((CellEditorListener) this.listeners.elementAt(i)).editingStopped(ce);
-            }
-        }
     }
 }

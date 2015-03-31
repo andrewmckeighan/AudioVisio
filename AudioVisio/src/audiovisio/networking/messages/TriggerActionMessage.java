@@ -18,7 +18,7 @@ public class TriggerActionMessage extends PhysicsSyncMessage {
 
     private Boolean state;
 
-    public TriggerActionMessage() {}
+    public TriggerActionMessage(){}
 
     public TriggerActionMessage( long id, Boolean state ){
         this.syncId = id;

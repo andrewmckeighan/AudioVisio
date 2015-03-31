@@ -12,16 +12,6 @@ public class LevelVersions {
     private static HashMap<String, ILevelUpgrader> upgraders = new HashMap<String, ILevelUpgrader>();
 
     /**
-     * Add a version to the list of upgradable versions.
-     *
-     * @param version  The version string of the OLD version (the version we are upgrading from)
-     * @param upgrader The upgrader that will perform the upgrade.
-     */
-    public static void addVersion( String version, ILevelUpgrader upgrader ){
-        LevelVersions.upgraders.put(version, upgrader);
-    }
-
-    /**
      * Perform the upgrade on the file.
      *
      * @param oldVersion The version string we are upgrading from
@@ -45,5 +35,15 @@ public class LevelVersions {
     public static void init(){
         LevelVersions.addVersion("0.2", new Level03Upgrader());
         LevelVersions.addVersion("0.3", new Level04Upgrader());
+    }
+
+    /**
+     * Add a version to the list of upgradable versions.
+     *
+     * @param version  The version string of the OLD version (the version we are upgrading from)
+     * @param upgrader The upgrader that will perform the upgrade.
+     */
+    public static void addVersion( String version, ILevelUpgrader upgrader ){
+        LevelVersions.upgraders.put(version, upgrader);
     }
 }

@@ -15,11 +15,11 @@ import de.lessvoid.nifty.screen.ScreenController;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class GuiAppState extends AbstractAppState implements ScreenController{
+public class GuiAppState extends AbstractAppState implements ScreenController {
 
-	AudioVisio app;
+	AudioVisio      app;
 	AppStateManager stateManager;
-    NiftyJmeDisplay niftyDisplay;
+	NiftyJmeDisplay niftyDisplay;
 	private Nifty nifty;
 
 	public GuiAppState(){
@@ -38,9 +38,14 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		this.nifty.fromXml("Interface/baselayer.xml", "start", this);
 		this.app.getGuiViewPort().addProcessor(this.niftyDisplay);
 		this.app.getFlyByCamera().setEnabled(false);
-         this.app.getInputManager().setCursorVisible(true);
+		this.app.getInputManager().setCursorVisible(true);
 	}
 
+	@Override
+	public void cleanup(){
+		this.app.getGuiViewPort().removeProcessor(this.niftyDisplay);
+		this.app.getInputManager().setCursorVisible(false);
+	}
 
 	public void GUIStart(){
 
@@ -86,16 +91,12 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 		}
 		return temp;
 	}
-	
-	
-	
-	public void setKeyBinding(String EventId){
-		
-	}
-	
-	
 
-	public void clientInit() {
+	public void setKeyBinding( String EventId ){
+
+	}
+
+	public void clientInit(){
 		this.app.stopGui();
 		this.setEnabled(false);
 		this.app.clientStart();
@@ -108,15 +109,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 
 	}
 
-
-	@Override
-	public void onEndScreen(){
-		// TODO Auto-generated method stub
-
-	}
-
-
-
 	@Override
 	public void onStartScreen(){
 		// TODO Auto-generated method stub
@@ -124,9 +116,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController{
 	}
 
 	@Override
-	public void cleanup(){
-		this.app.getGuiViewPort().removeProcessor(this.niftyDisplay);
-		this.app.getInputManager().setCursorVisible(false);
+	public void onEndScreen(){
+		// TODO Auto-generated method stub
+
 	}
 
 	public void clientAndServerInit(){

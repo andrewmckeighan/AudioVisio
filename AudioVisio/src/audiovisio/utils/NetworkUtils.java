@@ -83,7 +83,7 @@ public class NetworkUtils {
         LogHelper.info("attemptConnection");
         for (int i = 0; i < 500; i++) {
             try{
-                if (client.isConnected()) {
+                if (client.isConnected()){
                     LogHelper.info("Actually connected");
                     return true;
                 }

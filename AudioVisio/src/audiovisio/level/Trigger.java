@@ -34,7 +34,7 @@ public class Trigger implements ILevelItem {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        
+
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Trigger implements ILevelItem {
     }
 
     @Override
-    public LevelNode getLevelNode() {
+    public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Trigger", "trigger", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
@@ -59,7 +59,7 @@ public class Trigger implements ILevelItem {
         return root;
     }
 
-    public long getID() {
+    public long getID(){
         return this.ID;
     }
 

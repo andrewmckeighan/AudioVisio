@@ -39,14 +39,6 @@ public class NewPanelDialog extends NewDialog {
         this.setSize(250, 60);
     }
 
-    public Vector3f getLevelLocation(){
-        float x = Float.parseFloat(this.xField.getText());
-        float y = Float.parseFloat(this.yField.getText());
-        float z = Float.parseFloat(this.zField.getText());
-
-        return new Vector3f(x, y, z);
-    }
-
     @Override
     public void okClicked(){
         if (this.xField.getText().isEmpty()
@@ -54,5 +46,13 @@ public class NewPanelDialog extends NewDialog {
                 || this.zField.getText().isEmpty()){ this.setStatus(false); } else {
             this.setStatus(true);
         }
+    }
+
+    public Vector3f getLevelLocation(){
+        float x = Float.parseFloat(this.xField.getText());
+        float y = Float.parseFloat(this.yField.getText());
+        float z = Float.parseFloat(this.zField.getText());
+
+        return new Vector3f(x, y, z);
     }
 }

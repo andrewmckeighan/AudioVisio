@@ -35,12 +35,33 @@ public class DirectionEditor extends JComboBox<String> implements CellEditor {
         });
     }
 
+    protected void fireEditingStopped(){
+        if (this.listeners.size() > 0){
+            ChangeEvent ce = new ChangeEvent(this);
+            for (int i = this.listeners.size() - 1; i >= 0; i--){
+                ((CellEditorListener) this.listeners.elementAt(i)).editingStopped(ce);
+            }
+        }
+    }
+
     public void setNode( LevelNode node ){
         this.node = node;
     }
 
     @Override
-    public void cancelCellEditing(){
+    public Object getCellEditorValue(){
+        return this.value;
+    }
+
+    @Override
+    public boolean isCellEditable( EventObject eo ){
+        return (eo == null)
+                || ((eo instanceof MouseEvent) && ((MouseEvent) eo).isMetaDown());
+    }
+
+    @Override
+    public boolean shouldSelectCell( EventObject eo ){
+        return true;
     }
 
     @Override
@@ -55,22 +76,7 @@ public class DirectionEditor extends JComboBox<String> implements CellEditor {
     }
 
     @Override
-    public Object getCellEditorValue(){
-        return this.value;
-    }
-
-    @Override
-    public boolean isCellEditable( EventObject eo ){
-        if ((eo == null)
-                || ((eo instanceof MouseEvent) && ((MouseEvent) eo).isMetaDown())){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean shouldSelectCell( EventObject eo ){
-        return true;
+    public void cancelCellEditing(){
     }
 
     @Override
@@ -81,14 +87,5 @@ public class DirectionEditor extends JComboBox<String> implements CellEditor {
     @Override
     public void removeCellEditorListener( CellEditorListener cel ){
         this.listeners.removeElement(cel);
-    }
-
-    protected void fireEditingStopped(){
-        if (this.listeners.size() > 0){
-            ChangeEvent ce = new ChangeEvent(this);
-            for (int i = this.listeners.size() - 1; i >= 0; i--){
-                ((CellEditorListener) this.listeners.elementAt(i)).editingStopped(ce);
-            }
-        }
     }
 }

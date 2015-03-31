@@ -47,7 +47,7 @@ public interface ILevelItem {
      *
      * @param loadObj JSONObject to load from.
      */
-    public void load( JSONObject loadObj );
+    void load( JSONObject loadObj );
 
     /**
      * Called after loading the item. At this point,
@@ -61,7 +61,7 @@ public interface ILevelItem {
      * @param assetManager A reference to the assetManager to allow
      *                     loading of assets.
      */
-    public void init( AssetManager assetManager );
+    void init( AssetManager assetManager );
 
     /**
      * This is the final stage before the game has started.
@@ -73,7 +73,7 @@ public interface ILevelItem {
      * @param rootNode The rootNode of the scene
      * @param physics  The physics space
      */
-    public void start( Node rootNode, PhysicsSpace physics );
+    void start( Node rootNode, PhysicsSpace physics );
 
     /**
      * Called when saving the object to JSON. The given
@@ -83,7 +83,7 @@ public interface ILevelItem {
      *
      * @param codeObj JSONObject to save to.
      */
-    public void save( JSONObject codeObj );
+    void save( JSONObject codeObj );
 
     /**
      * Used by {@link audiovisio.rsle.RSLE} to get a LevelNode of the
@@ -93,23 +93,23 @@ public interface ILevelItem {
      *
      * @return The Item's LevelNode
      */
-    public LevelNode getLevelNode();
+    LevelNode getLevelNode();
 
     /**
      * Used by the level system to manage IDs in the level.
      *
      * @return The ID of the object
      */
-    public long getID();
+    long getID();
 
     /**
      * Used by the level system to manage the IDs in the level.
      *
      * @param id The new ID of the object
      */
-    public void setID( long id );
+    void setID( long id );
 
-    public enum Direction {
+    enum Direction {
         NORTH,
         SOUTH,
         EAST,

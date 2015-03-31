@@ -25,9 +25,9 @@ public class PlayerLocationMessage extends AbstractMessage {
     }
 
     /**
-     * @param playerID The ID of the player being updated with this message
+     * @param playerID  The ID of the player being updated with this message
      * @param direction The direction the player is moving
-     * @param location The location the player is currently in
+     * @param location  The location the player is currently in
      */
     public PlayerLocationMessage( int playerID, Vector3f location, Vector3f direction ){
         this.playerID = playerID;
@@ -50,7 +50,7 @@ public class PlayerLocationMessage extends AbstractMessage {
     }
 
     @Override
-    public String toString() {
+    public String toString(){
         return String.format(this.playerID + ":" + this.location + ":" + this.direction);
     }
 

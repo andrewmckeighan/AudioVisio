@@ -48,18 +48,6 @@ public class NewLevelDialog extends JDialog implements ActionListener {
         this.setSize(250, 120);
     }
 
-    public String getName(){
-        return this.name.getText();
-    }
-
-    public String getAuthor(){
-        return this.author.getText();
-    }
-
-    public String getVersion(){
-        return this.version.getText();
-    }
-
     public boolean getStatus(){
         return this.status;
     }
@@ -73,5 +61,17 @@ public class NewLevelDialog extends JDialog implements ActionListener {
 
             this.status = true;
         }
+    }
+
+    public String getName(){
+        return this.name.getText();
+    }
+
+    public String getAuthor(){
+        return this.author.getText();
+    }
+
+    public String getVersion(){
+        return this.version.getText();
     }
 }

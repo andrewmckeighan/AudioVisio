@@ -9,11 +9,11 @@ import java.util.Set;
  * @author Matt Gerst
  */
 public class LevelUtils {
-    public static LevelNode vector2node(Vector3f vec) {
+    public static LevelNode vector2node( Vector3f vec ){
         return LevelUtils.vector2node("Location", vec);
     }
 
-    public static LevelNode vector2node(String name, Vector3f vec) {
+    public static LevelNode vector2node( String name, Vector3f vec ){
         LevelNode location = new LevelNode(name, true);
 
         LevelNode x = new LevelNode("X", vec.x, false);
@@ -27,10 +27,10 @@ public class LevelUtils {
         return location;
     }
 
-    public static LevelNode linksNode(Set<Long> ids) {
+    public static LevelNode linksNode( Set<Long> ids ){
         LevelNode links = new LevelNode("Links", true);
 
-        for (Long id : ids) {
+        for (Long id : ids){
             LevelNode idNode = new LevelNode(id, false);
             links.add(idNode);
         }

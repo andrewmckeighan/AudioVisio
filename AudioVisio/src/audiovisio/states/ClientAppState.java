@@ -3,16 +3,13 @@ package audiovisio.states;
 import audiovisio.AudioVisio;
 import audiovisio.Items;
 import audiovisio.WorldManager;
-import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
 import audiovisio.entities.Player;
 import audiovisio.level.Level;
 import audiovisio.level.LevelReader;
+import audiovisio.networking.CollisionEvent;
 import audiovisio.networking.SyncManager;
-import audiovisio.networking.messages.PlayerJoinMessage;
-import audiovisio.networking.messages.PlayerLeaveMessage;
-import audiovisio.networking.messages.SyncCharacterMessage;
-import audiovisio.networking.messages.SyncRigidBodyMessage;
+import audiovisio.networking.messages.*;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
@@ -41,6 +38,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * This class manages the client, sending messages to the server, and all
  * methods to work with Jmonkey's SimpleApplication.
@@ -53,23 +52,26 @@ import com.jme3.scene.shape.Sphere;
 public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
+    public static final int FPS = 1;
     public NetworkClient myClient = Network.createClient();
-
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;
     private AssetManager assetManager;
     private Node         rootNode;
+    private Level level;
+
     private WorldManager worldManager;
 
-    // On Screen Message
+    //On Screen Message
     private CharSequence velocityMessage = "";
     private Vector3f oldLocation;
     private Vector3f newLocation = new Vector3f();
-    private long  oldTime;
-    private long  newTime;
-    private int   counter;
-    private Level level;
+    private long oldTime;
+    private long newTime;
+    private int  counter;
+    private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
+    private float updateCounter;
 
     public ClientAppState(){
     }
@@ -77,7 +79,7 @@ public class ClientAppState extends AbstractAppState implements
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting client...");
-        NetworkUtils.initializeSerializables();
+
         this.audioVisioApp = (AudioVisio) app;
         this.rootNode = this.audioVisioApp.getRootNode();
         this.assetManager = this.audioVisioApp.getAssetManager();
@@ -86,7 +88,7 @@ public class ClientAppState extends AbstractAppState implements
         Items.init();
 
         try{
-            this.level = LevelReader.read("test_level2.json");
+            this.level = LevelReader.read(AudioVisio.level);
             this.level.loadLevel();
         } catch (Exception e){
             LogHelper.info("exception: ", e);
@@ -129,7 +131,7 @@ public class ClientAppState extends AbstractAppState implements
         syncManager.setMaxDelay(NetworkUtils.NETWORK_SYNC_FREQUENCY);
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class,
-                PlayerLeaveMessage.class);
+                PlayerLeaveMessage.class, TriggerActionMessage.class);
         stateManager.attach(syncManager);
 
         this.worldManager = new WorldManager(this.audioVisioApp, this, this.audioVisioApp.getRootNode());
@@ -184,48 +186,6 @@ public class ClientAppState extends AbstractAppState implements
         this.level.init(this.assetManager, syncManager);
         this.level.start(this.rootNode, physicsSpace);
         LogHelper.info("Client Started!");
-
-    }
-
-    /**
-     * Gives mappings to all hotkeys and actions by the user. Adds appropriate
-     * listeners to the player.
-     *
-     * @param player The player entity that is affected by this clients inputs.
-     */
-
-    public void initKeys( Player player ){
-        this.inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        this.inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        this.inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        this.inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        this.inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-
-        this.inputManager.addMapping("Shoot", new MouseButtonTrigger(
-                MouseInput.BUTTON_LEFT));
-
-        this.inputManager.addListener(player, "Up");
-        this.inputManager.addListener(player, "Down");
-        this.inputManager.addListener(player, "Left");
-        this.inputManager.addListener(player, "Right");
-        this.inputManager.addListener(player, "Jump");
-
-        this.inputManager.addListener(player, "Shoot");
-
-    }
-
-    /**
-     * Creates a sphere to show where on an object the player 'shoots' (where
-     * the ray from their camera collides with the closest valid object.) TODO
-     * may be moved.
-     */
-
-    private void initMark(){
-        Sphere sphere = new Sphere(30, 30, 0.2f);
-        Geometry mark = new Geometry("BOOM!", sphere);
-        Material mark_mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat.setColor("Color", ColorRGBA.Red);
-        mark.setMaterial(mark_mat);
 
     }
 
@@ -301,6 +261,10 @@ public class ClientAppState extends AbstractAppState implements
         this.counter++;
     }
 
+    public long getId(){
+        return this.myClient.getId();
+    }
+
     @Override
     public void cleanup(){
         if (this.myClient.isConnected()){
@@ -312,6 +276,48 @@ public class ClientAppState extends AbstractAppState implements
     }
 
     /**
+     * Gives mappings to all hotkeys and actions by the user. Adds appropriate
+     * listeners to the player.
+     *
+     * @param player The player entity that is affected by this clients inputs.
+     */
+
+    public void initKeys( Player player ){
+        this.inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+        this.inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+        this.inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+        this.inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+        this.inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+
+        this.inputManager.addMapping("Shoot", new MouseButtonTrigger(
+                MouseInput.BUTTON_LEFT));
+
+        this.inputManager.addListener(player, "Up");
+        this.inputManager.addListener(player, "Down");
+        this.inputManager.addListener(player, "Left");
+        this.inputManager.addListener(player, "Right");
+        this.inputManager.addListener(player, "Jump");
+
+        this.inputManager.addListener(player, "Shoot");
+
+    }
+
+    /**
+     * Creates a sphere to show where on an object the player 'shoots' (where
+     * the ray from their camera collides with the closest valid object.) TODO
+     * may be moved.
+     */
+
+    private void initMark(){
+        Sphere sphere = new Sphere(30, 30, 0.2f);
+        Geometry mark = new Geometry("BOOM!", sphere);
+        Material mark_mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat.setColor("Color", ColorRGBA.Red);
+        mark.setMaterial(mark_mat);
+
+    }
+
+    /**
      * TODO rewrite Handles collisions of entities
      *
      * @param event The collision event containing the two nodes that have
@@ -320,39 +326,37 @@ public class ClientAppState extends AbstractAppState implements
 
     @Override
     public void collision( PhysicsCollisionEvent event ){
-        if (event.getNodeA().getParent() instanceof Entity
-                && event.getNodeB().getParent() instanceof Entity){
-            Entity entityA = (Entity) event.getNodeA().getParent();
-            Entity entityB = (Entity) event.getNodeB().getParent();
+        //TODO are these better than node.getParent()?
+        event.getObjectA();
+        event.getObjectB();
+        if (event.getNodeA() instanceof Entity && event.getNodeB() instanceof Entity){
+            Entity entityA = (Entity) event.getNodeA();
+            Entity entityB = (Entity) event.getNodeB();
             entityA.collisionTrigger(entityB);
             entityB.collisionTrigger(entityA);
-            if ("button".equals(event.getNodeA().getName())){
 
-                if ("Oto-ogremesh".equals(event.getNodeB().getName())){
-                    Button b = (Button) event.getNodeA().getParent();
-                    b.startPress();
-                }
-            }
-            if ("button".equals(event.getNodeB().getName())){
+            if (this.collisionEvents.isEmpty()){
+                this.collisionEvents.add(new CollisionEvent(entityA, entityB));
+            } else {
 
-                if ("Oto-ogremesh".equals(event.getNodeA().getName())){
-                    Button b = (Button) event.getNodeB().getParent();
-                    b.startPress();
+                for (CollisionEvent collisionEvent : this.collisionEvents){
+                    if (collisionEvent.hasSameEntities(entityA, entityB)){
+                        collisionEvent.wasUpdated = true;
+                    } else {
+                        this.collisionEvents.add(new CollisionEvent(entityA, entityB));
+                    }
                 }
             }
         }
 
-    }
 
-    public long getId(){
-        return this.myClient.getId();
-    }
-
-    public boolean isAudioClient(){
-        return this.getId() % 2 == 0;
     }
 
     public boolean isVideoClient(){
         return !this.isAudioClient();
+    }
+
+    public boolean isAudioClient(){
+        return this.getId() % 2 == 0;
     }
 }

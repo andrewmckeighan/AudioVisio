@@ -33,8 +33,8 @@ public interface ITriggerable {
      *
      * @param id The id to link to
      */
-    void link(Long id);
+    void link( Long id );
 
-    public void update(Boolean state);
+    void update( Boolean state );
 
 }
