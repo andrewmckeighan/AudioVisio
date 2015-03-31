@@ -1,6 +1,7 @@
 package audiovisio.level;
 
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
@@ -66,7 +67,6 @@ public class Panel implements ILevelItem {
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
         randomMaterial.setColor("Color", ColorRGBA.randomColor());
-//        this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(0);
@@ -75,7 +75,9 @@ public class Panel implements ILevelItem {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        rootNode.attachChild(this.geometry);
+        if (!ClientAppState.isAudio){
+            rootNode.attachChild(this.geometry);
+        }
         physics.add(this.physics);
     }
 

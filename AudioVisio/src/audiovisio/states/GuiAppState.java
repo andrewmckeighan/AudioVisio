@@ -17,14 +17,14 @@ import java.net.UnknownHostException;
 
 public class GuiAppState extends AbstractAppState implements ScreenController {
 
-	AudioVisio      app;
-	AppStateManager stateManager;
-	NiftyJmeDisplay niftyDisplay;
-	private Nifty nifty;
+    AudioVisio      app;
+    AppStateManager stateManager;
+    NiftyJmeDisplay niftyDisplay;
+    private Nifty nifty;
 
-	public GuiAppState(){
+    public GuiAppState(){
 
-	}
+    }
 
 	/**
 	 * Initializes variables to create a GuiAppState
@@ -37,14 +37,14 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 		this.app = (AudioVisio) app;
 		this.stateManager = stateManager;
 
-		this.niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
-				app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
-		this.nifty = this.niftyDisplay.getNifty();
-		this.nifty.fromXml("Interface/baselayer.xml", "start", this);
-		this.app.getGuiViewPort().addProcessor(this.niftyDisplay);
-		this.app.getFlyByCamera().setEnabled(false);
-		this.app.getInputManager().setCursorVisible(true);
-	}
+        this.niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
+                app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
+        this.nifty = this.niftyDisplay.getNifty();
+        this.nifty.fromXml("Interface/baselayer.xml", "start", this);
+        this.app.getGuiViewPort().addProcessor(this.niftyDisplay);
+        this.app.getFlyByCamera().setEnabled(false);
+        this.app.getInputManager().setCursorVisible(true);
+    }
 
 	/**
 	 * Sets variables to run the GuiAppState to false, closes the GuiAppState in the SimpleApplication.
