@@ -54,6 +54,7 @@ public class AudioVisio extends SimpleApplication {
             stateManager.attach(gui);
         }
     }
+    
 
     public int getWidth(){
         return settings.getWidth();
