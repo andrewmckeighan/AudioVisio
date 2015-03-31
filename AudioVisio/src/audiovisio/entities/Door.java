@@ -74,20 +74,41 @@ public class Door extends InteractableEntity {
 
     private void open(){
         assert this.state;
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
+    }
 
-//        this.geometry.scale(0.0F);
-        this.rootNode.detachChild(this);
-        this.physicsSpace.remove(this);
+    private void updateVisuals(){
+        if (this.state){
+            this.rootNode.detachChild(this);
+            this.physicsSpace.remove(this);
+        } else {
+            this.rootNode.attachChild(this);
+            this.physicsSpace.add(this);
+        }
+    }
 
+    private void emitParticle(){
+        //TODO
+    }
+
+    private void playSound(){
+        //TODO
     }
 
     private void close(){
         //TODO
         assert !this.state;
-
-//        this.geometry.scale(1.0F);
-        this.rootNode.attachChild(this);
-        this.physicsSpace.add(this);
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
     @Override
