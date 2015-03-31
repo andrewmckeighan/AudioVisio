@@ -15,113 +15,126 @@ import de.lessvoid.nifty.screen.ScreenController;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class GuiAppState extends AbstractAppState implements ScreenController {
+public class GuiAppState extends AbstractAppState implements ScreenController{
 
-    private AudioVisio      app;
-    private AppStateManager stateManager;
-    private Nifty           nifty;
-    private NiftyJmeDisplay niftyDisplay;
+	AudioVisio app;
+	AppStateManager stateManager;
+    NiftyJmeDisplay niftyDisplay;
+	private Nifty nifty;
 
-    public GuiAppState(){
+	public GuiAppState(){
 
-    }
+	}
 
-    @Override
-    public void initialize( AppStateManager stateManager, Application app ){
-        super.initialize(stateManager, app);
-        this.app = (AudioVisio) app;
-        this.stateManager = stateManager;
+	@Override
+	public void initialize( AppStateManager stateManager, Application app ){
+		super.initialize(stateManager, app);
+		this.app = (AudioVisio) app;
+		this.stateManager = stateManager;
 
-        this.niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
-                app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
-        this.nifty = this.niftyDisplay.getNifty();
-        this.nifty.fromXml("Interface/baselayer.xml", "start", this);
-        this.app.getGuiViewPort().addProcessor(this.niftyDisplay);
-        this.app.getFlyByCamera().setEnabled(false);
-        this.app.getInputManager().setCursorVisible(true);
-    }
-
-
-    public void GUIStart(){
-
-        AppSettings settings = new AppSettings(true);
-        settings.setAudioRenderer("LWJGL");
-
-        this.app.setSettings(settings);
-        this.app.start();
-
-    }
-
-    public void quitGui(){
-        this.app.stop();
-    }
-
-    public void initHost(){
-        this.nifty.gotoScreen("host");
-    }
-
-    public void initJoin(){
-        this.nifty.gotoScreen("join");
-    }
-
-    public void initSettings(){
-        this.nifty.gotoScreen("settings");
-    }
-
-    public void initKeybind(){
-        this.nifty.gotoScreen("keybindings");
-    }
-
-    public void goBack(){
-        this.nifty.fromXml("Interface/baselayer.xml", "start");
-    }
-
-    public String getIp(){
-        String temp = "";
-        try{
-            System.setProperty("java.net.preferIPv4Stack", "true");
-            temp = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e){
-            LogHelper.warn("UnkownHostException", e);
-        }
-        return temp;
-    }
+		this.niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
+				app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
+		this.nifty = this.niftyDisplay.getNifty();
+		this.nifty.fromXml("Interface/baselayer.xml", "start", this);
+		this.app.getGuiViewPort().addProcessor(this.niftyDisplay);
+		this.app.getFlyByCamera().setEnabled(false);
+         this.app.getInputManager().setCursorVisible(true);
+	}
 
 
-    @Override
-    public void bind( Nifty arg0, Screen arg1 ){
-        // TODO Auto-generated method stub
+	public void GUIStart(){
 
-    }
+		AppSettings settings = new AppSettings(true);
+		settings.setAudioRenderer("LWJGL");
+
+		this.app.setSettings(settings);
+		this.app.start();
+
+	}
+
+	public void quitGui(){
+		this.app.stop();
+	}
+
+	public void initHost(){
+		this.nifty.gotoScreen("host");
+	}
+
+	public void initJoin(){
+		this.nifty.gotoScreen("join");
+	}
+
+	public void initSettings(){
+		this.nifty.gotoScreen("settings");
+	}
+
+	public void initKeybind(){
+		this.nifty.gotoScreen("keybindings");
+	}
+
+	public void goBack(){
+		this.nifty.fromXml("Interface/baselayer.xml", "start");
+	}
+
+	public String getIp(){
+		String temp = "";
+		try{
+			System.setProperty("java.net.preferIPv4Stack", "true");
+			temp = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e){
+			LogHelper.warn("UnkownHostException", e);
+		}
+		return temp;
+	}
+	
+	
+	
+	public void setKeyBinding(String EventId){
+		
+	}
+	
+	
+
+	public void clientInit() {
+		this.app.stopGui();
+		this.setEnabled(false);
+		this.app.clientStart();
+		NetworkUtils.attemptConnection(this.app.client.myClient);
+	}
+
+	@Override
+	public void bind( Nifty arg0, Screen arg1 ){
+		// TODO Auto-generated method stub
+
+	}
 
 
-    @Override
-    public void onEndScreen(){
-        // TODO Auto-generated method stub
+	@Override
+	public void onEndScreen(){
+		// TODO Auto-generated method stub
 
-    }
+	}
 
 
-    @Override
-    public void onStartScreen(){
-        // TODO Auto-generated method stub
 
-    }
+	@Override
+	public void onStartScreen(){
+		// TODO Auto-generated method stub
 
-    public void clientAndServerInit(){
-        this.app.stopGui();
-        this.setEnabled(false);
-        this.stateManager.detach(this);
-        AudioVisio.main(new String[]{ "-server" });
-        this.app.clientStart();
-        NetworkUtils.attemptConnection(this.app.client.myClient);
+	}
 
-    }
+	@Override
+	public void cleanup(){
+		this.app.getGuiViewPort().removeProcessor(this.niftyDisplay);
+		this.app.getInputManager().setCursorVisible(false);
+	}
 
-    @Override
-    public void stateDetached( AppStateManager stateManager ){
-        //TODO: http://hub.jmonkeyengine.org/t/appstate-example/13331/4
-        //        this.app.getGuiViewPort().detachScene(this.niftyDisplay);
-    }
+	public void clientAndServerInit(){
+		this.app.stopGui();
+		this.setEnabled(false);
+		AudioVisio.main(new String[]{ "-server" });
+		this.app.clientStart();
+		NetworkUtils.attemptConnection(this.app.client.myClient);
+	}
 
 }

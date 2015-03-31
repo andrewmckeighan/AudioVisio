@@ -24,24 +24,25 @@ public abstract class NewDialog extends JDialog implements ActionListener {
         this.add(this.cancel);
     }
 
-    protected void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public boolean getStatus() {
+    public boolean getStatus(){
         return this.status;
     }
 
+    protected void setStatus( boolean status ){
+        this.status = status;
+    }
+
     protected abstract void okClicked();
-    protected void cancelClicked() {}
+
+    protected void cancelClicked(){}
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed( ActionEvent e ){
         this.setVisible(false);
 
-        if (e.getActionCommand().equals(this.ok.getActionCommand())) {
+        if (e.getActionCommand().equals(this.ok.getActionCommand())){
             this.okClicked();
-        } else if (e.getActionCommand().equals(this.cancel.getActionCommand())) {
+        } else if (e.getActionCommand().equals(this.cancel.getActionCommand())){
             this.cancelClicked();
         }
     }

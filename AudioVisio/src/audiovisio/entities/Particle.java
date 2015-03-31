@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 //TODO why do particles reset?
-public class Particle extends Entity {
+public class Particle extends Entity{
     public ParticleEmitter emitter;
 
 
@@ -23,7 +23,7 @@ public class Particle extends Entity {
         fire.setMaterial(mat_red);
         fire.setImagesX(2);
         fire.setImagesY(2); // 2x2 texture animation
-        fire.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f));   // red
+        fire.setEndColor(  new ColorRGBA(1f, 0f, 0f, 1f));   // red
         fire.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
         fire.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
         fire.setStartSize(1.5f);

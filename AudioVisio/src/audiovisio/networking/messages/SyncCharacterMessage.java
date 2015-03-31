@@ -23,6 +23,7 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
         this.location = location;
         this.walkDirection = walkDirection;
         this.rotation = rotation;
+
     }
 
     public void readData(BetterCharacterControl character, Vector3f location, Vector3f walkDirection, Quaternion rotation) {

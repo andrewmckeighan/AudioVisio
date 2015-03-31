@@ -48,29 +48,28 @@ public class NewLevelDialog extends JDialog implements ActionListener {
         this.setSize(250, 120);
     }
 
-    public String getName() {
+    public String getName(){
         return this.name.getText();
     }
 
-    public String getAuthor() {
+    public String getAuthor(){
         return this.author.getText();
     }
 
-    public String getVersion() {
+    public String getVersion(){
         return this.version.getText();
     }
 
-    public boolean getStatus() {
+    public boolean getStatus(){
         return this.status;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed( ActionEvent e ){
         this.setVisible(false);
 
-        if (e.getActionCommand().equals(this.ok.getActionCommand())) {
-            if (this.getName().isEmpty() || this.getAuthor().isEmpty() || this.getVersion().isEmpty())
-                return;
+        if (e.getActionCommand().equals(this.ok.getActionCommand())){
+            if (this.getName().isEmpty() || this.getAuthor().isEmpty() || this.getVersion().isEmpty()){ return; }
 
             this.status = true;
         }

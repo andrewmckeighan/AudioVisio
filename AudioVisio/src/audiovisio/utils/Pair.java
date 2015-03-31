@@ -12,6 +12,10 @@ public class Pair<K, V> {
         return this.value;
     }
 
+    public void setValue(V value) {
+        this.value = value;
+    }
+
     public Pair(K var1, V var2) {
         this.key = var1;
         this.value = var2;

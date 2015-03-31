@@ -1,5 +1,7 @@
 package audiovisio.entities;
 
+import audiovisio.level.ITriggerable;
+import audiovisio.networking.messages.TriggerActionMessage;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -7,52 +9,76 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class InteractableEntity extends Entity {
+public class InteractableEntity extends Entity implements ITriggerable {
 
-    public    boolean                  stuck; //if the entity keeps it state regardless of triggerEvents
-    public    Geometry                 geometry;
-    public    Material                 material;
-    public    RigidBodyControl         physics;
-    protected Boolean                  state;
-    private   InteractableEntity       linkedEntity;
-    private   List<InteractableEntity> interactionList;
+    public static final String KEY_LINKED = "interactionList";
+    public boolean stuck; //if the entity keeps it state regardless of triggerEvents
+    public Geometry         geometry;
+    public Material         material;
+    public RigidBodyControl physics;
+    public boolean wasUpdated;
+    protected Set<Long> linkedIds = new HashSet<Long>();
+    protected Map<Long, ITriggerable> interactionMap;
 
+    protected Boolean state = false;
+    private InteractableEntity linkedEntity;
 
-    public InteractableEntity(){
-        this(false);
-    }
+    public InteractableEntity(){}
 
     public InteractableEntity( boolean stuck ){
-
-    }
-
-    public void load( JSONObject obj ){
-        super.load(obj);
-
-        // TODO: Figure out how to get a reference to linked entities
-        JSONObject linked = (JSONObject) obj.get("linked");
-        //"linked": { "type": "door", "location": {"x": 5, "y": 5, "z": 5}}
-        //this.linkedEntity = Level.getListOfType(type).getAt(x,y,z);
+        this.stuck = stuck;
     }
 
     @Override
-    public void save( JSONObject obj ){
-        super.save(obj);
+    public void load( JSONObject loadObj ){
+        super.load(loadObj);
+
+        // TODO: Figure out how to get a reference to linked entities
+        JSONArray interactionList = (JSONArray) loadObj.get("interactionList");
+
+        for (Object oItem : interactionList){
+            this.linkedIds.add((Long) oItem);
+        }
+    }
+
+    @Override
+    public void save( JSONObject codeObj ){
+        super.save(codeObj);
 
         // TODO: Figure out how to deal with linked entities
+        JSONArray linked = new JSONArray();
+
+        for (Long id : this.linkedIds){
+            linked.add(id);
+        }
+
+        codeObj.put(InteractableEntity.KEY_LINKED, linked);
     }
 
-    public void triggerEvent(){
-        this.linkedEntity.onTriggeredEvent();
+
+    @Override
+    public Set<Long> getLinked(){
+        if (this.linkedIds == null){ throw new IllegalStateException("Link Ids are null! Did you load the object?"); }
+
+        return this.linkedIds;
     }
 
-    private void onTriggeredEvent(){
-        // TODO Auto-generated method stub
+    @Override
+    public void resolveLinks( Map<Long, ITriggerable> links ){
+        if (this.interactionMap != null){ throw new IllegalStateException("Links have already been resolved!"); }
+        this.interactionMap = links;
+    }
 
+    @Override
+    public void link( Long id ){
+        if (this.linkedIds != null){ this.linkedIds.add(id); }
     }
 
     public Entity getLinkedEntity(){
@@ -63,15 +89,12 @@ public class InteractableEntity extends Entity {
         this.linkedEntity = entity;
     }
 
-    public void setMaterial( Material mat ){
-        this.geometry.setMaterial(mat);
-    }
-
     public void addToScene( Node root, PhysicsSpace physics ){
         this.addToScene(root);
         physics.add(this.physics);
     }
 
+    //TODO remove this
     public void createMaterial( AssetManager assetManager ){
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -80,14 +103,32 @@ public class InteractableEntity extends Entity {
         this.geometry.setMaterial(randomMaterial);
     }
 
-    public void update( List<Long> idList, Boolean state ){
+    public void update( Set<Long> idList, Boolean state ){
         this.update(state);
         for (Long id : idList){
-            this.interactionList.get(id.intValue()).update(state);
+            this.interactionMap.get(id).update(state);
         }
     }
 
-    private void update( Boolean state ){
+    @Override
+    public void update( Boolean state ){
         this.state = state;
+    }
+
+    public void update( TriggerActionMessage message ){
+        this.update(message.getState());
+        for (Long id : this.linkedIds){
+            this.interactionMap.get(id).update(this.state);
+        }
+        this.wasUpdated = false;
+    }
+
+    public TriggerActionMessage getTriggerActionMessage(){
+        return new TriggerActionMessage(this.getID(), this.state);
+    }
+
+    public Set<Long> getIDList( Boolean state ){
+
+        return this.linkedIds;
     }
 }

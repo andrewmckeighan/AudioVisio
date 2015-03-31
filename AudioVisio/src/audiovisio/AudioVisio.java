@@ -15,7 +15,7 @@ public class AudioVisio extends SimpleApplication {
 
     public static AudioVisio serverInstance;
     static JmeContext.Type appType = JmeContext.Type.Display;
-    static boolean startServer;
+    static boolean        startServer;
     public ClientAppState client;
     GuiAppState gui;
     ServerAppState server;
@@ -28,11 +28,11 @@ public class AudioVisio extends SimpleApplication {
         AudioVisio AV = new AudioVisio();
 
         NetworkUtils.setPort(11550);
-        LogHelper.init();
+        LogHelper.init("rsle2Log.log");
         LogHelper.setLevel(Level.INFO);
 
         if (args.length == 1){
-            if ("-server".equals(args[0])){
+            if (args[0].equals("-server")){
                 AudioVisio.startServer = true;
                 AudioVisio.appType = JmeContext.Type.Headless;
                 AudioVisio.serverInstance = AV;
@@ -47,7 +47,7 @@ public class AudioVisio extends SimpleApplication {
     public static void stopServer(){
         if (AudioVisio.serverInstance != null){ AudioVisio.serverInstance.stop(); }
     }
-
+    
     @Override
     public void simpleInitApp(){
         if (AudioVisio.startServer){

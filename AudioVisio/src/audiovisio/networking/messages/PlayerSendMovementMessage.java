@@ -1,10 +1,7 @@
 package audiovisio.networking.messages;
 
-import audiovisio.entities.Player;
-
 import audiovisio.utils.LogHelper;
 import com.jme3.math.Vector3f;
-import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -16,41 +13,41 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class PlayerSendMovementMessage extends PhysicsSyncMessage{
-	private Vector3f position;
-	private Vector3f direction;
-	
-	public PlayerSendMovementMessage(){
+    private Vector3f location;
+    private Vector3f direction;
+
+    public PlayerSendMovementMessage(){
         this.setReliable(false);
-	}
-
-	/**
-	 * @param direction The direction the player is currently moving
-	 */
-
-	public PlayerSendMovementMessage(Vector3f position, Vector3f direction){
-		this.position = position;
-		this.direction = direction;
-
-        this.setReliable(false);
-	}
-	
-	public Vector3f getPosition() {
-		return this.position;
-	}
-	
-	public Vector3f getDirection(){
-		return this.direction;
-	}
-	
-	@Override
-    public String toString() {
-        return String.format("[" + this.position + ":" + this.direction + "]");
     }
 
-	@Override
-	public void applyData(Object player) {
+    /**
+     * @param direction The direction the player is currently moving
+     */
+
+    public PlayerSendMovementMessage( Vector3f location, Vector3f direction ){
+        this.location = location;
+        this.direction = direction;
+
+        this.setReliable(false);
+    }
+
+    public Vector3f getlocation(){
+        return this.location;
+    }
+
+    public Vector3f getDirection(){
+        return this.direction;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[" + this.location + ":" + this.direction + "]");
+    }
+
+    @Override
+    public void applyData( Object player ){
         LogHelper.warn("This message is not used! Please switch to SyncCharacterMessage!");
-		//((Player) player).update(this.position, this.direction);
-		
-	}
+        //((Player) player).update(this.location, this.direction);
+
+    }
 }

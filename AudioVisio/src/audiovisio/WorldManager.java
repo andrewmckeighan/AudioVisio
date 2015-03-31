@@ -1,6 +1,7 @@
 package audiovisio;
 
 import audiovisio.entities.AudioPlayer;
+import audiovisio.entities.InteractableEntity;
 import audiovisio.entities.Player;
 import audiovisio.entities.VisualPlayer;
 import audiovisio.networking.SyncManager;
@@ -20,6 +21,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class manages the list of players between servers and clients.
@@ -35,14 +38,15 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     private Server      server;
 
     // SimpleAppState references.
-    private Node           rootNode;
-    private Application    app;
-    private ClientAppState client;
-    private AssetManager   assetManager;
-    private PhysicsSpace   space;
+    private Node rootNode             = null;
+    private Application app           = null;
+    private ClientAppState client     = null;
+    private AssetManager assetManager = null;
+    private PhysicsSpace space        = null;
 
     // Lists
-    private HashMap<Long, Player> players = new HashMap<Long, Player>();
+    private HashMap<Long, Player>             players             = new HashMap<Long, Player>();
+    private HashMap<Long, InteractableEntity> interactableHashMap = new HashMap<Long, InteractableEntity>();
 
     /**
      * Constructor, Gets references to the simpleApplication and the root node.
@@ -50,7 +54,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      * @param app      The owners Application.
      * @param rootNode The owners rootNode.
      */
-    public WorldManager( Application app, ClientAppState client, Node rootNode ){
+    public WorldManager(Application app, ClientAppState client, Node rootNode) {
         this.app = app;
         this.client = client;
         this.rootNode = rootNode;
@@ -82,10 +86,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             player.setServer(true);
         } else {
 //            assert this.app instanceof audiovisio.states.ClientAppState;
-            if (this.client != null) {
-                if (this.client.getId() == playerID) {
-                    player.setCam(this.app.getCamera());
-                    this.client.initKeys(player);
+            if (client != null) {
+                if (client.getId() == playerID) {
+                    player.setCam(app.getCamera());
+                    client.initKeys(player);
                 }
             }
         }
@@ -165,5 +169,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 
     public PhysicsSpace getPhysicsSpace() {
         return this.space;
+    }
+
+    public List<InteractableEntity> getInteractableEntityList() {
+        //TODO
+        return new LinkedList<InteractableEntity>();
     }
 }

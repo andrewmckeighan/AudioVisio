@@ -18,3 +18,8 @@ dist
 .settings
 JMonkeyLib
 bin/
+
+.idea
+*.iml
+
+*.log*

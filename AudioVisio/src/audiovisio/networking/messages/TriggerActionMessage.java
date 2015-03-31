@@ -2,8 +2,7 @@ package audiovisio.networking.messages;
 
 import audiovisio.entities.InteractableEntity;
 import audiovisio.utils.LogHelper;
-
-import java.util.List;
+import com.jme3.network.serializing.Serializable;
 
 /**
  * This message sends when an interactable object is triggered by the user.
@@ -14,26 +13,27 @@ import java.util.List;
  * The object stores a list of objects, and is passed a list of indexes to match with the list.
  * The object updates itself, then the linked objects based on the list given.
  */
-public class EntityInteractionMessage extends PhysicsSyncMessage {
+@Serializable
+public class TriggerActionMessage extends PhysicsSyncMessage {
 
-    private List<Long> interactionList;
-    private long entitiyId;
     private Boolean state;
 
-    public EntityInteractionMessage() {}
+    public TriggerActionMessage() {}
 
-    public EntityInteractionMessage(long id, long entityId,  List<Long> interactionList, Boolean state) {
+    public TriggerActionMessage( long id, Boolean state ){
         this.syncId = id;
-        this.entitiyId = entityId;
-        this.interactionList = interactionList;
         this.state = state;
+    }
+
+    public Boolean getState(){
+        return this.state;
     }
 
     @Override
     public void applyData(Object triggeredEntity) {
         assert triggeredEntity instanceof InteractableEntity;
-
-        LogHelper.finer("EntityInteractionMessage: " + this + ":" + triggeredEntity);
-        ((InteractableEntity) triggeredEntity).update(this.interactionList, this.state);
+        InteractableEntity interactableEntity = (InteractableEntity) triggeredEntity;
+        LogHelper.finer("TriggerActionMessage: " + this + ":" + interactableEntity);
+        interactableEntity.update(this);
     }
 }

@@ -13,12 +13,12 @@ public class MovingEntity extends Entity {
 
     }
 
-    public void load( JSONObject obj ){
-        super.load(obj);
+    public void load( JSONObject loadObj ){
+        super.load(loadObj);
 
-        this.frontDirection = (Vector3f) obj.get("frontDirection");
-        this.leftDirection = (Vector3f) obj.get("leftDirection");
-        this.moveDirection = (Vector3f) obj.get("moveDirection");
+        this.frontDirection = (Vector3f) loadObj.get("frontDirection");
+        this.leftDirection = (Vector3f) loadObj.get("leftDirection");
+        this.moveDirection = (Vector3f) loadObj.get("moveDirection");
     }
 
 }

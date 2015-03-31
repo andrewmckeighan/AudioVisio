@@ -157,7 +157,7 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     assert entry.getValue() instanceof Player;
                     Player p = (Player) entry.getValue();
                     SyncCharacterMessage msg = p.getSyncCharacterMessage();
-                    LogHelper.info("SyncManager.sendSyncData " + msg);
+                    LogHelper.fine("SyncManager.sendSyncData " + msg);
                     this.broadcast(msg);
                 }
             }
