@@ -6142,7 +6142,7 @@
     },
     {
       "interactionList": [679],
-      "edge": "SOUTH",
+      "edge": "NORTH",
       "name": "end_door",
       "location": {
         "x": 14.0,
@@ -6291,6 +6291,16 @@
         "z": 10.0
       },
       "id": 696,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 14.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 697,
       "type": "wall"
     }
   ],

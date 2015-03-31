@@ -4,7 +4,9 @@ import audiovisio.AudioVisio;
 import audiovisio.Items;
 import audiovisio.WorldManager;
 import audiovisio.entities.Entity;
+import audiovisio.entities.InteractableEntity;
 import audiovisio.entities.Player;
+import audiovisio.level.ILevelItem;
 import audiovisio.level.Level;
 import audiovisio.level.LevelReader;
 import audiovisio.networking.CollisionEvent;
@@ -38,6 +40,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
+import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -224,6 +227,25 @@ public class ClientAppState extends AbstractAppState implements
             this.updateMessage(player);
             SyncCharacterMessage msg = player.getSyncCharacterMessage();
             this.myClient.send(msg);
+        }
+
+        Collection<ILevelItem> levelItems = this.level.getItems();
+        for (ILevelItem iLevelItem : levelItems){
+            if (iLevelItem instanceof InteractableEntity){
+                InteractableEntity inEnt = (InteractableEntity) iLevelItem;
+                if (inEnt.wasUpdated){
+                    TriggerActionMessage msg = inEnt.getTriggerActionMessage();
+                    this.myClient.send(msg);
+                }
+            }
+        }
+
+
+        for (CollisionEvent event : this.collisionEvents){
+            if (event.check(tpf)){
+                this.collisionEvents.remove(event);
+                event.collisionEndTrigger();
+            }
         }
 
     }

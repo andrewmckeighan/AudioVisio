@@ -16,6 +16,7 @@ import com.jme3.scene.shape.Box;
 import org.json.simple.JSONObject;
 
 public class Door extends InteractableEntity {
+    public static final  String     KEY_EDGE  = "edge";
     public static final  String     KEY_STATE = "state";
     private static final Quaternion ROTATION  = new Quaternion().fromAngles(0, (float) Math.PI / 2, 0);
     private static final Box        SHAPE     = new Box(0.05F * Level.SCALE.getX(),
@@ -43,47 +44,7 @@ public class Door extends InteractableEntity {
         super.load(loadObj);
 
         this.state = (Boolean) loadObj.get(Door.KEY_STATE);
-    }
-
-    @Override
-    public void save( JSONObject codeObj ){
-        super.save(codeObj);
-        codeObj.put(JSONHelper.KEY_TYPE, "door");
-
-        codeObj.put(Door.KEY_STATE, this.state);
-    }
-
-    @Override
-    public void update( Boolean state ){
-        if (!this.state){
-            if (state){
-                this.open();
-            }
-        } else {
-            if (!state){
-                this.close();
-            }
-        }
-
-        this.state = state;
-    }
-
-    private void open(){
-        assert this.state;
-
-//        this.geometry.scale(0.0F);
-        this.rootNode.detachChild(this);
-        this.physicsSpace.remove(this);
-
-    }
-
-    private void close(){
-        //TODO
-        assert !this.state;
-
-//        this.geometry.scale(1.0F);
-        this.rootNode.attachChild(this);
-        this.physicsSpace.add(this);
+        this.direction = Direction.valueOf((String) loadObj.get(Door.KEY_EDGE));
     }
 
     @Override
@@ -128,6 +89,15 @@ public class Door extends InteractableEntity {
     }
 
     @Override
+    public void save( JSONObject codeObj ){
+        super.save(codeObj);
+        codeObj.put(JSONHelper.KEY_TYPE, "door");
+
+        codeObj.put(Door.KEY_STATE, this.state);
+        codeObj.put(Door.KEY_EDGE, this.direction.toString());
+    }
+
+    @Override
     public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d door @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "door", true);
@@ -143,6 +113,57 @@ public class Door extends InteractableEntity {
         root.add(locationNode);
 
         return root;
+    }
+
+    private void open(){
+        assert this.state;
+
+//        this.geometry.scale(0.0F);
+        this.rootNode.detachChild(this);
+        this.physicsSpace.remove(this);
+
+    }
+
+    private void close(){
+        //TODO
+        assert !this.state;
+
+//        this.geometry.scale(1.0F);
+        this.rootNode.attachChild(this);
+        this.physicsSpace.add(this);
+    }
+
+    @Override
+    public LevelNode getLevelNode(){
+        LevelNode root = new LevelNode(String.format("#%d door @ %s", this.ID, this.location), true);
+        LevelNode typeNode = new LevelNode("Type", "door", true);
+        LevelNode idNode = new LevelNode("ID", this.ID, false);
+        LevelNode nameNode = new LevelNode("Name", this.name, false);
+        LevelNode stateNode = new LevelNode("State", this.state, false);
+        LevelNode locationNode = LevelUtils.vector2node(this.location);
+
+        root.add(typeNode);
+        root.add(idNode);
+        root.add(nameNode);
+        root.add(stateNode);
+        root.add(locationNode);
+
+        return root;
+    }
+
+    @Override
+    public void update( Boolean state ){
+        if (!this.state){
+            if (state){
+                this.open();
+            }
+        } else {
+            if (!state){
+                this.close();
+            }
+        }
+
+        this.state = state;
     }
 
 

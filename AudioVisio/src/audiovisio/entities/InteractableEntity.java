@@ -2,6 +2,7 @@ package audiovisio.entities;
 
 import audiovisio.level.ITriggerable;
 import audiovisio.networking.messages.TriggerActionMessage;
+import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -111,6 +112,7 @@ public class InteractableEntity extends Entity implements ITriggerable {
     public void update( Set<Long> idList, Boolean state ){
         this.update(state);
         for (Long id : idList){
+            LogHelper.info("updating: " + id);
             this.interactionMap.get(id).update(state);
         }
     }

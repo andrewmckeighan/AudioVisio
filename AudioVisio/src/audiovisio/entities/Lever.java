@@ -7,6 +7,8 @@ import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -15,13 +17,16 @@ import com.jme3.scene.shape.Box;
 import org.json.simple.JSONObject;
 
 public class Lever extends InteractableEntity {
-    public static final String KEY_ISON = "isOn";
-    public static final  float      ANGLE    = (float) (Math.PI / 6.0);
-    private static final Quaternion ROTATION = new Quaternion().fromAngles(0, (float) Math.PI / 2, 0);
-    private static final float      MASS     = 0.0F;
-    private static final Box        SHAPE    = new Box(0.1F * Level.SCALE.getX(),
-            0.3F * Level.SCALE.getY(),
-            0.1F * Level.SCALE.getZ());
+    public static final  String     KEY_EDGE  = "edge";
+    public static final  String     KEY_ISON  = "isOn";
+    public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
+    private static final Quaternion ROTATION  = new Quaternion().fromAngles(0, (float) (Math.PI / 2.0), 0);
+    private static final float      MASS      = 0.0F;
+    private static final Box        SHAPE     = new Box(0.05F * Level.SCALE.getX(),
+            0.15F * Level.SCALE.getY(),
+            0.05F * Level.SCALE.getZ());
+    private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
+    private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
 
     private Direction direction;
 
@@ -48,16 +53,41 @@ public class Lever extends InteractableEntity {
     public void init( AssetManager assetManager ){
         Box shape = Lever.SHAPE;
         this.geometry = new Geometry("level", shape);
-        this.geometry.setLocalRotation(new Quaternion()
-                .fromAngles(Lever.ANGLE, 0, 0));
+        this.geometry.setLocalRotation(Lever.ANGLE);
+
+        if (this.direction == Direction.NORTH){
+            this.location = this.location.add(0.5F, 0.0F, 0.0F);
+        } else if (this.direction == Direction.SOUTH){
+            this.location = this.location.add(-0.5F, 0.0F, 0.0F);
+        } else if (this.direction == Direction.EAST){
+            this.location = this.location.add(0.0F, 0.0F, -0.5F);
+            this.geometry.setLocalRotation(Lever.ROTATION);//Probably in Radians
+        } else if (this.direction == Direction.WEST){
+            this.location = this.location.add(0.0F, 0.0F, -0.5F);
+            this.geometry.setLocalRotation(Lever.ROTATION);//Probably in Radians
+        }
+        this.location = this.location.mult(Level.SCALE);
+        this.location = this.location.add(Lever.OFFSET);
 
         this.geometry.setLocalTranslation(this.location);
+
+        Material randomMaterial = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+//        this.material = randomMaterial;
+        this.geometry.setMaterial(randomMaterial);
+
+        this.physics = new RigidBodyControl(Lever.MASS);//TODO: this might not be needed if we don't want collision detection
+        this.attachChild(this.geometry);
+        this.addControl(this.physics);
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        this.physics = new RigidBodyControl(Lever.MASS);
-        this.geometry.addControl(this.physics);
+        this.rootNode = rootNode;
+        this.physicsSpace = physics;
+        rootNode.attachChild(this);
+        physics.add(this);
     }
 
     @Override
@@ -82,6 +112,7 @@ public class Lever extends InteractableEntity {
     public void load( JSONObject loadObj ){
         super.load(loadObj);
         this.isOn = (Boolean) loadObj.get(Lever.KEY_ISON);
+        this.direction = Direction.valueOf((String) loadObj.get(Lever.KEY_EDGE));
     }
 
     @Override
@@ -90,6 +121,7 @@ public class Lever extends InteractableEntity {
         codeObj.put(JSONHelper.KEY_TYPE, "lever");
 
         codeObj.put(Lever.KEY_ISON, this.isOn);
+        codeObj.put(Lever.KEY_EDGE, this.direction.toString());
     }
 
     public void setOn( boolean state ){
@@ -100,11 +132,11 @@ public class Lever extends InteractableEntity {
         this.isOn = !this.isOn;
         if (this.isOn){
             this.turnedOnEvent();
-            this.geometry.setLocalRotation(new Quaternion().fromAngles(0, Lever.ANGLE, 0));
+            this.geometry.setLocalRotation(Lever.ANGLE);
         }
         if (!this.isOn){
             this.turnedOffEvent();
-            this.geometry.setLocalRotation(new Quaternion().fromAngles(0, -Lever.ANGLE, 0));
+            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
         }
     }
 

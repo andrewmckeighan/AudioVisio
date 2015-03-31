@@ -33,6 +33,8 @@ public class NetworkUtils {
         Serializer.registerClass(PhysicsSyncMessage.class);
         Serializer.registerClass(SyncCharacterMessage.class);
         Serializer.registerClass(SyncRigidBodyMessage.class);
+        Serializer.registerClass(TriggerActionMessage.class);
+
     }
 
     public static int getPort(){

@@ -64,7 +64,7 @@ public class Wall extends Panel {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+        randomMaterial.setColor("Color", ColorRGBA.Gray);
 //        this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
 

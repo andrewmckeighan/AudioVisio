@@ -95,13 +95,13 @@ public class Button extends InteractableEntity {
      *
      * Note: this method will be called twice (once per entity), so only handle the receiving end of the collision.
      * (e.g. bot hits button, box does nothing, button updates being hit.)
-     *
      * @param entity The other entity in the collision.
      */
     @Override
     public void collisionTrigger( Entity entity ){
         if (this.isTriggeredBy(entity)){
             if (!this.state){
+                LogHelper.info("button was triggered!");
                 this.state = true;
                 this.wasUpdated = true;
             }
@@ -112,6 +112,7 @@ public class Button extends InteractableEntity {
     public void collisionEndTrigger( Entity entity ){
         if (this.isTriggeredBy(entity)){
             if (this.state){
+                LogHelper.info("button trigger ended!");
                 this.state = false;
                 this.wasUpdated = true;
             }
@@ -120,9 +121,7 @@ public class Button extends InteractableEntity {
 
     /**
      * Checks the entity against all classes that are valid ways to collide with this entity.
-     *
      * @param entity entity to be checked
-     *
      * @return if entity is something that can cause an update via collision
      */
     private Boolean isTriggeredBy( Entity entity ){

@@ -217,25 +217,13 @@ public class ServerAppState extends AbstractAppState implements
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
+        LogHelper.info(event.toString());
         if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
             Entity entityA = (Entity) event.getNodeA().getParent();
             Entity entityB = (Entity) event.getNodeB().getParent();
+            LogHelper.info(entityA + ": " + entityB);
             entityA.collisionTrigger(entityB);
             entityB.collisionTrigger(entityA);
-            if ("button".equals(event.getNodeA().getName())) {
-
-                if ("Oto-ogremesh".equals(event.getNodeB().getName())) {
-                    Button b = (Button) event.getNodeA().getParent();
-                    b.startPress();
-                }
-            }
-            if ("button".equals(event.getNodeB().getName())) {
-
-                if ("Oto-ogremesh".equals(event.getNodeA().getName())) {
-                    Button b = (Button) event.getNodeB().getParent();
-                    b.startPress();
-                }
-            }
         }
     }
 
