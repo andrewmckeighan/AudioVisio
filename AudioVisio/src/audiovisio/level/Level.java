@@ -40,7 +40,7 @@ public class Level {
     public static final String KEY_VISUAL_SPAWN = "p2";
 
     public static final long STARTING_ID = 10;
-    public static Node shootables;
+    public static Node shootables = new Node();
     JSONObject levelData;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
@@ -161,7 +161,7 @@ public class Level {
             }
 
             if (item instanceof IShootable){
-                shootables.attachChild((Spatial) item);
+                Level.shootables.attachChild((Spatial) item);
             }
         }
     }
@@ -431,6 +431,6 @@ public class Level {
     }
 
     public Node getShootables() {
-        return this.shootables;
+        return shootables;
     }
 }

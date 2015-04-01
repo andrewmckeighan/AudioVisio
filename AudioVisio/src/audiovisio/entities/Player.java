@@ -1,6 +1,6 @@
 package audiovisio.entities;
 
-import audiovisio.level.Level;
+import audiovisio.level.IShootable;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
@@ -200,11 +200,16 @@ public class Player extends MovingEntity implements ActionListener {
 
             Node shootables = ClientAppState.level.getShootables();
             shootables.collideWith(ray, results);
+
+            LogHelper.info("Shot: " + results);
             if (results.size() > 0){
                 CollisionResult closest = results.getClosestCollision();
+                LogHelper.info("Shot: " + closest);
+                LogHelper.info("distance: " + closest.getDistance());
                 if (closest.getDistance() <= Player.MAX_SHOOT_DISTANCE){
-                    assert closest instanceof IShootable;
-                    closest.update();
+                    IShootable shotObject = (IShootable) closest.getGeometry().getParent();
+                    assert shotObject instanceof IShootable;
+                    shotObject.update();
                 }
             }
         }

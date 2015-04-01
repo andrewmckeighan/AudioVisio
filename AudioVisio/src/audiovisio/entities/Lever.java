@@ -1,10 +1,12 @@
 package audiovisio.entities;
 
+import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
+import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -17,7 +19,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import org.json.simple.JSONObject;
 
-public class Lever extends InteractableEntity {
+public class Lever extends InteractableEntity implements IShootable {
     public static final  String     KEY_EDGE  = "edge";
     public static final  String     KEY_ISON  = "isOn";
     public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
@@ -86,11 +88,11 @@ public class Lever extends InteractableEntity {
 
         if (this.particle != null && this.particle.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
-            this.particle.emitter.setLocalTranslation(location);
+            this.particle.emitter.setLocalTranslation(this.location);
             this.particle.emitter.setNumParticles(25);
         }
 
-        this.particle.init(this.rootNode, assetManager);
+//        this.particle.init(this.rootNode, assetManager);
     }
 
     @Override
@@ -154,6 +156,7 @@ public class Lever extends InteractableEntity {
     }
 
     private void turnedOnEvent(){
+        LogHelper.info("Lever ON!");
         if (ClientAppState.isAudio){
             this.startSound();
             this.startParticles();
@@ -173,6 +176,7 @@ public class Lever extends InteractableEntity {
     private void updateVisuals(){}
 
     private void turnedOffEvent(){
+        LogHelper.info("Lever OFF!");
         if (ClientAppState.isAudio){
             this.stopSound();
             this.stopParticles();
@@ -187,5 +191,18 @@ public class Lever extends InteractableEntity {
 
     private void stopSound(){
 
+    }
+
+    @Override
+    public void update(){
+        this.isOn = !this.isOn;
+        if (this.isOn){
+            this.turnedOnEvent();
+            this.geometry.setLocalRotation(Lever.ANGLE);
+        }
+        if (!this.isOn){
+            this.turnedOffEvent();
+            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
+        }
     }
 }

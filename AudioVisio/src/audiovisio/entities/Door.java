@@ -25,9 +25,8 @@ public class Door extends InteractableEntity {
             0.5F * Level.SCALE.getZ());
     private static final float      MASS      = 0.0F;
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
-    private              Direction  direction = Direction.NORTH;
-
     public Particle particle;
+    private Direction direction = Direction.NORTH;
 
     public Door(){
         this.state = false;
@@ -138,11 +137,11 @@ public class Door extends InteractableEntity {
 
         if (this.particle != null && this.particle.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
-            this.particle.emitter.setLocalTranslation(location);
+            this.particle.emitter.setLocalTranslation(this.location);
             this.particle.emitter.setNumParticles(25);
         }
 
-        this.particle.init(this.rootNode, assetManager);
+//        this.particle.init(this.rootNode, assetManager);
 
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,

@@ -29,7 +29,7 @@ public class AudioVisio extends SimpleApplication {
         AudioVisio AV = new AudioVisio();
 
         NetworkUtils.setPort(11550);
-        LogHelper.init("rsle2Log.log");
+        LogHelper.init();
         LogHelper.setLevel(Level.INFO);
 
         NetworkUtils.initializeSerializables();
