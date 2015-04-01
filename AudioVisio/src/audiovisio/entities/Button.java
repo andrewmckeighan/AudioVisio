@@ -27,6 +27,8 @@ public class Button extends InteractableEntity {
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
 
+    public Particle particle;
+
     public Button(){}
 
     @Override
@@ -46,6 +48,15 @@ public class Button extends InteractableEntity {
 
         this.attachChild(this.geometry);
         this.addControl(this.physics);
+
+        if (this.particle != null && this.particle.emitter != null){
+//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+            this.particle.emitter.setLocalTranslation(location);
+            this.particle.emitter.setNumParticles(25);
+        }
+
+        this.particle.init(this.rootNode, assetManager);
+
     }
 
     @Override

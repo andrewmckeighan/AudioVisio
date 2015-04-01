@@ -29,6 +29,8 @@ public class Lever extends InteractableEntity {
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
     private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
 
+    public Particle particle;
+
     private Direction direction;
 
     private Boolean isOn;
@@ -81,6 +83,14 @@ public class Lever extends InteractableEntity {
         this.physics = new RigidBodyControl(Lever.MASS);//TODO: this might not be needed if we don't want collision detection
         this.attachChild(this.geometry);
         this.addControl(this.physics);
+
+        if (this.particle != null && this.particle.emitter != null){
+//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+            this.particle.emitter.setLocalTranslation(location);
+            this.particle.emitter.setNumParticles(25);
+        }
+
+        this.particle.init(this.rootNode, assetManager);
     }
 
     @Override
