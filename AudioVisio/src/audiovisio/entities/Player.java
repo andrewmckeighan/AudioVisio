@@ -16,6 +16,7 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import org.json.simple.JSONObject;
 
 /**
@@ -200,7 +201,10 @@ public class Player extends MovingEntity implements ActionListener {
 
             Node shootables = ClientAppState.level.getShootables();
             shootables.collideWith(ray, results);
-
+            LogHelper.info("shootables: " + shootables);
+            for (Spatial n : shootables.getChildren()){
+                LogHelper.info("Shootables" + n);
+            }
             LogHelper.info("Shot: " + results);
             if (results.size() > 0){
                 CollisionResult closest = results.getClosestCollision();
