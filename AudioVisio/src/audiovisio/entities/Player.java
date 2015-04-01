@@ -6,6 +6,7 @@ import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResult;
@@ -75,6 +76,9 @@ public class Player extends MovingEntity implements ActionListener {
     private Vector3f camDir        = new Vector3f();
     private Vector3f camLeft       = new Vector3f();
     private Vector3f spawn         = Player.DEFAULT_SPAWN_LOCATION;
+
+    //Sound Variables
+    private AudioNode audio_steps;
 
     public Player( Node playerModel ){
         this(playerModel, Player.DEFAULT_SPAWN_LOCATION);
@@ -233,6 +237,8 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.move(location);
 
 //        this.characterControl.warp(location);
+        audio_steps = new AudioNode(assetManager, "Sound/Effects/Foot steps.ogg",false);
+
         this.characterControl.setWalkDirection(direction);
 
 
@@ -247,6 +253,17 @@ public class Player extends MovingEntity implements ActionListener {
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.footSteps.emitter.setLocalTranslation(location);
             this.footSteps.emitter.setNumParticles((int) direction.length() * 3 + 1);
+
+        }
+
+        if(direction.length() !=0){
+            audio_steps.setLooping(false);
+            audio_steps.setPositional(false);
+            audio_steps.setVolume(3);
+            rootNode.attachChild(audio_steps);
+            audio_steps.playInstance();
+        }else{
+            audio_steps.stop();
         }
 
         if (this.playerCamera != null){
