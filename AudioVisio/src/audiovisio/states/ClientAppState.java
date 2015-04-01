@@ -102,7 +102,7 @@ public class ClientAppState extends AbstractAppState implements
                 LogHelper.warn("Thread.sleep interuppted in client init, ", e);
             }
         }
-        ClientAppState.isAudio = this.myClient.getId() % 2 == 0;
+        ClientAppState.isAudio = this.myClient.getId() % 2 == 1;
 
         this.audioVisioApp = (AudioVisio) app;
         this.rootNode = this.audioVisioApp.getRootNode();
@@ -112,8 +112,8 @@ public class ClientAppState extends AbstractAppState implements
         Items.init();
 
         try{
-            this.level = LevelReader.read(AudioVisio.level);
-            this.level.loadLevel();
+            level = LevelReader.read(AudioVisio.level);
+            level.loadLevel();
         } catch (Exception e){
             LogHelper.info("exception: ", e);
         }
@@ -207,8 +207,8 @@ public class ClientAppState extends AbstractAppState implements
         physicsSpace.addCollisionListener(this);
 //        physicsSpace.add(landscape);
 
-        this.level.init(this.assetManager, syncManager);
-        this.level.start(this.rootNode, physicsSpace);
+        level.init(this.assetManager, syncManager);
+        level.start(this.rootNode, physicsSpace);
 
 
         LogHelper.info("Client Started!");
@@ -252,7 +252,7 @@ public class ClientAppState extends AbstractAppState implements
             this.myClient.send(msg);
         }
 
-        Collection<ILevelItem> levelItems = this.level.getItems();
+        Collection<ILevelItem> levelItems = level.getItems();
         for (ILevelItem iLevelItem : levelItems){
             if (iLevelItem instanceof InteractableEntity){
                 InteractableEntity inEnt = (InteractableEntity) iLevelItem;

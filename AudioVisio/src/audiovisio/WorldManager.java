@@ -75,10 +75,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     public void addPlayer( long playerID ){
         LogHelper.fine("adding player: ");
         Player player;
-        if (playerID % 2 == 0){
-            player = new AudioPlayer();
-        } else {
+        if (ClientAppState.isAudio){
             player = new VisualPlayer();
+        } else {
+            player = new AudioPlayer();
         }
         player.setID(playerID);
         if (this.isServer()) {
