@@ -10,6 +10,7 @@ import audiovisio.networking.messages.PhysicsSyncMessage;
 import audiovisio.networking.messages.PlayerJoinMessage;
 import audiovisio.networking.messages.PlayerLeaveMessage;
 import audiovisio.states.ClientAppState;
+import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -76,9 +77,17 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         LogHelper.fine("adding player: ");
         Player player;
         if (ClientAppState.isAudio){
-            player = new VisualPlayer();
+            if (this.isServer()){
+                player = new VisualPlayer(this.app.getStateManager().getState(ServerAppState.class).getLevel());
+            } else {
+                player = new VisualPlayer(this.client.getLevel());
+            }
         } else {
-            player = new AudioPlayer();
+            if (this.isServer()) {
+                player = new AudioPlayer(this.app.getStateManager().getState(ServerAppState.class).getLevel());
+            } else {
+                player = new AudioPlayer(this.client.getLevel());
+            }
         }
         player.setID(playerID);
         if (this.isServer()) {

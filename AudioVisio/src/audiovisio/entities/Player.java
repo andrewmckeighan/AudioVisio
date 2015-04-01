@@ -1,6 +1,7 @@
 package audiovisio.entities;
 
 import audiovisio.level.IShootable;
+import audiovisio.level.Level;
 import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
@@ -68,6 +69,7 @@ public class Player extends MovingEntity implements ActionListener {
     //references
     private Node                   rootNode;
     private AssetManager           assetManager;
+    private Level                  level;
 
     //Instance Variables
     private boolean isServer;
@@ -124,8 +126,9 @@ public class Player extends MovingEntity implements ActionListener {
         this.attachChild(this.model);
     }
 
-    public Player(){
+    public Player(Level level){
         this(null, Player.DEFAULT_SPAWN_LOCATION);
+        this.level = level;
     }
 
     public static Node createModel( AssetManager assetManager ){
@@ -203,7 +206,7 @@ public class Player extends MovingEntity implements ActionListener {
 
             Ray ray = new Ray(this.playerCamera.getLocation(), this.playerCamera.getDirection());
 
-            Node shootables = ClientAppState.level.getShootables();
+            Node shootables = this.level.getShootables();
             shootables.collideWith(ray, results);
             LogHelper.info("shootables: " + shootables);
             for (Spatial n : shootables.getChildren()){
@@ -411,6 +414,7 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public void init(){
-        this.footSteps.init(this.rootNode, this.assetManager);
+        this.footSteps.init(this.assetManager);
+        this.footSteps.start(this.rootNode, this.physicsSpace);
     }
 }

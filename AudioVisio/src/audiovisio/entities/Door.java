@@ -135,7 +135,7 @@ public class Door extends InteractableEntity {
 
         this.particle = new Particle();
 
-        this.particle.init(this.rootNode, assetManager);
+        this.particle.init(assetManager);
 
         if (this.particle != null && this.particle.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -162,6 +162,8 @@ public class Door extends InteractableEntity {
             rootNode.attachChild(this);
         }
         physics.add(this);
+
+        this.particle.start(rootNode, physics);
     }
 
     @Override

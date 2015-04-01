@@ -245,5 +245,8 @@ public class ServerAppState extends AbstractAppState implements
         return this.players.get(id);
     }
 
+    public Level getLevel(){
+        return this.currentLevel;
+    }
 }
 

@@ -57,7 +57,6 @@ public class ClientAppState extends AbstractAppState implements
 
     public static final int FPS = 1;
     public static boolean isAudio;
-    public static Level   level;
 
     public NetworkClient myClient = Network.createClient();
     // Networking
@@ -66,6 +65,7 @@ public class ClientAppState extends AbstractAppState implements
     private AssetManager assetManager;
     private Node         rootNode;
     private WorldManager worldManager;
+    public  Level        level;
 
     //On Screen Message
     private CharSequence velocityMessage = "";
@@ -412,5 +412,9 @@ public class ClientAppState extends AbstractAppState implements
 
     public boolean isAudioClient(){
         return this.getId() % 2 == 0;
+    }
+
+    public Level getLevel(){
+        return this.level;
     }
 }

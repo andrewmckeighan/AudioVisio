@@ -1,6 +1,7 @@
 package audiovisio.entities;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
@@ -12,9 +13,8 @@ import com.jme3.scene.Node;
 public class Particle extends Entity {
     public ParticleEmitter emitter;
 
-
-    public void init( Node node, AssetManager assetManager ){
-
+    @Override
+    public void init( AssetManager assetManager ){
         ParticleEmitter fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
         Material mat_red = new Material(assetManager,
                 "Common/MatDefs/Misc/Particle.j3md");
@@ -35,7 +35,11 @@ public class Particle extends Entity {
         fire.setInWorldSpace(true);//TODO this should prevent particles from moving when emitter moves.
 
         this.emitter = fire;
-        node.attachChild(this.emitter);
+    }
 
+    @Override
+    public void start( Node rootNode, PhysicsSpace physics ){
+        super.start(rootNode, physics);
+        rootNode.attachChild(this.emitter);
     }
 }

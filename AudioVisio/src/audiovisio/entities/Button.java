@@ -51,7 +51,7 @@ public class Button extends InteractableEntity {
 
         this.particle = new Particle();
 
-        this.particle.init(this.rootNode, assetManager);
+        this.particle.init(assetManager);
 
 
         if (this.particle != null && this.particle.emitter != null){
@@ -70,6 +70,8 @@ public class Button extends InteractableEntity {
             rootNode.attachChild(this);
         }
         physics.add(this);
+
+        this.particle.start(rootNode, physics);
     }
 
     @Override
