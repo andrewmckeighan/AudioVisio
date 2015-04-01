@@ -55,7 +55,7 @@ public class Button extends InteractableEntity {
             this.particle.emitter.setNumParticles(25);
         }
 
-//        this.particle.init(this.rootNode, assetManager);
+        this.particle.init(this.rootNode, assetManager);
 
     }
 

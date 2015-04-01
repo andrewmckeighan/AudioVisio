@@ -92,7 +92,7 @@ public class Lever extends InteractableEntity implements IShootable {
             this.particle.emitter.setNumParticles(25);
         }
 
-//        this.particle.init(this.rootNode, assetManager);
+        this.particle.init(this.rootNode, assetManager);
     }
 
     @Override
