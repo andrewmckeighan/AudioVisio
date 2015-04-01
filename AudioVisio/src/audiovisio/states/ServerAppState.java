@@ -217,7 +217,6 @@ public class ServerAppState extends AbstractAppState implements
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        LogHelper.info(event.toString());
         if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
             Entity entityA = (Entity) event.getNodeA().getParent();
             Entity entityB = (Entity) event.getNodeB().getParent();
