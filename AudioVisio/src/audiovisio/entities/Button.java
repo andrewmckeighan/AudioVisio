@@ -27,6 +27,8 @@ public class Button extends InteractableEntity {
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
 
+    public Particle particle;
+
     public Button(){}
 
     @Override
@@ -46,6 +48,15 @@ public class Button extends InteractableEntity {
 
         this.attachChild(this.geometry);
         this.addControl(this.physics);
+
+        if (this.particle != null && this.particle.emitter != null){
+//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+            this.particle.emitter.setLocalTranslation(this.location);
+            this.particle.emitter.setNumParticles(25);
+        }
+
+//        this.particle.init(this.rootNode, assetManager);
+
     }
 
     @Override
@@ -167,28 +178,23 @@ public class Button extends InteractableEntity {
         //particles for startPress
         //change color of button to something
         assert this.state;
-
-        String isPressColor = "";
-        this.updateColor(isPressColor);
-        String isPressSound = "";
-        this.playSound(isPressSound);
-
-        //children are updated in the this.update(list, state) method, so don't need to be updated here.
-
-//        for(ITriggerable inEnt : this.interactionMap.values()){
-//            ((InteractableEntity) inEnt).update(true);
-//        }
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
-    private void playSound( String sound ){
+    private void emitParticle(){}
+
+    private void playSound(){
         //TODO
     }
 
-    private void updateColor( String color ){
+    private void updateVisuals(){
         //TODO
         try{
-
-
             if (this.geometry.getMaterial() != null){
                 this.geometry.getMaterial().setColor("updatedColor", ColorRGBA.randomColor());
             }
@@ -202,15 +208,12 @@ public class Button extends InteractableEntity {
         //change the color again.
         assert !this.state;
 
-        String notPressColor = "";
-        this.updateColor(notPressColor);
-        String notPressSound = "";
-        this.playSound(notPressSound);
-
-//        for(ITriggerable inEnt : this.interactionMap.values()){
-//            ((InteractableEntity) inEnt).update(false);
-//        }
-
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
     public TriggerActionMessage getTriggerActionMessage(){

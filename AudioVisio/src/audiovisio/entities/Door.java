@@ -25,7 +25,8 @@ public class Door extends InteractableEntity {
             0.5F * Level.SCALE.getZ());
     private static final float      MASS      = 0.0F;
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
-    private              Direction  direction = Direction.NORTH;
+    public Particle particle;
+    private Direction direction = Direction.NORTH;
 
     public Door(){
         this.state = false;
@@ -74,20 +75,41 @@ public class Door extends InteractableEntity {
 
     private void open(){
         assert this.state;
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
+    }
 
-//        this.geometry.scale(0.0F);
-        this.rootNode.detachChild(this);
-        this.physicsSpace.remove(this);
+    private void updateVisuals(){
+        if (this.state){
+            this.rootNode.detachChild(this);
+            this.physicsSpace.remove(this);
+        } else {
+            this.rootNode.attachChild(this);
+            this.physicsSpace.add(this);
+        }
+    }
 
+    private void emitParticle(){
+        //TODO
+    }
+
+    private void playSound(){
+        //TODO
     }
 
     private void close(){
         //TODO
         assert !this.state;
-
-//        this.geometry.scale(1.0F);
-        this.rootNode.attachChild(this);
-        this.physicsSpace.add(this);
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
     @Override
@@ -110,6 +132,16 @@ public class Door extends InteractableEntity {
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Door.OFFSET);
         this.geometry.setLocalTranslation(this.location);
+
+        this.particle = new Particle();
+
+        if (this.particle != null && this.particle.emitter != null){
+//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+            this.particle.emitter.setLocalTranslation(this.location);
+            this.particle.emitter.setNumParticles(25);
+        }
+
+//        this.particle.init(this.rootNode, assetManager);
 
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,

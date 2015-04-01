@@ -29,7 +29,7 @@ public class AudioVisio extends SimpleApplication {
         AudioVisio AV = new AudioVisio();
 
         NetworkUtils.setPort(11550);
-        LogHelper.init("rsle2Log.log");
+        LogHelper.init();
         LogHelper.setLevel(Level.INFO);
 
         NetworkUtils.initializeSerializables();
@@ -51,6 +51,9 @@ public class AudioVisio extends SimpleApplication {
         if (AudioVisio.serverInstance != null){ AudioVisio.serverInstance.stop(); }
     }
 
+    /**
+     * Starts the AudioVisio SimpleApplication.
+     */
     @Override
     public void simpleInitApp(){
         if (AudioVisio.startServer){
@@ -61,27 +64,46 @@ public class AudioVisio extends SimpleApplication {
         }
     }
 
+    /**
+     * Creates an instance of the ServerAppState, and switches the state manager to run the server.
+     */
     public void serverStart(){
         this.server = new ServerAppState();
         this.stateManager.attach(this.server);
     }
 
+    /**
+     * @return returns the width of for
+     */
     public int getWidth(){
         return this.settings.getWidth();
     }
 
+    /**
+     * @return returns the height of for
+     */
     public int getHeight(){
         return this.settings.getHeight();
     }
 
+    /**
+     * Sets a sequence of characters to display from the server.
+     * @param text A char sequence to display from the server.
+     */
     public void setFPSText( CharSequence text ){
         this.fpsText.setText(text);
     }
 
+    /**
+     * Detaches the GuiAppState from the Audio Visio simple Application.
+     */
     public void stopGui(){
         this.stateManager.detach(this.gui);
     }
 
+    /**
+     * Creates an instance of the ClientAppState, and switches the state manager to run the client.
+     */
     public void clientStart(){
         this.client = new ClientAppState();
         this.stateManager.attach(this.client);

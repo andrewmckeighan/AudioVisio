@@ -35,7 +35,7 @@ import java.io.File;
  * @author Matt Gerst
  */
 public class RSLE extends JPanel implements ActionListener, MouseListener {
-    protected JMenuBar menuBar;
+    protected JMenuBar         menuBar;
     private   JTree            tree;
     private   DefaultTreeModel treeModel;
     private JPanel editor = new JPanel();
@@ -71,6 +71,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private JMenu     create;
     private JMenuItem create_floor;
     private JMenuItem create_link;
+    private JMenuItem create_wall;
 
     // CONTEXT MENU
     private JPopupMenu ctxMenu;
@@ -80,7 +81,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private LevelNode panels;
     private LevelNode entities;
 
-    // LEVEL STUFF
+    // level STUFF
     private File  loadedFile;
     private Level currentLevel;
 
@@ -232,6 +233,10 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.create_link = new JMenuItem("Create Link");
         this.create_link.addActionListener(this);
         this.create.add(this.create_link);
+
+        this.create_wall = new JMenuItem("Create Wall");
+        this.create_wall.addActionListener(this);
+        this.create.add(this.create_wall);
 
         this.menuBar.add(this.create);
     }
@@ -557,8 +562,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // CREATE ACTIONS
-
     private void actionAddStair(){
         NewStairDialog stairDialog = new NewStairDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         stairDialog.setVisible(true);
@@ -590,6 +593,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
         }
     }
+
+    // CREATE ACTIONS
 
     private void actionCreateFloor(){
         CreateFloorDialog floorDialog = new CreateFloorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -630,6 +635,54 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.buildTree();
         }
     }
+
+    private void actionCreateWall(){
+        CreateWallDialog wallDialog = new CreateWallDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        wallDialog.setVisible(true);
+
+        if (wallDialog.getStatus()){
+            int startX = wallDialog.getStartX();
+            int startZ = wallDialog.getStartZ();
+            int size = wallDialog.getWallSize();
+            int y = wallDialog.getYPlane();
+
+            String direction = wallDialog.getDirection();
+
+            if ("NORTH-SOUTH".equals(direction) || "SOUTH-NORTH".equals(direction)){
+                ILevelItem.Direction face;
+                if ("NORTH-SOUTH".equals(direction)){
+                    face = ILevelItem.Direction.EAST;
+                } else {
+                    face = ILevelItem.Direction.WEST;
+                }
+
+                for (int x = startX; x < size; x++){
+                    Wall wall = new Wall(new Vector3f(x, y, startZ), face);
+                    wall.setID(this.currentLevel.getNextId());
+
+                    this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
+                    this.currentLevel.addItem(wall);
+                }
+            } else if ("EAST_WEST".equals(direction) || "WEST-EAST".equals(direction)){
+                ILevelItem.Direction face;
+                if ("EAST-WEST".equals(direction)){
+                    face = ILevelItem.Direction.NORTH;
+                } else {
+                    face = ILevelItem.Direction.SOUTH;
+                }
+
+                for (int z = startZ; z < size; z++){
+                    Wall wall = new Wall(new Vector3f(startX, y, z), face);
+                    wall.setID(this.currentLevel.getNextId());
+
+                    this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
+                    this.currentLevel.addItem(wall);
+                }
+            }
+        }
+    }
+
+    // OTHER ACTIONS
 
     private void actionDelete( ActionEvent e ){
         TreePath path = this.tree.getSelectionPath();

@@ -57,14 +57,14 @@ public class ClientAppState extends AbstractAppState implements
 
     public static final int FPS = 1;
     public static boolean isAudio;
+    public static Level   level;
+
     public NetworkClient myClient = Network.createClient();
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;
     private AssetManager assetManager;
     private Node         rootNode;
-    private Level level;
-
     private WorldManager worldManager;
 
     //On Screen Message
@@ -86,6 +86,12 @@ public class ClientAppState extends AbstractAppState implements
         return this.myClient.getId();
     }
 
+
+    /**
+     * Initializes variables to create a ClientAppState. Then initializes the game inside of the Client.
+     * @param stateManager State manager passed by the AudioVisio SimpleApplication.
+     * @param app A SimpleApplication to implement the AppState in (AudioVisio).
+     */
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting client: " + this.myClient.getId());
@@ -175,9 +181,9 @@ public class ClientAppState extends AbstractAppState implements
 //        RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
 //        sceneModel.setLocalScale(2f);
 
-//        // /////////////////////
+//        ///////////////////////
 //        // Generate entities //
-//        // /////////////////////
+//        ///////////////////////
 //        Button testButton = new Button();
 
 //        Lever testLever = new Lever(3f, 5f, 3f);
