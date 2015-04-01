@@ -154,10 +154,38 @@ public class Lever extends InteractableEntity {
     }
 
     private void turnedOnEvent(){
+        if (ClientAppState.isAudio){
+            this.startSound();
+            this.startParticles();
+        } else {
+            this.updateVisuals();
+        }
+    }
+
+    private void startSound(){
 
     }
 
+    private void startParticles(){
+
+    }
+
+    private void updateVisuals(){}
+
     private void turnedOffEvent(){
+        if (ClientAppState.isAudio){
+            this.stopSound();
+            this.stopParticles();
+        } else {
+            this.updateVisuals();
+        }
+    }
+
+    private void stopParticles(){
+
+    }
+
+    private void stopSound(){
 
     }
 }

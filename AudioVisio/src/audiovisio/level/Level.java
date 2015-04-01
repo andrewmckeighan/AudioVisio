@@ -12,6 +12,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -157,6 +158,10 @@ public class Level {
 
                 Map<Long, ITriggerable> links = this.resolveLinks(item.getID(), linkable.getLinked());
                 linkable.resolveLinks(links);
+            }
+
+            if (item instanceof IShootable){
+                shootables.attachChild((Spatial) item);
             }
         }
     }
@@ -423,5 +428,9 @@ public class Level {
 
     public ILevelItem getItem( Long id ){
         return this.levelItems.get(id);
+    }
+
+    public Node getShootables() {
+        return this.shootables;
     }
 }

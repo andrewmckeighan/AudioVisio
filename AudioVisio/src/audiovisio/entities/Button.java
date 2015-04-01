@@ -178,28 +178,23 @@ public class Button extends InteractableEntity {
         //particles for startPress
         //change color of button to something
         assert this.state;
-
-        String isPressColor = "";
-        this.updateColor(isPressColor);
-        String isPressSound = "";
-        this.playSound(isPressSound);
-
-        //children are updated in the this.update(list, state) method, so don't need to be updated here.
-
-//        for(ITriggerable inEnt : this.interactionMap.values()){
-//            ((InteractableEntity) inEnt).update(true);
-//        }
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
-    private void playSound( String sound ){
+    private void emitParticle(){}
+
+    private void playSound(){
         //TODO
     }
 
-    private void updateColor( String color ){
+    private void updateVisuals(){
         //TODO
         try{
-
-
             if (this.geometry.getMaterial() != null){
                 this.geometry.getMaterial().setColor("updatedColor", ColorRGBA.randomColor());
             }
@@ -213,15 +208,12 @@ public class Button extends InteractableEntity {
         //change the color again.
         assert !this.state;
 
-        String notPressColor = "";
-        this.updateColor(notPressColor);
-        String notPressSound = "";
-        this.playSound(notPressSound);
-
-//        for(ITriggerable inEnt : this.interactionMap.values()){
-//            ((InteractableEntity) inEnt).update(false);
-//        }
-
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
     public TriggerActionMessage getTriggerActionMessage(){
