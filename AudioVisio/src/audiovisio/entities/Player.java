@@ -240,7 +240,7 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.move(location);
 
 //        this.characterControl.warp(location);
-        audio_steps = new AudioNode(assetManager, "Sound/Effects/Foot steps.ogg",false);
+        this.audio_steps = new AudioNode(this.assetManager, "Sound/Effects/Foot steps.ogg",false);
 
         this.characterControl.setWalkDirection(direction);
 
@@ -259,14 +259,16 @@ public class Player extends MovingEntity implements ActionListener {
 
         }
 
-        if(direction.length() !=0){
-            audio_steps.setLooping(false);
-            audio_steps.setPositional(false);
-            audio_steps.setVolume(3);
-            rootNode.attachChild(audio_steps);
-            audio_steps.playInstance();
-        }else{
-            audio_steps.stop();
+        if(!this.isServer()){
+            if (direction.length() != 0){
+                this.audio_steps.setLooping(false);
+                this.audio_steps.setPositional(false);
+                this.audio_steps.setVolume(3);
+                this.rootNode.attachChild(this.audio_steps);
+                this.audio_steps.playInstance();
+            } else {
+                this.audio_steps.stop();
+            }
         }
 
         if (this.playerCamera != null){
