@@ -252,15 +252,7 @@ public class Player extends MovingEntity implements ActionListener {
 
         }
 
-        if(direction.length() !=0){
-            audio_steps.setLooping(false);
-            audio_steps.setPositional(false);
-            audio_steps.setVolume(3);
-            rootNode.attachChild(audio_steps);
-            audio_steps.playInstance();
-        }else{
-            audio_steps.stop();
-        }
+
 
         if (this.playerCamera != null){
             //TODO why isnt this location?
@@ -284,12 +276,22 @@ public class Player extends MovingEntity implements ActionListener {
                 this.model.removeFromParent();
                 this.model = null;
             }
+
         }
 
         if (this instanceof AudioPlayer){
             if (this.footSteps != null){
                 this.footSteps.removeFromParent();
                 this.footSteps = null;
+            }
+            if(direction.length() !=0){
+                audio_steps.setLooping(false);
+                audio_steps.setPositional(false);
+                audio_steps.setVolume(3);
+                rootNode.attachChild(audio_steps);
+                audio_steps.playInstance();
+            }else{
+                audio_steps.pause();
             }
         }
 
