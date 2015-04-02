@@ -100,7 +100,7 @@ public class Level {
 
         JSONObject visual = (JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN);
         float pVisualRotation = ((Double) visual.get(Level.KEY_SPAWN_ROTATION)).floatValue();
-        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
+        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) visual.get(Level.KEY_SPAWN_LOCATION));
 
         JSONArray level = (JSONArray) this.levelData.get(Level.KEY_LEVEL_DATA);
         LogHelper.info(String.format("Loading level '%s'", this.name));
