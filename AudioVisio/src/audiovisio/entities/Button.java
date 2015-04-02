@@ -71,11 +71,16 @@ public class Button extends InteractableEntity {
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        if (!ClientAppState.isAudio){
+        if (ClientAppState.isAudio){
+            rootNode.attachChild(this.particle);
+            this.particle.start(rootNode, physics);
+        } else {
+            this.particle.removeFromParent();
+            this.particle = null;
             rootNode.attachChild(this);
         }
         physics.add(this);
-        this.particle.start(rootNode, physics);
+
     }
 
     @Override
