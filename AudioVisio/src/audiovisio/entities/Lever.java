@@ -95,6 +95,8 @@ public class Lever extends InteractableEntity implements IShootable {
 
         this.particle.init(assetManager);
 
+        this.attachChild(this.particle);
+
         if (this.particle != null && this.particle.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);

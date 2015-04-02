@@ -51,6 +51,5 @@ public class Particle extends Entity {
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         super.start(rootNode, physics);
-        rootNode.attachChild(this);
     }
 }
