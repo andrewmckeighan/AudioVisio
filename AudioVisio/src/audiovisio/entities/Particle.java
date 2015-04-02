@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.AudioVisio;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.effect.ParticleEmitter;
@@ -52,5 +53,8 @@ public class Particle extends Entity {
     public void start( Node rootNode, PhysicsSpace physics ){
         super.start(rootNode, physics);
         rootNode.attachChild(this);
+        if (AudioVisio.difficulty == 0){
+            this.status = true;
+        }
     }
 }

@@ -57,6 +57,7 @@ public class Player extends MovingEntity implements ActionListener {
     private static final Vector3f JUMP_FORCE             = new Vector3f(0, 2, 0);
     private static final float MAX_SHOOT_DISTANCE = 10.0F;
     public  Particle               footSteps;
+    protected Level level;
     //Key Listeners
     private boolean                up;
     private boolean                down;
@@ -69,8 +70,6 @@ public class Player extends MovingEntity implements ActionListener {
     //references
     private Node                   rootNode;
     private AssetManager           assetManager;
-    protected Level                  level;
-
     //Instance Variables
     private boolean isServer;
     private Vector3f walkDirection = new Vector3f(); //TODO are walk & save directions needed?
@@ -93,13 +92,15 @@ public class Player extends MovingEntity implements ActionListener {
      * @param  spawnLocation The starting location for the Player to appear in.
      */
     public Player( Node playerModel, Vector3f spawnLocation ){
+        spawnLocation = spawnLocation.mult(Level.SCALE);
         this.spawn = spawnLocation;
+        LogHelper.info("spawn: " + this.spawn);
 
         if (playerModel != null){
             this.setModel(playerModel, spawnLocation);
         }
 
-        this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8f);
+        this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8.0f);
         this.characterControl.setJumpForce(Player.JUMP_FORCE);
         this.characterControl.setGravity(Player.GRAVITY);
 

@@ -38,12 +38,12 @@ public class Level {
     public static final String KEY_SPAWN          = "spawn";
     public static final String KEY_SPAWN_LOCATION = "location";
     public static final String KEY_SPAWN_ROTATION = "rotation";
-    public static final String KEY_AUDIO_SPAWN    = "p1";
-    public static final String KEY_VISUAL_SPAWN   = "p2";
+    public static final String KEY_AUDIO_SPAWN  = "p2";
+    public static final String KEY_VISUAL_SPAWN = "p1";
 
     public static final long STARTING_ID = 10;
-    private Node       shootables;
     public  JSONObject levelData;
+    private Node shootables;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
     /**
