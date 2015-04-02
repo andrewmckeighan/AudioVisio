@@ -69,7 +69,7 @@ public class Player extends MovingEntity implements ActionListener {
     //references
     private Node                   rootNode;
     private AssetManager           assetManager;
-    private Level                  level;
+    protected Level                  level;
 
     //Instance Variables
     private boolean isServer;
