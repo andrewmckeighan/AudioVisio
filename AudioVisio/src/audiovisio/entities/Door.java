@@ -163,7 +163,6 @@ public class Door extends InteractableEntity {
             rootNode.attachChild(this);
         }
         physics.add(this);
-
         this.particle.start(rootNode, physics);
     }
 

@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.AudioVisio;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
@@ -107,8 +108,6 @@ public class Lever extends InteractableEntity implements IShootable {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-//        this.rootNode = rootNode;
-//        this.physicsSpace = physics;
         physics.add(this);
         this.particle.start(rootNode, physics);
     }
@@ -192,7 +191,7 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     private void startParticles(){
-
+        this.particle.status = true;
     }
 
     private void updateVisuals(){
@@ -210,15 +209,17 @@ public class Lever extends InteractableEntity implements IShootable {
     private void turnedOffEvent(){
         LogHelper.info("Lever OFF!");
         if (ClientAppState.isAudio){
-            this.stopSound();
-            this.stopParticles();
+            if (AudioVisio.difficulty > 0){
+                this.stopSound();
+                this.stopParticles();
+            }
         } else {
             this.updateVisuals();
         }
     }
 
     private void stopParticles(){
-
+        this.particle.status = false;
     }
 
     private void stopSound(){

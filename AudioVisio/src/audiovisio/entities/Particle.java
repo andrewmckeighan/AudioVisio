@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.AudioVisio;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.effect.ParticleEmitter;
@@ -11,6 +12,7 @@ import com.jme3.scene.Node;
 
 //TODO why do particles reset?
 public class Particle extends Entity {
+    private static final float PARTICLES_PER_SECOND = 5;
     public ParticleEmitter emitter;
     private String    material  = "Common/MatDefs/Misc/Particle.j3md";
     private String    texture   = "Effects/Explosion/flame.png";
@@ -51,5 +53,11 @@ public class Particle extends Entity {
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         super.start(rootNode, physics);
+        rootNode.attachChild(this);
+        if (AudioVisio.difficulty == 0){
+            this.status = true;
+            this.emitter.setParticlesPerSec(Particle.PARTICLES_PER_SECOND);
+            this.emitter.setEnabled(true);
+        }
     }
 }
