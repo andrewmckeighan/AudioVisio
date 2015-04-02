@@ -35,6 +35,7 @@ public class LevelVersions {
     public static void init(){
         LevelVersions.addVersion("0.2", new Level03Upgrader());
         LevelVersions.addVersion("0.3", new Level04Upgrader());
+        LevelVersions.addVersion("0.4", new Level05Upgrader());
     }
 
     /**

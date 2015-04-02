@@ -13,6 +13,8 @@ import java.util.logging.Level;
 
 public class AudioVisio extends SimpleApplication {
 
+    public static final Boolean DEBUG = true;
+    //    public static final Difficulty = 0;
     public static AudioVisio serverInstance;
     public static String level = "demo_level.json";
     static JmeContext.Type appType = JmeContext.Type.Display;
