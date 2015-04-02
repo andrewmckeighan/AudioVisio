@@ -41,7 +41,7 @@ public class Button extends InteractableEntity {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+        randomMaterial.setColor("Color", Button.COLOR);
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection

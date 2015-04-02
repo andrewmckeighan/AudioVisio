@@ -20,10 +20,10 @@ import org.json.simple.JSONObject;
  */
 public class Panel implements ILevelItem {
 
+    public static final ColorRGBA COLOR = ColorRGBA.DarkGray;
     private static final Box SHAPE = new Box(0.5F * Level.SCALE.getX(),
             0.01F * Level.SCALE.getY(),
             0.5F * Level.SCALE.getZ());
-
     /**
      * The location of the panel on the grid.
      */
@@ -66,7 +66,7 @@ public class Panel implements ILevelItem {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+        randomMaterial.setColor("Color", Panel.COLOR);
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(0);

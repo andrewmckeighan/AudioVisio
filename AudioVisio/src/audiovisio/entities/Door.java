@@ -8,7 +8,6 @@ import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -60,7 +59,6 @@ public class Door extends InteractableEntity {
 
     @Override
     public void update( Boolean state ){
-
         if (!this.state){
             if (state){
                 this.state = state;
@@ -72,8 +70,6 @@ public class Door extends InteractableEntity {
                 this.close();
             }
         }
-
-
     }
 
     private void open(){
@@ -148,7 +144,7 @@ public class Door extends InteractableEntity {
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+        randomMaterial.setColor("Color", Door.COLOR);
         this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
 

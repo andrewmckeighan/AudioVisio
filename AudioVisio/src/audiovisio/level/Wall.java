@@ -22,6 +22,7 @@ public class Wall extends Panel {
             0.5F * Level.SCALE.getZ());
     private static final Quaternion ROTATION = new Quaternion().fromAngles(0, (float) Math.PI / 2, 0);
     private static final Vector3f   OFFSET   = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
+    private static final ColorRGBA COLOR = ColorRGBA.LightGray;
 
     private Direction direction;
 
@@ -62,7 +63,7 @@ public class Wall extends Panel {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.Gray);
+        randomMaterial.setColor("Color", Wall.COLOR);
 //        this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
 
