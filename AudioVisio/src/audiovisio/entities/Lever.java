@@ -102,7 +102,7 @@ public class Lever extends InteractableEntity implements IShootable {
         this.rootNode = rootNode;
         this.physicsSpace = physics;
         physics.add(this);
-        this.particle.start(this.rootNode, physics);
+        this.particle.start(rootNode, physics);
     }
 
     @Override
