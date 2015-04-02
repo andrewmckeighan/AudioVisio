@@ -90,7 +90,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     public static void main( String[] args ){
         LogHelper.init();
         LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
-        LogHelper.setLevel(java.util.logging.Level.FINE);
+//        LogHelper.setLevel(java.util.logging.Level.FINE);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

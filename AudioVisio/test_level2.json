@@ -2550,6 +2550,17 @@
       },
       "type": "trigger",
       "subtype": "end"
+    },
+    {
+      "id": 290,
+      "location": {
+        "x": 4.0,
+        "y": 5.0,
+        "z": 6.0
+      },
+      "type": "trigger",
+      "subtype": "text",
+      "text": "This is some text!"
     }
   ],
   "name": "Test Level",

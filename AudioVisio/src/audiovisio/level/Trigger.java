@@ -10,8 +10,8 @@ import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
 
 public class Trigger implements ILevelItem {
-    private Vector3f location;
-    private long ID = -3;
+    protected Vector3f location;
+    protected long ID = -3;
 
     public Trigger(){}
 

@@ -18,6 +18,7 @@ public class EndTrigger extends Trigger {
     @Override
     public LevelNode getLevelNode(){
         LevelNode parent = super.getLevelNode();
+        parent.setUserObject(String.format("#%d end @ %s", this.ID, this.location));
 
         LevelNode subType = new LevelNode("Sub-Type", "end", true);
         parent.insert(subType, 1);
