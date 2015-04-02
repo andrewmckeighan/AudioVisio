@@ -95,9 +95,11 @@ public class Level {
         JSONObject spawns = (JSONObject) this.levelData.get(Level.KEY_SPAWN);
 
         JSONObject audio = (JSONObject) spawns.get(Level.KEY_AUDIO_SPAWN);
+        float pAudioRotation = ((Double) audio.get(Level.KEY_SPAWN_ROTATION)).floatValue();
         this.pAudioSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
 
         JSONObject visual = (JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN);
+        float pVisualRotation = ((Double) visual.get(Level.KEY_SPAWN_ROTATION)).floatValue();
         this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
 
         JSONArray level = (JSONArray) this.levelData.get(Level.KEY_LEVEL_DATA);
