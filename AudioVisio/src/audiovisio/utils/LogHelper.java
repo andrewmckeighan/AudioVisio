@@ -1,16 +1,13 @@
 package audiovisio.utils;
 
 import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.*;
 
 public class LogHelper {
     private static final Level LEVEL        = Level.WARNING;
     private static final int   DIVIDER_SIZE = 40;
     static FileHandler fileHandler;
-    private static Logger LOGGER = Logger.getLogger("AudioVisio");
+    private static Logger  LOGGER     = Logger.getLogger("AudioVisio");
     private static boolean DUMP_STACK = true;
 
     public static void finest( String msg ){LogHelper.LOGGER.log(Level.FINEST, msg);}
@@ -53,9 +50,30 @@ public class LogHelper {
 
     public static void setLevel( Level level ){
         LogHelper.LOGGER.setLevel(level);
+
+        // Because apparently java's default ConsoleHandler doesn't think
+        // anybody would ever want to see FINE, and doesn't respect the
+        // system property to change it's logging level, we have to do this
+        // http://stackoverflow.com/questions/470430/java-util-logging-logger-doesnt-respect-java-util-logging-level
+        Logger topLogger = Logger.getLogger("");
+
+        Handler consoleHandler = null;
+
+        for (Handler handler : topLogger.getHandlers()){
+            if (handler instanceof ConsoleHandler){
+                consoleHandler = handler;
+                break;
+            }
+        }
+
+        if (consoleHandler == null){
+            consoleHandler = new ConsoleHandler();
+            topLogger.addHandler(consoleHandler);
+        }
+        consoleHandler.setLevel(level);
     }
 
-    public static void init() {
+    public static void init(){
         LogHelper.LOGGER.setLevel(LogHelper.LEVEL);
         System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS [%4$s]: [%5$s%6$s]%n");
     }

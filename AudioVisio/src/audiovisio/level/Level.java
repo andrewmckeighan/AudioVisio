@@ -113,10 +113,19 @@ public class Level {
             // This is mainly used in the level editors
             this.NEXT_ID = Math.max(this.NEXT_ID, ((Long) itemJson.get("id")).intValue() + 1);
 
-            ILevelItem lvlItem = LevelRegistry.getItemForType(type);
-            lvlItem.load(itemJson);
-            this.levelItems.put(lvlItem.getID(), lvlItem);
-            LogHelper.fine("Load item of type: " + type);
+            if (LevelRegistry.typeHasSubTypes(type) && itemJson.containsKey("subtype")) {
+                String subtype = (String) itemJson.get("subtype");
+
+                ILevelItem lvlItem = LevelRegistry.getItemForSubType(type, subtype);
+                lvlItem.load(itemJson);
+                this.levelItems.put(lvlItem.getID(), lvlItem);
+                LogHelper.fine(String.format("Load item of type: %s:%s", type, subtype));
+            } else {
+                ILevelItem lvlItem = LevelRegistry.getItemForType(type);
+                lvlItem.load(itemJson);
+                this.levelItems.put(lvlItem.getID(), lvlItem);
+                LogHelper.fine("Load item of type: " + type);
+            }
         }
     }
 

@@ -48,7 +48,7 @@ public class Trigger implements ILevelItem {
     @Override
     public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d @ %s", this.ID, this.location), true);
-        LevelNode typeNode = new LevelNode("Trigger", "trigger", true);
+        LevelNode typeNode = new LevelNode("Type", "trigger", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
         LevelNode location = LevelUtils.vector2node(this.location);
 
