@@ -191,6 +191,7 @@ public class Level {
             }
 
             if (item instanceof IShootable){
+//                ((IShootable) item).init(ClientAppState.isAudio);
                 this.shootables.attachChild((Spatial) item);
             }
         }

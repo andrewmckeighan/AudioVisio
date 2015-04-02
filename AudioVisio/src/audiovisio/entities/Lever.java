@@ -103,18 +103,28 @@ public class Lever extends InteractableEntity implements IShootable {
             this.particle.emitter.setNumParticles(25);
         }
 
+        if (ClientAppState.isAudio){
+            this.offGeometry.removeFromParent();
+            this.onGeometry.removeFromParent();
+            this.offGeometry = null;
+            this.onGeometry = null;
+        } else {
+            this.particle.removeFromParent();
+            this.particle = null;
+        }
+
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         physics.add(this);
         if (ClientAppState.isAudio){
+
             rootNode.attachChild(this.particle);
             this.particle.start(rootNode, physics);
         } else {
-            this.particle.removeFromParent();
-            this.particle = null;
-            rootNode.attachChild(this);
+
+//            rootNode.attachChild(this);
         }
 
     }
@@ -182,6 +192,20 @@ public class Lever extends InteractableEntity implements IShootable {
     public void setWasUpdated( boolean wasUpdated ){
         this.wasUpdated = wasUpdated;
     }
+
+    @Override
+    public Geometry getGeometry(){
+        return this.geometry;
+    }
+
+//    @Override
+//    public void init( boolean isAudio ){
+//        if(isAudio){
+//            this.model.removeFromParent();
+//        } else {
+//            this.particle.removeFromParent();
+//        }
+//    }
 
     private void turnedOnEvent(){
         LogHelper.info("Lever ON!");

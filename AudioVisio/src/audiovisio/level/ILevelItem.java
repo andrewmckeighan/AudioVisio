@@ -109,6 +109,8 @@ public interface ILevelItem {
      */
     void setID( long id );
 
+
+
     enum Direction {
         NORTH,
         SOUTH,
