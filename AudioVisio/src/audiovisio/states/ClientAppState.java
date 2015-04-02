@@ -27,6 +27,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
@@ -57,16 +58,15 @@ public class ClientAppState extends AbstractAppState implements
 
     public static final int FPS = 1;
     public static boolean isAudio;
-    public static Level   level;
 
     public NetworkClient myClient = Network.createClient();
+    public Level level;
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;
     private AssetManager assetManager;
     private Node         rootNode;
     private WorldManager worldManager;
-
     //On Screen Message
     private CharSequence velocityMessage = "";
     private Vector3f oldLocation;
@@ -75,7 +75,8 @@ public class ClientAppState extends AbstractAppState implements
     private long newTime;
     private int  counter;
     private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
-    private float updateCounter;
+    private float   updateCounter;
+    private boolean debug;
 
     //private static int ID;
 
@@ -112,8 +113,8 @@ public class ClientAppState extends AbstractAppState implements
         Items.init();
 
         try{
-            level = LevelReader.read(AudioVisio.level);
-            level.loadLevel();
+            this.level = LevelReader.read(AudioVisio.level);
+            this.level.loadLevel();
         } catch (Exception e){
             LogHelper.info("exception: ", e);
         }
@@ -145,7 +146,7 @@ public class ClientAppState extends AbstractAppState implements
         // Create Camera //
         // /////////////////
         this.audioVisioApp.getFlyByCamera().setEnabled(true);
-        this.audioVisioApp.getViewPort().setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        this.audioVisioApp.getViewPort().setBackgroundColor(new ColorRGBA(0.0f, 0.0f, 0.0f, 1.0f));
         this.audioVisioApp.getFlyByCamera().setMoveSpeed(100);
 
         // ////////////////
@@ -207,8 +208,8 @@ public class ClientAppState extends AbstractAppState implements
         physicsSpace.addCollisionListener(this);
 //        physicsSpace.add(landscape);
 
-        level.init(this.assetManager, syncManager);
-        level.start(this.rootNode, physicsSpace);
+        this.level.init(this.assetManager, syncManager);
+        this.level.start(this.rootNode, physicsSpace);
 
 
         LogHelper.info("Client Started!");
@@ -252,7 +253,7 @@ public class ClientAppState extends AbstractAppState implements
             this.myClient.send(msg);
         }
 
-        Collection<ILevelItem> levelItems = level.getItems();
+        Collection<ILevelItem> levelItems = this.level.getItems();
         for (ILevelItem iLevelItem : levelItems){
             if (iLevelItem instanceof InteractableEntity){
                 InteractableEntity inEnt = (InteractableEntity) iLevelItem;
@@ -346,6 +347,8 @@ public class ClientAppState extends AbstractAppState implements
         this.inputManager.addMapping("Shoot", new MouseButtonTrigger(
                 MouseInput.BUTTON_LEFT));
 
+        this.inputManager.addMapping("Debug", new KeyTrigger(KeyInput.KEY_F3));
+
         this.inputManager.addListener(player, "Up");
         this.inputManager.addListener(player, "Down");
         this.inputManager.addListener(player, "Left");
@@ -354,6 +357,15 @@ public class ClientAppState extends AbstractAppState implements
 
         this.inputManager.addListener(player, "Shoot");
 
+        this.inputManager.addListener(new ActionListener() {
+            @Override
+            public void onAction( String name, boolean isPressed, float tpf ){
+                if (!isPressed){
+                    ClientAppState.this.debug = !ClientAppState.this.debug;
+                    ClientAppState.this.inputManager.setCursorVisible(ClientAppState.this.debug);
+                }
+            }
+        }, "Debug");
     }
 
     /**
@@ -392,14 +404,17 @@ public class ClientAppState extends AbstractAppState implements
             if (this.collisionEvents.isEmpty()){
                 this.collisionEvents.add(new CollisionEvent(entityA, entityB));
             } else {
-
+                Boolean inCollisionEvents = false;
                 for (CollisionEvent collisionEvent : this.collisionEvents){
                     if (collisionEvent.hasSameEntities(entityA, entityB)){
                         collisionEvent.wasUpdated = true;
-                    } else {
-                        this.collisionEvents.add(new CollisionEvent(entityA, entityB));
+                        inCollisionEvents = true;
                     }
                 }
+                if (!inCollisionEvents){
+                    this.collisionEvents.add(new CollisionEvent(entityA, entityB));
+                }
+
             }
         }
 
@@ -412,5 +427,9 @@ public class ClientAppState extends AbstractAppState implements
 
     public boolean isAudioClient(){
         return this.getId() % 2 == 0;
+    }
+
+    public Level getLevel(){
+        return this.level;
     }
 }

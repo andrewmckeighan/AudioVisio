@@ -9,6 +9,8 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -121,8 +123,11 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 		return temp;
 	}
 
-	public void setKeyBinding( String EventId ){
-
+	public void setKeyBinding(){
+		Element myBt = this.nifty.getScreen("keybindings").findElementByName("button");
+		TextRenderer myBtLabel = myBt.findElementByName("Forwards").getRenderer(TextRenderer.class);
+		myBtLabel.setText("Boop!");
+		myBt.layoutElements();
 	}
 
 	/**

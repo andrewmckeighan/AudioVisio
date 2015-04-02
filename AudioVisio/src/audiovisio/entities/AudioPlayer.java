@@ -1,16 +1,9 @@
 package audiovisio.entities;
 
-import org.json.simple.JSONObject;
+import audiovisio.level.Level;
 
 public class AudioPlayer extends Player {
-
-    public AudioPlayer(){
-
+    public AudioPlayer( Level level ){
+        super(level);
     }
-
-    public void load( JSONObject loadObj ){
-        super.load(loadObj);
-
-    }
-
 }

@@ -71,22 +71,22 @@
 				<text text="Keybindings" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000"/>
 			</panel>
 			<panel id="forward" height="12%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
-				<control name="button" label="Forwards" id="BackButton" height="50%" width="50%" align="center" valign="center">
-					<interact onClick="initSettings()"/>
+				<control name="button" label="Forwards" id="fw" height="50%" width="50%" align="center" valign="center">
+					<interact onClick="setKeyBinding()"/>
           		</control>
 			</panel>
 			<panel id="backwards" height="12%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Backwards" id="BackButton" height="50%" width="50%" align="center" valign="center">
+				<control name="button" label="Backwards" id="bw" height="50%" width="50%" align="center" valign="center">
 					<interact onClick="initSettings()"/>
           		</control>
 			</panel>
 			<panel id="left" height="12%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Left" id="BackButton" height="50%" width="50%" align="center" valign="center">
+				<control name="button" label="Left" id="lb" height="50%" width="50%" align="center" valign="center">
 					<interact onClick="initSettings()"/>
           		</control>
 			</panel>
 			<panel id="right" height="12%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-				<control name="button" label="Right" id="BackButton" height="50%" width="50%" align="center" valign="center">
+				<control name="button" label="Right" id="rb" height="50%" width="50%" align="center" valign="center">
 					<interact onClick="initSettings()"/>
           		</control>
 			</panel>

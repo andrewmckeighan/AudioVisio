@@ -1,12 +1,13 @@
 package audiovisio.entities;
 
 import audiovisio.level.IShootable;
+import audiovisio.level.Level;
 import audiovisio.networking.messages.SyncCharacterMessage;
-import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
+import com.jme3.audio.AudioSource;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResult;
@@ -54,7 +55,7 @@ public class Player extends MovingEntity implements ActionListener {
     public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
     public static final  Vector3f MODEL_OFFSET           = Player.CAMERA_OFFSET.divide(2);
     private static final Vector3f JUMP_FORCE             = new Vector3f(0, 2, 0);
-    private static final float MAX_SHOOT_DISTANCE = 5.0F;
+    private static final float MAX_SHOOT_DISTANCE = 10.0F;
     public  Particle               footSteps;
     //Key Listeners
     private boolean                up;
@@ -68,6 +69,7 @@ public class Player extends MovingEntity implements ActionListener {
     //references
     private Node                   rootNode;
     private AssetManager           assetManager;
+    private Level                  level;
 
     //Instance Variables
     private boolean isServer;
@@ -124,8 +126,9 @@ public class Player extends MovingEntity implements ActionListener {
         this.attachChild(this.model);
     }
 
-    public Player(){
+    public Player(Level level){
         this(null, Player.DEFAULT_SPAWN_LOCATION);
+        this.level = level;
     }
 
     public static Node createModel( AssetManager assetManager ){
@@ -203,7 +206,7 @@ public class Player extends MovingEntity implements ActionListener {
 
             Ray ray = new Ray(this.playerCamera.getLocation(), this.playerCamera.getDirection());
 
-            Node shootables = ClientAppState.level.getShootables();
+            Node shootables = this.level.getShootables();
             shootables.collideWith(ray, results);
             LogHelper.info("shootables: " + shootables);
             for (Spatial n : shootables.getChildren()){
@@ -218,6 +221,7 @@ public class Player extends MovingEntity implements ActionListener {
                     IShootable shotObject = (IShootable) closest.getGeometry().getParent();
                     assert shotObject instanceof IShootable;
                     shotObject.update();
+                    shotObject.setWasUpdated(true);
                 }
             }
         }
@@ -237,7 +241,10 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.move(location);
 
 //        this.characterControl.warp(location);
-        audio_steps = new AudioNode(assetManager, "Sound/Effects/Foot steps.ogg",false);
+        if (this.audio_steps == null){
+            this.audio_steps = new AudioNode(this.assetManager, "Sound/Effects/Foot steps.ogg", false);
+            this.rootNode.attachChild(this.audio_steps);
+        }
 
         this.characterControl.setWalkDirection(direction);
 
@@ -256,7 +263,18 @@ public class Player extends MovingEntity implements ActionListener {
 
         }
 
-
+        if(!this.isServer()){
+            if (direction.length() != 0){
+                this.audio_steps.setLooping(false);
+                this.audio_steps.setPositional(false);
+                this.audio_steps.setVolume(3);
+                if (this.audio_steps.getStatus() != AudioSource.Status.Playing){
+                    this.audio_steps.play();
+                }
+            } else {
+                this.audio_steps.pause();
+            }
+        }
 
         if (this.playerCamera != null){
             //TODO why isnt this location?
@@ -280,7 +298,6 @@ public class Player extends MovingEntity implements ActionListener {
                 this.model.removeFromParent();
                 this.model = null;
             }
-
         }
 
         if (this instanceof AudioPlayer){
@@ -288,21 +305,21 @@ public class Player extends MovingEntity implements ActionListener {
                 this.footSteps.removeFromParent();
                 this.footSteps = null;
             }
-            if(direction.length() !=0){
-                audio_steps.setLooping(false);
-                audio_steps.setPositional(false);
-                audio_steps.setVolume(3);
-                rootNode.attachChild(audio_steps);
-                audio_steps.playInstance();
-            }else{
-                audio_steps.pause();
-            }
         }
 
     }
 
+    public boolean isServer(){
+        return this.isServer;
+    }
+
+    public void setServer( boolean isServer ){
+        this.isServer = isServer;
+    }
+
     /**
      * Generates a message containing all the info needed to update the character on the other server/client.
+     *
      * @return new SyncCharacterMessage to send to other server/client.
      */
     public SyncCharacterMessage getSyncCharacterMessage(){
@@ -344,14 +361,6 @@ public class Player extends MovingEntity implements ActionListener {
         return new SyncCharacterMessage(this.getID(),
                 this.getLocalTranslation(),
                 walkDirection, this.playerCamera.getRotation());
-    }
-
-    public boolean isServer(){
-        return this.isServer;
-    }
-
-    public void setServer( boolean isServer ){
-        this.isServer = isServer;
     }
 
     public Vector3f getWalkDirection(){
@@ -413,6 +422,7 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public void init(){
-        this.footSteps.init(this.rootNode, this.assetManager);
+        this.footSteps.init(this.assetManager);
+        this.footSteps.start(this.rootNode, this.physicsSpace);
     }
 }

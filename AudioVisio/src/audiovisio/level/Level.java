@@ -26,7 +26,7 @@ import java.util.*;
  * JSON files.
  */
 public class Level {
-    public static final VersionString CURRENT_LEVEL_FORMAT = new VersionString("0.4");
+    public static final VersionString CURRENT_LEVEL_FORMAT = new VersionString("0.5");
     public static final Vector3f      SCALE                = new Vector3f(5.2F, 10.2F, 5.2F);
 
     public static final String KEY_NAME       = "name";
@@ -35,13 +35,15 @@ public class Level {
     public static final String KEY_FORMAT     = "format";
     public static final String KEY_LEVEL_DATA = "level";
 
-    public static final String KEY_SPAWN        = "spawn";
-    public static final String KEY_AUDIO_SPAWN  = "p1";
-    public static final String KEY_VISUAL_SPAWN = "p2";
+    public static final String KEY_SPAWN          = "spawn";
+    public static final String KEY_SPAWN_LOCATION = "location";
+    public static final String KEY_SPAWN_ROTATION = "rotation";
+    public static final String KEY_AUDIO_SPAWN    = "p1";
+    public static final String KEY_VISUAL_SPAWN   = "p2";
 
     public static final long STARTING_ID = 10;
-    public static Node shootables = new Node();
-    JSONObject levelData;
+    private Node       shootables;
+    public  JSONObject levelData;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
     /**
@@ -92,8 +94,13 @@ public class Level {
     public void loadLevel(){
         JSONObject spawns = (JSONObject) this.levelData.get(Level.KEY_SPAWN);
 
-        this.pAudioSpawn = JSONHelper.readVector3f((JSONObject) spawns.get(Level.KEY_AUDIO_SPAWN));
-        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN));
+        JSONObject audio = (JSONObject) spawns.get(Level.KEY_AUDIO_SPAWN);
+        float pAudioRotation = ((Double) audio.get(Level.KEY_SPAWN_ROTATION)).floatValue();
+        this.pAudioSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
+
+        JSONObject visual = (JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN);
+        float pVisualRotation = ((Double) visual.get(Level.KEY_SPAWN_ROTATION)).floatValue();
+        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
 
         JSONArray level = (JSONArray) this.levelData.get(Level.KEY_LEVEL_DATA);
         LogHelper.info(String.format("Loading level '%s'", this.name));
@@ -119,17 +126,28 @@ public class Level {
     public void saveLevel(){
         this.levelData = new JSONObject();
 
+        // Metadata
         this.levelData.put(Level.KEY_NAME, this.name);
         this.levelData.put(Level.KEY_AUTHOR, this.author);
         this.levelData.put(Level.KEY_VERSION, this.version);
         this.levelData.put(Level.KEY_FORMAT, Level.CURRENT_LEVEL_FORMAT.getVersion());
 
+        // Spawns
         JSONObject objSpawn = new JSONObject();
-        objSpawn.put(Level.KEY_AUDIO_SPAWN, JSONHelper.saveVector3f(this.pAudioSpawn));
-        objSpawn.put(Level.KEY_VISUAL_SPAWN, JSONHelper.saveVector3f(this.pVisualSpawn));
+
+        JSONObject audioSpawn = new JSONObject();
+        audioSpawn.put(Level.KEY_SPAWN_LOCATION, JSONHelper.saveVector3f(this.pAudioSpawn));
+        audioSpawn.put(Level.KEY_SPAWN_ROTATION, 0F);
+        objSpawn.put(Level.KEY_AUDIO_SPAWN, audioSpawn);
+
+        JSONObject visualSpawn = new JSONObject();
+        visualSpawn.put(Level.KEY_SPAWN_LOCATION, JSONHelper.saveVector3f(this.pVisualSpawn));
+        visualSpawn.put(Level.KEY_SPAWN_ROTATION, 0F);
+        objSpawn.put(Level.KEY_VISUAL_SPAWN, visualSpawn);
 
         this.levelData.put(Level.KEY_SPAWN, objSpawn);
 
+        // Level Data
         JSONArray level = new JSONArray();
         for (ILevelItem item : this.levelItems.values()){
             JSONObject obj = new JSONObject();
@@ -149,6 +167,9 @@ public class Level {
      */
     public void init( AssetManager assetManager, SyncManager syncManager ){
         LogHelper.info(String.format("Initializing level: '%s'", this.name));
+
+        this.shootables = new Node("shootables");
+
         for (ILevelItem item : this.levelItems.values()){
             item.init(assetManager);
             syncManager.addObject(item.getID(), item);
@@ -161,7 +182,7 @@ public class Level {
             }
 
             if (item instanceof IShootable){
-                Level.shootables.attachChild((Spatial) item);
+                this.shootables.attachChild((Spatial) item);
             }
         }
     }
@@ -203,6 +224,8 @@ public class Level {
         for (ILevelItem item : this.levelItems.values()){
             item.start(rootNode, physics);
         }
+
+        rootNode.attachChild(this.shootables);
     }
 
     /**
@@ -413,7 +436,12 @@ public class Level {
 
         LevelNode lvlSpawn = new LevelNode("Spawns", true);
         LevelNode lvlAudio = LevelUtils.vector2node("Audio", this.pAudioSpawn);
+        LevelNode lvlAudioRot = new LevelNode("Rotation", 0F, false);
         LevelNode lvlVisual = LevelUtils.vector2node("Visual", this.pVisualSpawn);
+        LevelNode lvlVisualRot = new LevelNode("Rotation", 0F, false);
+
+        lvlAudio.add(lvlAudioRot);
+        lvlVisual.add(lvlVisualRot);
 
         lvlSpawn.add(lvlAudio);
         lvlSpawn.add(lvlVisual);
@@ -431,6 +459,6 @@ public class Level {
     }
 
     public Node getShootables() {
-        return shootables;
+        return this.shootables;
     }
 }

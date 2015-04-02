@@ -20,6 +20,7 @@ import java.util.Set;
 public class InteractableEntity extends Entity implements ITriggerable {
 
     public static final String KEY_LINKED = "interactionList";
+    protected static ColorRGBA COLOR = ColorRGBA.Blue;
     public boolean stuck; //if the entity keeps it state regardless of triggerEvents
     public Geometry         geometry;
     public Material         material;
@@ -27,7 +28,6 @@ public class InteractableEntity extends Entity implements ITriggerable {
     public boolean wasUpdated;
     protected Set<Long> linkedIds = new HashSet<Long>();
     protected Map<Long, ITriggerable> interactionMap;
-
     protected Boolean state = false;
     private InteractableEntity linkedEntity;
 

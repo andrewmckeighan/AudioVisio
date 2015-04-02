@@ -41,7 +41,7 @@ public class Button extends InteractableEntity {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+        randomMaterial.setColor("Color", Button.COLOR);
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection
@@ -51,13 +51,12 @@ public class Button extends InteractableEntity {
 
         this.particle = new Particle();
 
-        this.particle.init(this.rootNode, assetManager);
-
+        this.particle.init(assetManager);
 
         if (this.particle != null && this.particle.emitter != null){
-//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+//          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
-            this.particle.emitter.setNumParticles(25);
+            this.particle.emitter.setNumParticles(35);
         }
 
     }
@@ -70,6 +69,8 @@ public class Button extends InteractableEntity {
             rootNode.attachChild(this);
         }
         physics.add(this);
+
+        this.particle.start(rootNode, physics);
     }
 
     @Override

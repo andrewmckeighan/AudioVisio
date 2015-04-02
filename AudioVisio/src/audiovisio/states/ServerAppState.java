@@ -217,7 +217,6 @@ public class ServerAppState extends AbstractAppState implements
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        LogHelper.info(event.toString());
         if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
             Entity entityA = (Entity) event.getNodeA().getParent();
             Entity entityB = (Entity) event.getNodeB().getParent();
@@ -246,5 +245,8 @@ public class ServerAppState extends AbstractAppState implements
         return this.players.get(id);
     }
 
+    public Level getLevel(){
+        return this.currentLevel;
+    }
 }
 

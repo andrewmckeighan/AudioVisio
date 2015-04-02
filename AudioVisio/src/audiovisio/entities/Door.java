@@ -8,7 +8,6 @@ import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -62,15 +61,15 @@ public class Door extends InteractableEntity {
     public void update( Boolean state ){
         if (!this.state){
             if (state){
+                this.state = state;
                 this.open();
             }
         } else {
             if (!state){
+                this.state = state;
                 this.close();
             }
         }
-
-        this.state = state;
     }
 
     private void open(){
@@ -135,17 +134,17 @@ public class Door extends InteractableEntity {
 
         this.particle = new Particle();
 
-        this.particle.init(this.rootNode, assetManager);
+        this.particle.init(assetManager);
 
         if (this.particle != null && this.particle.emitter != null){
-//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+//          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
-            this.particle.emitter.setNumParticles(25);
+            this.particle.emitter.setNumParticles(50);
         }
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
+        randomMaterial.setColor("Color", Door.COLOR);
         this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
 
@@ -162,6 +161,8 @@ public class Door extends InteractableEntity {
             rootNode.attachChild(this);
         }
         physics.add(this);
+
+        this.particle.start(rootNode, physics);
     }
 
     @Override
