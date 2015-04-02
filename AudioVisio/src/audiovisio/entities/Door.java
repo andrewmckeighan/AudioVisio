@@ -60,17 +60,20 @@ public class Door extends InteractableEntity {
 
     @Override
     public void update( Boolean state ){
+
         if (!this.state){
             if (state){
+                this.state = state;
                 this.open();
             }
         } else {
             if (!state){
+                this.state = state;
                 this.close();
             }
         }
 
-        this.state = state;
+
     }
 
     private void open(){
