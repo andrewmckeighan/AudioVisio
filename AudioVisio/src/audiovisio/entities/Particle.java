@@ -23,8 +23,8 @@ public class Particle extends Entity {
         fire.setMaterial(mat_red);
         fire.setImagesX(2);
         fire.setImagesY(2); // 2x2 texture animation
-        fire.setEndColor(ColorRGBA.Blue);
-        fire.setStartColor(ColorRGBA.Blue);
+        fire.setEndColor(ColorRGBA.Cyan);
+        fire.setStartColor(ColorRGBA.Cyan);
         fire.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
         fire.setStartSize(1.5f);
         fire.setEndSize(0.1f);
