@@ -55,7 +55,7 @@ public class Player extends MovingEntity implements ActionListener {
     public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
     public static final  Vector3f MODEL_OFFSET           = Player.CAMERA_OFFSET.divide(2);
     private static final Vector3f JUMP_FORCE             = new Vector3f(0, 2, 0);
-    private static final float MAX_SHOOT_DISTANCE = 5.0F;
+    private static final float MAX_SHOOT_DISTANCE = 10.0F;
     public  Particle               footSteps;
     //Key Listeners
     private boolean                up;
