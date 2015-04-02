@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.AudioVisio;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
@@ -83,17 +84,18 @@ public class Lever extends InteractableEntity implements IShootable {
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
         randomMaterial.setColor("Color", Lever.COLOR);
-//        this.material = randomMaterial;
         this.onGeometry.setMaterial(randomMaterial);
         this.offGeometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(Lever.MASS);//TODO: this might not be needed if we don't want collision detection
-        this.attachChild(this.offGeometry);
-        this.addControl(this.physics);
 
         this.particle = new Particle();
 
         this.particle.init(assetManager);
+
+        this.attachChild(this.offGeometry);
+        this.attachChild(this.particle);
+        this.addControl(this.physics);
 
         if (this.particle != null && this.particle.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -101,14 +103,30 @@ public class Lever extends InteractableEntity implements IShootable {
             this.particle.emitter.setNumParticles(25);
         }
 
+        if (ClientAppState.isAudio){
+            this.offGeometry.removeFromParent();
+            this.onGeometry.removeFromParent();
+            this.offGeometry = null;
+            this.onGeometry = null;
+        } else {
+            this.particle.removeFromParent();
+            this.particle = null;
+        }
+
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-//        this.rootNode = rootNode;
-//        this.physicsSpace = physics;
         physics.add(this);
-        this.particle.start(rootNode, physics);
+        if (ClientAppState.isAudio){
+
+            rootNode.attachChild(this.particle);
+            this.particle.start(rootNode, physics);
+        } else {
+
+//            rootNode.attachChild(this);
+        }
+
     }
 
     @Override
@@ -175,6 +193,20 @@ public class Lever extends InteractableEntity implements IShootable {
         this.wasUpdated = wasUpdated;
     }
 
+    @Override
+    public Geometry getGeometry(){
+        return this.geometry;
+    }
+
+//    @Override
+//    public void init( boolean isAudio ){
+//        if(isAudio){
+//            this.model.removeFromParent();
+//        } else {
+//            this.particle.removeFromParent();
+//        }
+//    }
+
     private void turnedOnEvent(){
         LogHelper.info("Lever ON!");
         if (ClientAppState.isAudio){
@@ -190,7 +222,7 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     private void startParticles(){
-
+        this.particle.status = true;
     }
 
     private void updateVisuals(){
@@ -208,15 +240,17 @@ public class Lever extends InteractableEntity implements IShootable {
     private void turnedOffEvent(){
         LogHelper.info("Lever OFF!");
         if (ClientAppState.isAudio){
-            this.stopSound();
-            this.stopParticles();
+            if (AudioVisio.difficulty > 0){
+                this.stopSound();
+                this.stopParticles();
+            }
         } else {
             this.updateVisuals();
         }
     }
 
     private void stopParticles(){
-
+        this.particle.status = false;
     }
 
     private void stopSound(){

@@ -57,7 +57,7 @@ public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
     public static final int FPS = 1;
-    public static boolean isAudio;
+    public static boolean isAudio = false;
 
     public NetworkClient myClient = Network.createClient();
     public Level level;

@@ -12,4 +12,6 @@ public interface IShootable {
     Boolean getWasUpdated();
 
     void setWasUpdated( boolean wasUpdated );
+
+    com.jme3.scene.Geometry getGeometry();
 }

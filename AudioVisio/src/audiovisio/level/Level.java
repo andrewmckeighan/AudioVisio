@@ -38,12 +38,12 @@ public class Level {
     public static final String KEY_SPAWN          = "spawn";
     public static final String KEY_SPAWN_LOCATION = "location";
     public static final String KEY_SPAWN_ROTATION = "rotation";
-    public static final String KEY_AUDIO_SPAWN    = "p1";
-    public static final String KEY_VISUAL_SPAWN   = "p2";
+    public static final String KEY_AUDIO_SPAWN  = "p2";
+    public static final String KEY_VISUAL_SPAWN = "p1";
 
     public static final long STARTING_ID = 10;
-    private Node       shootables;
     public  JSONObject levelData;
+    private Node shootables;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
     /**
@@ -100,7 +100,7 @@ public class Level {
 
         JSONObject visual = (JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN);
         float pVisualRotation = ((Double) visual.get(Level.KEY_SPAWN_ROTATION)).floatValue();
-        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
+        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) visual.get(Level.KEY_SPAWN_LOCATION));
 
         JSONArray level = (JSONArray) this.levelData.get(Level.KEY_LEVEL_DATA);
         LogHelper.info(String.format("Loading level '%s'", this.name));
@@ -113,10 +113,19 @@ public class Level {
             // This is mainly used in the level editors
             this.NEXT_ID = Math.max(this.NEXT_ID, ((Long) itemJson.get("id")).intValue() + 1);
 
-            ILevelItem lvlItem = LevelRegistry.getItemForType(type);
-            lvlItem.load(itemJson);
-            this.levelItems.put(lvlItem.getID(), lvlItem);
-            LogHelper.fine("Load item of type: " + type);
+            if (LevelRegistry.typeHasSubTypes(type) && itemJson.containsKey("subtype")) {
+                String subtype = (String) itemJson.get("subtype");
+
+                ILevelItem lvlItem = LevelRegistry.getItemForSubType(type, subtype);
+                lvlItem.load(itemJson);
+                this.levelItems.put(lvlItem.getID(), lvlItem);
+                LogHelper.fine(String.format("Load item of type: %s:%s", type, subtype));
+            } else {
+                ILevelItem lvlItem = LevelRegistry.getItemForType(type);
+                lvlItem.load(itemJson);
+                this.levelItems.put(lvlItem.getID(), lvlItem);
+                LogHelper.fine("Load item of type: " + type);
+            }
         }
     }
 
@@ -182,6 +191,7 @@ public class Level {
             }
 
             if (item instanceof IShootable){
+//                ((IShootable) item).init(ClientAppState.isAudio);
                 this.shootables.attachChild((Spatial) item);
             }
         }

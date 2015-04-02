@@ -136,6 +136,8 @@ public class Door extends InteractableEntity {
 
         this.particle.init(assetManager);
 
+        this.attachChild(this.particle);
+
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
@@ -150,6 +152,7 @@ public class Door extends InteractableEntity {
 
         this.physics = new RigidBodyControl(Door.MASS);//TODO: this might not be needed if we don't want collision detection
         this.attachChild(this.geometry);
+        this.attachChild(this.particle);
         this.addControl(this.physics);
     }
 
@@ -157,12 +160,16 @@ public class Door extends InteractableEntity {
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        if (!ClientAppState.isAudio){
+        if (ClientAppState.isAudio){
+            rootNode.attachChild(this.particle);
+            this.particle.start(rootNode, physics);
+        } else {
+            this.particle.removeFromParent();
+            this.particle = null;
             rootNode.attachChild(this);
         }
         physics.add(this);
 
-        this.particle.start(rootNode, physics);
     }
 
     @Override

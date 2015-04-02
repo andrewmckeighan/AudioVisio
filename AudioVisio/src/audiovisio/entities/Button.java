@@ -37,7 +37,8 @@ public class Button extends InteractableEntity {
 
         this.geometry = new Geometry(this.name + "testButtonName", shape);
         this.geometry.setLocalRotation(Button.ROTATION);
-        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
+        this.location = this.location.mult(Level.SCALE);
+        this.geometry.setLocalTranslation(this.location);
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -46,12 +47,17 @@ public class Button extends InteractableEntity {
 
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection
 
-        this.attachChild(this.geometry);
-        this.addControl(this.physics);
-
         this.particle = new Particle();
 
         this.particle.init(assetManager);
+
+        this.attachChild(this.geometry);
+        this.attachChild(this.particle);
+        this.addControl(this.physics);
+
+
+
+//        this.attachChild(this.particle);
 
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -65,12 +71,16 @@ public class Button extends InteractableEntity {
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        if (!ClientAppState.isAudio){
+        if (ClientAppState.isAudio){
+            rootNode.attachChild(this.particle);
+            this.particle.start(rootNode, physics);
+        } else {
+            this.particle.removeFromParent();
+            this.particle = null;
             rootNode.attachChild(this);
         }
         physics.add(this);
 
-        this.particle.start(rootNode, physics);
     }
 
     @Override

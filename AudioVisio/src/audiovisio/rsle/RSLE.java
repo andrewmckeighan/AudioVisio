@@ -5,6 +5,7 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Door;
 import audiovisio.entities.Lever;
 import audiovisio.level.*;
+import audiovisio.level.Level;
 import audiovisio.level.Panel;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor2;
@@ -19,6 +20,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.logging.*;
 
 /**
  * A VERY simple level editor used to edit the level json files.
@@ -85,12 +87,24 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private File  loadedFile;
     private Level currentLevel;
 
+    public static void main( String[] args ){
+        LogHelper.init();
+        LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
+//        LogHelper.setLevel(java.util.logging.Level.FINE);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run(){
+                RSLE.createAndShowGUI();
+            }
+        });
+    }
+
     public RSLE(){
         super(new GridLayout(1, 0));
         this.setSize(600, 400);
 
         Items.init(); // Register all ILevelItems with the LevelRegistry
-        LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
 
         this.menuBar = new JMenuBar();
         this.createMenu();
@@ -239,15 +253,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.create.add(this.create_wall);
 
         this.menuBar.add(this.create);
-    }
-
-    public static void main( String[] args ){
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run(){
-                RSLE.createAndShowGUI();
-            }
-        });
     }
 
     /**
