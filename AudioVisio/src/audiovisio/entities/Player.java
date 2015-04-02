@@ -3,11 +3,11 @@ package audiovisio.entities;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.networking.messages.SyncCharacterMessage;
-import audiovisio.states.ClientAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
+import com.jme3.audio.AudioSource;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResult;
@@ -240,7 +240,10 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.move(location);
 
 //        this.characterControl.warp(location);
-        this.audio_steps = new AudioNode(this.assetManager, "Sound/Effects/Foot steps.ogg",false);
+        if (this.audio_steps == null){
+            this.audio_steps = new AudioNode(this.assetManager, "Sound/Effects/Foot steps.ogg", false);
+            this.rootNode.attachChild(this.audio_steps);
+        }
 
         this.characterControl.setWalkDirection(direction);
 
@@ -264,10 +267,11 @@ public class Player extends MovingEntity implements ActionListener {
                 this.audio_steps.setLooping(false);
                 this.audio_steps.setPositional(false);
                 this.audio_steps.setVolume(3);
-                this.rootNode.attachChild(this.audio_steps);
-                this.audio_steps.playInstance();
+                if (this.audio_steps.getStatus() != AudioSource.Status.Playing){
+                    this.audio_steps.play();
+                }
             } else {
-                this.audio_steps.stop();
+                this.audio_steps.pause();
             }
         }
 
@@ -304,8 +308,17 @@ public class Player extends MovingEntity implements ActionListener {
 
     }
 
+    public boolean isServer(){
+        return this.isServer;
+    }
+
+    public void setServer( boolean isServer ){
+        this.isServer = isServer;
+    }
+
     /**
      * Generates a message containing all the info needed to update the character on the other server/client.
+     *
      * @return new SyncCharacterMessage to send to other server/client.
      */
     public SyncCharacterMessage getSyncCharacterMessage(){
@@ -347,14 +360,6 @@ public class Player extends MovingEntity implements ActionListener {
         return new SyncCharacterMessage(this.getID(),
                 this.getLocalTranslation(),
                 walkDirection, this.playerCamera.getRotation());
-    }
-
-    public boolean isServer(){
-        return this.isServer;
-    }
-
-    public void setServer( boolean isServer ){
-        this.isServer = isServer;
     }
 
     public Vector3f getWalkDirection(){
