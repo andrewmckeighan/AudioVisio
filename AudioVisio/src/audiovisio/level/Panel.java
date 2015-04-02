@@ -75,7 +75,7 @@ public class Panel implements ILevelItem {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        if (!ClientAppState.isAudio){
+        if (!ClientAppState.isAudio || true){//TODO turn this off
             rootNode.attachChild(this.geometry);
         }
         physics.add(this.physics);
