@@ -27,6 +27,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
@@ -76,6 +77,7 @@ public class ClientAppState extends AbstractAppState implements
     private int  counter;
     private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
     private float updateCounter;
+    private boolean debug = false;
 
     //private static int ID;
 
@@ -346,6 +348,8 @@ public class ClientAppState extends AbstractAppState implements
         this.inputManager.addMapping("Shoot", new MouseButtonTrigger(
                 MouseInput.BUTTON_LEFT));
 
+        this.inputManager.addMapping("Debug", new KeyTrigger(KeyInput.KEY_F3));
+
         this.inputManager.addListener(player, "Up");
         this.inputManager.addListener(player, "Down");
         this.inputManager.addListener(player, "Left");
@@ -354,6 +358,15 @@ public class ClientAppState extends AbstractAppState implements
 
         this.inputManager.addListener(player, "Shoot");
 
+        this.inputManager.addListener(new ActionListener() {
+            @Override
+            public void onAction( String name, boolean isPressed, float tpf ){
+                if (!isPressed){
+                    debug = !debug;
+                    ClientAppState.this.inputManager.setCursorVisible(debug);
+                }
+            }
+        }, "Debug");
     }
 
     /**
