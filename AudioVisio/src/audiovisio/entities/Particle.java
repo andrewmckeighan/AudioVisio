@@ -16,7 +16,7 @@ public class Particle extends Entity {
     public ParticleEmitter emitter;
     private String    material  = "Common/MatDefs/Misc/Particle.j3md";
     private String    texture   = "Effects/Explosion/flame.png";
-    private ColorRGBA color     = ColorRGBA.Blue;
+    private ColorRGBA color = ColorRGBA.Red;
     private Vector3f  velocity  = new Vector3f(0, 2, 0);
     private Float     startSize = 20.0F;
     private Float     endSize   = 30.0F;
@@ -53,7 +53,7 @@ public class Particle extends Entity {
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         super.start(rootNode, physics);
-        rootNode.attachChild(this);
+//        rootNode.attachChild(this);
         if (AudioVisio.difficulty == 0){
             this.status = true;
             this.emitter.setParticlesPerSec(Particle.PARTICLES_PER_SECOND);

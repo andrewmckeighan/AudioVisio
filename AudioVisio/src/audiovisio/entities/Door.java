@@ -152,6 +152,7 @@ public class Door extends InteractableEntity {
 
         this.physics = new RigidBodyControl(Door.MASS);//TODO: this might not be needed if we don't want collision detection
         this.attachChild(this.geometry);
+        this.attachChild(this.particle);
         this.addControl(this.physics);
     }
 

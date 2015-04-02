@@ -84,19 +84,18 @@ public class Lever extends InteractableEntity implements IShootable {
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
         randomMaterial.setColor("Color", Lever.COLOR);
-//        this.material = randomMaterial;
         this.onGeometry.setMaterial(randomMaterial);
         this.offGeometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(Lever.MASS);//TODO: this might not be needed if we don't want collision detection
-        this.attachChild(this.offGeometry);
-        this.addControl(this.physics);
 
         this.particle = new Particle();
 
         this.particle.init(assetManager);
 
+        this.attachChild(this.offGeometry);
         this.attachChild(this.particle);
+        this.addControl(this.physics);
 
         if (this.particle != null && this.particle.emitter != null){
 //            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
