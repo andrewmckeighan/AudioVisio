@@ -21,20 +21,21 @@ import org.json.simple.JSONObject;
 public class Lever extends InteractableEntity implements IShootable {
     public static final  String     KEY_EDGE  = "edge";
     public static final  String     KEY_ISON  = "isOn";
-    public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
-    private static final Quaternion ROTATION  = new Quaternion().fromAngles(0, (float) (Math.PI / 2.0), 0);
+//    public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);//VERTICAL ROTATION FOR ON/OFF
+    private static final Quaternion ROTATION  = new Quaternion().fromAngles(0, (float) -(Math.PI / 2.0), 0);//HORIZONTAL ROTATION FOR DIRECTION
     private static final float      MASS      = 0.0F;
     private static final Box        SHAPE     = new Box(0.05F * Level.SCALE.getX(),
             0.15F * Level.SCALE.getY(),
             0.05F * Level.SCALE.getZ());
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
-    private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
-
+    private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
+    private static final Quaternion ON_ANGLE  = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
     public Particle particle;
-
+    private Geometry onGeometry;
+    private Geometry offGeometry;
     private Direction direction;
 
-    private Boolean isOn;
+//    private Boolean isOn = false;
 
     public Lever(){
         this(new Vector3f(0f, 0f, 0f));
@@ -42,7 +43,7 @@ public class Lever extends InteractableEntity implements IShootable {
 
     public Lever( Vector3f location ){
         this.location = location;
-        this.isOn = false;
+        this.state = false;
     }
 
     public Lever( float x, float y, float z ){
@@ -56,8 +57,11 @@ public class Lever extends InteractableEntity implements IShootable {
     @Override
     public void init( AssetManager assetManager ){
         Box shape = Lever.SHAPE;
-        this.geometry = new Geometry("level", shape);
-        this.geometry.setLocalRotation(Lever.ANGLE);
+        this.onGeometry = new Geometry("lever", shape);
+        this.offGeometry = new Geometry("lever", shape);
+
+        this.onGeometry.setLocalRotation(Lever.ON_ANGLE);
+        this.offGeometry.setLocalRotation(Lever.OFF_ANGLE);
 
         if (this.direction == Direction.NORTH){
             this.location = this.location.add(0.5F, 0.0F, 0.0F);
@@ -73,16 +77,18 @@ public class Lever extends InteractableEntity implements IShootable {
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Lever.OFFSET);
 
-        this.geometry.setLocalTranslation(this.location);
+        this.onGeometry.setLocalTranslation(this.location);
+        this.offGeometry.setLocalTranslation(this.location);
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
         randomMaterial.setColor("Color", Lever.COLOR);
 //        this.material = randomMaterial;
-        this.geometry.setMaterial(randomMaterial);
+        this.onGeometry.setMaterial(randomMaterial);
+        this.offGeometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(Lever.MASS);//TODO: this might not be needed if we don't want collision detection
-        this.attachChild(this.geometry);
+        this.attachChild(this.offGeometry);
         this.addControl(this.physics);
 
         this.particle = new Particle();
@@ -99,10 +105,10 @@ public class Lever extends InteractableEntity implements IShootable {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        this.rootNode = rootNode;
-        this.physicsSpace = physics;
+//        this.rootNode = rootNode;
+//        this.physicsSpace = physics;
         physics.add(this);
-        this.particle.start(this.rootNode, physics);
+        this.particle.start(rootNode, physics);
     }
 
     @Override
@@ -111,7 +117,7 @@ public class Lever extends InteractableEntity implements IShootable {
         LevelNode typeNode = new LevelNode("Type", "lever", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
         LevelNode nameNode = new LevelNode("Name", this.name, false);
-        LevelNode stateNode = new LevelNode("Is On", this.isOn, false);
+        LevelNode stateNode = new LevelNode("Is On", this.state, false);
         LevelNode locationNode = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
@@ -126,7 +132,7 @@ public class Lever extends InteractableEntity implements IShootable {
     @Override
     public void load( JSONObject loadObj ){
         super.load(loadObj);
-        this.isOn = (Boolean) loadObj.get(Lever.KEY_ISON);
+        this.state = (Boolean) loadObj.get(Lever.KEY_ISON);
         this.direction = Direction.valueOf((String) loadObj.get(Lever.KEY_EDGE));
     }
 
@@ -135,23 +141,27 @@ public class Lever extends InteractableEntity implements IShootable {
         super.save(codeObj);
         codeObj.put(JSONHelper.KEY_TYPE, "lever");
 
-        codeObj.put(Lever.KEY_ISON, this.isOn);
+        codeObj.put(Lever.KEY_ISON, this.state);
         codeObj.put(Lever.KEY_EDGE, this.direction.toString());
     }
 
     public void setOn( boolean state ){
-        this.isOn = state;
+        this.state = state;
     }
 
-    public void switchLever(){
-        this.isOn = !this.isOn;
-        if (this.isOn){
-            this.turnedOnEvent();
-            this.geometry.setLocalRotation(Lever.ANGLE);
+    @Override
+    public void update(){
+        if(this.state == null){
+            this.state = false;
         }
-        if (!this.isOn){
+        this.state = !this.state;
+        if (this.state){
+            this.turnedOnEvent();
+//            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
+        }
+        if (!this.state){
             this.turnedOffEvent();
-            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
+//            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
         }
     }
 
@@ -173,7 +183,17 @@ public class Lever extends InteractableEntity implements IShootable {
 
     }
 
-    private void updateVisuals(){}
+    private void updateVisuals(){
+        if(this.state){
+            //this.setLocalRotation(Lever.ON_ANGLE);
+            this.offGeometry.removeFromParent();
+            this.attachChild(this.onGeometry);
+        } else {
+//            this.setLocalRotation(Lever.OFF_ANGLE);
+            this.onGeometry.removeFromParent();
+            this.attachChild(this.offGeometry);
+        }
+    }
 
     private void turnedOffEvent(){
         LogHelper.info("Lever OFF!");
@@ -191,18 +211,5 @@ public class Lever extends InteractableEntity implements IShootable {
 
     private void stopSound(){
 
-    }
-
-    @Override
-    public void update(){
-        this.isOn = !this.isOn;
-        if (this.isOn){
-            this.turnedOnEvent();
-            this.geometry.setLocalRotation(Lever.ANGLE);
-        }
-        if (!this.isOn){
-            this.turnedOffEvent();
-            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
-        }
     }
 }
