@@ -165,6 +165,16 @@ public class Lever extends InteractableEntity implements IShootable {
         }
     }
 
+    @Override
+    public Boolean getWasUpdated(){
+        return this.wasUpdated;
+    }
+
+    @Override
+    public void setWasUpdated( boolean wasUpdated ){
+        this.wasUpdated = wasUpdated;
+    }
+
     private void turnedOnEvent(){
         LogHelper.info("Lever ON!");
         if (ClientAppState.isAudio){

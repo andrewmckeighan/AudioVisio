@@ -221,6 +221,7 @@ public class Player extends MovingEntity implements ActionListener {
                     IShootable shotObject = (IShootable) closest.getGeometry().getParent();
                     assert shotObject instanceof IShootable;
                     shotObject.update();
+                    shotObject.setWasUpdated(true);
                 }
             }
         }

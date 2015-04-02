@@ -60,14 +60,13 @@ public class ClientAppState extends AbstractAppState implements
     public static boolean isAudio;
 
     public NetworkClient myClient = Network.createClient();
+    public Level level;
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;
     private AssetManager assetManager;
     private Node         rootNode;
     private WorldManager worldManager;
-    public  Level        level;
-
     //On Screen Message
     private CharSequence velocityMessage = "";
     private Vector3f oldLocation;
@@ -76,8 +75,8 @@ public class ClientAppState extends AbstractAppState implements
     private long newTime;
     private int  counter;
     private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
-    private float updateCounter;
-    private boolean debug = false;
+    private float   updateCounter;
+    private boolean debug;
 
     //private static int ID;
 
@@ -114,8 +113,8 @@ public class ClientAppState extends AbstractAppState implements
         Items.init();
 
         try{
-            level = LevelReader.read(AudioVisio.level);
-            level.loadLevel();
+            this.level = LevelReader.read(AudioVisio.level);
+            this.level.loadLevel();
         } catch (Exception e){
             LogHelper.info("exception: ", e);
         }
@@ -209,8 +208,8 @@ public class ClientAppState extends AbstractAppState implements
         physicsSpace.addCollisionListener(this);
 //        physicsSpace.add(landscape);
 
-        level.init(this.assetManager, syncManager);
-        level.start(this.rootNode, physicsSpace);
+        this.level.init(this.assetManager, syncManager);
+        this.level.start(this.rootNode, physicsSpace);
 
 
         LogHelper.info("Client Started!");
@@ -254,7 +253,7 @@ public class ClientAppState extends AbstractAppState implements
             this.myClient.send(msg);
         }
 
-        Collection<ILevelItem> levelItems = level.getItems();
+        Collection<ILevelItem> levelItems = this.level.getItems();
         for (ILevelItem iLevelItem : levelItems){
             if (iLevelItem instanceof InteractableEntity){
                 InteractableEntity inEnt = (InteractableEntity) iLevelItem;
@@ -362,8 +361,8 @@ public class ClientAppState extends AbstractAppState implements
             @Override
             public void onAction( String name, boolean isPressed, float tpf ){
                 if (!isPressed){
-                    debug = !debug;
-                    ClientAppState.this.inputManager.setCursorVisible(debug);
+                    ClientAppState.this.debug = !ClientAppState.this.debug;
+                    ClientAppState.this.inputManager.setCursorVisible(ClientAppState.this.debug);
                 }
             }
         }, "Debug");
@@ -405,14 +404,17 @@ public class ClientAppState extends AbstractAppState implements
             if (this.collisionEvents.isEmpty()){
                 this.collisionEvents.add(new CollisionEvent(entityA, entityB));
             } else {
-
+                Boolean inCollisionEvents = false;
                 for (CollisionEvent collisionEvent : this.collisionEvents){
                     if (collisionEvent.hasSameEntities(entityA, entityB)){
                         collisionEvent.wasUpdated = true;
-                    } else {
-                        this.collisionEvents.add(new CollisionEvent(entityA, entityB));
+                        inCollisionEvents = true;
                     }
                 }
+                if (!inCollisionEvents){
+                    this.collisionEvents.add(new CollisionEvent(entityA, entityB));
+                }
+
             }
         }
 
