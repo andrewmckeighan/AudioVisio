@@ -137,9 +137,9 @@ public class Door extends InteractableEntity {
         this.particle.init(assetManager);
 
         if (this.particle != null && this.particle.emitter != null){
-//            this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+//          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
-            this.particle.emitter.setNumParticles(25);
+            this.particle.emitter.setNumParticles(50);
         }
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
