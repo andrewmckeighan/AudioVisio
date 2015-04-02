@@ -206,6 +206,8 @@ public class Level {
         for (ILevelItem item : this.levelItems.values()){
             item.start(rootNode, physics);
         }
+
+        rootNode.attachChild(this.shootables);
     }
 
     /**

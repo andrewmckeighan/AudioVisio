@@ -101,9 +101,6 @@ public class Lever extends InteractableEntity implements IShootable {
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        if (!ClientAppState.isAudio){
-            rootNode.attachChild(this);
-        }
         physics.add(this);
         this.particle.start(this.rootNode, physics);
     }
