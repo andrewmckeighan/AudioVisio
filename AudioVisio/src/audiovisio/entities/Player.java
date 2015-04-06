@@ -62,6 +62,7 @@ public class Player extends MovingEntity implements ActionListener {
     private Vector3f camLeft = new Vector3f();
     private boolean isServer;
     private Vector3f savedLocation = Player.DEFAULT_SPAWN_LOCATION;
+    private Box box;
 
     public Player(){}
 
@@ -167,6 +168,13 @@ public class Player extends MovingEntity implements ActionListener {
                 if (closest.getDistance() <= Player.MAX_SHOOT_DISTANCE){
                     IShootable shotObject = (IShootable) closest.getGeometry().getParent();
                     assert shotObject instanceof IShootable;
+                    if (shotObject instanceof Box && this.box == null){
+                        this.box = ((Box) shotObject).pickUp();
+                    }
+                    if (shotObject instanceof Button && this.box != null){
+                        this.box.putDown(((Button) shotObject).getLocalTranslation());
+                    }
+
                     shotObject.update();
                     shotObject.setWasUpdated(true);
                 }
