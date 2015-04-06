@@ -9,13 +9,11 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewTriggerDialog extends NewDialog {
-    JLabel lblLocation = new JLabel("Location");
-
-    JPanel pnlLocation = new JPanel();
-
-    JTextField xField = new JTextField();
-    JTextField yField = new JTextField();
-    JTextField zField = new JTextField();
+    JLabel     lblLocation = new JLabel("Location");
+    JPanel     pnlLocation = new JPanel();
+    JTextField xField      = new JTextField();
+    JTextField yField      = new JTextField();
+    JTextField zField      = new JTextField();
 
     public NewTriggerDialog( Frame owner, boolean modal ){
         super(owner, modal);

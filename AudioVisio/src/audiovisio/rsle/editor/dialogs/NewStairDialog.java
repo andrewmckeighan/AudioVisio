@@ -10,12 +10,10 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewStairDialog extends NewDialog {
-    JLabel lblLocation = new JLabel("Location");
-    JLabel lblDirection = new JLabel("Direction");
-
-    LocationField location = new LocationField();
-    JComboBox<String> direction = new JComboBox<String>();
-
+    JLabel            lblLocation  = new JLabel("Location");
+    JLabel            lblDirection = new JLabel("Direction");
+    LocationField     location     = new LocationField();
+    JComboBox<String> direction    = new JComboBox<String>();
     private int id;
 
     public NewStairDialog( Frame owner, boolean modal ){

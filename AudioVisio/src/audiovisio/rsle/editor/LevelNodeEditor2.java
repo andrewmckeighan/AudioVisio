@@ -21,7 +21,6 @@ public class LevelNodeEditor2 implements TreeCellEditor {
     BoolEditor      boolEditor;
     TextEditor      textEditor;
     DirectionEditor directionEditor;
-
     CellEditor currentEditor;
 
     public LevelNodeEditor2(){

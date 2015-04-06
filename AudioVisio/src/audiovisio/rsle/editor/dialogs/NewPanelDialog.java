@@ -10,7 +10,6 @@ import java.awt.*;
  */
 public class NewPanelDialog extends NewDialog {
     JLabel lblLocation = new JLabel("Location");
-
     JPanel     pnlLocation = new JPanel(new GridLayout(1, 3));
     JTextField xField      = new JTextField();
     JTextField yField      = new JTextField();

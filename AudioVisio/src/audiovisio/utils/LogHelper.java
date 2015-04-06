@@ -10,6 +10,30 @@ public class LogHelper {
     private static Logger  LOGGER     = Logger.getLogger("AudioVisio");
     private static boolean DUMP_STACK = true;
 
+    public static void init(){
+        LogHelper.LOGGER.setLevel(LogHelper.LEVEL);
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS [%4$s]: [%5$s%6$s]%n");
+    }
+
+    public static void init( String fileName ){
+        LogHelper.LOGGER.setLevel(LogHelper.LEVEL);
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tM:%1$tS:%1$tL:%1$tN\n" +
+                "%5$s%6$s\n%n");
+
+        try{
+            LogHelper.fileHandler = new FileHandler(fileName);
+            LogHelper.LOGGER.addHandler(LogHelper.fileHandler);
+            SimpleFormatter formatter = new SimpleFormatter();
+            LogHelper.fileHandler.setFormatter(formatter);
+
+            LogHelper.LOGGER.info("writing to file: " + fileName);
+        } catch (SecurityException securityException){
+            securityException.printStackTrace();
+        } catch (IOException ioException){
+            ioException.printStackTrace();
+        }
+    }
+
     public static void finest( String msg ){LogHelper.LOGGER.log(Level.FINEST, msg);}
 
     public static void finer( String msg ){LogHelper.LOGGER.log(Level.FINER, msg);}
@@ -71,30 +95,6 @@ public class LogHelper {
             topLogger.addHandler(consoleHandler);
         }
         consoleHandler.setLevel(level);
-    }
-
-    public static void init(){
-        LogHelper.LOGGER.setLevel(LogHelper.LEVEL);
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS [%4$s]: [%5$s%6$s]%n");
-    }
-
-    public static void init( String fileName ){
-        LogHelper.LOGGER.setLevel(LogHelper.LEVEL);
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tM:%1$tS:%1$tL:%1$tN\n" +
-                "%5$s%6$s\n%n");
-
-        try{
-            LogHelper.fileHandler = new FileHandler(fileName);
-            LogHelper.LOGGER.addHandler(LogHelper.fileHandler);
-            SimpleFormatter formatter = new SimpleFormatter();
-            LogHelper.fileHandler.setFormatter(formatter);
-
-            LogHelper.LOGGER.info("writing to file: " + fileName);
-        } catch (SecurityException securityException){
-            securityException.printStackTrace();
-        } catch (IOException ioException){
-            ioException.printStackTrace();
-        }
     }
 
     public static void toggleStackDump(){

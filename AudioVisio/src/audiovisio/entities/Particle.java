@@ -14,12 +14,12 @@ import com.jme3.scene.Node;
 public class Particle extends Entity {
     private static final float PARTICLES_PER_SECOND = 5;
     public ParticleEmitter emitter;
-    private String    material  = "Common/MatDefs/Misc/Particle.j3md";
-    private String    texture   = "Effects/Explosion/flame.png";
-    private ColorRGBA color = ColorRGBA.Red;
-    private Vector3f  velocity  = new Vector3f(0, 2, 0);
-    private Float lowLife  = 2.0F;
-    private Float highLife = 3.0F;
+    private String    material = "Common/MatDefs/Misc/Particle.j3md";
+    private String    texture  = "Effects/Explosion/flame.png";
+    private ColorRGBA color    = ColorRGBA.Red;
+    private Vector3f  velocity = new Vector3f(0, 2, 0);
+    private Float     lowLife  = 2.0F;
+    private Float     highLife = 3.0F;
 
     public Particle(){}
 

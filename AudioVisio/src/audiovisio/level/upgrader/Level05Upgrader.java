@@ -43,6 +43,6 @@ public class Level05Upgrader implements ILevelUpgrader {
 
     @Override
     public VersionString newVersion(){
-        return version;
+        return this.version;
     }
 }

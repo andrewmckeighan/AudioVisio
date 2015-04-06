@@ -9,17 +9,14 @@ import java.awt.event.ActionListener;
  * @author Matt Gerst
  */
 public class NewLevelDialog extends JDialog implements ActionListener {
-    JLabel lblName    = new JLabel("Name");
-    JLabel lblAuthor  = new JLabel("Author");
-    JLabel lblVersion = new JLabel("Version");
-
-    JTextField name    = new JTextField();
-    JTextField author  = new JTextField();
-    JTextField version = new JTextField("1.0");
-
-    JButton ok     = new JButton("Ok");
-    JButton cancel = new JButton("Cancel");
-
+    JLabel     lblName    = new JLabel("Name");
+    JLabel     lblAuthor  = new JLabel("Author");
+    JLabel     lblVersion = new JLabel("Version");
+    JTextField name       = new JTextField();
+    JTextField author     = new JTextField();
+    JTextField version    = new JTextField("1.0");
+    JButton    ok         = new JButton("Ok");
+    JButton    cancel     = new JButton("Cancel");
     boolean status;
 
     public NewLevelDialog( Frame owner, boolean modal ){

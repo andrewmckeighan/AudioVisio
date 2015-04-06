@@ -6,11 +6,11 @@ import com.jme3.network.serializing.Serializable;
 
 /**
  * Sent by the server to the client when the player has moved.
- * 
+ *
  * When the server updates the location of a player it sends the
  * client this message telling the client which player it is,
  * which direction the player is walking, and where the player is.
- * 
+ *
  * This message is also used by the server to tell the clients where
  * the other players are.
  */

@@ -20,8 +20,8 @@ import org.json.simple.JSONObject;
  */
 public class Panel implements ILevelItem {
 
-    public static final ColorRGBA COLOR = ColorRGBA.DarkGray;
-    private static final Box SHAPE = new Box(0.5F * Level.SCALE.getX(),
+    public static final  ColorRGBA COLOR = ColorRGBA.DarkGray;
+    private static final Box       SHAPE = new Box(0.5F * Level.SCALE.getX(),
             0.01F * Level.SCALE.getY(),
             0.5F * Level.SCALE.getZ());
     /**
@@ -57,22 +57,6 @@ public class Panel implements ILevelItem {
         this.initialize(assetManager);
     }
 
-    public void initialize( AssetManager assetManager ){
-        Box shape = Panel.SHAPE;
-
-        this.geometry = new Geometry("Panel" + this.ID, shape);
-
-        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
-
-        Material randomMaterial = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Panel.COLOR);
-        this.geometry.setMaterial(randomMaterial);
-
-        this.physics = new RigidBodyControl(0);
-        this.geometry.addControl(this.physics);
-    }
-
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         if (!ClientAppState.isAudio || true){//TODO turn this off
@@ -106,6 +90,22 @@ public class Panel implements ILevelItem {
         root.add(location);
 
         return root;
+    }
+
+    public void initialize( AssetManager assetManager ){
+        Box shape = Panel.SHAPE;
+
+        this.geometry = new Geometry("Panel" + this.ID, shape);
+
+        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
+
+        Material randomMaterial = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        randomMaterial.setColor("Color", Panel.COLOR);
+        this.geometry.setMaterial(randomMaterial);
+
+        this.physics = new RigidBodyControl(0);
+        this.geometry.addControl(this.physics);
     }
 
     public long getID(){

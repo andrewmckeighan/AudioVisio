@@ -13,14 +13,14 @@ import java.util.Enumeration;
 
 
 public class NetworkUtils {
-    
+
     public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
     public static int PORT;
-    
+
     public static synchronized void initializeSerializables(){
         // Client Messages
         Serializer.registerClass(PlayerSendMovementMessage.class);
-        
+
         // Server Messages
         Serializer.registerClass(PlayerLocationMessage.class);
         Serializer.registerClass(PlayerJoinMessage.class);
@@ -47,40 +47,36 @@ public class NetworkUtils {
      *
      * @return The address of the host if found, null otherwise.
      */
-    public static String getIP() {
-        try {
+    public static String getIP(){
+        try{
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
+            while (interfaces.hasMoreElements()){
                 NetworkInterface iface = interfaces.nextElement();
 
                 Enumeration<InetAddress> addrs = iface.getInetAddresses();
-                while (addrs.hasMoreElements()) {
+                while (addrs.hasMoreElements()){
                     InetAddress addr = addrs.nextElement();
 
-                    if (addr instanceof Inet4Address) {
+                    if (addr instanceof Inet4Address){
                         Inet4Address ipv4 = (Inet4Address) addr;
 
-                        if (ipv4.isLoopbackAddress())
-                            continue;
-                        if (ipv4.isLinkLocalAddress())
-                            continue;
-                        if (ipv4.isMulticastAddress())
-                            continue;
-                        if (ipv4.isSiteLocalAddress())
-                            return ipv4.getHostAddress();
+                        if (ipv4.isLoopbackAddress()){ continue; }
+                        if (ipv4.isLinkLocalAddress()){ continue; }
+                        if (ipv4.isMulticastAddress()){ continue; }
+                        if (ipv4.isSiteLocalAddress()){ return ipv4.getHostAddress(); }
                     }
                 }
             }
-        } catch (SocketException e) {
+        } catch (SocketException e){
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static Boolean attemptConnection(NetworkClient client){
+    public static Boolean attemptConnection( NetworkClient client ){
         LogHelper.info("attemptConnection");
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++){
             try{
                 if (client.isConnected()){
                     LogHelper.info("Actually connected");
@@ -92,9 +88,9 @@ public class NetworkUtils {
             } catch (IOException e){
                 LogHelper.info(String.format("Attempt %d to connect to server", i));
             }
-            try {
+            try{
                 Thread.sleep(50l);
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex){}
         }
         LogHelper.info("Unable to connect to server.");
         return false;

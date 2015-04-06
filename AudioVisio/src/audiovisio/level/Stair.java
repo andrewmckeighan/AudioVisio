@@ -8,16 +8,14 @@ import org.json.simple.JSONObject;
 
 /**
  * Represents a stair in the world
- *
  */
-public class Stair extends Panel{
+public class Stair extends Panel {
     public static final String KEY_DIRECTION = "direction";
-
     private Direction direction;
-    
-    public Stair() {}
 
-    public Stair(Vector3f location, Direction direction){
+    public Stair(){}
+
+    public Stair( Vector3f location, Direction direction ){
         super(location);
         this.direction = direction;
     }
@@ -28,7 +26,7 @@ public class Stair extends Panel{
 
         this.direction = Direction.valueOf((String) loadObj.get(Stair.KEY_DIRECTION));
     }
-    
+
     @Override
     public void save( JSONObject codeObj ){
         super.save(codeObj);

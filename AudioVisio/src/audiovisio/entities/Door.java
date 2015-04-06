@@ -26,6 +26,8 @@ public class Door extends InteractableEntity {
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
     public Particle particle;
     private Direction direction = Direction.NORTH;
+    private Node         rootNode;
+    private PhysicsSpace physicsSpace;
 
     public Door(){
         this.state = false;
@@ -49,12 +51,90 @@ public class Door extends InteractableEntity {
     }
 
     @Override
+    public void init( AssetManager assetManager ){
+        Box shape = Door.SHAPE;
+
+        this.geometry = new Geometry(this.name, shape);
+
+        if (this.direction == Direction.NORTH){
+            this.location = this.location.add(0.5F, 0.0F, 0.0F);
+        } else if (this.direction == Direction.SOUTH){
+            this.location = this.location.add(-0.5F, 0.0F, 0.0F);
+        } else if (this.direction == Direction.EAST){
+            this.location = this.location.add(0.0F, 0.0F, 0.5F);
+            this.geometry.setLocalRotation(Door.ROTATION);//Probably in Radians
+        } else if (this.direction == Direction.WEST){
+            this.location = this.location.add(0.0F, 0.0F, -0.5F);
+            this.geometry.setLocalRotation(Door.ROTATION);//Probably in Radians
+        }
+        this.location = this.location.mult(Level.SCALE);
+        this.location = this.location.add(Door.OFFSET);
+        this.geometry.setLocalTranslation(this.location);
+
+        this.particle = new Particle();
+
+        this.particle.init(assetManager);
+
+        this.attachChild(this.particle);
+
+        if (this.particle != null && this.particle.emitter != null){
+//          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
+            this.particle.emitter.setLocalTranslation(this.location);
+            this.particle.emitter.setNumParticles(50);
+        }
+
+        com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        randomMaterial.setColor("Color", Door.COLOR);
+        this.material = randomMaterial;
+        this.geometry.setMaterial(randomMaterial);
+
+        this.physics = new RigidBodyControl(Door.MASS);
+        this.attachChild(this.geometry);
+        this.attachChild(this.particle);
+        this.addControl(this.physics);
+    }
+
+    @Override
+    public void start( Node rootNode, PhysicsSpace physics ){
+        this.rootNode = rootNode;
+        this.physicsSpace = physics;
+        if (ClientAppState.isAudio){
+            rootNode.attachChild(this.particle);
+            this.particle.start(rootNode, physics);
+        } else {
+            this.particle.removeFromParent();
+            this.particle = null;
+            rootNode.attachChild(this);
+        }
+        physics.add(this);
+    }
+
+    @Override
     public void save( JSONObject codeObj ){
         super.save(codeObj);
         codeObj.put(JSONHelper.KEY_TYPE, "door");
 
         codeObj.put(Door.KEY_STATE, this.state);
         codeObj.put(Door.KEY_EDGE, this.direction.toString());
+    }
+
+    @Override
+    public LevelNode getLevelNode(){
+        LevelNode root = new LevelNode(String.format("#%d door @ %s", this.ID, this.location), true);
+        LevelNode typeNode = new LevelNode("Type", "door", true);
+        LevelNode idNode = new LevelNode("ID", this.ID, false);
+        LevelNode nameNode = new LevelNode("Name", this.name, false);
+        LevelNode stateNode = new LevelNode("State", this.state, false);
+        LevelNode locationNode = LevelUtils.vector2node(this.location);
+
+        root.add(typeNode);
+        root.add(idNode);
+        root.add(nameNode);
+        root.add(stateNode);
+        root.add(locationNode);
+
+        return root;
     }
 
     @Override
@@ -109,85 +189,6 @@ public class Door extends InteractableEntity {
         } else {
             this.updateVisuals();
         }
-    }
-
-    @Override
-    public void init( AssetManager assetManager ){
-        Box shape = Door.SHAPE;
-
-        this.geometry = new Geometry(this.name, shape);
-
-        if (this.direction == Direction.NORTH){
-            this.location = this.location.add(0.5F, 0.0F, 0.0F);
-        } else if (this.direction == Direction.SOUTH){
-            this.location = this.location.add(-0.5F, 0.0F, 0.0F);
-        } else if (this.direction == Direction.EAST){
-            this.location = this.location.add(0.0F, 0.0F, 0.5F);
-            this.geometry.setLocalRotation(Door.ROTATION);//Probably in Radians
-        } else if (this.direction == Direction.WEST){
-            this.location = this.location.add(0.0F, 0.0F, -0.5F);
-            this.geometry.setLocalRotation(Door.ROTATION);//Probably in Radians
-        }
-        this.location = this.location.mult(Level.SCALE);
-        this.location = this.location.add(Door.OFFSET);
-        this.geometry.setLocalTranslation(this.location);
-
-        this.particle = new Particle();
-
-        this.particle.init(assetManager);
-
-        this.attachChild(this.particle);
-
-        if (this.particle != null && this.particle.emitter != null){
-//          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
-            this.particle.emitter.setLocalTranslation(this.location);
-            this.particle.emitter.setNumParticles(50);
-        }
-
-        com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Door.COLOR);
-        this.material = randomMaterial;
-        this.geometry.setMaterial(randomMaterial);
-
-        this.physics = new RigidBodyControl(Door.MASS);//TODO: this might not be needed if we don't want collision detection
-        this.attachChild(this.geometry);
-        this.attachChild(this.particle);
-        this.addControl(this.physics);
-    }
-
-    @Override
-    public void start( Node rootNode, PhysicsSpace physics ){
-        this.rootNode = rootNode;
-        this.physicsSpace = physics;
-        if (ClientAppState.isAudio){
-            rootNode.attachChild(this.particle);
-            this.particle.start(rootNode, physics);
-        } else {
-            this.particle.removeFromParent();
-            this.particle = null;
-            rootNode.attachChild(this);
-        }
-        physics.add(this);
-
-    }
-
-    @Override
-    public LevelNode getLevelNode(){
-        LevelNode root = new LevelNode(String.format("#%d door @ %s", this.ID, this.location), true);
-        LevelNode typeNode = new LevelNode("Type", "door", true);
-        LevelNode idNode = new LevelNode("ID", this.ID, false);
-        LevelNode nameNode = new LevelNode("Name", this.name, false);
-        LevelNode stateNode = new LevelNode("State", this.state, false);
-        LevelNode locationNode = LevelUtils.vector2node(this.location);
-
-        root.add(typeNode);
-        root.add(idNode);
-        root.add(nameNode);
-        root.add(stateNode);
-        root.add(locationNode);
-
-        return root;
     }
 
 

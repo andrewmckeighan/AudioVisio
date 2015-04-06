@@ -12,6 +12,8 @@ import java.util.Set;
  */
 public interface ITriggerable {
 
+    void update( Boolean state );
+
     /**
      * Get a list of IDs that this item links to. This is used by the
      * level during loading to create a map of objects to their
@@ -34,7 +36,5 @@ public interface ITriggerable {
      * @param id The id to link to
      */
     void link( Long id );
-
-    void update( Boolean state );
 
 }

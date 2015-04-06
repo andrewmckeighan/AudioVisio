@@ -28,7 +28,7 @@ public class Trigger implements ILevelItem {
     }
 
     @Override
-    public void init(AssetManager assetManager) {
+    public void init( AssetManager assetManager ){
 
     }
 

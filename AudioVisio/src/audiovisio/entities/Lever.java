@@ -22,7 +22,7 @@ import org.json.simple.JSONObject;
 public class Lever extends InteractableEntity implements IShootable {
     public static final  String     KEY_EDGE  = "edge";
     public static final  String     KEY_ISON  = "isOn";
-//    public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);//VERTICAL ROTATION FOR ON/OFF
+    //    public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);//VERTICAL ROTATION FOR ON/OFF
     private static final Quaternion ROTATION  = new Quaternion().fromAngles(0, (float) -(Math.PI / 2.0), 0);//HORIZONTAL ROTATION FOR DIRECTION
     private static final float      MASS      = 0.0F;
     private static final Box        SHAPE     = new Box(0.05F * Level.SCALE.getX(),
@@ -31,8 +31,16 @@ public class Lever extends InteractableEntity implements IShootable {
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
     private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
     private static final Quaternion ON_ANGLE  = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
-    public Particle particle;
+    public  Particle particle;
     private Geometry onGeometry;
+    //    @Override
+//    public void init( boolean isAudio ){
+//        if(isAudio){
+//            this.model.removeFromParent();
+//        } else {
+//            this.particle.removeFromParent();
+//        }
+//    }
     private Geometry offGeometry;
     private Direction direction;
 
@@ -53,6 +61,13 @@ public class Lever extends InteractableEntity implements IShootable {
 
     public Lever( boolean stuck ){
         super(stuck);
+    }
+
+    @Override
+    public void load( JSONObject loadObj ){
+        super.load(loadObj);
+        this.state = (Boolean) loadObj.get(Lever.KEY_ISON);
+        this.direction = Direction.valueOf((String) loadObj.get(Lever.KEY_EDGE));
     }
 
     @Override
@@ -130,6 +145,15 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     @Override
+    public void save( JSONObject codeObj ){
+        super.save(codeObj);
+        codeObj.put(JSONHelper.KEY_TYPE, "lever");
+
+        codeObj.put(Lever.KEY_ISON, this.state);
+        codeObj.put(Lever.KEY_EDGE, this.direction.toString());
+    }
+
+    @Override
     public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d lever @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "lever", true);
@@ -148,28 +172,8 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     @Override
-    public void load( JSONObject loadObj ){
-        super.load(loadObj);
-        this.state = (Boolean) loadObj.get(Lever.KEY_ISON);
-        this.direction = Direction.valueOf((String) loadObj.get(Lever.KEY_EDGE));
-    }
-
-    @Override
-    public void save( JSONObject codeObj ){
-        super.save(codeObj);
-        codeObj.put(JSONHelper.KEY_TYPE, "lever");
-
-        codeObj.put(Lever.KEY_ISON, this.state);
-        codeObj.put(Lever.KEY_EDGE, this.direction.toString());
-    }
-
-    public void setOn( boolean state ){
-        this.state = state;
-    }
-
-    @Override
     public void update(){
-        if(this.state == null){
+        if (this.state == null){
             this.state = false;
         }
         this.state = !this.state;
@@ -182,30 +186,6 @@ public class Lever extends InteractableEntity implements IShootable {
 //            this.geometry.setLocalRotation(Lever.OFF_ANGLE);
         }
     }
-
-    @Override
-    public Boolean getWasUpdated(){
-        return this.wasUpdated;
-    }
-
-    @Override
-    public void setWasUpdated( boolean wasUpdated ){
-        this.wasUpdated = wasUpdated;
-    }
-
-    @Override
-    public Geometry getGeometry(){
-        return this.geometry;
-    }
-
-//    @Override
-//    public void init( boolean isAudio ){
-//        if(isAudio){
-//            this.model.removeFromParent();
-//        } else {
-//            this.particle.removeFromParent();
-//        }
-//    }
 
     private void turnedOnEvent(){
         LogHelper.info("Lever ON!");
@@ -226,7 +206,7 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     private void updateVisuals(){
-        if(this.state){
+        if (this.state){
             //this.setLocalRotation(Lever.ON_ANGLE);
             this.offGeometry.removeFromParent();
             this.attachChild(this.onGeometry);
@@ -255,5 +235,24 @@ public class Lever extends InteractableEntity implements IShootable {
 
     private void stopSound(){
 
+    }
+
+    @Override
+    public Boolean getWasUpdated(){
+        return this.wasUpdated;
+    }
+
+    @Override
+    public void setWasUpdated( boolean wasUpdated ){
+        this.wasUpdated = wasUpdated;
+    }
+
+    @Override
+    public Geometry getGeometry(){
+        return this.geometry;
+    }
+
+    public void setOn( boolean state ){
+        this.state = state;
     }
 }

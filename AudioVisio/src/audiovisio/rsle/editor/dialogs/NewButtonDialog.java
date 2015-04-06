@@ -12,7 +12,6 @@ import java.awt.*;
 public class NewButtonDialog extends NewDialog {
     JLabel lblName     = new JLabel("Name");
     JLabel lblLocation = new JLabel("Location");
-
     JTextField    nameField     = new JTextField();
     LocationField locationField = new LocationField();
 

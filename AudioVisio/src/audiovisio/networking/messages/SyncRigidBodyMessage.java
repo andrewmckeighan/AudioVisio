@@ -15,10 +15,10 @@ public class SyncRigidBodyMessage extends PhysicsSyncMessage {
     public Vector3f linearVelocity;
     public Vector3f angularVelocity;
 
-    public SyncRigidBodyMessage() {
+    public SyncRigidBodyMessage(){
     }
 
-    public SyncRigidBodyMessage(long id, PhysicsRigidBody body) {
+    public SyncRigidBodyMessage( long id, PhysicsRigidBody body ){
         this.syncId = id;
 
         this.location = body.getPhysicsLocation(new Vector3f());
@@ -29,7 +29,7 @@ public class SyncRigidBodyMessage extends PhysicsSyncMessage {
         body.getAngularVelocity(this.angularVelocity);
     }
 
-    public void readData(PhysicsRigidBody body) {
+    public void readData( PhysicsRigidBody body ){
         this.location = body.getPhysicsLocation(new Vector3f());
         this.rotation = body.getPhysicsRotationMatrix(new Matrix3f());
         this.linearVelocity = new Vector3f();
@@ -38,8 +38,8 @@ public class SyncRigidBodyMessage extends PhysicsSyncMessage {
         body.getAngularVelocity(this.angularVelocity);
     }
 
-    public void applyData(Object body) {
-        if (body == null) {
+    public void applyData( Object body ){
+        if (body == null){
             return;
         }
         PhysicsRigidBody rigidBody = ((Spatial) body).getControl(RigidBodyControl.class);

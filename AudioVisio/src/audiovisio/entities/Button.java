@@ -26,7 +26,6 @@ public class Button extends InteractableEntity {
     private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.5F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
-
     public Particle particle;
 
     public Button(){}
@@ -69,8 +68,6 @@ public class Button extends InteractableEntity {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        this.rootNode = rootNode;
-        this.physicsSpace = physics;
         if (ClientAppState.isAudio){
             rootNode.attachChild(this.particle);
             this.particle.start(rootNode, physics);
@@ -84,12 +81,18 @@ public class Button extends InteractableEntity {
     }
 
     @Override
+    public void save( JSONObject codeObj ){
+        super.save(codeObj);
+        codeObj.put(JSONHelper.KEY_TYPE, "button");
+    }
+
+    @Override
     public LevelNode getLevelNode(){
         LevelNode root = new LevelNode(String.format("#%d button @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "button", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
-        LevelNode nameNode = new LevelNode("Name", this.name, false);
         LevelNode locationNode = LevelUtils.vector2node(this.location);
+        LevelNode nameNode = new LevelNode("Name", this.name, false);
 
         root.add(typeNode);
         root.add(idNode);
@@ -105,18 +108,80 @@ public class Button extends InteractableEntity {
     }
 
     @Override
-    public String toString(){
-        String s = "Button: " + this.name + "{\n" +
-                "   Pos: " + this.location + "\n" +
-                "   State: " + this.state + "\n" +
-                "   Interactables: {\n";
-        for (Long id : this.linkedIds){
-            s = s + "      " + id + "/n";
+    public void update( Boolean state ){
+        if (!this.state){
+            if (state){
+                this.startPress();
+            }
+        } else {
+            if (!state){
+                this.stopPress();
+            }
         }
-        s = s + "   }\n + " +
-                "}\n";
 
-        return s;
+        this.state = state;
+        this.wasUpdated = false;
+    }
+
+    private void emitParticle(){}
+
+    private void playSound(){
+        //TODO
+    }
+
+    private void updateVisuals(){
+        //TODO
+        try{
+            if (this.geometry.getMaterial() != null){
+                this.geometry.getMaterial().setColor("updatedColor", ColorRGBA.randomColor());
+            }
+        } catch (IllegalArgumentException argumentException){
+            // LogHelper.warn("Material not defined", argumentException);
+        }
+    }
+
+    /**
+     * Checks the entity against all classes that are valid ways to collide with this entity.
+     *
+     * @param entity entity to be checked
+     *
+     * @return if entity is something that can cause an update via collision
+     */
+    private Boolean isTriggeredBy( Entity entity ){
+        Boolean rBoolean = false;
+        if (entity instanceof Player){
+            rBoolean = true;
+        }
+        if (entity instanceof MovingEntity){
+            rBoolean = true;
+        }
+        //add other entities here (eg ball/box/etc..)
+        return rBoolean;
+    }
+
+    public void startPress(){
+        //particles for startPress
+        //change color of button to something
+        assert this.state;
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
+    }
+
+    public void stopPress(){
+        //particles for stopPress
+        //change the color again.
+        assert !this.state;
+
+        if (ClientAppState.isAudio){
+            this.playSound();
+            this.emitParticle();
+        } else {
+            this.updateVisuals();
+        }
     }
 
     /**
@@ -125,6 +190,7 @@ public class Button extends InteractableEntity {
      *
      * Note: this method will be called twice (once per entity), so only handle the receiving end of the collision.
      * (e.g. bot hits button, box does nothing, button updates being hit.)
+     *
      * @param entity The other entity in the collision.
      */
     @Override
@@ -149,89 +215,23 @@ public class Button extends InteractableEntity {
         }
     }
 
-    /**
-     * Checks the entity against all classes that are valid ways to collide with this entity.
-     * @param entity entity to be checked
-     * @return if entity is something that can cause an update via collision
-     */
-    private Boolean isTriggeredBy( Entity entity ){
-        Boolean rBoolean = false;
-        if (entity instanceof Player){
-            rBoolean = true;
-        }
-        if (entity instanceof MovingEntity){
-            rBoolean = true;
-        }
-        //add other entities here (eg ball/box/etc..)
-        return rBoolean;
-    }
-
-    @Override
-    public void save( JSONObject codeObj ){
-        super.save(codeObj);
-        codeObj.put(JSONHelper.KEY_TYPE, "button");
-    }
-
-    @Override
-    public void update( Boolean state ){
-        if (!this.state){
-            if (state){
-                this.startPress();
-            }
-        } else {
-            if (!state){
-                this.stopPress();
-            }
-        }
-
-        this.state = state;
-        this.wasUpdated = false;
-    }
-
-    public void startPress(){
-        //particles for startPress
-        //change color of button to something
-        assert this.state;
-        if (ClientAppState.isAudio){
-            this.playSound();
-            this.emitParticle();
-        } else {
-            this.updateVisuals();
-        }
-    }
-
-    private void emitParticle(){}
-
-    private void playSound(){
-        //TODO
-    }
-
-    private void updateVisuals(){
-        //TODO
-        try{
-            if (this.geometry.getMaterial() != null){
-                this.geometry.getMaterial().setColor("updatedColor", ColorRGBA.randomColor());
-            }
-        } catch (IllegalArgumentException argumentException){
-            // LogHelper.warn("Material not defined", argumentException);
-        }
-    }
-
-    public void stopPress(){
-        //particles for stopPress
-        //change the color again.
-        assert !this.state;
-
-        if (ClientAppState.isAudio){
-            this.playSound();
-            this.emitParticle();
-        } else {
-            this.updateVisuals();
-        }
-    }
-
     public TriggerActionMessage getTriggerActionMessage(){
         //TODO
         return new TriggerActionMessage(this.getID(), this.state);
+    }
+
+    @Override
+    public String toString(){
+        String s = "Button: " + this.name + "{\n" +
+                "   Pos: " + this.location + "\n" +
+                "   State: " + this.state + "\n" +
+                "   Interactables: {\n";
+        for (Long id : this.linkedIds){
+            s = s + "      " + id + "/n";
+        }
+        s = s + "   }\n + " +
+                "}\n";
+
+        return s;
     }
 }

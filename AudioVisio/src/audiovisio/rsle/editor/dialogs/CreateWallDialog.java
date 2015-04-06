@@ -7,17 +7,16 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class CreateWallDialog extends NewDialog {
-    JLabel lblStartX    = new JLabel("Start X:");
-    JLabel lblStartZ    = new JLabel("Start Z:");
-    JLabel lblSize      = new JLabel("Size:");
-    JLabel lblDirection = new JLabel("Direction:");
-    JLabel lblYPlane    = new JLabel("Y Level:");
-
-    JTextField        startX    = new JTextField();
-    JTextField        startZ    = new JTextField();
-    JTextField        size      = new JTextField();
-    JComboBox<String> direction = new JComboBox<String>();
-    JTextField        yPlane    = new JTextField(0);
+    JLabel            lblStartX    = new JLabel("Start X:");
+    JLabel            lblStartZ    = new JLabel("Start Z:");
+    JLabel            lblSize      = new JLabel("Size:");
+    JLabel            lblDirection = new JLabel("Direction:");
+    JLabel            lblYPlane    = new JLabel("Y Level:");
+    JTextField        startX       = new JTextField();
+    JTextField        startZ       = new JTextField();
+    JTextField        size         = new JTextField();
+    JComboBox<String> direction    = new JComboBox<String>();
+    JTextField        yPlane       = new JTextField(0);
 
     public CreateWallDialog( Frame owner, boolean modal ){
         super(owner, modal);
@@ -69,7 +68,7 @@ public class CreateWallDialog extends NewDialog {
         return Integer.parseInt(this.startX.getText());
     }
 
-    public int getStartZ() {
+    public int getStartZ(){
         return Integer.parseInt(this.startZ.getText());
     }
 

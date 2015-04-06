@@ -10,20 +10,20 @@ import java.text.DecimalFormat;
 public class PrintHelper {
     public static final String DEFAULT_FLOAT_FORMAT = "000.00";
 
-    public static String printFormat(String format, float value){
-        DecimalFormat formatter = new DecimalFormat(format);
-        return formatter.format(value);
-    }
-
-    public static String printFormat(float value){
-        return PrintHelper.printFormat(PrintHelper.DEFAULT_FLOAT_FORMAT, value);
-    }
-
-    public static String printVector3f(Vector3f vec){
-        if(vec == null){
+    public static String printVector3f( Vector3f vec ){
+        if (vec == null){
             return "[null]";
         }
         return "[" + PrintHelper.printFormat(vec.x) + ", " + PrintHelper.printFormat(vec.y) + ", " + PrintHelper.printFormat(vec.z) + "]";
+    }
+
+    public static String printFormat( float value ){
+        return PrintHelper.printFormat(PrintHelper.DEFAULT_FLOAT_FORMAT, value);
+    }
+
+    public static String printFormat( String format, float value ){
+        DecimalFormat formatter = new DecimalFormat(format);
+        return formatter.format(value);
     }
 
 }

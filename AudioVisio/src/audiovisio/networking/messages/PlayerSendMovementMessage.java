@@ -6,13 +6,13 @@ import com.jme3.network.serializing.Serializable;
 
 /**
  * Sent by the client to the server when the player is moving.
- * 
+ *
  * When the player is moved on the client (one of the movement
  * keys is pressed), the client sends this message to the server
  * telling it what direction it is traveling in.
  */
 @Serializable
-public class PlayerSendMovementMessage extends PhysicsSyncMessage{
+public class PlayerSendMovementMessage extends PhysicsSyncMessage {
     private Vector3f location;
     private Vector3f direction;
 
@@ -40,14 +40,14 @@ public class PlayerSendMovementMessage extends PhysicsSyncMessage{
     }
 
     @Override
-    public String toString() {
-        return String.format("[" + this.location + ":" + this.direction + "]");
-    }
-
-    @Override
     public void applyData( Object player ){
         LogHelper.warn("This message is not used! Please switch to SyncCharacterMessage!");
         //((Player) player).update(this.location, this.direction);
 
+    }
+
+    @Override
+    public String toString(){
+        return String.format("[" + this.location + ":" + this.direction + "]");
     }
 }

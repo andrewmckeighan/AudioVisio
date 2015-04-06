@@ -23,7 +23,6 @@ public class Wall extends Panel {
     private static final Quaternion ROTATION = new Quaternion().fromAngles(0, (float) Math.PI / 2, 0);
     private static final Vector3f   OFFSET   = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
     private static final ColorRGBA COLOR = ColorRGBA.LightGray;
-
     private Direction direction;
 
     public Wall(){}

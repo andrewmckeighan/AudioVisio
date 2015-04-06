@@ -39,6 +39,13 @@ import org.json.simple.JSONObject;
  */
 public interface ILevelItem {
 
+    enum Direction {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
+    }
+
     /**
      * Called when loading the object from JSON. The given
      * JSON object should contain the JSONObject that this
@@ -108,14 +115,5 @@ public interface ILevelItem {
      * @param id The new ID of the object
      */
     void setID( long id );
-
-
-
-    enum Direction {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
-    }
 
 }

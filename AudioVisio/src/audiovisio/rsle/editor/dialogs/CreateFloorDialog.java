@@ -7,17 +7,16 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class CreateFloorDialog extends NewDialog {
-    JLabel lblStartX = new JLabel("Start X:");
-    JLabel lblStartZ = new JLabel("Start Z:");
-    JLabel lblSizeX  = new JLabel("Width:");
-    JLabel lblSizeZ  = new JLabel("Height:");
-    JLabel lblYPlane = new JLabel("Y Level:");
-
-    JTextField startX = new JTextField();
-    JTextField startZ = new JTextField();
-    JTextField sizeX  = new JTextField();
-    JTextField sizeZ  = new JTextField();
-    JTextField yPlane = new JTextField(0);
+    JLabel     lblStartX = new JLabel("Start X:");
+    JLabel     lblStartZ = new JLabel("Start Z:");
+    JLabel     lblSizeX  = new JLabel("Width:");
+    JLabel     lblSizeZ  = new JLabel("Height:");
+    JLabel     lblYPlane = new JLabel("Y Level:");
+    JTextField startX    = new JTextField();
+    JTextField startZ    = new JTextField();
+    JTextField sizeX     = new JTextField();
+    JTextField sizeZ     = new JTextField();
+    JTextField yPlane    = new JTextField(0);
 
     public CreateFloorDialog( Frame owner, boolean modal ){
         super(owner, modal);
