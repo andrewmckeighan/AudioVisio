@@ -80,7 +80,8 @@ public class LogHelper {
 
     public static void init( String fileName ){
         LogHelper.LOGGER.setLevel(LogHelper.LEVEL);
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tH:%1$tM:%1$tS [%4$s]: [%5$s%6$s]%n");
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tM:%1$tS:%1$tL:%1$tN\n" +
+                "%5$s%6$s\n%n");
 
         try{
             LogHelper.fileHandler = new FileHandler(fileName);
@@ -111,7 +112,7 @@ public class LogHelper {
             s += " ";
         }
         s += "=";
-        LogHelper.LOGGER.log(Level.INFO, s);
+        LogHelper.LOGGER.log(Level.FINEST, s);
         LogHelper.divider();
     }
 
@@ -120,6 +121,15 @@ public class LogHelper {
         for (int i = 0; i < LogHelper.DIVIDER_SIZE; i++){
             s += "=";
         }
-        LogHelper.LOGGER.log(Level.INFO, s);
+        LogHelper.LOGGER.log(Level.FINEST, s);
+    }
+
+    public static void object( String title, Object... objects ){
+        String s = "\n" + title + " {\n";
+        for (Object o : objects){
+            s += "  " + o.getClass() + ": " + o + "\n";
+        }
+        s += "}";
+        LogHelper.LOGGER.log(Level.FINE, s);
     }
 }

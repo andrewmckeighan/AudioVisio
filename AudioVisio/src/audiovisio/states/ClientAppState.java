@@ -57,7 +57,7 @@ public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
     public static final int FPS = 1;
-    public static boolean isAudio = false;
+    public static boolean isAudio;
 
     public NetworkClient myClient = Network.createClient();
     public Level level;
@@ -246,10 +246,12 @@ public class ClientAppState extends AbstractAppState implements
 
     @Override
     public void update( float tpf ){
+        LogHelper.divider("Client.update");
         Player player = ((Player) this.worldManager.getPlayer(this.myClient.getId()));
         if (player != null){
             this.updateMessage(player);
             SyncCharacterMessage msg = player.getSyncCharacterMessage();
+            LogHelper.finer("\nSending syncCharMsg:\n   " + msg);
             this.myClient.send(msg);
         }
 

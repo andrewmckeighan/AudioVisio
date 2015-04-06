@@ -190,7 +190,7 @@ public class ServerAppState extends AbstractAppState implements
                 }
                 ServerAppState.this.worldManager.removePlayer(conn.getId());
 
-                if (ServerAppState.this.players.isEmpty() || ServerAppState.this.players.size() == 0){
+                if (!ServerAppState.this.players.isEmpty()){
                     ServerAppState.this.myServer.close();
                 }
 
@@ -202,6 +202,12 @@ public class ServerAppState extends AbstractAppState implements
         this.currentLevel.init(this.AM, syncManager);
         this.currentLevel.start(this.AV.getRootNode(), physicsSpace);
     }
+
+    @Override
+    public void update( float tpf ){
+        LogHelper.divider("Server Update");
+    }
+
 
     @Override
     public void cleanup() {

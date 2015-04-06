@@ -236,7 +236,8 @@ public class Player extends MovingEntity implements ActionListener {
      * @param direction walkDirection to set
      */
     public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
-//        this.savedLocation = location;
+//        LogHelper.object("Player.updateStart", location.x, this.getLocalTranslation().x, this.playerCamera.getLocation(), this.savedLocation);
+        this.savedLocation = location;
 //        this.setWalkDirection(direction);
 
 //        this.move(location);
@@ -254,7 +255,8 @@ public class Player extends MovingEntity implements ActionListener {
         if (this.model != null){
 //            LogHelper.info("test" + this.getLocalTranslation().add(MODEL_OFFSET) + ":" + location.add(MODEL_OFFSET));
 //            this.model.setLocalTranslation(this.getLocalTranslation().add(MODEL_OFFSET));
-            this.model.setLocalTranslation(location.add(Player.MODEL_OFFSET));
+            this.model.setLocalTranslation(this.getLocalTranslation().add(Player.MODEL_OFFSET));
+//            this.model.setLocalTranslation(location.add(Player.MODEL_OFFSET));
         }
 
         if (this.footSteps != null && this.footSteps.emitter != null){
@@ -279,7 +281,8 @@ public class Player extends MovingEntity implements ActionListener {
 
         if (this.playerCamera != null){
             //TODO why isnt this location?
-            this.playerCamera.setLocation(location.add(
+//            this.playerCamera.setLocation(location.add(
+            this.playerCamera.setLocation(this.getLocalTranslation().add(
                     Player.CAMERA_OFFSET));
 //            this.model.setLocalRotation(this.playerCamera.getRotation());//TODO remove y coord from rotation/set a max
             if (this.model != null){
@@ -308,6 +311,8 @@ public class Player extends MovingEntity implements ActionListener {
             }
         }
 
+//        LogHelper.object("Player.updateEnd", location.x, this.getLocalTranslation().x, this.playerCamera.getLocation(), this.savedLocation);
+
     }
 
     public boolean isServer(){
@@ -324,6 +329,7 @@ public class Player extends MovingEntity implements ActionListener {
      * @return new SyncCharacterMessage to send to other server/client.
      */
     public SyncCharacterMessage getSyncCharacterMessage(){
+        SyncCharacterMessage syncCharacterMessage;
         Quaternion q;
         if (this.model != null){
             q = this.model.getLocalRotation();
@@ -333,35 +339,38 @@ public class Player extends MovingEntity implements ActionListener {
 
         //TODO: determine if this if is needed.
         if (this.isServer()){
-            return new SyncCharacterMessage(this.getID(),
-                    this.getLocalTranslation(),
+            syncCharacterMessage = new SyncCharacterMessage(this.getID(),
+                    this.savedLocation, //this.getLocalTranslation(),
                     this.getWalkDirection(), q);
-        }
-        this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
-        this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
+        } else {
+            this.camDir.set(this.playerCamera.getDirection().multLocal(20.6f));
+            this.camLeft.set(this.playerCamera.getLeft()).multLocal(20.4f);
 
-        Vector3f walkDirection = new Vector3f(0, 0, 0);
+            Vector3f walkDirection = new Vector3f(0, 0, 0);
 
-        if (this.up){
-            walkDirection.addLocal(this.camDir);
-        }
-        if (this.down){
-            walkDirection.addLocal(this.camDir.negate());
-        }
-        if (this.left){
-            walkDirection.addLocal(this.camLeft);
-        }
-        if (this.right){
-            walkDirection.addLocal(this.camLeft.negate());
-        }
+            if (this.up){
+                walkDirection.addLocal(this.camDir);
+            }
+            if (this.down){
+                walkDirection.addLocal(this.camDir.negate());
+            }
+            if (this.left){
+                walkDirection.addLocal(this.camLeft);
+            }
+            if (this.right){
+                walkDirection.addLocal(this.camLeft.negate());
+            }
 
 //        walkDirection.setY(walkDirection.getY() / 4);
-        walkDirection.setY(0); //Y movement will be done on 'jump'
+            walkDirection.setY(0); //Y movement will be done on 'jump'
 //        this.setWalkDirection(walkDirection);
+            LogHelper.object("Player.getSyncCharMessage", this.getID(), this.getLocalTranslation(), walkDirection, this.playerCamera.getRotation());
 
-        return new SyncCharacterMessage(this.getID(),
-                this.getLocalTranslation(),
-                walkDirection, this.playerCamera.getRotation());
+            syncCharacterMessage = new SyncCharacterMessage(this.getID(),
+                    this.savedLocation, //this.playerCamera.getLocation(),//this.getLocalTranslation(),
+                    walkDirection, this.playerCamera.getRotation());
+        }
+        return syncCharacterMessage;
     }
 
     public Vector3f getWalkDirection(){
@@ -405,13 +414,34 @@ public class Player extends MovingEntity implements ActionListener {
 
     @Override
     public String toString(){
+        String s = "";
         try{
-            return "Player[" + this.ID + "] located: " + PrintHelper.printVector3f(this.getLocalTranslation()) +
-                    " walking: " + PrintHelper.printVector3f(this.walkDirection) +
-                    " looking: " + PrintHelper.printVector3f(this.playerCamera.getDirection());
+
+            String localTrans, walkDir, camDir;
+            if (this.getLocalTranslation() != null){
+                localTrans = PrintHelper.printVector3f(this.getLocalTranslation());
+            } else {
+                localTrans = "null";
+            }
+            if (this.walkDirection != null){
+                walkDir = PrintHelper.printVector3f(this.walkDirection);
+            } else {
+                walkDir = "null";
+            }
+            if (this.playerCamera != null && this.playerCamera.getDirection() != null){
+                camDir = PrintHelper.printVector3f(this.playerCamera.getDirection());
+            } else {
+                camDir = "null";
+            }
+
+            s = "Player[" + this.ID + "]\n" +
+                    "   located: " + localTrans + "\n" +
+                    "   walking: " + walkDir + "\n" +
+                    "   looking: " + camDir;
         } catch (NullPointerException nullException){
-            return "Player has not been fully created yet.";
+            s = "Player has not been fully created yet.";
         }
+        return s;
     }
 
     public void setRootNode( Node rootNode ){
