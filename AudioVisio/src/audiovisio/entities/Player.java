@@ -71,7 +71,7 @@ public class Player extends MovingEntity implements ActionListener {
      * @param level [description]
      */
     public void load( Level level ){
-        this.spawn = Player.Player.DEFAULT_SPAWN_LOCATION;
+        this.spawn = Player.DEFAULT_SPAWN_LOCATION;
         this.level = level;
     }
 

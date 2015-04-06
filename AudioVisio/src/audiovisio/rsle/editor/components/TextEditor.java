@@ -15,7 +15,7 @@ import java.util.Vector;
  * @author Matt Gerst
  */
 public class TextEditor extends JTextField implements CellEditor {
-    String value = "";
+    String value     = "";
     Vector listeners = new Vector();
     LevelNode node;
 

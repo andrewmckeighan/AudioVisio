@@ -10,9 +10,9 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewDoorDialog extends NewDialog {
-    JLabel lblName     = new JLabel("Name");
-    JLabel lblState    = new JLabel("State");
-    JLabel lblLocation = new JLabel("Location");
+    JLabel        lblName       = new JLabel("Name");
+    JLabel        lblState      = new JLabel("State");
+    JLabel        lblLocation   = new JLabel("Location");
     JTextField    nameField     = new JTextField();
     JCheckBox     stateField    = new JCheckBox();
     LocationField locationField = new LocationField();

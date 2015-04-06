@@ -24,7 +24,7 @@ public class AudioVisio extends SimpleApplication {
     static        JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
-    GuiAppState gui;
+    GuiAppState    gui;
     ServerAppState server;
 
     public AudioVisio(){

@@ -31,8 +31,8 @@ public class Lever extends InteractableEntity implements IShootable {
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
     private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
     private static final Quaternion ON_ANGLE  = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
-    public  Particle particle;
-    private Geometry onGeometry;
+    public  Particle  particle;
+    private Geometry  onGeometry;
     //    @Override
 //    public void init( boolean isAudio ){
 //        if(isAudio){
@@ -41,7 +41,7 @@ public class Lever extends InteractableEntity implements IShootable {
 //            this.particle.removeFromParent();
 //        }
 //    }
-    private Geometry offGeometry;
+    private Geometry  offGeometry;
     private Direction direction;
 
 //    private Boolean isOn = false;
