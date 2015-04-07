@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.Level;
 import audiovisio.networking.messages.TriggerActionMessage;
 import audiovisio.rsle.editor.LevelNode;
@@ -26,7 +27,7 @@ public class Button extends InteractableEntity {
     private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.5F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
-    public Particle particle;
+    public PlayerParticle particle;
 
     public Button(){}
 
@@ -46,7 +47,7 @@ public class Button extends InteractableEntity {
 
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection
 
-        this.particle = new Particle();
+        this.particle = new PlayerParticle();
 
         this.particle.init(assetManager);
 

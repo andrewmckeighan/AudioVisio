@@ -1,6 +1,7 @@
 package audiovisio.entities;
 
 import audiovisio.AudioVisio;
+import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
@@ -31,8 +32,8 @@ public class Lever extends InteractableEntity implements IShootable {
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
     private static final Quaternion OFF_ANGLE = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
     private static final Quaternion ON_ANGLE  = new Quaternion().fromAngles((float) -(Math.PI / 6.0), (float) (Math.PI / 2.0), 0);
-    public  Particle  particle;
-    private Geometry  onGeometry;
+    public  PlayerParticle particle;
+    private Geometry       onGeometry;
     //    @Override
 //    public void init( boolean isAudio ){
 //        if(isAudio){
@@ -41,8 +42,8 @@ public class Lever extends InteractableEntity implements IShootable {
 //            this.particle.removeFromParent();
 //        }
 //    }
-    private Geometry  offGeometry;
-    private Direction direction;
+    private Geometry       offGeometry;
+    private Direction      direction;
 
 //    private Boolean isOn = false;
 
@@ -104,7 +105,7 @@ public class Lever extends InteractableEntity implements IShootable {
 
         this.physics = new RigidBodyControl(Lever.MASS);//TODO: this might not be needed if we don't want collision detection
 
-        this.particle = new Particle();
+        this.particle = new PlayerParticle();
 
         this.particle.init(assetManager);
 

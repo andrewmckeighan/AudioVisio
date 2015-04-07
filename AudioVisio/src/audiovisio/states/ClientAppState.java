@@ -34,11 +34,14 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
 import com.jme3.network.NetworkClient;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 
 import java.util.Collection;
@@ -77,6 +80,7 @@ public class ClientAppState extends AbstractAppState implements
     private float   updateCounter;
     //private static int ID;
     private boolean debug;
+    private Node debugNode;
 
     public ClientAppState(){
     }
@@ -251,7 +255,7 @@ public class ClientAppState extends AbstractAppState implements
         BulletAppState bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
-        PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+        physicsSpace = bulletAppState.getPhysicsSpace();
 
         // ////////////////////
         // Load Scene (map) //
@@ -331,7 +335,6 @@ public class ClientAppState extends AbstractAppState implements
 
 
         LogHelper.info("Client Started!");
-
     }
 
     @Override
@@ -362,6 +365,7 @@ public class ClientAppState extends AbstractAppState implements
                 MouseInput.BUTTON_LEFT));
 
         this.inputManager.addMapping("Debug", new KeyTrigger(KeyInput.KEY_F3));
+        this.inputManager.addMapping("ReleaseMouse", new KeyTrigger(KeyInput.KEY_F4));
 
         this.inputManager.addListener(player, "Up");
         this.inputManager.addListener(player, "Down");
@@ -371,15 +375,36 @@ public class ClientAppState extends AbstractAppState implements
 
         this.inputManager.addListener(player, "Shoot");
 
-        this.inputManager.addListener(new ActionListener() {
+        ActionListener debugListener = new ActionListener() {
             @Override
             public void onAction( String name, boolean isPressed, float tpf ){
                 if (!isPressed){
-                    ClientAppState.this.debug = !ClientAppState.this.debug;
-                    ClientAppState.this.inputManager.setCursorVisible(ClientAppState.this.debug);
+                    if ("Debug".equals(name)){
+                        debug = !debug;
+
+                        if (debug){
+                            // Setup debug arrows
+                            // TODO: These should be near the crosshair and move with the camera
+                            Vector3f loc = audioVisioApp.getCamera().getLocation();
+                            createCoordinateAxes(loc);
+                            rootNode.attachChild(debugNode);
+
+                            physicsSpace.enableDebug(assetManager);
+                        } else {
+                            rootNode.detachChild(debugNode);
+                            physicsSpace.disableDebug();
+                        }
+                    } else if ("ReleaseMouse".equals(name)){
+                        if (debug){
+                            inputManager.setCursorVisible(!inputManager.isCursorVisible());
+                        }
+                    }
                 }
             }
-        }, "Debug");
+        };
+
+        this.inputManager.addListener(debugListener, "Debug");
+        this.inputManager.addListener(debugListener, "ReleaseMouse");
     }
 
     /**
@@ -431,4 +456,37 @@ public class ClientAppState extends AbstractAppState implements
     public Level getLevel(){
         return this.level;
     }
+
+    public void createCoordinateAxes( Vector3f pos ){
+        debugNode = new Node("debug arrows");
+        Arrow arrow = new Arrow(Vector3f.UNIT_X);
+        arrow.setLineWidth(4);
+        Geometry g = putShape(arrow, ColorRGBA.Red);
+        g.setLocalTranslation(pos);
+        debugNode.attachChild(g);
+
+        arrow = new Arrow(Vector3f.UNIT_Y);
+        arrow.setLineWidth(4);
+        g = putShape(arrow, ColorRGBA.Green);
+        g.setLocalTranslation(pos);
+        debugNode.attachChild(g);
+
+        arrow = new Arrow(Vector3f.UNIT_Z);
+        arrow.setLineWidth(4);
+        g = putShape(arrow, ColorRGBA.Blue);
+        g.setLocalTranslation(pos);
+        debugNode.attachChild(g);
+    }
+
+    private Geometry putShape( Mesh shape, ColorRGBA color ){
+        Geometry g = new Geometry("coordinate axis", shape);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", color);
+        g.setMaterial(mat);
+        rootNode.attachChild(g);
+        return g;
+    }
+
+    private PhysicsSpace physicsSpace;
 }

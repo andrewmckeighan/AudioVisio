@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.Level;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
@@ -10,8 +11,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 public class VisualPlayer extends Player {
-    private Particle  footSteps;
-    private AudioNode audioSteps;
+    private PlayerParticle footSteps;
+    private AudioNode      audioSteps;
 
     @Override
     public void load( Level level ){
@@ -25,7 +26,7 @@ public class VisualPlayer extends Player {
         super.init(assetManager);
 
         this.audioSteps = new AudioNode(assetManager, "Sound/Effects/Foot steps.ogg", false);
-        this.footSteps = new Particle();
+        this.footSteps = new PlayerParticle();
         this.footSteps.init(assetManager);
 
         this.attachChild(this.audioSteps);

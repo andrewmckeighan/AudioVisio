@@ -1,5 +1,6 @@
 package audiovisio.entities;
 
+import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.states.ClientAppState;
@@ -24,7 +25,7 @@ public class Door extends InteractableEntity {
             0.5F * Level.SCALE.getZ());
     private static final float      MASS      = 0.0F;
     private static final Vector3f   OFFSET    = new Vector3f(0.0F, Level.SCALE.getY() / 2.0F, 0.0F);
-    public Particle particle;
+    public PlayerParticle particle;
     private Direction direction = Direction.NORTH;
     private Node         rootNode;
     private PhysicsSpace physicsSpace;
@@ -71,7 +72,7 @@ public class Door extends InteractableEntity {
         this.location = this.location.add(Door.OFFSET);
         this.geometry.setLocalTranslation(this.location);
 
-        this.particle = new Particle();
+        this.particle = new PlayerParticle();
 
         this.particle.init(assetManager);
 
