@@ -8,20 +8,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PanelTest {
-    Panel panel;
+/**
+ * @author Matt Gerst
+ */
+public class WallTest {
+    Wall wall;
     Vector3f location = new Vector3f(1F, 2F, 3F);
 
     @Before
     public void setUp(){
-        panel = new Panel();
-    }
-
-    @Test
-    public void testSetupWithPosition(){
-        panel = new Panel(location);
-
-        assertEquals(location, panel.location);
+        wall = new Wall(location, ILevelItem.Direction.NORTH);
     }
 
     // LOAD
@@ -46,47 +42,52 @@ public class PanelTest {
 
         obj.put(JSONHelper.KEY_ID, 1L);
         obj.put(JSONHelper.KEY_LOCATION, loc);
+        obj.put(Wall.KEY_EDGE, ILevelItem.Direction.EAST.toString());
 
-        panel.load(obj);
+        wall.load(obj);
 
-        assertEquals(1L, panel.getID());
-        assertEquals(location, panel.location);
+        assertEquals(1L, wall.getID());
+        assertEquals(location, wall.location);
+        assertEquals(ILevelItem.Direction.EAST, wall.getDirection());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullLoad(){
-        panel.load(null);
+        wall.load(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyLoad(){
         JSONObject obj = new JSONObject();
-        panel.load(obj);
+
+        wall.load(obj);
     }
 
     // SAVE
 
     @Test
     public void testSave(){
-        panel.location = location;
-        panel.setID(1L);
+        wall.setID(1L);
 
         JSONObject obj = new JSONObject();
-        panel.save(obj);
+        wall.save(obj);
 
         assertEquals(1L, obj.get(JSONHelper.KEY_ID));
-        assertEquals("panel", obj.get(JSONHelper.KEY_TYPE));
+        assertTrue(obj.containsKey(JSONHelper.KEY_LOCATION));
+        assertEquals("wall", obj.get(JSONHelper.KEY_TYPE));
+        assertEquals(ILevelItem.Direction.NORTH.toString(), obj.get(Wall.KEY_EDGE));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNulLSave(){
-        panel.save(null);
+    public void testNullSave(){
+        wall.save(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNonEmptySave(){
         JSONObject obj = new JSONObject();
-        obj.put(JSONHelper.KEY_ID, 1L);
-        panel.save(obj);
+        obj.put("test", "invalid");
+
+        wall.save(obj);
     }
 }

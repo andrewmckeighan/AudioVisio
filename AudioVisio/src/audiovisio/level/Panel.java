@@ -45,6 +45,13 @@ public class Panel implements ILevelItem {
      */
     @Override
     public void load( JSONObject loadObj ){
+        if (loadObj == null){
+            throw new IllegalArgumentException("The JSONObject to load from cannot be null");
+        }
+        if (loadObj.isEmpty()){
+            throw new IllegalArgumentException("The JSONObject to load from cannot be empty");
+        }
+
         this.ID = (Long) loadObj.get(JSONHelper.KEY_ID);
         JSONObject location = (JSONObject) loadObj.get(JSONHelper.KEY_LOCATION);
         this.location = JSONHelper.readVector3f(location);
@@ -82,6 +89,13 @@ public class Panel implements ILevelItem {
      */
     @Override
     public void save( JSONObject codeObj ){
+        if (codeObj == null){
+            throw new IllegalArgumentException("The given JSONObject to save to cannot be null");
+        }
+        if (!codeObj.isEmpty()){
+            throw new IllegalArgumentException("The JSONObject to save to must be empty");
+        }
+
         codeObj.put(JSONHelper.KEY_ID, this.getID());
         codeObj.put(JSONHelper.KEY_TYPE, "panel");
         JSONObject location = new JSONObject();

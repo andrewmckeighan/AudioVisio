@@ -6,28 +6,25 @@ import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class PanelTest {
-    Panel panel;
+/**
+ * @author Matt Gerst
+ */
+public class TriggerTest {
+    Trigger trigger;
     Vector3f location = new Vector3f(1F, 2F, 3F);
 
     @Before
-    public void setUp(){
-        panel = new Panel();
-    }
-
-    @Test
-    public void testSetupWithPosition(){
-        panel = new Panel(location);
-
-        assertEquals(location, panel.location);
+    public void setUp() throws Exception{
+        trigger = new Trigger(location);
     }
 
     // LOAD
 
     @Test
-    public void testLoad(){
+    public void testLoad() throws Exception{
         JSONObject obj = new JSONObject();
 
         /*
@@ -44,49 +41,50 @@ public class PanelTest {
         loc.put(JSONHelper.KEY_LOCATION_Y, 2D);
         loc.put(JSONHelper.KEY_LOCATION_Z, 3D);
 
-        obj.put(JSONHelper.KEY_ID, 1L);
+        obj.put(JSONHelper.KEY_ID, 3L);
         obj.put(JSONHelper.KEY_LOCATION, loc);
 
-        panel.load(obj);
+        trigger.load(obj);
 
-        assertEquals(1L, panel.getID());
-        assertEquals(location, panel.location);
+        assertEquals(3L, trigger.getID());
+        assertEquals(location, trigger.location);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullLoad(){
-        panel.load(null);
+        trigger.load(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyLoad(){
         JSONObject obj = new JSONObject();
-        panel.load(obj);
+        trigger.load(obj);
     }
 
     // SAVE
 
     @Test
     public void testSave(){
-        panel.location = location;
-        panel.setID(1L);
+        trigger.setID(3L);
 
         JSONObject obj = new JSONObject();
-        panel.save(obj);
+        trigger.save(obj);
 
-        assertEquals(1L, obj.get(JSONHelper.KEY_ID));
-        assertEquals("panel", obj.get(JSONHelper.KEY_TYPE));
+        assertEquals(3L, obj.get(JSONHelper.KEY_ID));
+        assertEquals("trigger", obj.get(JSONHelper.KEY_TYPE));
+        assertTrue(obj.containsKey(JSONHelper.KEY_LOCATION));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNulLSave(){
-        panel.save(null);
+    public void testNullSave(){
+        trigger.save(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNonEmptySave(){
         JSONObject obj = new JSONObject();
-        obj.put(JSONHelper.KEY_ID, 1L);
-        panel.save(obj);
+        obj.put("test", "invalid");
+
+        trigger.save(obj);
     }
 }

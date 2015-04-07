@@ -94,4 +94,7 @@ public class Wall extends Panel {
         return root;
     }
 
+    public Direction getDirection(){
+        return direction;
+    }
 }

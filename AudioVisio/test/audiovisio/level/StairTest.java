@@ -8,20 +8,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PanelTest {
-    Panel panel;
+/**
+ * @author Matt Gerst
+ */
+public class StairTest {
+    Stair stair;
     Vector3f location = new Vector3f(1F, 2F, 3F);
 
     @Before
     public void setUp(){
-        panel = new Panel();
-    }
-
-    @Test
-    public void testSetupWithPosition(){
-        panel = new Panel(location);
-
-        assertEquals(location, panel.location);
+        stair = new Stair(location, ILevelItem.Direction.NORTH);
     }
 
     // LOAD
@@ -44,49 +40,53 @@ public class PanelTest {
         loc.put(JSONHelper.KEY_LOCATION_Y, 2D);
         loc.put(JSONHelper.KEY_LOCATION_Z, 3D);
 
-        obj.put(JSONHelper.KEY_ID, 1L);
+        obj.put(JSONHelper.KEY_ID, 2L);
         obj.put(JSONHelper.KEY_LOCATION, loc);
+        obj.put(Stair.KEY_DIRECTION, ILevelItem.Direction.EAST.toString());
 
-        panel.load(obj);
+        stair.load(obj);
 
-        assertEquals(1L, panel.getID());
-        assertEquals(location, panel.location);
+        assertEquals(2L, stair.getID());
+        assertEquals(location, stair.location);
+        assertEquals(ILevelItem.Direction.EAST, stair.getDirection());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullLoad(){
-        panel.load(null);
+        stair.load(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyLoad(){
         JSONObject obj = new JSONObject();
-        panel.load(obj);
+
+        stair.load(obj);
     }
 
     // SAVE
 
     @Test
     public void testSave(){
-        panel.location = location;
-        panel.setID(1L);
+        stair.setID(2L);
 
         JSONObject obj = new JSONObject();
-        panel.save(obj);
+        stair.save(obj);
 
-        assertEquals(1L, obj.get(JSONHelper.KEY_ID));
-        assertEquals("panel", obj.get(JSONHelper.KEY_TYPE));
+        assertEquals(2L, obj.get(JSONHelper.KEY_ID));
+        assertEquals("stair", obj.get(JSONHelper.KEY_TYPE));
+        assertEquals(ILevelItem.Direction.NORTH.toString(), obj.get(Stair.KEY_DIRECTION));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNulLSave(){
-        panel.save(null);
+    public void testNullSave(){
+        stair.save(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNonEmptySave(){
         JSONObject obj = new JSONObject();
-        obj.put(JSONHelper.KEY_ID, 1L);
-        panel.save(obj);
+        obj.put("test", "invalid");
+
+        stair.save(obj);
     }
 }

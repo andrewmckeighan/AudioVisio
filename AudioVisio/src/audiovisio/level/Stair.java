@@ -51,4 +51,7 @@ public class Stair extends Panel {
         return root;
     }
 
+    public Direction getDirection(){
+        return direction;
+    }
 }
