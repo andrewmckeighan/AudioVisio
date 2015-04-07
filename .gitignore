@@ -11,6 +11,7 @@ dist
 *.dll
 *.so
 /AudioVisio/nbproject/private/
+out/
 
 .classpath
 .metadata
