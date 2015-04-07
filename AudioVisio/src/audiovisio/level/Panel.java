@@ -51,18 +51,28 @@ public class Panel implements ILevelItem {
     }
 
     @Override
-    public void init( AssetManager assetManager ){
-//        this.model = assetManager.loadModel("Models/Level/Panel/Panel.j3o");
-//        this.model.setLocalTranslation(this.location);
-        this.initialize(assetManager);
-    }
-
-    @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         if (!ClientAppState.isAudio || true){//TODO turn this off
             rootNode.attachChild(this.geometry);
         }
         physics.add(this.physics);
+    }
+
+    @Override
+    public void init( AssetManager assetManager ){
+        Box shape = Panel.SHAPE;
+
+        this.geometry = new Geometry("Panel" + this.ID, shape);
+
+        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
+
+        Material randomMaterial = new Material(assetManager,
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        randomMaterial.setColor("Color", Panel.COLOR);
+        this.geometry.setMaterial(randomMaterial);
+
+        this.physics = new RigidBodyControl(0);
+        this.geometry.addControl(this.physics);
     }
 
     /**
@@ -90,22 +100,6 @@ public class Panel implements ILevelItem {
         root.add(location);
 
         return root;
-    }
-
-    public void initialize( AssetManager assetManager ){
-        Box shape = Panel.SHAPE;
-
-        this.geometry = new Geometry("Panel" + this.ID, shape);
-
-        this.geometry.setLocalTranslation(this.location.mult(Level.SCALE));
-
-        Material randomMaterial = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Panel.COLOR);
-        this.geometry.setMaterial(randomMaterial);
-
-        this.physics = new RigidBodyControl(0);
-        this.geometry.addControl(this.physics);
     }
 
     public long getID(){
