@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 public class VisualPlayer extends Player {
-    private PlayerParticle footSteps;
+    private PlayerParticle particle;
     private AudioNode      audioSteps;
 
     @Override
@@ -26,29 +26,32 @@ public class VisualPlayer extends Player {
         super.init(assetManager);
 
         this.audioSteps = new AudioNode(assetManager, "Sound/Effects/Foot steps.ogg", false);
-        this.footSteps = new PlayerParticle();
-        this.footSteps.init(assetManager);
+        this.particle = new PlayerParticle();
+        this.particle.init(assetManager);
 
         this.attachChild(this.audioSteps);
-        this.attachChild(this.footSteps);
+        this.attachChild(this.particle);
+//        this.particle.emitter.setEnabled(false);
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         super.start(rootNode, physics);
 
-        this.footSteps.start(rootNode, physics);
+        this.particle.start(rootNode, physics);
     }
 
     @Override
     public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
         super.update(location, direction, rotation);
 
-        assert this.footSteps != null && this.footSteps.emitter != null;
+        assert this.particle != null && this.particle.emitter != null;
         assert this.model == null;
 
-//        this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
-        this.footSteps.emitter.setNumParticles((int) direction.length() * 3 + 1);
+//        this.particle.emitter.setEnabled(true);
+//    this.particle.emitter.setLocalTranslation(this.getLocalTranslation());
+        this.particle.emitter.setNumParticles((int) direction.length() * 3 + 1);
+
 
         if (!this.isServer()){
             if (direction.length() != 0){
@@ -58,8 +61,12 @@ public class VisualPlayer extends Player {
                 if (this.audioSteps.getStatus() != AudioSource.Status.Playing){
                     this.audioSteps.play();
                 }
+                if(!this.particle.emitter.isEnabled()){
+                    this.particle.emitter.setEnabled(true);
+                }
             } else {
                 this.audioSteps.pause();
+                this.particle.emitter.setEnabled(false);
             }
         }
 
