@@ -84,22 +84,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             level = this.client.getLevel();
         }
 
-        if (this.isServer()){
-            player = new Player();
+        if (ClientAppState.isAudio){
+            player = new VisualPlayer();
         } else {
-            if (ClientAppState.isAudio){
-                if (this.client.getId() == playerID){
-                    player = new AudioPlayer();
-                } else {
-                    player = new VisualPlayer();
-                }
-            } else {
-                if (this.client.getId() == playerID){
-                    player = new VisualPlayer();
-                } else {
-                    player = new AudioPlayer();
-                }
-            }
+            player = new AudioPlayer();
         }
         player.load(level);
         player.setID(playerID);
