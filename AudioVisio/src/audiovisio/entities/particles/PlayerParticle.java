@@ -56,9 +56,8 @@ public class PlayerParticle extends Entity {
         super.start(rootNode, physics);
 //        rootNode.attachChild(this);
         if (AudioVisio.difficulty == 0){
-            this.status = true;
             this.emitter.setParticlesPerSec(PlayerParticle.PARTICLES_PER_SECOND);
-            this.emitter.setEnabled(true);
+            this.emitter.setEnabled(false);
         }
     }
 }

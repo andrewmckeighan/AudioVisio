@@ -44,7 +44,6 @@ public class Entity extends Node implements ILevelItem {
     protected String materialString = "";
     protected Material  material;
     protected ColorRGBA color;
-    protected boolean   status;
 
     public Entity(){}
 
