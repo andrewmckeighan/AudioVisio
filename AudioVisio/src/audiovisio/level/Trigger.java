@@ -80,4 +80,8 @@ public class Trigger implements ILevelItem {
         this.ID = id;
     }
 
+    public Vector3f getLocation(){
+        return this.location;
+    }
+
 }

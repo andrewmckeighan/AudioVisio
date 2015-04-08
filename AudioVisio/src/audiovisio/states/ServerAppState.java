@@ -163,8 +163,6 @@ public class ServerAppState extends AbstractAppState implements
             @Override
             public void connectionAdded( com.jme3.network.Server server,
                                          HostedConnection conn ){
-                // DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
-                //TODO explain/fix this
                 LogHelper.info("connectionAdded() for connection: " + conn.getId());
                 if (ServerAppState.this.players.size() < 2){
 

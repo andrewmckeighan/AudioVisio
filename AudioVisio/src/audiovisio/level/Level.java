@@ -4,6 +4,7 @@ import audiovisio.entities.Entity;
 import audiovisio.entities.Player;
 import audiovisio.networking.SyncManager;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import audiovisio.utils.LogHelper;
@@ -55,6 +56,7 @@ public class Level {
     private String version;
     private Map<Long, ILevelItem> levelItems = new HashMap<Long, ILevelItem>();
     private String fileName;
+    private LevelBox levelBox;
 
     /**
      * Create an instance of Level with the given metadata.
@@ -99,6 +101,11 @@ public class Level {
 
         this.shootables = new Node("shootables");
 
+        levelBox = new LevelBox(assetManager);
+
+        Vector3f min = new Vector3f();
+        Vector3f max = new Vector3f();
+
         for (ILevelItem item : this.levelItems.values()){
             item.init(assetManager);
             syncManager.addObject(item.getID(), item);
@@ -114,7 +121,14 @@ public class Level {
 //                ((IShootable) item).init(ClientAppState.isAudio);
                 this.shootables.attachChild((Spatial) item);
             }
+
+            Vector3f location = item.getLocation();
+            location.setY(location.getY() + Level.SCALE.getY());
+            min.minLocal(item.getLocation());
+            max.maxLocal(item.getLocation());
         }
+
+        levelBox.setSize(min, max);
     }
 
     /**
@@ -129,6 +143,10 @@ public class Level {
         }
 
         rootNode.attachChild(this.shootables);
+
+        if (ClientAppState.isAudio){
+            levelBox.start(rootNode);
+        }
     }
 
     /**
@@ -227,15 +245,16 @@ public class Level {
             // This is mainly used in the level editors
             this.NEXT_ID = Math.max(this.NEXT_ID, ((Long) itemJson.get("id")).intValue() + 1);
 
+            ILevelItem lvlItem;
             if (LevelRegistry.typeHasSubTypes(type) && itemJson.containsKey("subtype")){
                 String subtype = (String) itemJson.get("subtype");
 
-                ILevelItem lvlItem = LevelRegistry.getItemForSubType(type, subtype);
+                lvlItem = LevelRegistry.getItemForSubType(type, subtype);
                 lvlItem.load(itemJson);
                 this.levelItems.put(lvlItem.getID(), lvlItem);
                 LogHelper.fine(String.format("Load item of type: %s:%s", type, subtype));
             } else {
-                ILevelItem lvlItem = LevelRegistry.getItemForType(type);
+                lvlItem = LevelRegistry.getItemForType(type);
                 lvlItem.load(itemJson);
                 this.levelItems.put(lvlItem.getID(), lvlItem);
                 LogHelper.fine("Load item of type: " + type);

@@ -3,6 +3,7 @@ package audiovisio.level;
 import audiovisio.rsle.editor.LevelNode;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
 
@@ -116,4 +117,9 @@ public interface ILevelItem {
      */
     void setID( long id );
 
+    /**
+     * Get the location of the level item.
+     * @return
+     */
+    Vector3f getLocation();
 }

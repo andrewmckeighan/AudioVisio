@@ -59,7 +59,7 @@ public class Panel implements ILevelItem {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-        if (!ClientAppState.isAudio || true){//TODO turn this off
+        if (!ClientAppState.isAudio){
             rootNode.attachChild(this.geometry);
         }
         physics.add(this.physics);
@@ -122,5 +122,9 @@ public class Panel implements ILevelItem {
 
     public void setID( long id ){
         this.ID = id;
+    }
+
+    public Vector3f getLocation(){
+        return this.location;
     }
 }

@@ -150,4 +150,8 @@ public class Entity extends Node implements ILevelItem {
     public String toString(){
         return "Entity[" + this.ID + "]";
     }
+
+    public Vector3f getLocation(){
+        return this.location;
+    }
 }
