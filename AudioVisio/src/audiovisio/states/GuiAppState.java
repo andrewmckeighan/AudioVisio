@@ -124,8 +124,8 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	}
 
 	public void setKeyBinding(){
-		Element myBt = this.nifty.getScreen("keybindings").findElementByName("button");
-		TextRenderer myBtLabel = myBt.findElementByName("Forwards").getRenderer(TextRenderer.class);
+		Element myBt = this.nifty.getScreen("keybindings").findElementByName("fw");
+		TextRenderer myBtLabel = myBt.getRenderer(TextRenderer.class);
 		myBtLabel.setText("Boop!");
 		myBt.layoutElements();
 	}
