@@ -113,8 +113,10 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.characterControl.setWalkDirection(direction);
 
         if (this.playerCamera != null){
-            this.playerCamera.setLocation(this.getLocalTranslation().add(
-                    Player.CAMERA_OFFSET));
+            if (!isDebug()){
+                this.playerCamera.setLocation(this.getLocalTranslation().add(
+                        Player.CAMERA_OFFSET));
+            }
             //TODO remove
             if (this.model != null){
                 this.model.removeFromParent();
@@ -275,4 +277,22 @@ public class Player extends MovingEntity implements ActionListener {
     public void warp( Vector3f location ){
         this.characterControl.warp(location);
     }
+
+    public void setDebug( boolean debug ){
+        this.debug = debug;
+
+        if (this.debug){
+            LogHelper.info("NoClip on");
+            this.removeControl(this.characterControl);
+        } else {
+            LogHelper.info("NoClip off");
+            this.addControl(this.characterControl);
+        }
+    }
+
+    public boolean isDebug(){
+        return this.debug;
+    }
+
+    private boolean debug;
 }

@@ -203,7 +203,7 @@ public class ClientAppState extends AbstractAppState implements
      *
      * @param player The player entity that is affected by this clients inputs.
      */
-    public void initKeys( Player player ){
+    public void initKeys( final Player player ){
         this.inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         this.inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         this.inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
@@ -215,6 +215,7 @@ public class ClientAppState extends AbstractAppState implements
 
         this.inputManager.addMapping("Debug", new KeyTrigger(KeyInput.KEY_F3));
         this.inputManager.addMapping("ReleaseMouse", new KeyTrigger(KeyInput.KEY_F4));
+        this.inputManager.addMapping("NoClip", new KeyTrigger(KeyInput.KEY_F2));
 
         this.inputManager.addListener(player, "Up");
         this.inputManager.addListener(player, "Down");
@@ -244,9 +245,11 @@ public class ClientAppState extends AbstractAppState implements
                             ClientAppState.this.physicsSpace.disableDebug();
                         }
                     } else if ("ReleaseMouse".equals(name)){
-                        if (ClientAppState.this.debug){
-                            ClientAppState.this.inputManager.setCursorVisible(!ClientAppState.this.inputManager.isCursorVisible());
-                        }
+                        ClientAppState.this.inputManager.setCursorVisible(!ClientAppState.this.inputManager.isCursorVisible());
+                        audioVisioApp.getFlyByCamera().setEnabled(!inputManager.isCursorVisible());
+                    } else if ("NoClip".equals(name)){
+                        LogHelper.info("Toggle NoClip mode on player");
+                        player.setDebug(!player.isDebug());
                     }
                 }
             }
@@ -254,6 +257,7 @@ public class ClientAppState extends AbstractAppState implements
 
         this.inputManager.addListener(debugListener, "Debug");
         this.inputManager.addListener(debugListener, "ReleaseMouse");
+        this.inputManager.addListener(debugListener, "NoClip");
     }
 
     /**
