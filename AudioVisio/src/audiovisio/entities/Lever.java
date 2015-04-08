@@ -203,7 +203,6 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     private void startParticles(){
-        this.particle.status = true;
     }
 
     private void updateVisuals(){
@@ -231,7 +230,6 @@ public class Lever extends InteractableEntity implements IShootable {
     }
 
     private void stopParticles(){
-        this.particle.status = false;
     }
 
     private void stopSound(){

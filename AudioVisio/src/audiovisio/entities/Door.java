@@ -76,12 +76,11 @@ public class Door extends InteractableEntity {
 
         this.particle.init(assetManager);
 
-        this.attachChild(this.particle);
-
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
             this.particle.emitter.setNumParticles(50);
+            this.particle.emitter.setEnabled(false);
         }
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
@@ -174,7 +173,13 @@ public class Door extends InteractableEntity {
     }
 
     private void emitParticle(){
-        //TODO
+        if (this.particle.emitter.isEnabled()) {
+            this.particle.emitter.setEnabled(false);
+            this.rootNode.detachChild(this.particle);
+        } else {
+            this.rootNode.attachChild(this.particle);
+            this.particle.emitter.setEnabled(true);
+        }
     }
 
     private void playSound(){

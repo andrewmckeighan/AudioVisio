@@ -27,7 +27,8 @@ public class Button extends InteractableEntity {
     private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.5F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
-    public PlayerParticle particle;
+    public  PlayerParticle particle;
+    private Node           rootNode;
 
     public Button(){}
 
@@ -55,27 +56,25 @@ public class Button extends InteractableEntity {
         this.attachChild(this.particle);
         this.addControl(this.physics);
 
-
-
-//        this.attachChild(this.particle);
-
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
             this.particle.emitter.setNumParticles(35);
+            this.particle.emitter.setEnabled(true);
         }
-
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
+        this.rootNode = rootNode;
         if (ClientAppState.isAudio){
-            rootNode.attachChild(this.particle);
+            this.rootNode.attachChild(this.particle);
             this.particle.start(rootNode, physics);
+
         } else {
             this.particle.removeFromParent();
             this.particle = null;
-            rootNode.attachChild(this);
+            this.rootNode.attachChild(this);
         }
         physics.add(this);
 
@@ -124,7 +123,19 @@ public class Button extends InteractableEntity {
         this.wasUpdated = false;
     }
 
-    private void emitParticle(){}
+    /**
+     * Toggle the particle effects for the button on and off.
+     * Expects to only be run on the Audio client.
+     */
+    private void toggleParticle(){
+        if (this.particle.emitter.isEnabled()){
+            this.particle.emitter.setEnabled(false);
+            this.rootNode.detachChild(this.particle);
+        } else {
+            this.rootNode.attachChild(this.particle);
+            this.particle.emitter.setEnabled(true);
+        }
+    }
 
     private void playSound(){
         //TODO
@@ -166,7 +177,7 @@ public class Button extends InteractableEntity {
         assert this.state;
         if (ClientAppState.isAudio){
             this.playSound();
-            this.emitParticle();
+            this.toggleParticle();
         } else {
             this.updateVisuals();
         }
@@ -179,7 +190,7 @@ public class Button extends InteractableEntity {
 
         if (ClientAppState.isAudio){
             this.playSound();
-            this.emitParticle();
+            this.toggleParticle();
         } else {
             this.updateVisuals();
         }
