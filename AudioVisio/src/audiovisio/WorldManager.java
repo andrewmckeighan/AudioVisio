@@ -72,7 +72,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      * @param playerID Unique id of the player, matches the clients ID.
      */
 
-    public void addPlayer( long playerID ){
+    public Player addPlayer( long playerID ){
 
         LogHelper.fine("adding player: ");
         Player player;
@@ -109,6 +109,8 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         this.syncManager.addObject(playerID, player);
         LogHelper.info(playerID + ":" + player);
         this.players.put(playerID, player);
+
+        return player;
     }
 
     public boolean isServer(){

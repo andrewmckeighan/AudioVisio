@@ -271,4 +271,8 @@ public class Player extends MovingEntity implements ActionListener {
         }
         return s;
     }
+
+    public void warp( Vector3f location ){
+        this.characterControl.warp(location);
+    }
 }

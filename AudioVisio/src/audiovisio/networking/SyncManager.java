@@ -106,7 +106,8 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                 WorldManager wm = (WorldManager) this.objectMap.get(-1L);
                 assert message instanceof SyncCharacterMessage;
                 SyncCharacterMessage msg = (SyncCharacterMessage) message;
-                wm.addPlayer(msg.syncId);
+                Player p = wm.addPlayer(msg.syncId);
+                p.warp(msg.location);
             }
             LogHelper.warn("Cannot find obj in message: " + message + " with ID: " + message.syncId);
         }
