@@ -1,14 +1,20 @@
 {
   "spawn": {
     "p1": {
-      "x": 7.0,
-      "y": 1.0,
-      "z": 3.0
+      "rotation": 0.0,
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 3.0
+      }
     },
     "p2": {
-      "x": 7.0,
-      "y": 1.0,
-      "z": 15.0
+      "rotation": 0.0,
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 15.0
+      }
     }
   },
   "level": [
@@ -6093,8 +6099,8 @@
       "type": "wall"
     },
     {
-      "interactionList": [],
       "edge": "WEST",
+      "interactionList": [],
       "name": "mid_door",
       "location": {
         "x": 7.0,
@@ -6106,8 +6112,8 @@
       "type": "door"
     },
     {
-      "interactionList": [],
       "edge": "WEST",
+      "interactionList": [],
       "name": "end_door",
       "location": {
         "x": 14.0,
@@ -6141,8 +6147,8 @@
       "type": "button"
     },
     {
+      "edge": "NORTH",
       "interactionList": [679],
-      "edge": "SOUTH",
       "name": "end_door",
       "location": {
         "x": 14.0,
@@ -6292,10 +6298,20 @@
       },
       "id": 696,
       "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 14.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 697,
+      "type": "wall"
     }
   ],
   "author": "Matt Gerst",
   "name": "Test Level",
-  "format": "0.4",
+  "format": "0.5",
   "version": "1.1"
 }

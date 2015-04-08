@@ -15,8 +15,7 @@ import java.util.Vector;
  * @author Matt Gerst
  */
 public class TextEditor extends JTextField implements CellEditor {
-    String value = "";
-
+    String value     = "";
     Vector listeners = new Vector();
     LevelNode node;
 
@@ -36,6 +35,14 @@ public class TextEditor extends JTextField implements CellEditor {
         });
     }
 
+    public TextEditor( String s ){
+        this(s, 5);
+    }
+
+    public TextEditor( int w ){
+        this("", w);
+    }
+
     protected void fireEditingStopped(){
         if (this.listeners.size() > 0){
             ChangeEvent ce = new ChangeEvent(this);
@@ -45,12 +52,19 @@ public class TextEditor extends JTextField implements CellEditor {
         }
     }
 
-    public TextEditor( String s ){
-        this(s, 5);
-    }
-
-    public TextEditor( int w ){
-        this("", w);
+    @Override
+    public boolean stopCellEditing(){
+        try{
+            String tmp = this.getText();
+            if (tmp == null){
+                return false;
+            }
+            this.value = tmp;
+            this.node.setValue(this.value);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
     }
 
     public void setNode( LevelNode node ){
@@ -71,21 +85,6 @@ public class TextEditor extends JTextField implements CellEditor {
     @Override
     public boolean shouldSelectCell( EventObject eo ){
         return true;
-    }
-
-    @Override
-    public boolean stopCellEditing(){
-        try{
-            String tmp = this.getText();
-            if (tmp == null){
-                return false;
-            }
-            this.value = tmp;
-            this.node.setValue(this.value);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
     }
 
     @Override

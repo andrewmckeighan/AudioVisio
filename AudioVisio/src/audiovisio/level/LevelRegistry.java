@@ -70,11 +70,11 @@ public class LevelRegistry {
         if (clazz == null){
             throw new IllegalArgumentException("Subtype " + subtype + " of type " + type + " cannot be null");
         }
-        if (!items.containsKey(type)){
+        if (!LevelRegistry.items.containsKey(type)){
             throw new IllegalArgumentException("Type " + type + " is not already registered!");
         }
 
-        ItemData data = items.get(type);
+        ItemData data = LevelRegistry.items.get(type);
         data.addSubType(subtype, clazz);
         LogHelper.info("Registered subtype " + subtype + " for Item " + type + ": " + clazz.getName());
     }
@@ -199,19 +199,19 @@ public class LevelRegistry {
         }
 
         public void addSubType( String name, Class<? extends ILevelItem> clazz ){
-            if (subTypes.containsKey(name)){
-                throw new IllegalArgumentException("Cannot add duplicate subtypes to " + type);
+            if (this.subTypes.containsKey(name)){
+                throw new IllegalArgumentException("Cannot add duplicate subtypes to " + this.type);
             }
 
-            subTypes.put(name, clazz);
+            this.subTypes.put(name, clazz);
         }
 
         public Class<? extends ILevelItem> getSubType( String name ){
-            return subTypes.get(name);
+            return this.subTypes.get(name);
         }
 
         public boolean hasSubTypes(){
-            return !subTypes.isEmpty();
+            return !this.subTypes.isEmpty();
         }
     }
 }

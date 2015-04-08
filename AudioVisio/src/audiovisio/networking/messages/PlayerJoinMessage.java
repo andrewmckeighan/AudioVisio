@@ -5,7 +5,7 @@ import com.jme3.network.serializing.Serializable;
 
 /**
  * Sent by the server to all connected players when a new client connects.
- * 
+ *
  * Tells the other players the ID of the new player.
  */
 @Serializable

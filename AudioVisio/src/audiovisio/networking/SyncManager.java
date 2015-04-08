@@ -37,12 +37,10 @@ public class SyncManager extends AbstractAppState implements MessageListener {
     private Application app;
     private Server      server;
     private Client      client;
-
     //Lists
     private LinkedList<PhysicsSyncMessage>   messageQueue = new LinkedList<PhysicsSyncMessage>();
     private LinkedList<SyncMessageValidator> validators   = new LinkedList<SyncMessageValidator>();
     private HashMap<Long, Object>            objectMap    = new HashMap<Long, Object>();
-
     //Timers
     private double time;
     private float  timeSinceLastSync;
@@ -98,13 +96,13 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      * @param message The message that was received.
      */
 
-    protected void handleMessage(PhysicsSyncMessage message) {
+    protected void handleMessage( PhysicsSyncMessage message ){
         Object obj = this.objectMap.get(message.syncId);
 
-        if (obj != null) {
+        if (obj != null){
             message.applyData(obj);
         } else {
-            if (this.client != null) {
+            if (this.client != null){
                 WorldManager wm = (WorldManager) this.objectMap.get(-1L);
                 assert message instanceof SyncCharacterMessage;
                 SyncCharacterMessage msg = (SyncCharacterMessage) message;
@@ -119,21 +117,21 @@ public class SyncManager extends AbstractAppState implements MessageListener {
      * May be modified to handle more messages in the future.
      */
 
-    protected void sendSyncData() {
-        for (Entry<Long, Object> entry : this.objectMap.entrySet()) {
-            if (entry.getValue() instanceof Spatial) {
+    protected void sendSyncData(){
+        for (Entry<Long, Object> entry : this.objectMap.entrySet()){
+            if (entry.getValue() instanceof Spatial){
                 Spatial spat = (Spatial) entry.getValue();
                 PhysicsRigidBody body = spat.getControl(RigidBodyControl.class);
-                if (body == null) {
+                if (body == null){
                     body = spat.getControl(VehicleControl.class);
                 }
-                if (body != null && body.isActive()) {
+                if (body != null && body.isActive()){
                     SyncRigidBodyMessage msg = new SyncRigidBodyMessage(entry.getKey(), body);
                     this.broadcast(msg);
                     continue;
                 }
                 BetterCharacterControl control = spat.getControl(BetterCharacterControl.class);
-                if (control != null) {
+                if (control != null){
                     assert entry.getValue() instanceof Player;
                     Player p = (Player) entry.getValue();
                     SyncCharacterMessage msg = p.getSyncCharacterMessage();
@@ -141,74 +139,6 @@ public class SyncManager extends AbstractAppState implements MessageListener {
                     this.broadcast(msg);
                 }
             }
-        }
-    }
-
-    /**
-     * Sends the message to all clients listening to the server.
-     *
-     * @param message The message to be broadcast.
-     */
-    public void broadcast(PhysicsSyncMessage message) {
-        if (this.server == null) {
-            LogHelper.severe("broadcasting from client: " + message);
-            return;
-        }
-
-        message.time = this.time;
-        this.server.broadcast(message);
-    }
-
-    /**
-     * Sends the message from the client to the server.
-     *
-     * @param client  client sending the message
-     * @param message message to be sent.
-     */
-
-    public void send(HostedConnection client, PhysicsSyncMessage message) {
-        message.time = this.time;
-        if (client == null) {
-            LogHelper.severe("Client is null when sending: " + message);
-            return;
-        }
-
-        client.send(message);
-    }
-
-    /**
-     * Handles messages recieved from either the client or server.
-     *
-     * If client is receiving, adds to the queue.
-     * If server is receiving, broadcast to all clients and then handle.
-     *
-     * @param source  Needed to implement MessageListener, currently not used.
-     * @param message The message that was received.
-     */
-
-    public void messageReceived(Object source, final Message message) {
-        assert (message instanceof PhysicsSyncMessage);
-        if (this.client != null) {
-            this.app.enqueue(new Callable<Void>() {
-                public Void call() throws Exception{
-                    SyncManager.this.enqueueMessage((PhysicsSyncMessage) message);
-                    return null;
-                }
-            });
-        } else if (this.server != null) {
-            this.app.enqueue(new Callable<Void>() {
-                public Void call() throws Exception{
-                    for (SyncMessageValidator syncMessageValidator : SyncManager.this.validators){
-                        if (!syncMessageValidator.checkMessage((PhysicsSyncMessage) message)){
-                            return null;
-                        }
-                    }
-                    SyncManager.this.broadcast((PhysicsSyncMessage) message);
-                    SyncManager.this.handleMessage((PhysicsSyncMessage) message);
-                    return null;
-                }
-            });
-
         }
     }
 
@@ -231,73 +161,141 @@ public class SyncManager extends AbstractAppState implements MessageListener {
     }
 
     /**
+     * Sends the message to all clients listening to the server.
+     *
+     * @param message The message to be broadcast.
+     */
+    public void broadcast( PhysicsSyncMessage message ){
+        if (this.server == null){
+            LogHelper.severe("broadcasting from client: " + message);
+            return;
+        }
+
+        message.time = this.time;
+        this.server.broadcast(message);
+    }
+
+    /**
+     * Sends the message from the client to the server.
+     *
+     * @param client  client sending the message
+     * @param message message to be sent.
+     */
+
+    public void send( HostedConnection client, PhysicsSyncMessage message ){
+        message.time = this.time;
+        if (client == null){
+            LogHelper.severe("Client is null when sending: " + message);
+            return;
+        }
+
+        client.send(message);
+    }
+
+    /**
+     * Handles messages recieved from either the client or server.
+     *
+     * If client is receiving, adds to the queue.
+     * If server is receiving, broadcast to all clients and then handle.
+     *
+     * @param source  Needed to implement MessageListener, currently not used.
+     * @param message The message that was received.
+     */
+
+    public void messageReceived( Object source, final Message message ){
+        assert (message instanceof PhysicsSyncMessage);
+        if (this.client != null){
+            this.app.enqueue(new Callable<Void>() {
+                public Void call() throws Exception{
+                    SyncManager.this.enqueueMessage((PhysicsSyncMessage) message);
+                    return null;
+                }
+            });
+        } else if (this.server != null){
+            this.app.enqueue(new Callable<Void>() {
+                public Void call() throws Exception{
+                    for (SyncMessageValidator syncMessageValidator : SyncManager.this.validators){
+                        if (!syncMessageValidator.checkMessage((PhysicsSyncMessage) message)){
+                            return null;
+                        }
+                    }
+                    SyncManager.this.broadcast((PhysicsSyncMessage) message);
+                    SyncManager.this.handleMessage((PhysicsSyncMessage) message);
+                    return null;
+                }
+            });
+
+        }
+    }
+
+    /**
      * Sets what classes the SyncManager will listen for and handle.
      *
      * @param classes the message classes to be handled by this.
      */
 
-    public void setMessageTypes(Class... classes) {
-        if (this.server != null) {
+    public void setMessageTypes( Class... classes ){
+        if (this.server != null){
             this.server.removeMessageListener(this);
             this.server.addMessageListener(this, classes);
-        } else if (this.client != null) {
+        } else if (this.client != null){
             this.client.removeMessageListener(this);
             this.client.addMessageListener(this, classes);
         }
     }
 
-    public void addObject(long id, Object object) {
+    public void addObject( long id, Object object ){
         this.objectMap.put(id, object);
     }
 
-    public void removeObject(long id) {
+    public void removeObject( long id ){
         this.objectMap.remove(id);
     }
 
-    public void removeObject(Object obj) {
-        for (Iterator<Entry<Long, Object>> iter = this.objectMap.entrySet().iterator(); iter.hasNext(); ) {
+    public void removeObject( Object obj ){
+        for (Iterator<Entry<Long, Object>> iter = this.objectMap.entrySet().iterator(); iter.hasNext(); ){
             Entry<Long, Object> entry = iter.next();
 
-            if (entry.getValue() == obj) {
+            if (entry.getValue() == obj){
                 iter.remove();
                 return;
             }
         }
     }
 
-    public void clearObjects() {
+    public void clearObjects(){
         this.objectMap.clear();
     }
 
-    public void addMessageValidator(SyncMessageValidator validator) {
+    public void addMessageValidator( SyncMessageValidator validator ){
         this.validators.add(validator);
     }
 
-    public void removeMessageValidator(SyncMessageValidator validator) {
+    public void removeMessageValidator( SyncMessageValidator validator ){
         this.validators.remove(validator);
     }
 
-    public Server getServer() {
+    public Server getServer(){
         return this.server;
     }
 
-    public Client getClient() {
+    public Client getClient(){
         return this.client;
     }
 
-    public double getMaxDelay() {
+    public double getMaxDelay(){
         return this.maxDelay;
     }
 
-    public void setMaxDelay(double maxDelay) {
+    public void setMaxDelay( double maxDelay ){
         this.maxDelay = maxDelay;
     }
 
-    public float getServerSyncFrequency() {
+    public float getServerSyncFrequency(){
         return this.serverSyncFrequency;
     }
 
-    public void setServerSyncFrequency(float serverSyncFrequency) {
+    public void setServerSyncFrequency( float serverSyncFrequency ){
         this.serverSyncFrequency = serverSyncFrequency;
     }
 }

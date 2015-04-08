@@ -3,6 +3,7 @@ package audiovisio.level;
 import audiovisio.rsle.editor.LevelNode;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
 
@@ -38,6 +39,13 @@ import org.json.simple.JSONObject;
  * @author Matt Gerst
  */
 public interface ILevelItem {
+
+    enum Direction {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
+    }
 
     /**
      * Called when loading the object from JSON. The given
@@ -109,13 +117,9 @@ public interface ILevelItem {
      */
     void setID( long id );
 
-
-
-    enum Direction {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
-    }
-
+    /**
+     * Get the location of the level item.
+     * @return
+     */
+    Vector3f getLocation();
 }

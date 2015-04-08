@@ -21,6 +21,12 @@ public class Trigger implements ILevelItem {
 
     @Override
     public void load( JSONObject loadObj ){
+        if (loadObj == null){
+            throw new IllegalArgumentException("The JSONObject to load cannot be null");
+        }
+        if (loadObj.isEmpty()){
+            throw new IllegalArgumentException("The JSONObject to load cannot be empty");
+        }
         this.setID((Long) loadObj.get(JSONHelper.KEY_ID));
 
         JSONObject location = (JSONObject) loadObj.get(JSONHelper.KEY_LOCATION);
@@ -28,7 +34,7 @@ public class Trigger implements ILevelItem {
     }
 
     @Override
-    public void init(AssetManager assetManager) {
+    public void init( AssetManager assetManager ){
 
     }
 
@@ -39,6 +45,13 @@ public class Trigger implements ILevelItem {
 
     @Override
     public void save( JSONObject codeObj ){
+        if (codeObj == null){
+            throw new IllegalArgumentException("The JSONObject to save to cannot be null");
+        }
+        if (!codeObj.isEmpty()){
+            throw new IllegalArgumentException("The JSONObject to save to cannot be empty");
+        }
+
         JSONObject location = JSONHelper.saveVector3f(this.location);
         codeObj.put(JSONHelper.KEY_TYPE, "trigger");
         codeObj.put(JSONHelper.KEY_ID, this.getID());
@@ -65,6 +78,10 @@ public class Trigger implements ILevelItem {
 
     public void setID( long id ){
         this.ID = id;
+    }
+
+    public Vector3f getLocation(){
+        return this.location;
     }
 
 }

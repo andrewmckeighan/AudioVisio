@@ -7,20 +7,24 @@ import audiovisio.states.ServerAppState;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.SimpleApplication;
+import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 
 public class AudioVisio extends SimpleApplication {
 
-    public static final Boolean DEBUG = true;
-    public static final int difficulty = 0;
+    public static final Boolean DEBUG      = true;
+    public static final int     difficulty = 0;
+    public static final int     FPS        = 100;
     public static AudioVisio serverInstance;
-    public static String level = "demo_level.json";
-    static JmeContext.Type appType = JmeContext.Type.Display;
+    public static String          level   = "demo_level.json";
+    static        JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
-    GuiAppState gui;
+    GuiAppState    gui;
     ServerAppState server;
 
     public AudioVisio(){
@@ -28,11 +32,20 @@ public class AudioVisio extends SimpleApplication {
     }
 
     public static void main( String[] args ){
+        Calendar cal = Calendar.getInstance();
+        cal.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH.mm.ss");
+        LogHelper.init();
+//        LogHelper.init("Log_" + sdf.format(cal.getTime()) + ".log");
+        LogHelper.setLevel(Level.INFO);
+        AppSettings settings = new AppSettings(true);
+        settings.setFrameRate(AudioVisio.FPS);
+
         AudioVisio AV = new AudioVisio();
+        AV.setSettings(settings);
 
         NetworkUtils.setPort(11550);
-        LogHelper.init();
-        LogHelper.setLevel(Level.INFO);
+
 
         NetworkUtils.initializeSerializables();
 
@@ -90,6 +103,7 @@ public class AudioVisio extends SimpleApplication {
 
     /**
      * Sets a sequence of characters to display from the server.
+     *
      * @param text A char sequence to display from the server.
      */
     public void setFPSText( CharSequence text ){

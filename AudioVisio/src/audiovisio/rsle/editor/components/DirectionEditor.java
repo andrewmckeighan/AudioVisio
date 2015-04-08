@@ -44,6 +44,17 @@ public class DirectionEditor extends JComboBox<String> implements CellEditor {
         }
     }
 
+    @Override
+    public boolean stopCellEditing(){
+        try{
+            this.value = (String) this.getSelectedItem();
+            this.node.setValue(this.value);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     public void setNode( LevelNode node ){
         this.node = node;
     }
@@ -62,17 +73,6 @@ public class DirectionEditor extends JComboBox<String> implements CellEditor {
     @Override
     public boolean shouldSelectCell( EventObject eo ){
         return true;
-    }
-
-    @Override
-    public boolean stopCellEditing(){
-        try{
-            this.value = (String) this.getSelectedItem();
-            this.node.setValue(this.value);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
     }
 
     @Override

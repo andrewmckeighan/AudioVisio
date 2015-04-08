@@ -5,7 +5,6 @@ import audiovisio.entities.Button;
 import audiovisio.entities.Door;
 import audiovisio.entities.Lever;
 import audiovisio.level.*;
-import audiovisio.level.Level;
 import audiovisio.level.Panel;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor2;
@@ -20,7 +19,6 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.logging.*;
 
 /**
  * A VERY simple level editor used to edit the level json files.
@@ -41,64 +39,44 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private   JTree            tree;
     private   DefaultTreeModel treeModel;
     private JPanel editor = new JPanel();
-
     // MENU ITEMS
-    private JMenu     file;
-    private JMenuItem file_new;
-    private JMenuItem file_open;
-    private JMenuItem file_save;
-    private JMenuItem file_save_as;
-    private JMenuItem file_close;
-    private JMenuItem file_exit;
-
+    private JMenu      file;
+    private JMenuItem  file_new;
+    private JMenuItem  file_open;
+    private JMenuItem  file_save;
+    private JMenuItem  file_save_as;
+    private JMenuItem  file_close;
+    private JMenuItem  file_exit;
     // EDIT ITEMS
-    private JMenu     edit;
-    private JMenuItem edit_regen_id;
-    private JMenuItem edit_set_p1_spawn;
-    private JMenuItem edit_set_p2_spawn;
-
+    private JMenu      edit;
+    private JMenuItem  edit_regen_id;
+    private JMenuItem  edit_set_p1_spawn;
+    private JMenuItem  edit_set_p2_spawn;
     // ADD ITEMS
-    private JMenu     add;
-    private JMenuItem add_trigger;
-    private JMenu     add_panels;
-    private JMenuItem add_panels_panel;
-    private JMenuItem add_panels_stair;
-    private JMenuItem add_panels_wall;
-    private JMenu     add_entities;
-    private JMenuItem add_button;
-    private JMenuItem add_door;
-    private JMenuItem add_lever;
-
+    private JMenu      add;
+    private JMenuItem  add_trigger;
+    private JMenu      add_panels;
+    private JMenuItem  add_panels_panel;
+    private JMenuItem  add_panels_stair;
+    private JMenuItem  add_panels_wall;
+    private JMenu      add_entities;
+    private JMenuItem  add_button;
+    private JMenuItem  add_door;
+    private JMenuItem  add_lever;
     // CREATE ITEMS
-    private JMenu     create;
-    private JMenuItem create_floor;
-    private JMenuItem create_link;
-    private JMenuItem create_wall;
-
+    private JMenu      create;
+    private JMenuItem  create_floor;
+    private JMenuItem  create_link;
+    private JMenuItem  create_wall;
     // CONTEXT MENU
     private JPopupMenu ctxMenu;
     private JMenuItem  ctxDelete;
-
-    private LevelNode triggers;
-    private LevelNode panels;
-    private LevelNode entities;
-
+    private LevelNode  triggers;
+    private LevelNode  panels;
+    private LevelNode  entities;
     // level STUFF
-    private File  loadedFile;
-    private Level currentLevel;
-
-    public static void main( String[] args ){
-        LogHelper.init();
-        LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
-//        LogHelper.setLevel(java.util.logging.Level.FINE);
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run(){
-                RSLE.createAndShowGUI();
-            }
-        });
-    }
+    private File       loadedFile;
+    private Level      currentLevel;
 
     public RSLE(){
         super(new GridLayout(1, 0));
@@ -129,6 +107,51 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.ctxDelete.setMnemonic(KeyEvent.VK_D);
         this.ctxDelete.addActionListener(this);
         this.ctxMenu.add(this.ctxDelete);
+    }
+
+    /**
+     * Load the file from disk
+     *
+     * @param file The file to load
+     */
+    public void load( File file ){
+        try{
+            this.currentLevel = LevelReader.read(file);
+            this.currentLevel.loadLevel();
+            this.buildTree();
+
+            this.tree.setEditable(true);
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(this, "There was an error reading the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            LogHelper.severe("Error reading level file!", ex);
+        }
+    }
+
+    public static void main( String[] args ){
+        LogHelper.init();
+        LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
+//        LogHelper.setLevel(java.util.logging.Level.FINE);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run(){
+                RSLE.createAndShowGUI();
+            }
+        });
+    }
+
+    /**
+     * Create and show the JFrame that contains the editor
+     */
+    private static void createAndShowGUI(){
+        JFrame frame = new JFrame("Really Simple Level Editor");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        RSLE rsle = new RSLE();
+        frame.add(rsle);
+        frame.pack();
+        frame.setJMenuBar(rsle.menuBar);
+        frame.setVisible(true);
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 
     private void createMenu(){
@@ -255,59 +278,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.menuBar.add(this.create);
     }
 
-    /**
-     * Create and show the JFrame that contains the editor
-     */
-    private static void createAndShowGUI(){
-        JFrame frame = new JFrame("Really Simple Level Editor");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        RSLE rsle = new RSLE();
-        frame.add(rsle);
-        frame.pack();
-        frame.setJMenuBar(rsle.menuBar);
-        frame.setVisible(true);
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e ){
-        if (e.getSource() == this.file_exit){
-            System.exit(0);
-        } else if (e.getSource() == this.file_new){
-            this.actionNew();
-        } else if (e.getSource() == this.file_open){
-            this.actionOpen();
-        } else if (e.getSource() == this.file_save){
-            this.write();
-        } else if (e.getSource() == this.file_save_as){
-            this.actionSaveAs();
-        } else if (e.getSource() == this.file_close){
-            this.actionClose();
-        } else if (e.getSource() == this.edit_regen_id){
-            this.actionEditRegenId();
-        } else if (e.getSource() == this.add_trigger){
-            this.actionAddTrigger();
-        } else if (e.getSource() == this.add_button){
-            this.actionAddButton();
-        } else if (e.getSource() == this.add_door){
-            this.actionAddDoor();
-        } else if (e.getSource() == this.add_lever){
-            this.actionAddLever();
-        } else if (e.getSource() == this.add_panels_panel){
-            this.actionAddPanel();
-        } else if (e.getSource() == this.add_panels_stair){
-            this.actionAddStair();
-        } else if (e.getSource() == this.add_panels_wall){
-            this.actionAddWall();
-        } else if (e.getSource() == this.create_floor){
-            this.actionCreateFloor();
-        } else if (e.getSource() == this.create_link){
-            this.actionCreateLink();
-        } else if (e.getSource() == this.ctxDelete){
-            this.actionDelete(e);
-        }
-    }
-
     // FILE ACTIONS
 
     private void actionNew(){
@@ -360,24 +330,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     }
 
     /**
-     * Load the file from disk
-     *
-     * @param file The file to load
-     */
-    public void load( File file ){
-        try{
-            this.currentLevel = LevelReader.read(file);
-            this.currentLevel.loadLevel();
-            this.buildTree();
-
-            this.tree.setEditable(true);
-        } catch (Exception ex){
-            JOptionPane.showMessageDialog(this, "There was an error reading the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            LogHelper.severe("Error reading level file!", ex);
-        }
-    }
-
-    /**
      * Build the JTree from the contents of Level.
      */
     private void buildTree(){
@@ -419,8 +371,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.treeModel.setRoot(rootNode);
     }
 
-    // EDIT ACTIONS
-
     private void actionSaveAs(){
         final JFileChooser fc = new JFileChooser();
         fc.addChoosableFileFilter(new FileUtils.LevelFileFilter());
@@ -436,7 +386,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // ADD ACTIONS
+    // EDIT ACTIONS
 
     private void actionClose(){
         this.tree.setEditable(false);
@@ -457,7 +407,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.loadedFile = null;
     }
 
-    // ADD > ENTITY ACTIONS
+    // ADD ACTIONS
 
     private void actionEditRegenId(){
         if (this.currentLevel == null){
@@ -478,6 +428,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             JOptionPane.showMessageDialog(this, "IDs will not be re-generated.", "Regenerate IDs", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    // ADD > ENTITY ACTIONS
 
     private void actionAddTrigger(){
         NewTriggerDialog triggerDialog = new NewTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -512,8 +464,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // ADD > PANEL ACTIONS
-
     private void actionAddDoor(){
         NewDoorDialog doorDialog = new NewDoorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         doorDialog.setVisible(true);
@@ -532,6 +482,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(door.getLevelNode(), this.entities, 0);
         }
     }
+
+    // ADD > PANEL ACTIONS
 
     private void actionAddLever(){
         NewLeverDialog leverDialog = new NewLeverDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -599,8 +551,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // CREATE ACTIONS
-
     private void actionCreateFloor(){
         CreateFloorDialog floorDialog = new CreateFloorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         floorDialog.setVisible(true);
@@ -624,6 +574,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
+    // CREATE ACTIONS
+
     private void actionCreateLink(){
         CreateLinkDialog linkDialog = new CreateLinkDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         linkDialog.setValidIds(this.currentLevel.getLinkables());
@@ -638,6 +590,14 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
 
             // TODO: Find a better way to handle this
             this.buildTree();
+        }
+    }
+
+    private void actionDelete( ActionEvent e ){
+        TreePath path = this.tree.getSelectionPath();
+        System.out.println(path);
+        if (path.getPathCount() == 4){
+            this.treeModel.removeNodeFromParent((LevelNode) path.getLastPathComponent());
         }
     }
 
@@ -689,11 +649,42 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
 
     // OTHER ACTIONS
 
-    private void actionDelete( ActionEvent e ){
-        TreePath path = this.tree.getSelectionPath();
-        System.out.println(path);
-        if (path.getPathCount() == 4){
-            this.treeModel.removeNodeFromParent((LevelNode) path.getLastPathComponent());
+    @Override
+    public void actionPerformed( ActionEvent e ){
+        if (e.getSource() == this.file_exit){
+            System.exit(0);
+        } else if (e.getSource() == this.file_new){
+            this.actionNew();
+        } else if (e.getSource() == this.file_open){
+            this.actionOpen();
+        } else if (e.getSource() == this.file_save){
+            this.write();
+        } else if (e.getSource() == this.file_save_as){
+            this.actionSaveAs();
+        } else if (e.getSource() == this.file_close){
+            this.actionClose();
+        } else if (e.getSource() == this.edit_regen_id){
+            this.actionEditRegenId();
+        } else if (e.getSource() == this.add_trigger){
+            this.actionAddTrigger();
+        } else if (e.getSource() == this.add_button){
+            this.actionAddButton();
+        } else if (e.getSource() == this.add_door){
+            this.actionAddDoor();
+        } else if (e.getSource() == this.add_lever){
+            this.actionAddLever();
+        } else if (e.getSource() == this.add_panels_panel){
+            this.actionAddPanel();
+        } else if (e.getSource() == this.add_panels_stair){
+            this.actionAddStair();
+        } else if (e.getSource() == this.add_panels_wall){
+            this.actionAddWall();
+        } else if (e.getSource() == this.create_floor){
+            this.actionCreateFloor();
+        } else if (e.getSource() == this.create_link){
+            this.actionCreateLink();
+        } else if (e.getSource() == this.ctxDelete){
+            this.actionDelete(e);
         }
     }
 

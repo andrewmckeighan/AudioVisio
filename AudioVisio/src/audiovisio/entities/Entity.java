@@ -28,12 +28,12 @@ import org.json.simple.JSONObject;
 
 public class Entity extends Node implements ILevelItem {
     public static final String KEY_NAME = "name";
-    public Vector3f     location;
-    public Node         rootNode;
-    public PhysicsSpace physicsSpace;
-    public Vector3f     position;
-    public String       name;
-    public Spatial      model;
+    public Vector3f location;
+    //    public Node         rootNode;
+//    public PhysicsSpace physicsSpace;
+    public Vector3f position;
+    public String   name;
+    public Spatial  model;
     //Read from JSON
     protected long ID = Long.MIN_VALUE;
     protected Geometry         geometry;
@@ -44,7 +44,9 @@ public class Entity extends Node implements ILevelItem {
     protected String materialString = "";
     protected Material  material;
     protected ColorRGBA color;
-    protected boolean status;
+    protected boolean   status;
+
+    public Entity(){}
 
     /**
      * Create and instance of Entity class,
@@ -125,20 +127,6 @@ public class Entity extends Node implements ILevelItem {
     }
 
     /**
-     * add the entities to rootNode so they are rendered in the game space.
-     *
-     * @param root rootNode from simpleApplication
-     */
-    public void addToScene( Node root ){
-        root.attachChild(this);
-    }
-
-    @Override
-    public String toString(){
-        return "Entity[" + this.ID + "]";
-    }
-
-    /**
      * A shallow toString Method.
      *
      * @return this.name Only return the name of the object on shallowToString
@@ -157,4 +145,13 @@ public class Entity extends Node implements ILevelItem {
     }
 
     public void collisionEndTrigger( Entity collisionEntityB ){}
+
+    @Override
+    public String toString(){
+        return "Entity[" + this.ID + "]";
+    }
+
+    public Vector3f getLocation(){
+        return this.location;
+    }
 }

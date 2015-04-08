@@ -45,13 +45,11 @@ import java.util.Map;
 public class ServerAppState extends AbstractAppState implements
         PhysicsCollisionListener, ActionListener {
     Level currentLevel;
-
     //Networking
     private com.jme3.network.Server myServer;
     private WorldManager            worldManager;
     private SimpleApplication       AV;
     private AssetManager            AM;
-
     //Players
     private Map<Integer, Player> players = new HashMap<Integer, Player>();
 
@@ -61,6 +59,10 @@ public class ServerAppState extends AbstractAppState implements
 //        this.start(JmeContext.Type.Headless);
 //    }
 
+    @Override
+    public void update( float tpf ){
+        LogHelper.divider("Server Update");
+    }
 
     /**
      * Initializes all variables used to run the server, is called on Jmonkey on this.start()
@@ -161,8 +163,6 @@ public class ServerAppState extends AbstractAppState implements
             @Override
             public void connectionAdded( com.jme3.network.Server server,
                                          HostedConnection conn ){
-                // DON'T REMOVE THIS LOG MESSAGE. IT BREAKS STUFF
-                //TODO explain/fix this
                 LogHelper.info("connectionAdded() for connection: " + conn.getId());
                 if (ServerAppState.this.players.size() < 2){
 
@@ -190,7 +190,7 @@ public class ServerAppState extends AbstractAppState implements
                 }
                 ServerAppState.this.worldManager.removePlayer(conn.getId());
 
-                if (ServerAppState.this.players.isEmpty() || ServerAppState.this.players.size() == 0){
+                if (!ServerAppState.this.players.isEmpty()){
                     ServerAppState.this.myServer.close();
                 }
 
@@ -204,7 +204,7 @@ public class ServerAppState extends AbstractAppState implements
     }
 
     @Override
-    public void cleanup() {
+    public void cleanup(){
         this.myServer.close();
     }
 
@@ -216,8 +216,8 @@ public class ServerAppState extends AbstractAppState implements
      */
 
     @Override
-    public void collision(PhysicsCollisionEvent event) {
-        if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity) {
+    public void collision( PhysicsCollisionEvent event ){
+        if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity){
             Entity entityA = (Entity) event.getNodeA().getParent();
             Entity entityB = (Entity) event.getNodeB().getParent();
             LogHelper.info(entityA + ": " + entityB);
@@ -228,20 +228,22 @@ public class ServerAppState extends AbstractAppState implements
 
     /**
      * Unimplemented method stub.
+     *
      * @param arg0
      * @param arg1
      * @param arg2
      */
     @Override
-    public void onAction(String arg0, boolean arg1, float arg2) {
+    public void onAction( String arg0, boolean arg1, float arg2 ){
         // TODO Method is needed in order to implement actionListener.
     }
 
     /**
      * @param id
+     *
      * @return
      */
-    public Player getPlayer(int id) {
+    public Player getPlayer( int id ){
         return this.players.get(id);
     }
 

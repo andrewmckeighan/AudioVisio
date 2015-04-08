@@ -20,8 +20,8 @@ import org.json.simple.JSONObject;
  */
 public class Panel implements ILevelItem {
 
-    public static final ColorRGBA COLOR = ColorRGBA.DarkGray;
-    private static final Box SHAPE = new Box(0.5F * Level.SCALE.getX(),
+    public static final  ColorRGBA COLOR = ColorRGBA.DarkGray;
+    private static final Box       SHAPE = new Box(0.5F * Level.SCALE.getX(),
             0.01F * Level.SCALE.getY(),
             0.5F * Level.SCALE.getZ());
     /**
@@ -45,19 +45,28 @@ public class Panel implements ILevelItem {
      */
     @Override
     public void load( JSONObject loadObj ){
+        if (loadObj == null){
+            throw new IllegalArgumentException("The JSONObject to load from cannot be null");
+        }
+        if (loadObj.isEmpty()){
+            throw new IllegalArgumentException("The JSONObject to load from cannot be empty");
+        }
+
         this.ID = (Long) loadObj.get(JSONHelper.KEY_ID);
         JSONObject location = (JSONObject) loadObj.get(JSONHelper.KEY_LOCATION);
         this.location = JSONHelper.readVector3f(location);
     }
 
     @Override
-    public void init( AssetManager assetManager ){
-//        this.model = assetManager.loadModel("Models/Level/Panel/Panel.j3o");
-//        this.model.setLocalTranslation(this.location);
-        this.initialize(assetManager);
+    public void start( Node rootNode, PhysicsSpace physics ){
+        if (!ClientAppState.isAudio){
+            rootNode.attachChild(this.geometry);
+        }
+        physics.add(this.physics);
     }
 
-    public void initialize( AssetManager assetManager ){
+    @Override
+    public void init( AssetManager assetManager ){
         Box shape = Panel.SHAPE;
 
         this.geometry = new Geometry("Panel" + this.ID, shape);
@@ -73,14 +82,6 @@ public class Panel implements ILevelItem {
         this.geometry.addControl(this.physics);
     }
 
-    @Override
-    public void start( Node rootNode, PhysicsSpace physics ){
-        if (!ClientAppState.isAudio || true){//TODO turn this off
-            rootNode.attachChild(this.geometry);
-        }
-        physics.add(this.physics);
-    }
-
     /**
      * Save the panel to a JSONObject
      *
@@ -88,6 +89,13 @@ public class Panel implements ILevelItem {
      */
     @Override
     public void save( JSONObject codeObj ){
+        if (codeObj == null){
+            throw new IllegalArgumentException("The given JSONObject to save to cannot be null");
+        }
+        if (!codeObj.isEmpty()){
+            throw new IllegalArgumentException("The JSONObject to save to must be empty");
+        }
+
         codeObj.put(JSONHelper.KEY_ID, this.getID());
         codeObj.put(JSONHelper.KEY_TYPE, "panel");
         JSONObject location = new JSONObject();
@@ -114,5 +122,9 @@ public class Panel implements ILevelItem {
 
     public void setID( long id ){
         this.ID = id;
+    }
+
+    public Vector3f getLocation(){
+        return this.location;
     }
 }

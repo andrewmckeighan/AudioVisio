@@ -24,8 +24,6 @@ public class CollisionEvent {
         }
     }
 
-
-
     public Boolean check( float tpf ){
         Boolean collisionEnded = false;
 

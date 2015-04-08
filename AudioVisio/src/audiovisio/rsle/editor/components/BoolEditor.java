@@ -16,7 +16,6 @@ import java.util.Vector;
  */
 public class BoolEditor extends JComboBox<Boolean> implements CellEditor {
     boolean value;
-
     Vector listeners = new Vector();
     LevelNode node;
 
@@ -44,6 +43,17 @@ public class BoolEditor extends JComboBox<Boolean> implements CellEditor {
         }
     }
 
+    @Override
+    public boolean stopCellEditing(){
+        try{
+            this.value = (Boolean) this.getSelectedItem();
+            this.node.setValue(this.value);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     public void setNode( LevelNode node ){
         this.node = node;
     }
@@ -62,17 +72,6 @@ public class BoolEditor extends JComboBox<Boolean> implements CellEditor {
     @Override
     public boolean shouldSelectCell( EventObject eo ){
         return true;
-    }
-
-    @Override
-    public boolean stopCellEditing(){
-        try{
-            this.value = (Boolean) this.getSelectedItem();
-            this.node.setValue(this.value);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
     }
 
     @Override

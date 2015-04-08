@@ -34,11 +34,14 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
 import com.jme3.network.NetworkClient;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 
 import java.util.Collection;
@@ -57,10 +60,9 @@ public class ClientAppState extends AbstractAppState implements
         PhysicsCollisionListener {
 
     public static final int FPS = 1;
-    public static boolean isAudio = false;
-
+    public static boolean isAudio;
     public NetworkClient myClient = Network.createClient();
-    public Level level;
+    public  Level        level;
     // Networking
     private AudioVisio   audioVisioApp;
     private InputManager inputManager;
@@ -76,22 +78,142 @@ public class ClientAppState extends AbstractAppState implements
     private int  counter;
     private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
     private float   updateCounter;
-    private boolean debug;
-
     //private static int ID;
+    private boolean debug;
+    private Node debugNode;
 
     public ClientAppState(){
     }
+
+    /**
+     * Handles updates made to the client every frame.
+     *
+     * Specifically, generates an on screen message: updateMessage(); and
+     * creates a message to send to the server with the players information.
+     *
+     * @param tpf time per frame
+     */
+
+    @Override
+    public void update( float tpf ){
+        LogHelper.divider("Client.update");
+        Player player = ((Player) this.worldManager.getPlayer(this.myClient.getId()));
+        if (player != null){
+            this.updateMessage(player);
+            SyncCharacterMessage msg = player.getSyncCharacterMessage();
+            LogHelper.finer("\nSending syncCharMsg:\n   " + msg);
+            this.myClient.send(msg);
+        }
+
+        Collection<ILevelItem> levelItems = this.level.getItems();
+        for (ILevelItem iLevelItem : levelItems){
+            if (iLevelItem instanceof InteractableEntity){
+                InteractableEntity inEnt = (InteractableEntity) iLevelItem;
+                if (inEnt.wasUpdated){
+                    TriggerActionMessage msg = inEnt.getTriggerActionMessage();
+                    this.myClient.send(msg);
+                }
+            }
+        }
+
+
+        for (CollisionEvent event : this.collisionEvents){
+            if (event.check(tpf)){
+                this.collisionEvents.remove(event);
+                event.collisionEndTrigger();
+            }
+        }
+
+    }
+
+    /**
+     * Creates on screen text that displays the users velocity, distance moved
+     * since last update, current position, and the current frame #
+     */
+
+    private void updateMessage( Player player ){
+
+        if (this.counter % 1000 == 0){ // We only update once every 1000 frames so
+            // that the player can actually move.
+            assert this.newLocation != null;
+            if (this.oldLocation != null && this.oldTime != 0 && this.newTime != 0){
+                this.oldLocation.distance(this.newLocation);
+            }
+
+            this.oldLocation = this.newLocation.clone();
+            this.newLocation = player.getLocalTranslation();
+
+            this.oldTime = this.newTime;
+            this.newTime = System.currentTimeMillis();
+
+            this.counter = 0;
+
+            float distance = this.oldLocation.distance(this.newLocation);
+            long time = this.newTime - this.oldTime;
+            float velocity = distance / time;
+            this.velocityMessage = ("ID: " + this.getId() + "V: " + velocity
+                    + ", D: " + distance + ", P: " + this.newLocation + "F: " + this.counter);
+        }
+
+        this.audioVisioApp.setFPSText(this.velocityMessage);
+        this.counter++;
+    }
+
+    /**
+     * Creates a '+' char on the center of the screen and adds it to the
+     * 'guiNode' TODO may be moved
+     */
+
+    private void initCrossHairs(){
+        this.audioVisioApp.setDisplayStatView(false);
+        BitmapFont guiFont = this.assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+"); // crosshairs
+        ch.setLocalTranslation(
+                // center
+                this.audioVisioApp.getWidth() / 2 - ch.getLineWidth() / 2,
+                this.audioVisioApp.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        this.audioVisioApp.getGuiNode().attachChild(ch);
+
+    }
+
+    /**
+     * Creates a sphere to show where on an object the player 'shoots' (where
+     * the ray from their camera collides with the closest valid object.) TODO
+     * may be moved.
+     */
+
+    private void initMark(){
+        Sphere sphere = new Sphere(30, 30, 0.2f);
+        Geometry mark = new Geometry("BOOM!", sphere);
+        Material mark_mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat.setColor("Color", ColorRGBA.Red);
+        mark.setMaterial(mark_mat);
+
+    }
+
+    public long getId(){
+        return this.myClient.getId();
+    }
+
+//    public int getID(){
+//        return ID;
+//    }
+//
+//    public void setId(int ID){
+//        this.ID = ID;
+//    }
 
     public long getID(){
         return this.myClient.getId();
     }
 
-
     /**
      * Initializes variables to create a ClientAppState. Then initializes the game inside of the Client.
+     *
      * @param stateManager State manager passed by the AudioVisio SimpleApplication.
-     * @param app A SimpleApplication to implement the AppState in (AudioVisio).
+     * @param app          A SimpleApplication to implement the AppState in (AudioVisio).
      */
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
@@ -133,7 +255,7 @@ public class ClientAppState extends AbstractAppState implements
         BulletAppState bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
-        PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+        physicsSpace = bulletAppState.getPhysicsSpace();
 
         // ////////////////////
         // Load Scene (map) //
@@ -213,111 +335,6 @@ public class ClientAppState extends AbstractAppState implements
 
 
         LogHelper.info("Client Started!");
-
-    }
-
-    /**
-     * Creates a '+' char on the center of the screen and adds it to the
-     * 'guiNode' TODO may be moved
-     */
-
-    private void initCrossHairs(){
-        this.audioVisioApp.setDisplayStatView(false);
-        BitmapFont guiFont = this.assetManager.loadFont("Interface/Fonts/Default.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
-        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-        ch.setText("+"); // crosshairs
-        ch.setLocalTranslation(
-                // center
-                this.audioVisioApp.getWidth() / 2 - ch.getLineWidth() / 2,
-                this.audioVisioApp.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-        this.audioVisioApp.getGuiNode().attachChild(ch);
-
-    }
-
-    /**
-     * Handles updates made to the client every frame.
-     *
-     * Specifically, generates an on screen message: updateMessage(); and
-     * creates a message to send to the server with the players information.
-     *
-     * @param tpf time per frame
-     */
-
-    @Override
-    public void update( float tpf ){
-        Player player = ((Player) this.worldManager.getPlayer(this.myClient.getId()));
-        if (player != null){
-            this.updateMessage(player);
-            SyncCharacterMessage msg = player.getSyncCharacterMessage();
-            this.myClient.send(msg);
-        }
-
-        Collection<ILevelItem> levelItems = this.level.getItems();
-        for (ILevelItem iLevelItem : levelItems){
-            if (iLevelItem instanceof InteractableEntity){
-                InteractableEntity inEnt = (InteractableEntity) iLevelItem;
-                if (inEnt.wasUpdated){
-                    TriggerActionMessage msg = inEnt.getTriggerActionMessage();
-                    this.myClient.send(msg);
-                }
-            }
-        }
-
-
-        for (CollisionEvent event : this.collisionEvents){
-            if (event.check(tpf)){
-                this.collisionEvents.remove(event);
-                event.collisionEndTrigger();
-            }
-        }
-
-    }
-
-    /**
-     * Creates on screen text that displays the users velocity, distance moved
-     * since last update, current position, and the current frame #
-     */
-
-    private void updateMessage( Player player ){
-
-        if (this.counter % 1000 == 0){ // We only update once every 1000 frames so
-            // that the player can actually move.
-            assert this.newLocation != null;
-            if (this.oldLocation != null && this.oldTime != 0 && this.newTime != 0){
-                this.oldLocation.distance(this.newLocation);
-            }
-
-            this.oldLocation = this.newLocation.clone();
-            this.newLocation = player.getLocalTranslation();
-
-            this.oldTime = this.newTime;
-            this.newTime = System.currentTimeMillis();
-
-            this.counter = 0;
-
-            float distance = this.oldLocation.distance(this.newLocation);
-            long time = this.newTime - this.oldTime;
-            float velocity = distance / time;
-            this.velocityMessage = ("ID: " + this.getId() + "V: " + velocity
-                    + ", D: " + distance + ", P: " + this.newLocation + "F: " + this.counter);
-        }
-
-        this.audioVisioApp.setFPSText(this.velocityMessage);
-        this.counter++;
-    }
-
-//    public int getID(){
-//        return ID;
-//    }
-//
-//    public void setId(int ID){
-//        this.ID = ID;
-//    }
-
-
-    public long getId(){
-        return this.myClient.getId();
     }
 
     @Override
@@ -348,6 +365,7 @@ public class ClientAppState extends AbstractAppState implements
                 MouseInput.BUTTON_LEFT));
 
         this.inputManager.addMapping("Debug", new KeyTrigger(KeyInput.KEY_F3));
+        this.inputManager.addMapping("ReleaseMouse", new KeyTrigger(KeyInput.KEY_F4));
 
         this.inputManager.addListener(player, "Up");
         this.inputManager.addListener(player, "Down");
@@ -357,30 +375,36 @@ public class ClientAppState extends AbstractAppState implements
 
         this.inputManager.addListener(player, "Shoot");
 
-        this.inputManager.addListener(new ActionListener() {
+        ActionListener debugListener = new ActionListener() {
             @Override
             public void onAction( String name, boolean isPressed, float tpf ){
                 if (!isPressed){
-                    ClientAppState.this.debug = !ClientAppState.this.debug;
-                    ClientAppState.this.inputManager.setCursorVisible(ClientAppState.this.debug);
+                    if ("Debug".equals(name)){
+                        debug = !debug;
+
+                        if (debug){
+                            // Setup debug arrows
+                            // TODO: These should be near the crosshair and move with the camera
+                            Vector3f loc = audioVisioApp.getCamera().getLocation();
+                            createCoordinateAxes(loc);
+                            rootNode.attachChild(debugNode);
+
+                            physicsSpace.enableDebug(assetManager);
+                        } else {
+                            rootNode.detachChild(debugNode);
+                            physicsSpace.disableDebug();
+                        }
+                    } else if ("ReleaseMouse".equals(name)){
+                        if (debug){
+                            inputManager.setCursorVisible(!inputManager.isCursorVisible());
+                        }
+                    }
                 }
             }
-        }, "Debug");
-    }
+        };
 
-    /**
-     * Creates a sphere to show where on an object the player 'shoots' (where
-     * the ray from their camera collides with the closest valid object.) TODO
-     * may be moved.
-     */
-
-    private void initMark(){
-        Sphere sphere = new Sphere(30, 30, 0.2f);
-        Geometry mark = new Geometry("BOOM!", sphere);
-        Material mark_mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat.setColor("Color", ColorRGBA.Red);
-        mark.setMaterial(mark_mat);
-
+        this.inputManager.addListener(debugListener, "Debug");
+        this.inputManager.addListener(debugListener, "ReleaseMouse");
     }
 
     /**
@@ -432,4 +456,37 @@ public class ClientAppState extends AbstractAppState implements
     public Level getLevel(){
         return this.level;
     }
+
+    public void createCoordinateAxes( Vector3f pos ){
+        debugNode = new Node("debug arrows");
+        Arrow arrow = new Arrow(Vector3f.UNIT_X);
+        arrow.setLineWidth(4);
+        Geometry g = putShape(arrow, ColorRGBA.Red);
+        g.setLocalTranslation(pos);
+        debugNode.attachChild(g);
+
+        arrow = new Arrow(Vector3f.UNIT_Y);
+        arrow.setLineWidth(4);
+        g = putShape(arrow, ColorRGBA.Green);
+        g.setLocalTranslation(pos);
+        debugNode.attachChild(g);
+
+        arrow = new Arrow(Vector3f.UNIT_Z);
+        arrow.setLineWidth(4);
+        g = putShape(arrow, ColorRGBA.Blue);
+        g.setLocalTranslation(pos);
+        debugNode.attachChild(g);
+    }
+
+    private Geometry putShape( Mesh shape, ColorRGBA color ){
+        Geometry g = new Geometry("coordinate axis", shape);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", color);
+        g.setMaterial(mat);
+        rootNode.attachChild(g);
+        return g;
+    }
+
+    private PhysicsSpace physicsSpace;
 }

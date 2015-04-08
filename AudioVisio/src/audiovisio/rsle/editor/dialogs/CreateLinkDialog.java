@@ -8,11 +8,10 @@ import java.util.Set;
  * @author Matt Gerst
  */
 public class CreateLinkDialog extends NewDialog {
-    JLabel lblFrom = new JLabel("From:");
-    JLabel lblTo   = new JLabel("To:");
-
-    JComboBox<Long> from = new JComboBox<Long>();
-    JComboBox<Long> to   = new JComboBox<Long>();
+    JLabel          lblFrom = new JLabel("From:");
+    JLabel          lblTo   = new JLabel("To:");
+    JComboBox<Long> from    = new JComboBox<Long>();
+    JComboBox<Long> to      = new JComboBox<Long>();
 
     public CreateLinkDialog( Frame owner, boolean modal ){
         super(owner, modal);

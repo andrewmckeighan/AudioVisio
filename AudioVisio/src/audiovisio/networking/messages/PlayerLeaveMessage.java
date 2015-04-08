@@ -6,7 +6,7 @@ import com.jme3.network.serializing.Serializable;
 /**
  * Sent by the server to the other connected clients when a
  * player leaves.
- * 
+ *
  * This message tells the other clients the ID of the player
  * who has just left.
  */

@@ -14,7 +14,7 @@ public class TextTrigger extends Trigger {
     public void load( JSONObject loadObj ){
         super.load(loadObj);
 
-        text = (String) loadObj.get("text");
+        this.text = (String) loadObj.get("text");
     }
 
     @Override

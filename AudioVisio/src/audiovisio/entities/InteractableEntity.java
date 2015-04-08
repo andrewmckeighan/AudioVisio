@@ -4,12 +4,10 @@ import audiovisio.level.ITriggerable;
 import audiovisio.networking.messages.TriggerActionMessage;
 import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -19,13 +17,13 @@ import java.util.Set;
 
 public class InteractableEntity extends Entity implements ITriggerable {
 
-    public static final String KEY_LINKED = "interactionList";
-    protected static ColorRGBA COLOR = ColorRGBA.Blue;
-    public boolean stuck; //if the entity keeps it state regardless of triggerEvents
+    public static final String    KEY_LINKED = "interactionList";
+    protected static    ColorRGBA COLOR      = ColorRGBA.Blue;
+    public boolean          stuck; //if the entity keeps it state regardless of triggerEvents
     public Geometry         geometry;
     public Material         material;
     public RigidBodyControl physics;
-    public boolean wasUpdated;
+    public boolean          wasUpdated;
     protected Set<Long> linkedIds = new HashSet<Long>();
     protected Map<Long, ITriggerable> interactionMap;
     protected Boolean state = false;
@@ -63,6 +61,26 @@ public class InteractableEntity extends Entity implements ITriggerable {
         codeObj.put(InteractableEntity.KEY_LINKED, linked);
     }
 
+    public void update( Set<Long> idList, Boolean state ){
+        this.update(state);
+        for (Long id : idList){
+            LogHelper.info("updating: " + id);
+            this.interactionMap.get(id).update(state);
+        }
+    }
+
+    @Override
+    public void update( Boolean state ){
+        this.state = state;
+    }
+
+    public void update( TriggerActionMessage message ){
+        this.update(message.getState());
+        for (Long id : this.linkedIds){
+            this.interactionMap.get(id).update(this.state);
+        }
+        this.wasUpdated = false;
+    }
 
     @Override
     public Set<Long> getLinked(){
@@ -82,10 +100,10 @@ public class InteractableEntity extends Entity implements ITriggerable {
         if (this.linkedIds != null){ this.linkedIds.add(id); }
     }
 
-    @Override
-    public void update( Boolean state ){
-        this.state = state;
-    }
+//    public void addToScene( Node root, PhysicsSpace physics ){
+//        this.addToScene(root);
+//        physics.add(this.physics);
+//    }
 
     public Entity getLinkedEntity(){
         return this.linkedEntity;
@@ -95,11 +113,6 @@ public class InteractableEntity extends Entity implements ITriggerable {
         this.linkedEntity = entity;
     }
 
-    public void addToScene( Node root, PhysicsSpace physics ){
-        this.addToScene(root);
-        physics.add(this.physics);
-    }
-
     //TODO remove this
     public void createMaterial( AssetManager assetManager ){
         Material randomMaterial = new Material(assetManager,
@@ -107,22 +120,6 @@ public class InteractableEntity extends Entity implements ITriggerable {
         randomMaterial.setColor("Color", ColorRGBA.randomColor());
         this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
-    }
-
-    public void update( Set<Long> idList, Boolean state ){
-        this.update(state);
-        for (Long id : idList){
-            LogHelper.info("updating: " + id);
-            this.interactionMap.get(id).update(state);
-        }
-    }
-
-    public void update( TriggerActionMessage message ){
-        this.update(message.getState());
-        for (Long id : this.linkedIds){
-            this.interactionMap.get(id).update(this.state);
-        }
-        this.wasUpdated = false;
     }
 
     public TriggerActionMessage getTriggerActionMessage(){

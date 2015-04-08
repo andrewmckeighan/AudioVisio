@@ -69,7 +69,7 @@ public class JSONHelper {
         return loc;
     }
 
-    public static int getInt(JSONObject obj, String key) {
+    public static int getInt( JSONObject obj, String key ){
         return ((Long) obj.get(key)).intValue();
     }
 
