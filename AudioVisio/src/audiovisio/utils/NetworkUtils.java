@@ -16,6 +16,7 @@ public class NetworkUtils {
 
     public static final float NETWORK_SYNC_FREQUENCY = 0.25f;
     public static int PORT;
+    public static String ipAddress = "127.0.0.1";
 
     public static synchronized void initializeSerializables(){
         // Client Messages
@@ -74,15 +75,20 @@ public class NetworkUtils {
         return null;
     }
 
+    public static void setIp( String ip ){
+        ipAddress = ip;
+    }
+
     public static Boolean attemptConnection( NetworkClient client ){
         LogHelper.info("attemptConnection");
+        LogHelper.info("Connecting to " + ipAddress);
         for (int i = 0; i < 500; i++){
             try{
                 if (client.isConnected()){
                     LogHelper.info("Actually connected");
                     return true;
                 }
-                client.connectToServer("127.0.0.1", NetworkUtils.PORT, NetworkUtils.PORT);
+                client.connectToServer(ipAddress, NetworkUtils.PORT, NetworkUtils.PORT);
                 client.start();
                 return true;
             } catch (IOException e){

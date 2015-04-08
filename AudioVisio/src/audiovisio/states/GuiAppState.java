@@ -10,6 +10,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
@@ -133,6 +134,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	 * Switches to the ClientAppState from the current GuiAppState.
 	 */
 	public void clientInit(){
+		TextField ipField = this.nifty.getScreen("join").findNiftyControl("input", TextField.class);
+		NetworkUtils.setIp(ipField.getRealText());
+
 		this.app.stopGui();
 		this.setEnabled(false);
 		this.app.clientStart();
@@ -145,28 +149,19 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	 * @param arg1
 	 */
 	@Override
-	public void bind( Nifty arg0, Screen arg1 ){
-		// TODO Auto-generated method stub
-
-	}
+	public void bind( Nifty arg0, Screen arg1 ){}
 
 	/**
 	 * Unimplemented method stub.
 	 */
 	@Override
-	public void onStartScreen(){
-		// TODO Auto-generated method stub
-
-	}
+	public void onStartScreen(){}
 
 	/**
 	 * Unimplemented method stub.
 	 */
 	@Override
-	public void onEndScreen(){
-		// TODO Auto-generated method stub
-
-	}
+	public void onEndScreen(){}
 
 	/**
 	 * Switches to the ClientAppState and ServerAppState from the current GuiAppState.
