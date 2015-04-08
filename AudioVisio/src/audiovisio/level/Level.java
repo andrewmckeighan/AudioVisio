@@ -101,7 +101,7 @@ public class Level {
 
         this.shootables = new Node("shootables");
 
-        levelBox = new LevelBox(assetManager);
+        this.levelBox = new LevelBox(assetManager);
 
         Vector3f min = new Vector3f();
         Vector3f max = new Vector3f();
@@ -128,7 +128,7 @@ public class Level {
             max.maxLocal(item.getLocation());
         }
 
-        levelBox.setSize(min, max);
+        this.levelBox.setSize(min, max);
     }
 
     /**
@@ -145,7 +145,7 @@ public class Level {
         rootNode.attachChild(this.shootables);
 
         if (ClientAppState.isAudio){
-            levelBox.start(rootNode);
+            this.levelBox.start(rootNode);
         }
     }
 

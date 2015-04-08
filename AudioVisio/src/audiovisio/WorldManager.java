@@ -73,6 +73,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      */
 
     public void addPlayer( long playerID ){
+
         LogHelper.fine("adding player: ");
         Player player;
         Level level;

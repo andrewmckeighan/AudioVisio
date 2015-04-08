@@ -52,12 +52,12 @@ public class Player extends MovingEntity implements ActionListener {
     protected Node  model;
     protected Vector3f spawn = Player.DEFAULT_SPAWN_LOCATION;
     //Key Listeners
-    private boolean                up;
-    private boolean                down;
-    private boolean                left;
-    private boolean                right;
-    private BetterCharacterControl characterControl;
-    private Camera                 playerCamera;
+    private   boolean                up;
+    private   boolean                down;
+    private   boolean                left;
+    private   boolean                right;
+    protected BetterCharacterControl characterControl;
+    private   Camera                 playerCamera;
     private Vector3f camDir  = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     private boolean isServer;
@@ -101,11 +101,16 @@ public class Player extends MovingEntity implements ActionListener {
      * sets the players location and direction, used to sync a player with a message sent from a different server/client
      * TODO: see what all this.move can handle.
      *
+     * @param location
      * @param direction walkDirection to set
      */
-    public void update( Vector3f direction, Quaternion rotation ){
+    public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
 
         this.characterControl.setWalkDirection(direction);
+//        if(this.characterControl.getWalkDirection().length() == 0){
+//            this.characterControl.warp(location);
+//        }
+//        this.characterControl.setWalkDirection(direction);
 
         if (this.playerCamera != null){
             this.playerCamera.setLocation(this.getLocalTranslation().add(
@@ -216,10 +221,12 @@ public class Player extends MovingEntity implements ActionListener {
             }
 
             walkDirection.setY(0); //Y movement will be done on 'jump'
+            this.characterControl.setWalkDirection(walkDirection);
             LogHelper.object("Player.getSyncCharMessage", this.getID(), this.getLocalTranslation(), walkDirection, this.playerCamera.getRotation());
 
+
             syncCharacterMessage = new SyncCharacterMessage(this.getID(),
-                    this.savedLocation, //this.playerCamera.getLocation(),//this.getLocalTranslation(),
+                    this.getLocalTranslation(),
                     walkDirection, this.playerCamera.getRotation());
         }
         return syncCharacterMessage;

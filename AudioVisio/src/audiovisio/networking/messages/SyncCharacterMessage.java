@@ -37,7 +37,7 @@ public class SyncCharacterMessage extends PhysicsSyncMessage {
         assert ((Player) character).getID() == this.syncId;
 
         LogHelper.finer("\nSyncCharacterMessage.applyData: \n   " + this + "\n  " + character);
-        ((Player) character).update(this.walkDirection, this.rotation);
+        ((Player) character).update(this.location, this.walkDirection, this.rotation);
     }
 
     @Override

@@ -119,6 +119,7 @@ public interface ILevelItem {
 
     /**
      * Get the location of the level item.
+     *
      * @return
      */
     Vector3f getLocation();

@@ -17,23 +17,23 @@ public class LevelBox {
     private Material wireMaterial;
     private Geometry geometry;
 
-    public LevelBox(AssetManager assetManager){
-        wireMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        wireMaterial.setColor("Color", ColorRGBA.White);
-        wireMaterial.getAdditionalRenderState().setWireframe(true);
-        wireMaterial.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Front);
+    public LevelBox( AssetManager assetManager ){
+        this.wireMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        this.wireMaterial.setColor("Color", ColorRGBA.White);
+        this.wireMaterial.getAdditionalRenderState().setWireframe(true);
+        this.wireMaterial.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Front);
 
-        box = new Box();
-        geometry = new Geometry("levelbox", box);
-        geometry.setMaterial(wireMaterial);
+        this.box = new Box();
+        this.geometry = new Geometry("levelbox", this.box);
+        this.geometry.setMaterial(this.wireMaterial);
     }
 
-    public void setSize(Vector3f min, Vector3f max) {
+    public void setSize( Vector3f min, Vector3f max ){
         min.mult(Level.SCALE);
-        box.updateGeometry(min, max);
+        this.box.updateGeometry(min, max);
     }
 
     public void start( Node rootNode ){
-        rootNode.attachChild(geometry);
+        rootNode.attachChild(this.geometry);
     }
 }

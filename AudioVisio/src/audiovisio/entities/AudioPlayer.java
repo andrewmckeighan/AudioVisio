@@ -22,14 +22,16 @@ public class AudioPlayer extends Player {
 
         this.model = (Node) assetManager.loadModel(Player.DEFAULT_MODEL);
         this.model.setLocalScale(0.5F);
+        this.model.setLocalTranslation(this.getLocalTranslation().add(Player.MODEL_OFFSET));
         this.attachChild(this.model);
     }
 
     @Override
-    public void update( Vector3f direction, Quaternion rotation ){
-        super.update(direction, rotation);
+    public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
+        super.update(location, direction, rotation);
         if (this.model != null){
-            this.model.setLocalTranslation(this.getLocalTranslation().add(Player.MODEL_OFFSET));
+//            this.model.setLocalTranslation(this.characterControl.getWalkDirection().add(Player.MODEL_OFFSET));
+//            this.model.setLocalTranslation(this.getLocalTranslation().add(Player.MODEL_OFFSET));
             //rotation.set(rotation.getX(), 0, rotation.getZ(), 0);//TODO fix Y rotaion
             this.model.setLocalRotation(rotation);
         }

@@ -173,7 +173,7 @@ public class Door extends InteractableEntity {
     }
 
     private void emitParticle(){
-        if (this.particle.emitter.isEnabled()) {
+        if (this.particle.emitter.isEnabled()){
             this.particle.emitter.setEnabled(false);
             this.rootNode.detachChild(this.particle);
         } else {

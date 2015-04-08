@@ -41,8 +41,8 @@ public class VisualPlayer extends Player {
     }
 
     @Override
-    public void update( Vector3f direction, Quaternion rotation ){
-        super.update(direction, rotation);
+    public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
+        super.update(location, direction, rotation);
 
         assert this.footSteps != null && this.footSteps.emitter != null;
         assert this.model == null;
