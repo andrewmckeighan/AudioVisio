@@ -33,7 +33,6 @@ public class Entity extends Node implements ILevelItem {
     //    public Node         rootNode;
 //    public PhysicsSpace physicsSpace;
     public Vector3f position;
-    public String   name;
     public Spatial  model;
     //Read from JSON
     protected long ID = Long.MIN_VALUE;

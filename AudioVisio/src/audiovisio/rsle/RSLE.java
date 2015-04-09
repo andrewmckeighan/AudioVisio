@@ -1,9 +1,9 @@
 package audiovisio.rsle;
 
 import audiovisio.Items;
+import audiovisio.entities.*;
+import audiovisio.entities.Box;
 import audiovisio.entities.Button;
-import audiovisio.entities.Door;
-import audiovisio.entities.Lever;
 import audiovisio.level.*;
 import audiovisio.level.Panel;
 import audiovisio.rsle.editor.LevelNode;
@@ -39,6 +39,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private   JTree            tree;
     private   DefaultTreeModel treeModel;
     private JPanel editor = new JPanel();
+
     // MENU ITEMS
     private JMenu      file;
     private JMenuItem  file_new;
@@ -47,11 +48,13 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private JMenuItem  file_save_as;
     private JMenuItem  file_close;
     private JMenuItem  file_exit;
+
     // EDIT ITEMS
     private JMenu      edit;
     private JMenuItem  edit_regen_id;
     private JMenuItem  edit_set_p1_spawn;
     private JMenuItem  edit_set_p2_spawn;
+
     // ADD ITEMS
     private JMenu      add;
     private JMenuItem  add_trigger;
@@ -60,20 +63,24 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private JMenuItem  add_panels_stair;
     private JMenuItem  add_panels_wall;
     private JMenu      add_entities;
+    private JMenuItem  add_box;
     private JMenuItem  add_button;
     private JMenuItem  add_door;
     private JMenuItem  add_lever;
+
     // CREATE ITEMS
     private JMenu      create;
     private JMenuItem  create_floor;
     private JMenuItem  create_link;
     private JMenuItem  create_wall;
+
     // CONTEXT MENU
     private JPopupMenu ctxMenu;
     private JMenuItem  ctxDelete;
     private LevelNode  triggers;
     private LevelNode  panels;
     private LevelNode  entities;
+
     // level STUFF
     private File       loadedFile;
     private Level      currentLevel;
@@ -241,6 +248,10 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.add.add(this.add_panels);
 
         this.add_entities = new JMenu("Add Entity...");
+
+        this.add_box = new JMenuItem("Box");
+        this.add_box.addActionListener(this);
+        this.add_entities.add(this.add_box);
 
         this.add_button = new JMenuItem("Button");
         this.add_button.addActionListener(this);
@@ -443,6 +454,24 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.currentLevel.addItem(trigger);
 
             this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
+        }
+    }
+
+    private void actionAddBox(){
+        NewBoxDialog boxDialog = new NewBoxDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        boxDialog.setVisible(true);
+
+        if (boxDialog.getStatus()){
+            Vector3f loc = boxDialog.getLevelLocation();
+            String name = boxDialog.getName();
+
+            Box box = new Box();
+            box.location = loc;
+            box.setName(name);
+            box.setID(this.currentLevel.getNextId());
+            this.currentLevel.addItem(box);
+
+            this.treeModel.insertNodeInto(box.getLevelNode(), this.entities, 0);
         }
     }
 
@@ -667,6 +696,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.actionEditRegenId();
         } else if (e.getSource() == this.add_trigger){
             this.actionAddTrigger();
+        } else if (e.getSource() == this.add_box){
+            this.actionAddBox();
         } else if (e.getSource() == this.add_button){
             this.actionAddButton();
         } else if (e.getSource() == this.add_door){

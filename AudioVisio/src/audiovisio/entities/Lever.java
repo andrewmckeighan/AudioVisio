@@ -22,7 +22,7 @@ import org.json.simple.JSONObject;
 
 public class Lever extends InteractableEntity implements IShootable {
     public static final  String     KEY_EDGE  = "edge";
-    public static final  String     KEY_ISON  = "isOn";
+    public static final  String     KEY_ISON  = "state";
     //    public static final  Quaternion ANGLE     = new Quaternion().fromAngles((float) (Math.PI / 6.0), (float) (Math.PI / 2.0), 0);//VERTICAL ROTATION FOR ON/OFF
     private static final Quaternion ROTATION  = new Quaternion().fromAngles(0, (float) -(Math.PI / 2.0), 0);//HORIZONTAL ROTATION FOR DIRECTION
     private static final float      MASS      = 0.0F;
@@ -168,6 +168,11 @@ public class Lever extends InteractableEntity implements IShootable {
         root.add(nameNode);
         root.add(stateNode);
         root.add(locationNode);
+
+        if (!this.linkedIds.isEmpty()){
+            LevelNode linkNode = LevelUtils.linksNode(this.linkedIds);
+            root.add(linkNode);
+        }
 
         return root;
     }
