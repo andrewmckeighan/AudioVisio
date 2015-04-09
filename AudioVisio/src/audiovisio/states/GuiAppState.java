@@ -81,6 +81,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	 */
 	public void initHost(){
 		this.nifty.gotoScreen("host");
+		AudioVisio.main(new String[]{"-server"});
 	}
 
 	/**
@@ -169,7 +170,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	public void clientAndServerInit(){
 		this.app.stopGui();
 		this.setEnabled(false);
-		AudioVisio.main(new String[]{ "-server" });
 		this.app.clientStart();
 		NetworkUtils.attemptConnection(this.app.client.myClient);
 	}
