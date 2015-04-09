@@ -57,7 +57,7 @@ public class LevelNodeEditor extends DefaultTreeCellEditor {
             if (path != null){
                 if (path.getLastPathComponent() instanceof LevelNode){
                     LevelNode node = (LevelNode) path.getLastPathComponent();
-                    return !node.isContainer();
+                    return !node.isReadOnly();
                 }
                 if (path.getLastPathComponent() instanceof DefaultMutableTreeNode){
                     DefaultMutableTreeNode last = (DefaultMutableTreeNode) path.getLastPathComponent();

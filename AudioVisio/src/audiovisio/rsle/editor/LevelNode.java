@@ -28,10 +28,10 @@ public class LevelNode extends DefaultMutableTreeNode {
      * Create a new instance of LevelNode
      *
      * @param userObject Custom user data for the node
-     * @param container  Whether this node is a container for other nodes.
+     * @param readonly  Whether this node is readonly.
      */
-    public LevelNode( Object userObject, boolean container ){
-        this(container);
+    public LevelNode( Object userObject, boolean readonly ){
+        this(readonly);
         this.setUserObject(userObject);
     }
 
@@ -46,19 +46,19 @@ public class LevelNode extends DefaultMutableTreeNode {
      *
      * @param key       The name of the property
      * @param value     The value of the property
-     * @param container Whether this node is a container for other nodes.
+     * @param readonly Whether this node is readonly.
      */
-    public LevelNode( String key, Object value, boolean container ){
-        this(container);
+    public LevelNode( String key, Object value, boolean readonly ){
+        this(readonly);
         this.setUserObject(new Pair<String, Object>(key, value));
     }
 
     /**
-     * Is this node read-only? TODO: This should probably be called read-only instead of container
+     * Is this node read-only?
      *
      * @return true if read-only, false otherwise
      */
-    public boolean isContainer(){
+    public boolean isReadOnly(){
         return this.container;
     }
 
