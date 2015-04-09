@@ -46,7 +46,6 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     private PhysicsSpace   space;
     // Lists
     private HashMap<Long, Player>             players             = new HashMap<Long, Player>();
-    private HashMap<Long, InteractableEntity> interactableHashMap = new HashMap<Long, InteractableEntity>();
 
     /**
      * Constructor, Gets references to the simpleApplication and the root node.
@@ -148,21 +147,13 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return this.players.get(syncID);
     }
 
-    //TODO
-    public void loadLevel(){
-    }
-
     /**
      * @param message
      *
      * @return
      */
-    //TODO
     @Override
     public boolean checkMessage( PhysicsSyncMessage message ){
-//        if (message.syncId >= 0 && getEntity(message.syncId) == null) {
-//            return false;
-//        }
         return true;
     }
 
@@ -192,13 +183,5 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
      */
     public PhysicsSpace getPhysicsSpace(){
         return this.space;
-    }
-
-    /**
-     * @return
-     */
-    public List<InteractableEntity> getInteractableEntityList(){
-        //TODO
-        return new LinkedList<InteractableEntity>();
     }
 }
