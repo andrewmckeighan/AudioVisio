@@ -18,6 +18,7 @@ import java.util.EventObject;
  *
  * @author Matt Gerst
  */
+@Deprecated
 public class LevelNodeEditor extends DefaultTreeCellEditor {
     public LevelNodeEditor( JTree tree, DefaultTreeCellRenderer renderer ){
         super(tree, renderer);

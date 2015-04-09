@@ -1,6 +1,7 @@
 package audiovisio.rsle.editor.components;
 
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.utils.LogHelper;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -63,6 +64,7 @@ public class TextEditor extends JTextField implements CellEditor {
             this.node.setValue(this.value);
             return true;
         } catch (Exception e){
+            LogHelper.warn("There was an error when editing", e);
             return false;
         }
     }

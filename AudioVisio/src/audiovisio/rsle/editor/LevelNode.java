@@ -2,9 +2,12 @@ package audiovisio.rsle.editor;
 
 import audiovisio.level.ILevelItem;
 import audiovisio.level.Level;
+import audiovisio.utils.LogHelper;
 import audiovisio.utils.Pair;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * A custom extension of Java's DefaultMutableTreeNode.
@@ -98,8 +101,9 @@ public class LevelNode extends DefaultMutableTreeNode {
     public void setValue( Object obj ){
         if (this.isPair()){
             ((Pair) this.userObject).setValue(obj);
+            LevelNode parent = (LevelNode) this.parent;
 
-            if (((LevelNode) this.parent).sourceLevel != null){
+            if (parent.sourceLevel != null){
                 Level lvl = ((LevelNode) this.parent).getSourceLevel();
 
                 if (this.getKey().equals("Name")){
@@ -108,6 +112,19 @@ public class LevelNode extends DefaultMutableTreeNode {
                     lvl.setAuthor((String) obj);
                 } else if (this.getKey().equals("Version")){
                     lvl.setVersion((String) obj);
+                }
+            } else if (parent.sourceItem != null){
+                ILevelItem item = parent.sourceItem;
+                Method[] methods = item.getClass().getMethods();
+
+                for(Method method : methods){
+                    RSLESetter ann = method.getAnnotation(RSLESetter.class);
+                    if (ann != null && getKey().equals(ann.value())){
+                        if(!setterInvoke(item, method, obj)){
+                            LogHelper.warn("Could not set value!");
+                        }
+                        break; // We found the correct setter method
+                    }
                 }
             }
         } else {
@@ -128,6 +145,45 @@ public class LevelNode extends DefaultMutableTreeNode {
             return ((Pair) this.userObject).getKey();
         }
         return null;
+    }
+
+    private boolean setterInvoke(ILevelItem item, Method method, Object obj){
+        try{
+            Class<?> type = method.getParameterTypes()[0];
+
+            if (type.equals(String.class) && obj instanceof String){
+                method.invoke(item, (String) obj);
+            }
+            else if((type.equals(long.class) || type.equals(Long.class)) && obj instanceof String){
+                Long longValue = Long.parseLong((String) obj);
+                method.invoke(item, longValue);
+            }
+            else if(type.equals(boolean.class) || type.equals(Boolean.class)){
+                boolean boolValue;
+                if (obj instanceof String){
+                    boolValue = Boolean.valueOf((String) obj);
+                } else {
+                    boolValue = (Boolean) obj;
+                }
+
+                method.invoke(item, boolValue);
+            }
+            else{
+                LogHelper.warn("Could not find type of given object");
+                return false;
+            }
+        } catch (IllegalAccessException e){
+            LogHelper.severe("There was an error setting a value", e);
+            return false;
+        } catch (InvocationTargetException e){
+            LogHelper.severe("There was an error setting a value", e);
+            return false;
+        } catch (ClassCastException e){
+            LogHelper.severe("There was an error setting a value", e);
+            return false;
+        }
+
+        return true;
     }
 
     @Override

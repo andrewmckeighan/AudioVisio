@@ -1,6 +1,7 @@
 package audiovisio.level;
 
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
@@ -113,6 +114,8 @@ public class Panel implements ILevelItem {
         root.add(idNode);
         root.add(location);
 
+        root.setSourceItem(this);
+
         return root;
     }
 
@@ -120,6 +123,7 @@ public class Panel implements ILevelItem {
         return this.ID;
     }
 
+    @RSLESetter("ID")
     public void setID( long id ){
         this.ID = id;
     }

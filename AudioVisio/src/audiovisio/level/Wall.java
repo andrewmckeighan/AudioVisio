@@ -1,6 +1,7 @@
 package audiovisio.level;
 
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
@@ -91,7 +92,14 @@ public class Wall extends Panel {
         root.add(dirNode);
         root.add(location);
 
+        root.setSourceItem(this);
+
         return root;
+    }
+
+    @RSLESetter("Direction")
+    public void setDirection( String direction ){
+        this.direction = Direction.valueOf(direction);
     }
 
     public Direction getDirection(){
