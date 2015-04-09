@@ -43,6 +43,7 @@ public class Box extends InteractableEntity implements IShootable {
 
         this.physics = new RigidBodyControl(Box.MASS);
 
+
         this.particle = new PlayerParticle();
 
         this.particle.init(assetManager);
@@ -64,6 +65,7 @@ public class Box extends InteractableEntity implements IShootable {
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         this.physics.setLinearVelocity(new Vector3f(0, -900.81f, 0));
+        this.physics.setKinematic(true);
 
         this.rootNode = rootNode;
         this.physicsSpace = physics;
@@ -127,17 +129,21 @@ public class Box extends InteractableEntity implements IShootable {
         LogHelper.info("putDown");
         this.shootables = shootablesNode;
 
-        shootablesNode.attachChild(this);
+//        shootablesNode.attachChild(this);
+        this.attachChild(this.geometry);
         this.physicsSpace.add(this);
 
-        this.location = location.add(Box.PLACE_OFFSET);
+        this.location = location.subtract(0.0f, Level.SCALE.getY(), 0.0f);
+        this.location = this.location.add(Box.PLACE_OFFSET);
 
+//        this.physics.setPhysicsLocation(this.location);
         this.setLocalTranslation(this.location);
     }
 
     public Box pickUp(){
         LogHelper.info("pickUP");
-        this.removeFromParent();
+//        this.removeFromParent();
+        this.geometry.removeFromParent();
         this.physicsSpace.remove(this);
         return this;
     }
@@ -145,6 +151,7 @@ public class Box extends InteractableEntity implements IShootable {
     @Override
     public void update(){
         LogHelper.fine("Box was shot");
+        this.wasUpdated = false;
     }
 
     @Override
@@ -162,7 +169,7 @@ public class Box extends InteractableEntity implements IShootable {
         return this.geometry;
     }
 
-    private static final Vector3f                 PLACE_OFFSET = new Vector3f(0.0F, 1.0F, 0.0F);
+    private static final Vector3f PLACE_OFFSET = new Vector3f(0.0F, 0.4F * Level.SCALE.getX(), 0.0F);
     private static final com.jme3.scene.shape.Box SHAPE        = new com.jme3.scene.shape.Box(0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX());

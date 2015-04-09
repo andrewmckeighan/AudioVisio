@@ -182,6 +182,7 @@ public class Player extends MovingEntity implements ActionListener {
                     }
                     if (shotObject instanceof Button && this.box != null){
                         this.box.putDown(shootables, ((Button) shotObject).location);
+                        this.box = null;
                     }
 
                     shotObject.update();
