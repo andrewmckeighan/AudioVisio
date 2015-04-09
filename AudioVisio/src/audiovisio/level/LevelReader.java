@@ -12,6 +12,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Responsible for reading the JSON from a file, and giving back
+ * a JSON object.
+ *
+ * @author Matt Gerst
+ */
 public class LevelReader {
 
     /**

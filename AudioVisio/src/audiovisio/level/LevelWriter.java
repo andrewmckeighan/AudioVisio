@@ -12,6 +12,11 @@ import java.io.IOException;
  */
 public class LevelWriter {
 
+    /**
+     * Write the given Level that file specified by the level.
+     *
+     * @param level The level to write
+     */
     public static void write( Level level ){
         File levelFile = new File(level.getFileName());
         levelFile.setReadable(true);
@@ -20,6 +25,12 @@ public class LevelWriter {
         LevelWriter.writeJson(level.levelData, levelFile);
     }
 
+    /**
+     * Write a JSONObject to a file.
+     *
+     * @param obj The JSONObject to write
+     * @param file The file to write to
+     */
     protected static void writeJson( JSONObject obj, File file ){
         try{
             FileWriter saveFile = new FileWriter(file);

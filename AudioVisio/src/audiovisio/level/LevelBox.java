@@ -10,6 +10,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
 /**
+ * This is the box that renders around the entire level for the
+ * visual player. The size of the box is dynamically calculated
+ * by the level. It uses a special material that allows it to
+ * render as a wireframe, rather than as a shaded surface. NOTE:
+ * the player will be inside this box, so it should not be added
+ * to any node that collision will be calculated on.
+ *
  * @author Matt Gerst
  */
 public class LevelBox {
@@ -28,11 +35,22 @@ public class LevelBox {
         this.geometry.setMaterial(this.wireMaterial);
     }
 
+    /**
+     * Set the size of the box by specifying two opposite corners
+     *
+     * @param min The min point
+     * @param max The max point
+     */
     public void setSize( Vector3f min, Vector3f max ){
         min.mult(Level.SCALE);
         this.box.updateGeometry(min, max);
     }
 
+    /**
+     * Attach the box to the specified root node.
+     *
+     * @param rootNode The node to attach the box to
+     */
     public void start( Node rootNode ){
         rootNode.attachChild(this.geometry);
     }
