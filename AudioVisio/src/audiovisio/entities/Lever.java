@@ -5,6 +5,7 @@ import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
@@ -174,7 +175,14 @@ public class Lever extends InteractableEntity implements IShootable {
             root.add(linkNode);
         }
 
+        root.setSourceItem(this);
+
         return root;
+    }
+
+    @RSLESetter("Is On")
+    public void setState( boolean state ){
+        this.state = state;
     }
 
     @Override

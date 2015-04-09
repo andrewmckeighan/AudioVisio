@@ -626,7 +626,9 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         TreePath path = this.tree.getSelectionPath();
         System.out.println(path);
         if (path.getPathCount() == 4){
-            this.treeModel.removeNodeFromParent((LevelNode) path.getLastPathComponent());
+            LevelNode node = (LevelNode) path.getLastPathComponent();
+            this.treeModel.removeNodeFromParent(node);
+            this.currentLevel.removeItem(node.getSourceItem().getID());
         }
     }
 
@@ -714,6 +716,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.actionCreateFloor();
         } else if (e.getSource() == this.create_link){
             this.actionCreateLink();
+        } else if (e.getSource() == this.create_wall){
+            this.actionCreateWall();
         } else if (e.getSource() == this.ctxDelete){
             this.actionDelete(e);
         }

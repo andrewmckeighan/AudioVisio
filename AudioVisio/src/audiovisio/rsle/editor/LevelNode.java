@@ -199,4 +199,8 @@ public class LevelNode extends DefaultMutableTreeNode {
 
         return super.toString();
     }
+
+    public ILevelItem getSourceItem(){
+        return sourceItem;
+    }
 }

@@ -13,6 +13,7 @@ package audiovisio.entities;
 import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.ILevelItem;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import audiovisio.utils.LogHelper;
@@ -120,6 +121,7 @@ public class Entity extends Node implements ILevelItem {
     /**
      * @param id the iD to set
      */
+    @RSLESetter("ID")
     @Override
     public void setID( long id ){
         this.ID = id;
@@ -152,6 +154,11 @@ public class Entity extends Node implements ILevelItem {
 
     public Vector3f getLocation(){
         return this.location;
+    }
+
+    @RSLESetter("Name")
+    public void setName( String name ){
+        this.name = name;
     }
 
     protected Node           rootNode;

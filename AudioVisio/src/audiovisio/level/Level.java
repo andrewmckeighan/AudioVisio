@@ -435,6 +435,21 @@ public class Level {
     }
 
     /**
+     * Remove an item from the level.
+     *
+     * @param id The item to move
+     * @return true if remove sucessful, false otherwise
+     */
+    public boolean removeItem( long id ){
+        if (this.levelItems.containsKey(id)){
+            this.levelItems.remove(id);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get all the items in the level.
      *
      * @return A list of all items

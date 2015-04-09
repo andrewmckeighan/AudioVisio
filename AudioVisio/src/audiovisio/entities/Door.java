@@ -3,6 +3,7 @@ package audiovisio.entities;
 import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
@@ -134,7 +135,14 @@ public class Door extends InteractableEntity {
         root.add(stateNode);
         root.add(locationNode);
 
+        root.setSourceItem(this);
+
         return root;
+    }
+
+    @RSLESetter("State")
+    public void setState( boolean state ){
+        this.state = state;
     }
 
     @Override

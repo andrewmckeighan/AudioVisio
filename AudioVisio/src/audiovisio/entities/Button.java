@@ -105,6 +105,8 @@ public class Button extends InteractableEntity implements IShootable {
             root.add(linkNode);
         }
 
+        root.setSourceItem(this);
+
         return root;
     }
 
