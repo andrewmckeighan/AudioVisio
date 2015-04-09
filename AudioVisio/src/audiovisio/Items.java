@@ -1,5 +1,6 @@
 package audiovisio;
 
+import audiovisio.entities.Box;
 import audiovisio.entities.Button;
 import audiovisio.entities.Door;
 import audiovisio.entities.Lever;
@@ -21,6 +22,7 @@ public class Items {
         LevelRegistry.registerItem("button", Button.class);
         LevelRegistry.registerItem("lever", Lever.class);
         LevelRegistry.registerItem("wall", Wall.class);
+        LevelRegistry.registerItem("box", Box.class);
 
         LevelRegistry.registerItem("trigger", Trigger.class);
         LevelRegistry.registerItemSubType("trigger", "end", EndTrigger.class);

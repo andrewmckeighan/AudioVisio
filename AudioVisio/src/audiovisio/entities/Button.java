@@ -1,6 +1,7 @@
 package audiovisio.entities;
 
 import audiovisio.entities.particles.PlayerParticle;
+import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.networking.messages.TriggerActionMessage;
 import audiovisio.rsle.editor.LevelNode;
@@ -22,7 +23,7 @@ import org.json.simple.JSONObject;
 /**
  * //TODO this needs to be easy to walk over! (maybe no physical collision?)
  */
-public class Button extends InteractableEntity {
+public class Button extends InteractableEntity implements IShootable {
 
     private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.5F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
@@ -121,6 +122,26 @@ public class Button extends InteractableEntity {
 
         this.state = state;
         this.wasUpdated = false;
+    }
+
+    @Override
+    public void update(){
+        LogHelper.fine("button was shot");
+    }
+
+    @Override
+    public Boolean getWasUpdated(){
+        return this.wasUpdated;
+    }
+
+    @Override
+    public void setWasUpdated( boolean wasUpdated ){
+        this.wasUpdated = wasUpdated;
+    }
+
+    @Override
+    public Geometry getGeometry(){
+        return this.geometry;
     }
 
     /**
@@ -229,7 +250,7 @@ public class Button extends InteractableEntity {
 
     public TriggerActionMessage getTriggerActionMessage(){
         //TODO
-        return new TriggerActionMessage(this.getID(), this.state);
+        return new TriggerActionMessage(this.getID(), this.state, this.location);
     }
 
     @Override

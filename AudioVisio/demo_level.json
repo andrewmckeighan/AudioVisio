@@ -6308,6 +6308,18 @@
       },
       "id": 697,
       "type": "wall"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 698,
+      "state": false,
+      "type": "box"
     }
   ],
   "author": "Matt Gerst",

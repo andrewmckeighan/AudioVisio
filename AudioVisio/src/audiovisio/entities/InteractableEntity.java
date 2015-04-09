@@ -123,7 +123,7 @@ public class InteractableEntity extends Entity implements ITriggerable {
     }
 
     public TriggerActionMessage getTriggerActionMessage(){
-        return new TriggerActionMessage(this.getID(), this.state);
+        return new TriggerActionMessage(this.getID(), this.state, this.location);
     }
 
     public Set<Long> getIDList( Boolean state ){

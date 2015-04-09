@@ -2,6 +2,7 @@ package audiovisio.networking.messages;
 
 import audiovisio.entities.InteractableEntity;
 import audiovisio.utils.LogHelper;
+import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -20,9 +21,10 @@ public class TriggerActionMessage extends PhysicsSyncMessage {
 
     public TriggerActionMessage(){}
 
-    public TriggerActionMessage( long id, Boolean state ){
+    public TriggerActionMessage( long id, Boolean state, Vector3f location ){
         this.syncId = id;
         this.state = state;
+        this.location = location;
     }
 
     public Boolean getState(){
@@ -36,4 +38,6 @@ public class TriggerActionMessage extends PhysicsSyncMessage {
         LogHelper.finer("TriggerActionMessage: " + this + ":" + interactableEntity);
         interactableEntity.update(this);
     }
+
+    public Vector3f location;
 }

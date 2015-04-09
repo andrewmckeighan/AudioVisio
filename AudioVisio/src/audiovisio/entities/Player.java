@@ -79,7 +79,9 @@ public class Player extends MovingEntity implements ActionListener {
     public void init( AssetManager assetManager ){
         //TODO move to subclass
 
-        this.characterControl = new BetterCharacterControl(0.3f, 2.5f, 8.0f);
+        this.characterControl = new BetterCharacterControl(0.4F * Level.SCALE.getX(),
+                0.4F * Level.SCALE.getY(),
+                0.4F * Level.SCALE.getZ());
         this.characterControl.setJumpForce(Player.JUMP_FORCE);
         this.characterControl.setGravity(Player.GRAVITY);
 
@@ -113,7 +115,7 @@ public class Player extends MovingEntity implements ActionListener {
 //        this.characterControl.setWalkDirection(direction);
 
         if (this.playerCamera != null){
-            if (!isDebug()){
+            if (!this.isDebug()){
                 this.playerCamera.setLocation(this.getLocalTranslation().add(
                         Player.CAMERA_OFFSET));
             }
