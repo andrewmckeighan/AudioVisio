@@ -34,7 +34,7 @@ public class Box extends InteractableEntity implements IShootable {
 
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Box.PLACE_OFFSET);
-        this.geometry.setLocalTranslation(this.location);
+        this.setLocalTranslation(this.location);
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -63,6 +63,8 @@ public class Box extends InteractableEntity implements IShootable {
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
+        this.physics.setLinearVelocity(new Vector3f(0, -900.81f, 0));
+
         this.rootNode = rootNode;
         this.physicsSpace = physics;
         if (ClientAppState.isAudio){
@@ -122,16 +124,19 @@ public class Box extends InteractableEntity implements IShootable {
     }
 
     public void putDown( Node shootablesNode, Vector3f location ){
+        LogHelper.info("putDown");
         this.shootables = shootablesNode;
+
         shootablesNode.attachChild(this);
         this.physicsSpace.add(this);
 
         this.location = location.add(Box.PLACE_OFFSET);
 
-        this.setLocalTranslation(this.location);
+        this.physics.setPhysicsLocation(this.location);
     }
 
     public Box pickUp(){
+        LogHelper.info("pickUP");
         this.removeFromParent();
         this.physicsSpace.remove(this);
         return this;
@@ -161,6 +166,6 @@ public class Box extends InteractableEntity implements IShootable {
     private static final com.jme3.scene.shape.Box SHAPE        = new com.jme3.scene.shape.Box(0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX());
-    private static final float MASS = 80.0F;
+    private static final float MASS = 1000.0F;
     private Node shootables;
 }

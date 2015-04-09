@@ -39,7 +39,7 @@ public class Player extends MovingEntity implements ActionListener {
 
     // Constants
     public static final  Vector3f DEFAULT_SPAWN_LOCATION = new Vector3f(0, 0.5f, 0);
-    public static final  Vector3f GRAVITY                = new Vector3f(0, -9.81f, 0); //TODO make this not awful
+    public static final Vector3f GRAVITY = new Vector3f(0, -9.81f, 0);
     public static final  String   DEFAULT_MODEL          = "Models/Oto/Oto.mesh.xml";
     public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
     public static final  Vector3f MODEL_OFFSET           = Player.CAMERA_OFFSET.divide(2);
@@ -167,7 +167,7 @@ public class Player extends MovingEntity implements ActionListener {
             shootables.collideWith(ray, results);
             LogHelper.info("shootables: " + shootables);
             for (Spatial n : shootables.getChildren()){
-                LogHelper.info("Shootables" + n);
+                LogHelper.info("Shootables" + n.getName());
             }
             LogHelper.info("Shot: " + results);
             if (results.size() > 0){
