@@ -10,6 +10,7 @@
 
 package audiovisio.entities;
 
+import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.ILevelItem;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.utils.JSONHelper;
@@ -153,4 +154,8 @@ public class Entity extends Node implements ILevelItem {
     public Vector3f getLocation(){
         return this.location;
     }
+
+    protected Node           rootNode;
+    protected PhysicsSpace   physicsSpace;
+    protected PlayerParticle particle;
 }
