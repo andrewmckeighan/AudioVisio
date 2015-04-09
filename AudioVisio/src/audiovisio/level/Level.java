@@ -42,14 +42,15 @@ public class Level {
     public static final String KEY_AUDIO_SPAWN    = "p2";
     public static final String KEY_VISUAL_SPAWN   = "p1";
 
+    /**
+     * Non-Player items will start at ID 10.
+     */
     public static final long STARTING_ID = 10;
+
     public  JSONObject levelData;
     private Node       shootables;
     private Vector3f pAudioSpawn  = Player.DEFAULT_SPAWN_LOCATION;
     private Vector3f pVisualSpawn = Player.DEFAULT_SPAWN_LOCATION;
-    /**
-     * Non-Player items will start at ID 10.
-     */
     private long     NEXT_ID      = Level.STARTING_ID;
     private String name;
     private String author;
@@ -89,135 +90,7 @@ public class Level {
         LogHelper.info(String.format("Found level '%s' by '%s'", this.name, this.author));
     }
 
-    /**
-     * Initialize the items in the level. It gives the items a reference
-     * to the asset manager to allow them to load things like models and
-     * meshes.
-     *
-     * @param assetManager A reference to the game's assetManager
-     */
-    public void init( AssetManager assetManager, SyncManager syncManager ){
-        LogHelper.info(String.format("Initializing level: '%s'", this.name));
-
-        this.shootables = new Node("shootables");
-
-        this.levelBox = new LevelBox(assetManager);
-
-        Vector3f min = new Vector3f();
-        Vector3f max = new Vector3f();
-
-        for (ILevelItem item : this.levelItems.values()){
-            item.init(assetManager);
-            syncManager.addObject(item.getID(), item);
-
-            if (item instanceof ITriggerable){
-                ITriggerable linkable = (ITriggerable) item;
-
-                Map<Long, ITriggerable> links = this.resolveLinks(item.getID(), linkable.getLinked());
-                linkable.resolveLinks(links);
-            }
-
-            if (item instanceof IShootable){
-//                ((IShootable) item).init(ClientAppState.isAudio);
-                this.shootables.attachChild((Spatial) item);
-            }
-
-            Vector3f location = item.getLocation();
-            location.setY(location.getY() + Level.SCALE.getY());
-            min.minLocal(item.getLocation());
-            max.maxLocal(item.getLocation());
-        }
-
-        this.levelBox.setSize(min, max);
-    }
-
-    /**
-     * Has the items in the level perform their game start methods.
-     *
-     * @param rootNode
-     */
-    public void start( Node rootNode, PhysicsSpace physics ){
-        LogHelper.info(String.format("Starting level '%s'", this.name));
-        for (ILevelItem item : this.levelItems.values()){
-            item.start(rootNode, physics);
-        }
-
-        rootNode.attachChild(this.shootables);
-
-        if (ClientAppState.isAudio){
-            this.levelBox.start(rootNode);
-        }
-    }
-
-    /**
-     * Get the root {@link audiovisio.rsle.editor.LevelNode} for
-     * the level.
-     *
-     * @return The root LevelNode
-     */
-    public LevelNode getLevelNode(){
-        LevelNode root = new LevelNode(this.name, true);
-        root.setSourceLevel(this);
-
-        LevelNode lvlName = new LevelNode("Name", this.name, false);
-        LevelNode lvlAuthor = new LevelNode("Author", this.author, false);
-        LevelNode lvlVersion = new LevelNode("Version", this.version, false);
-
-        LevelNode lvlSpawn = new LevelNode("Spawns", true);
-        LevelNode lvlAudio = LevelUtils.vector2node("Audio", this.pAudioSpawn);
-        LevelNode lvlAudioRot = new LevelNode("Rotation", 0F, false);
-        LevelNode lvlVisual = LevelUtils.vector2node("Visual", this.pVisualSpawn);
-        LevelNode lvlVisualRot = new LevelNode("Rotation", 0F, false);
-
-        lvlAudio.add(lvlAudioRot);
-        lvlVisual.add(lvlVisualRot);
-
-        lvlSpawn.add(lvlAudio);
-        lvlSpawn.add(lvlVisual);
-
-        root.add(lvlName);
-        root.add(lvlAuthor);
-        root.add(lvlVersion);
-        root.add(lvlSpawn);
-
-        return root;
-    }
-
-    private Map<Long, ITriggerable> resolveLinks( Long parent, Set<Long> requested ){
-        HashMap<Long, ITriggerable> links = new HashMap<Long, ITriggerable>();
-
-        if (requested == null){ return links; }
-
-        for (Long id : requested){
-            if (!this.levelItems.containsKey(id)){
-                LogHelper.warn(String.format("Level object %d requested link to non-existent object %d", parent, id));
-                continue;
-            }
-
-            ILevelItem item = this.levelItems.get(id);
-
-            if (!(item instanceof ITriggerable)){
-                LogHelper.warn(String.format("Level object %d attempting to link to non-linkable object %d", parent, id));
-                continue;
-            }
-
-            ITriggerable linkable = (ITriggerable) item;
-
-            links.put(id, (ITriggerable) item);
-            LogHelper.info(String.format("Linked objs %d -> %d", parent, id));
-        }
-
-        return links;
-    }
-
-    /**
-     * Set the filename of the level's JSON file.
-     *
-     * @param fileName path to the JSON file
-     */
-    protected void setFileName( String fileName ){
-        this.fileName = fileName;
-    }
+    // LIFECYCLE
 
     /**
      * Load the level from the levelData JSON object. The method creates
@@ -263,6 +136,65 @@ public class Level {
     }
 
     /**
+     * Initialize the items in the level. It gives the items a reference
+     * to the asset manager to allow them to load things like models and
+     * meshes.
+     *
+     * @param assetManager A reference to the game's assetManager
+     */
+    public void init( AssetManager assetManager, SyncManager syncManager ){
+        LogHelper.info(String.format("Initializing level: '%s'", this.name));
+
+        this.shootables = new Node("shootables");
+
+        this.levelBox = new LevelBox(assetManager);
+
+        Vector3f min = new Vector3f();
+        Vector3f max = new Vector3f();
+
+        for (ILevelItem item : this.levelItems.values()){
+            item.init(assetManager);
+            syncManager.addObject(item.getID(), item);
+
+            if (item instanceof ITriggerable){
+                ITriggerable linkable = (ITriggerable) item;
+
+                Map<Long, ITriggerable> links = this.resolveLinks(item.getID(), linkable.getLinked());
+                linkable.resolveLinks(links);
+            }
+
+            if (item instanceof IShootable){
+                this.shootables.attachChild((Spatial) item);
+            }
+
+            Vector3f location = item.getLocation();
+            location.setY(location.getY() + Level.SCALE.getY());
+            min.minLocal(item.getLocation());
+            max.maxLocal(item.getLocation());
+        }
+
+        this.levelBox.setSize(min, max);
+    }
+
+    /**
+     * Has the items in the level perform their game start methods.
+     *
+     * @param rootNode
+     */
+    public void start( Node rootNode, PhysicsSpace physics ){
+        LogHelper.info(String.format("Starting level '%s'", this.name));
+        for (ILevelItem item : this.levelItems.values()){
+            item.start(rootNode, physics);
+        }
+
+        rootNode.attachChild(this.shootables);
+
+        if (ClientAppState.isAudio){
+            this.levelBox.start(rootNode);
+        }
+    }
+
+    /**
      * Save the level to the levelData JSONObject.
      */
     public void saveLevel(){
@@ -300,6 +232,199 @@ public class Level {
         this.levelData.put(Level.KEY_LEVEL_DATA, level);
     }
 
+    // METADATA
+
+    /**
+     * Get the name of the level
+     */
+    public String getName(){
+        return this.name;
+    }
+
+    /**
+     * Set the name of the level
+     *
+     * @param name The level's new name
+     */
+    public void setName( String name ){
+        this.name = name;
+    }
+
+    /**
+     * Get the author of the level
+     */
+    public String getAuthor(){
+        return this.author;
+    }
+
+    /**
+     * Set the author of the level
+     *
+     * @param author The level's new author
+     */
+    public void setAuthor( String author ){
+        this.author = author;
+    }
+
+    /**
+     * Get the version string of the level
+     */
+    public String getVersion(){
+        return this.version;
+    }
+
+    /**
+     * Set the version number of the level
+     *
+     * @param version The new version number
+     */
+    public void setVersion( String version ){
+        this.version = version;
+    }
+
+    /**
+     * Set the filename of the level's JSON file.
+     *
+     * @param fileName path to the JSON file
+     */
+    protected void setFileName( String fileName ){
+        this.fileName = fileName;
+    }
+    /**
+     * Get the filename of the level's JSON
+     * file.
+     *
+     * @return The filename
+     */
+    public String getFileName(){
+        return this.fileName;
+    }
+
+    /**
+     * Set the File for the Level
+     *
+     * @param loadedFile The file object to use
+     */
+    public void setFile( File loadedFile ){
+        this.fileName = loadedFile.getAbsolutePath();
+    }
+
+    // HELPER METHODS
+
+    /**
+     * Get the root {@link audiovisio.rsle.editor.LevelNode} for
+     * the level.
+     *
+     * @return The root LevelNode
+     */
+    public LevelNode getLevelNode(){
+        LevelNode root = new LevelNode(this.name, true);
+        root.setSourceLevel(this);
+
+        LevelNode lvlName = new LevelNode("Name", this.name, false);
+        LevelNode lvlAuthor = new LevelNode("Author", this.author, false);
+        LevelNode lvlVersion = new LevelNode("Version", this.version, false);
+
+        LevelNode lvlSpawn = new LevelNode("Spawns", true);
+        LevelNode lvlAudio = LevelUtils.vector2node("Audio", this.pAudioSpawn);
+        LevelNode lvlAudioRot = new LevelNode("Rotation", 0F, false);
+        LevelNode lvlVisual = LevelUtils.vector2node("Visual", this.pVisualSpawn);
+        LevelNode lvlVisualRot = new LevelNode("Rotation", 0F, false);
+
+        lvlAudio.add(lvlAudioRot);
+        lvlVisual.add(lvlVisualRot);
+
+        lvlSpawn.add(lvlAudio);
+        lvlSpawn.add(lvlVisual);
+
+        root.add(lvlName);
+        root.add(lvlAuthor);
+        root.add(lvlVersion);
+        root.add(lvlSpawn);
+
+        return root;
+    }
+
+    /**
+     * Resolve the links that have been requested by a ITriggerable. This will
+     * determine which items are triggered by it. Invalid links are logged to
+     * the console.
+     *
+     * @param parent The ID of the parent object
+     * @param requested The links the parent object requested
+     * @return A map of ID -> triggerable instance
+     */
+    private Map<Long, ITriggerable> resolveLinks( Long parent, Set<Long> requested ){
+        HashMap<Long, ITriggerable> links = new HashMap<Long, ITriggerable>();
+
+        if (requested == null){ return links; }
+
+        for (Long id : requested){
+            if (!this.levelItems.containsKey(id)){
+                LogHelper.warn(String.format("Level object %d requested link to non-existent object %d", parent, id));
+                continue;
+            }
+
+            ILevelItem item = this.levelItems.get(id);
+
+            if (!(item instanceof ITriggerable)){
+                LogHelper.warn(String.format("Level object %d attempting to link to non-linkable object %d", parent, id));
+                continue;
+            }
+
+            ITriggerable linkable = (ITriggerable) item;
+
+            links.put(id, (ITriggerable) item);
+            LogHelper.info(String.format("Linked objs %d -> %d", parent, id));
+        }
+
+        return links;
+    }
+
+    /**
+     * Regenerate the Ids for a level. This is intended to be
+     * used by the level editors to help make ID numbers more
+     * manageable. This currently does not deal with linked
+     * objects, however it does keep a mapping of old->new
+     * IDs in preparation for linked objects.
+     */
+    public void regenIds(){
+        this.resetNextId();
+
+        // This is used to keep track of old->new IDs. It is intended
+        // to be used to fix linked objects
+        HashMap<Long, Long> remappedIds = new HashMap<Long, Long>();
+
+        for (ILevelItem item : this.levelItems.values()){
+            long oldId = item.getID();
+            long newId = this.getNextId();
+
+            remappedIds.put(newId, oldId);
+            item.setID(newId);
+        }
+    }
+
+    /**
+     * Get the next available ID for level objects.
+     *
+     * @return Next ID
+     */
+    public long getNextId(){
+        long curID = this.NEXT_ID;
+        this.NEXT_ID++;
+        return curID;
+    }
+
+    /**
+     * Reset the NEXT_ID counter to the starting ID for
+     * level objects.
+     */
+    public void resetNextId(){
+        this.NEXT_ID = Level.STARTING_ID;
+    }
+
+    // LEVEL ITEMS
+
     /**
      * Add item to the level.
      *
@@ -318,6 +443,12 @@ public class Level {
         return this.levelItems.values();
     }
 
+    /**
+     * Get the set of level items that implement the ITriggerable interface and can
+     * be linked to other objects.
+     *
+     * @return A set of item IDs
+     */
     public Set<Long> getLinkables(){
         HashSet<Long> linkable = new HashSet<Long>();
 
@@ -372,39 +503,6 @@ public class Level {
     }
 
     /**
-     * Get the name of the level
-     */
-    public String getName(){
-        return this.name;
-    }
-
-    public void setName( String name ){
-        this.name = name;
-    }
-
-    /**
-     * Get the author of the level
-     */
-    public String getAuthor(){
-        return this.author;
-    }
-
-    public void setAuthor( String author ){
-        this.author = author;
-    }
-
-    /**
-     * Get the version string of the level
-     */
-    public String getVersion(){
-        return this.version;
-    }
-
-    public void setVersion( String version ){
-        this.version = version;
-    }
-
-    /**
      * Get the spawn location set by the level for the Audio player.
      *
      * @return spawn location
@@ -423,70 +521,20 @@ public class Level {
     }
 
     /**
-     * Get the filename of the level's JSON
-     * file.
+     * Retreive an item by its ID
      *
-     * @return The filename
+     * @param id The id of the item wanted
+     * @return the item if it exists, null otherwise
      */
-    public String getFileName(){
-        return this.fileName;
-    }
-
-    /**
-     * Set the File for the Level
-     *
-     * @param loadedFile The file object to use
-     */
-    public void setFile( File loadedFile ){
-        this.fileName = loadedFile.getAbsolutePath();
-    }
-
-    /**
-     * Regenerate the Ids for a level. This is intended to be
-     * used by the level editors to help make ID numbers more
-     * manageable. This currently does not deal with linked
-     * objects, however it does keep a mapping of old->new
-     * IDs in preparation for linked objects.
-     */
-    public void regenIds(){
-        this.resetNextId();
-
-        // This is used to keep track of old->new IDs. It is intended
-        // to be used to fix linked objects
-        HashMap<Long, Long> remappedIds = new HashMap<Long, Long>();
-
-        for (ILevelItem item : this.levelItems.values()){
-            long oldId = item.getID();
-            long newId = this.getNextId();
-
-            remappedIds.put(newId, oldId);
-            item.setID(newId);
-        }
-    }
-
-    /**
-     * Get the next available ID for level objects.
-     *
-     * @return Next ID
-     */
-    public long getNextId(){
-        long curID = this.NEXT_ID;
-        this.NEXT_ID++;
-        return curID;
-    }
-
-    /**
-     * Reset the NEXT_ID counter to the starting ID for
-     * level objects.
-     */
-    public void resetNextId(){
-        this.NEXT_ID = Level.STARTING_ID;
-    }
-
     public ILevelItem getItem( Long id ){
         return this.levelItems.get(id);
     }
 
+    /**
+     * Get the Node containing the shootables in the level.
+     *
+     * @return Node containing shootables
+     */
     public Node getShootables(){
         return this.shootables;
     }
