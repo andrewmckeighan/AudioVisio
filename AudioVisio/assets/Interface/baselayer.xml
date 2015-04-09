@@ -9,12 +9,12 @@
     <screen id="start" controller="audiovisio.states.GuiAppState">
         <layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
 
-            <panel id="panel_title" height="20%" width="100%" align="center" backgroundColor="#FFFFFF"
+            <panel id="panel_title" height="16%" width="100%" align="center" backgroundColor="#FFFFFF"
                    childLayout="center">
                 <text text="AudioVisio" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000"/>
             </panel>
 
-            <panel id="panel_top" height="20%" width="100%" align="center" backgroundColor="#FFFFFF"
+            <panel id="panel_top" height="16%" width="100%" align="center" backgroundColor="#FFFFFF"
                    childLayout="center">
                 <control name="button" label="Host" id="HostButton" height="50%" width="50%" align="center"
                          valign="center">
@@ -22,7 +22,7 @@
                 </control>
             </panel>
 
-            <panel id="panel_mid" height="20%" width="100%" align="center" childLayout="center"
+            <panel id="panel_mid" height="16%" width="100%" align="center" childLayout="center"
                    backgroundColor="#FFFFFF">
                 <control name="button" label="Join" id="JoinButton" height="50%" width="50%" align="center"
                          valign="center">
@@ -30,8 +30,16 @@
                 </control>
             </panel>
 
+            <panel id="panel_create" height="16%" width="100%" align="center" childLayout="center"
+                   backgroundColor="#FFFFFF">
+                <control name="button" label="Create Level" id="CreateLevel" height="50%" width="50%" align="center"
+                         valign="center">
+                    <interact onClick="initRSLE()"/>
+                </control>
+            </panel>
 
-            <panel id="panel_mid_low" height="20%" width="100%" align="center" childLayout="center"
+
+            <panel id="panel_mid_low" height="16%" width="100%" align="center" childLayout="center"
                    backgroundColor="#FFFFFF">
                 <control name="button" label="Settings" id="SettingsButton" height="50%" width="50%" align="center"
                          valign="center">
@@ -39,7 +47,7 @@
                 </control>
             </panel>
 
-            <panel id="panel_bot" height="20%" width="100%" align="center" childLayout="center"
+            <panel id="panel_bot" height="16%" width="100%" align="center" childLayout="center"
                    backgroundColor="#FFFFFF">
                 <control name="button" label="Exit" id="ExitButton" height="50%" width="50%" align="center"
                          valign="center">

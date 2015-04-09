@@ -81,7 +81,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	 */
 	public void initHost(){
 		this.nifty.gotoScreen("host");
-		AudioVisio.main(new String[]{"-server"});
+		AudioVisio.main(new String[]{ "-server" });
 	}
 
 	/**
@@ -103,6 +103,11 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	 */
 	public void initKeybind(){
 		this.nifty.gotoScreen("keybindings");
+	}
+
+	public void initRSLE(){
+		AudioVisio.main(new String[]{"-rsle"});
+		app.stop();
 	}
 
 	/**

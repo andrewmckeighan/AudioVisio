@@ -1,6 +1,7 @@
 package audiovisio;
 
 
+import audiovisio.rsle.RSLE;
 import audiovisio.states.ClientAppState;
 import audiovisio.states.GuiAppState;
 import audiovisio.states.ServerAppState;
@@ -54,6 +55,10 @@ public class AudioVisio extends SimpleApplication {
                 AudioVisio.startServer = true;
                 AudioVisio.appType = JmeContext.Type.Headless;
                 AudioVisio.serverInstance = AV;
+            }
+            else if(args[0].equals("-rsle")){
+                RSLE.main(args);
+                return;
             }
         }
 
