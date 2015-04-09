@@ -38,7 +38,7 @@ import com.jme3.scene.Spatial;
 public class Player extends MovingEntity implements ActionListener {
 
     // Constants
-    public static final  Vector3f DEFAULT_SPAWN_LOCATION = new Vector3f(0, 5, 0);
+    public static final  Vector3f DEFAULT_SPAWN_LOCATION = new Vector3f(0, 0.5f, 0);
     public static final  Vector3f GRAVITY                = new Vector3f(0, -9.81f, 0); //TODO make this not awful
     public static final  String   DEFAULT_MODEL          = "Models/Oto/Oto.mesh.xml";
     public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
@@ -80,8 +80,8 @@ public class Player extends MovingEntity implements ActionListener {
         //TODO move to subclass
 
         this.characterControl = new BetterCharacterControl(0.4F * Level.SCALE.getX(),
-                0.4F * Level.SCALE.getY(),
-                0.4F * Level.SCALE.getZ());
+                0.7F * Level.SCALE.getY(),
+                Player.MASS);
         this.characterControl.setJumpForce(Player.JUMP_FORCE);
         this.characterControl.setGravity(Player.GRAVITY);
 
@@ -181,7 +181,7 @@ public class Player extends MovingEntity implements ActionListener {
                         this.box = ((Box) shotObject).pickUp();
                     }
                     if (shotObject instanceof Button && this.box != null){
-                        this.box.putDown(((Button) shotObject).getLocalTranslation());
+                        this.box.putDown(shootables, ((Button) shotObject).location);
                     }
 
                     shotObject.update();
@@ -297,4 +297,5 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     private boolean debug;
+    private static final float MASS = 8.0F;
 }

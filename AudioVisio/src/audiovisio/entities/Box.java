@@ -31,7 +31,7 @@ public class Box extends InteractableEntity implements IShootable {
         com.jme3.scene.shape.Box shape = Box.SHAPE;
 
         this.geometry = new Geometry(this.name + "testButtonName", shape);
-//        this.geometry.setLocalRotation(Button.ROTATION);
+
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Box.PLACE_OFFSET);
         this.geometry.setLocalTranslation(this.location);
@@ -50,6 +50,8 @@ public class Box extends InteractableEntity implements IShootable {
         this.attachChild(this.geometry);
         this.attachChild(this.particle);
         this.addControl(this.physics);
+//        this.geometry.addControl(this.physics);
+
 
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -70,9 +72,9 @@ public class Box extends InteractableEntity implements IShootable {
         } else {
             this.particle.removeFromParent();
             this.particle = null;
-            this.rootNode.attachChild(this);
+//            rootNode.attachChild(this);
         }
-        physics.add(this);
+        physics.add(this.physics);
 
     }
 
@@ -111,7 +113,7 @@ public class Box extends InteractableEntity implements IShootable {
             }
         } else {
             if (!state){
-                this.putDown(this.location);
+                this.putDown(this.shootables, this.location);
             }
         }
 
@@ -119,8 +121,9 @@ public class Box extends InteractableEntity implements IShootable {
         this.wasUpdated = false;
     }
 
-    public void putDown( Vector3f location ){
-        this.rootNode.attachChild(this);
+    public void putDown( Node shootablesNode, Vector3f location ){
+        this.shootables = shootablesNode;
+        shootablesNode.attachChild(this);
         this.physicsSpace.add(this);
 
         this.location = location.add(Box.PLACE_OFFSET);
@@ -158,5 +161,6 @@ public class Box extends InteractableEntity implements IShootable {
     private static final com.jme3.scene.shape.Box SHAPE        = new com.jme3.scene.shape.Box(0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX());
-    private static final float                    MASS         = 8.0F;
+    private static final float MASS = 80.0F;
+    private Node shootables;
 }

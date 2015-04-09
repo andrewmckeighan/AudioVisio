@@ -75,7 +75,7 @@ public class Button extends InteractableEntity implements IShootable {
         } else {
             this.particle.removeFromParent();
             this.particle = null;
-            this.rootNode.attachChild(this);
+//            this.rootNode.attachChild(this);
         }
         physics.add(this);
 
