@@ -132,7 +132,7 @@ public class Box extends InteractableEntity implements IShootable {
 
         this.location = location.add(Box.PLACE_OFFSET);
 
-        this.physics.setPhysicsLocation(this.location);
+        this.setLocalTranslation(this.location);
     }
 
     public Box pickUp(){
@@ -166,6 +166,6 @@ public class Box extends InteractableEntity implements IShootable {
     private static final com.jme3.scene.shape.Box SHAPE        = new com.jme3.scene.shape.Box(0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX(),
             0.4F * Level.SCALE.getX());
-    private static final float MASS = 1000.0F;
+    private static final float MASS = 500.0F;
     private Node shootables;
 }

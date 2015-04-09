@@ -188,6 +188,9 @@ public class Button extends InteractableEntity implements IShootable {
         if (entity instanceof MovingEntity){
             rBoolean = true;
         }
+        if (entity instanceof Box){
+            rBoolean = true;
+        }
         //add other entities here (eg ball/box/etc..)
         return rBoolean;
     }
