@@ -55,10 +55,6 @@ public class ServerAppState extends AbstractAppState implements
 
     public ServerAppState(){}
 
-//    public void startServer() {
-//        this.start(JmeContext.Type.Headless);
-//    }
-
     @Override
     public void update( float tpf ){
         LogHelper.divider("Server Update");
@@ -111,48 +107,13 @@ public class ServerAppState extends AbstractAppState implements
 
         // TODO: Shouldn't need the rest of this method
 
-        ///////////////////////
-        //Load Scene (map) //
-        ///////////////////////
-//        AM.registerLocator("town.zip", ZipLocator.class);
-//        Spatial sceneModel = AM.loadModel("main.scene");
-//        sceneModel.setLocalScale(2f);
-
-        // /////////////
-        // Physics //
-        // /////////////
-//        CollisionShape sceneShape = CollisionShapeFactory
-//                .createMeshShape(sceneModel);
-//        RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
-//        sceneModel.setLocalScale(2f);
-
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-
-        /////////////////////////
-        // Generate entities //
-        /////////////////////////
-        Button testButton = new Button();
-
-        Lever testLever = new Lever(3f, 5f, 3f);
-
-        ///////////////////////////
-        //Add entities to Scene //
-        ///////////////////////////
-
-//        testButton.addToScene(rootNode, physicsSpace);
-//        testLever.addToScene(rootNode, physicsSpace);
-
-        // ////////////////////////////
-        // Add objects to rootNode //
-        // ////////////////////////////
-//        AV.getRootNode().attachChild(sceneModel);
 
         // /////////////////////////////////
         // Add objects to physicsSpace //
         // /////////////////////////////////
         physicsSpace.addCollisionListener(this);
-//        physicsSpace.add(landscape);
 
         //TODO move this somewhere more appropriate
         this.myServer.addConnectionListener(new ConnectionListener() {
@@ -169,10 +130,6 @@ public class ServerAppState extends AbstractAppState implements
                     LogHelper.info("Sent PlayerJoinMessage: " + conn.getId());
                     ServerAppState.this.worldManager.addPlayer(conn.getId());
                     ServerAppState.this.players.put(conn.getId(), (Player) ServerAppState.this.worldManager.getPlayer(conn.getId()));
-
-//                    Integer[] list = ServerAppState.this.players.keySet().toArray(new Integer[ServerAppState.this.players.keySet().size()]);
-//                    conn.send(new PlayerListMessage(list));
-//                    LogHelper.info("Sent PlayerListMessage");
                 } else {
                     conn.close("Too many clients connect to server");
                     LogHelper.severe("More than 2 players attempted to join");
@@ -193,8 +150,6 @@ public class ServerAppState extends AbstractAppState implements
                 if (!ServerAppState.this.players.isEmpty()){
                     ServerAppState.this.myServer.close();
                 }
-
-//                LogHelper.info(players.size() + players.toString());
             }
         });
         LogHelper.info("Server Started!");
