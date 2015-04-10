@@ -2,12 +2,22 @@ package audiovisio.level.triggers;
 
 import audiovisio.level.Trigger;
 import audiovisio.rsle.editor.LevelNode;
+import com.jme3.math.Vector3f;
 import org.json.simple.JSONObject;
 
 /**
  * @author Matt Gerst
  */
 public class EndTrigger extends Trigger {
+
+    public EndTrigger(){
+        super();
+    }
+
+    public EndTrigger( Vector3f location ){
+        super(location);
+    }
+
     @Override
     public void save( JSONObject codeObj ){
         super.save(codeObj);

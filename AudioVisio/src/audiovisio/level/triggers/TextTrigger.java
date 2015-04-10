@@ -2,6 +2,8 @@ package audiovisio.level.triggers;
 
 import audiovisio.level.Trigger;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
+import com.jme3.math.Vector3f;
 import org.json.simple.JSONObject;
 
 /**
@@ -9,6 +11,14 @@ import org.json.simple.JSONObject;
  */
 public class TextTrigger extends Trigger {
     private String text;
+
+    public TextTrigger(){
+        super();
+    }
+
+    public TextTrigger( Vector3f loc ){
+        super(loc);
+    }
 
     @Override
     public void load( JSONObject loadObj ){
@@ -37,5 +47,10 @@ public class TextTrigger extends Trigger {
         parent.insert(textNode, 3);
 
         return parent;
+    }
+
+    @RSLESetter("Text")
+    public void setText( String text ){
+        this.text = text;
     }
 }

@@ -6,6 +6,8 @@ import audiovisio.entities.Box;
 import audiovisio.entities.Button;
 import audiovisio.level.*;
 import audiovisio.level.Panel;
+import audiovisio.level.triggers.EndTrigger;
+import audiovisio.level.triggers.TextTrigger;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor2;
 import audiovisio.rsle.editor.LevelNodeRenderer;
@@ -57,7 +59,9 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
 
     // ADD ITEMS
     private JMenu      add;
-    private JMenuItem  add_trigger;
+    private JMenu      add_trigger;
+    private JMenuItem  add_trigger_end;
+    private JMenuItem  add_trigger_text;
     private JMenu      add_panels;
     private JMenuItem  add_panels_panel;
     private JMenuItem  add_panels_stair;
@@ -137,7 +141,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     public static void main( String[] args ){
         LogHelper.init();
         LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
-        LogHelper.setLevel(java.util.logging.Level.FINE);
+        LogHelper.setLevel(java.util.logging.Level.INFO);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -229,8 +233,16 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.add.setMnemonic(KeyEvent.VK_A);
         this.add.setEnabled(false);
 
-        this.add_trigger = new JMenuItem("Add Trigger");
-        this.add_trigger.addActionListener(this);
+        this.add_trigger = new JMenu("Add Trigger...");
+
+        this.add_trigger_end = new JMenuItem("End");
+        this.add_trigger_end.addActionListener(this);
+        this.add_trigger.add(this.add_trigger_end);
+
+        this.add_trigger_text = new JMenuItem("Text");
+        this.add_trigger_text.addActionListener(this);
+        this.add_trigger.add(this.add_trigger_text);
+
         this.add.add(this.add_trigger);
 
         this.add_panels = new JMenu("Add Panel...");
@@ -468,14 +480,31 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    private void actionAddTrigger(){
-        NewTriggerDialog triggerDialog = new NewTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+    private void actionAddEndTrigger(){
+        NewEndTriggerDialog triggerDialog = new NewEndTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         triggerDialog.setVisible(true);
 
         if (triggerDialog.getStatus()){
             Vector3f loc = triggerDialog.getLevelLocation();
 
-            Trigger trigger = new Trigger(loc);
+            EndTrigger trigger = new EndTrigger(loc);
+            trigger.setID(this.currentLevel.getNextId());
+            this.currentLevel.addItem(trigger);
+
+            this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
+        }
+    }
+
+    private void actionAddTextTrigger(){
+        NewTextTriggerDialog triggerDialog = new NewTextTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        triggerDialog.setVisible(true);
+
+        if(triggerDialog.getStatus()){
+            Vector3f loc = triggerDialog.getLevelLocation();
+            String text = triggerDialog.getText();
+
+            TextTrigger trigger = new TextTrigger(loc);
+            trigger.setText(text);
             trigger.setID(this.currentLevel.getNextId());
             this.currentLevel.addItem(trigger);
 
@@ -720,8 +749,10 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.actionEditP1Spawn();
         } else if (e.getSource() == this.edit_set_p2_spawn){
             this.actionEditP2Spawn();
-        } else if (e.getSource() == this.add_trigger){
-            this.actionAddTrigger();
+        } else if (e.getSource() == this.add_trigger_end){
+            this.actionAddEndTrigger();
+        } else if (e.getSource() == this.add_trigger_text){
+            this.actionAddTextTrigger();
         } else if (e.getSource() == this.add_box){
             this.actionAddBox();
         } else if (e.getSource() == this.add_button){

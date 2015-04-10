@@ -127,17 +127,24 @@ public class Door extends InteractableEntity {
         LevelNode idNode = new LevelNode("ID", this.ID, false);
         LevelNode nameNode = new LevelNode("Name", this.name, false);
         LevelNode stateNode = new LevelNode("State", this.state, false);
+        LevelNode edgeNode = new LevelNode("Edge", this.direction, false);
         LevelNode locationNode = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
         root.add(idNode);
         root.add(nameNode);
         root.add(stateNode);
+        root.add(edgeNode);
         root.add(locationNode);
 
         root.setSourceItem(this);
 
         return root;
+    }
+
+    @RSLESetter("Edge")
+    public void setEdge( String edge ){
+        this.direction = Direction.valueOf(edge);
     }
 
     @RSLESetter("State")

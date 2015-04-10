@@ -1,10 +1,13 @@
 package audiovisio.level;
 
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
@@ -12,6 +15,10 @@ import org.json.simple.JSONObject;
 public class Trigger implements ILevelItem {
     protected Vector3f location;
     protected long ID = -3;
+
+    protected Node rootNode;
+    protected Node node;
+    protected GhostControl ghost;
 
     public Trigger(){}
 
@@ -35,12 +42,16 @@ public class Trigger implements ILevelItem {
 
     @Override
     public void init( AssetManager assetManager ){
-
+        this.ghost = new GhostControl(new BoxCollisionShape(Level.SCALE));
+        this.node = new Node("Trigger Ghost #" + this.ID);
+        node.addControl(ghost);
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
-
+        this.rootNode = rootNode;
+        rootNode.attachChild(this.node);
+        physics.add(this.node);
     }
 
     @Override
@@ -69,6 +80,8 @@ public class Trigger implements ILevelItem {
         root.add(idNode);
         root.add(location);
 
+        root.setSourceItem(this);
+
         return root;
     }
 
@@ -76,6 +89,7 @@ public class Trigger implements ILevelItem {
         return this.ID;
     }
 
+    @RSLESetter("ID")
     public void setID( long id ){
         this.ID = id;
     }
