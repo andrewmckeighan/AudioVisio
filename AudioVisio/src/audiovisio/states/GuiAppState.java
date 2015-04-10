@@ -16,10 +16,13 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
-public class GuiAppState extends AbstractAppState implements ScreenController {
+public class GuiAppState extends AbstractAppState implements ScreenController, KeyListener {
 
     AudioVisio      app;
     AppStateManager stateManager;
@@ -132,8 +135,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 	}
 
 	public void setKeyBinding(String butt){
-        Button btn = this.nifty.getScreen("keybindings").findNiftyControl(butt, Button.class);
-        btn.setText("Boop!");
+        keyPressed();//TODO
+		Button btn = this.nifty.getScreen("keybindings").findNiftyControl(butt, Button.class);
+        btn.setText(key);
 	}
 
 	/**
@@ -178,5 +182,19 @@ public class GuiAppState extends AbstractAppState implements ScreenController {
 		this.app.clientStart();
 		NetworkUtils.attemptConnection(this.app.client.myClient);
 	}
+	int keycode;
+	@Override
+	public void keyTyped( KeyEvent e ){
+		keycode = e.getKeyCode();
+	}
 
+	@Override
+	public void keyPressed( KeyEvent e ){
+
+	}
+
+	@Override
+	public void keyReleased( KeyEvent e ){
+
+	}
 }
