@@ -1,9 +1,11 @@
 package audiovisio.level;
 
+import audiovisio.entities.Player;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
+import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
@@ -12,12 +14,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
 
-public class Trigger implements ILevelItem {
+public class Trigger extends Node implements ILevelItem {
     protected Vector3f location;
     protected long ID = -3;
 
     protected Node rootNode;
-    protected Node node;
     protected GhostControl ghost;
 
     public Trigger(){}
@@ -43,15 +44,14 @@ public class Trigger implements ILevelItem {
     @Override
     public void init( AssetManager assetManager ){
         this.ghost = new GhostControl(new BoxCollisionShape(Level.SCALE));
-        this.node = new Node("Trigger Ghost #" + this.ID);
-        node.addControl(ghost);
+        this.addControl(ghost);
     }
 
     @Override
     public void start( Node rootNode, PhysicsSpace physics ){
         this.rootNode = rootNode;
-        rootNode.attachChild(this.node);
-        physics.add(this.node);
+        rootNode.attachChild(this);
+        physics.add(this);
     }
 
     @Override
@@ -96,6 +96,10 @@ public class Trigger implements ILevelItem {
 
     public Vector3f getLocation(){
         return this.location;
+    }
+
+    public void collide( Player player ){
+        LogHelper.info("Collided with trigger");
     }
 
 }

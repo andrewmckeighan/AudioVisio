@@ -9,6 +9,7 @@ import audiovisio.entities.Player;
 import audiovisio.level.ILevelItem;
 import audiovisio.level.Level;
 import audiovisio.level.LevelReader;
+import audiovisio.level.Trigger;
 import audiovisio.networking.CollisionEvent;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.*;
@@ -365,8 +366,24 @@ public class ClientAppState extends AbstractAppState implements
 
             }
         }
+        else if (event.getNodeA() instanceof Trigger && event.getNodeB() instanceof Player){
+            Trigger trigger;
+            Player player;
 
+            trigger = (Trigger) event.getNodeA();
+            player = (Player) event.getNodeB();
 
+            trigger.collide(player);
+        }
+        else if (event.getNodeA() instanceof Player && event.getNodeB() instanceof Trigger){
+            Trigger trigger;
+            Player player;
+
+            trigger = (Trigger) event.getNodeB();
+            player = (Player) event.getNodeA();
+
+            trigger.collide(player);
+        }
     }
 
     @Override
