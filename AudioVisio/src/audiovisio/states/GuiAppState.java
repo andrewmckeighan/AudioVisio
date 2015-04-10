@@ -6,6 +6,8 @@ import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.input.RawInputListener;
+import com.jme3.input.event.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
@@ -22,7 +24,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class GuiAppState extends AbstractAppState implements ScreenController, KeyListener {
+public class GuiAppState extends AbstractAppState implements ScreenController, RawInputListener {
 
     AudioVisio      app;
     AppStateManager stateManager;
@@ -133,11 +135,11 @@ public class GuiAppState extends AbstractAppState implements ScreenController, K
 		}
 		return temp;
 	}
-
+	boolean kFlag = false;
 	public void setKeyBinding(String butt){
-        keyPressed();//TODO
+		kFlag = true;
 		Button btn = this.nifty.getScreen("keybindings").findNiftyControl(butt, Button.class);
-        btn.setText(key);
+        btn.setText(Character.toString(keyChar));
 	}
 
 	/**
@@ -182,19 +184,54 @@ public class GuiAppState extends AbstractAppState implements ScreenController, K
 		this.app.clientStart();
 		NetworkUtils.attemptConnection(this.app.client.myClient);
 	}
-	int keycode;
-	@Override
-	public void keyTyped( KeyEvent e ){
-		keycode = e.getKeyCode();
-	}
+
+
+
 
 	@Override
-	public void keyPressed( KeyEvent e ){
+	public void beginInput(){
 
 	}
 
 	@Override
-	public void keyReleased( KeyEvent e ){
+	public void endInput(){
+
+	}
+
+	@Override
+	public void onJoyAxisEvent( JoyAxisEvent joyAxisEvent ){
+
+	}
+
+	@Override
+	public void onJoyButtonEvent( JoyButtonEvent joyButtonEvent ){
+
+	}
+
+	@Override
+	public void onMouseMotionEvent( MouseMotionEvent mouseMotionEvent ){
+
+	}
+
+	@Override
+	public void onMouseButtonEvent( MouseButtonEvent mouseButtonEvent ){
+
+	}
+
+	char keyChar;
+	int keyCode;
+	@Override
+	public void onKeyEvent( KeyInputEvent keyInputEvent ){
+
+		if(kFlag = true){
+			keyChar = keyInputEvent.getKeyChar();
+			keyCode = keyInputEvent.getKeyCode();
+		}
+
+	}
+
+	@Override
+	public void onTouchEvent( TouchEvent touchEvent ){
 
 	}
 }
