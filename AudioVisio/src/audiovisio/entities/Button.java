@@ -1,5 +1,7 @@
 package audiovisio.entities;
 
+import audiovisio.entities.particles.ButtonParticle;
+import audiovisio.entities.particles.Particle;
 import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
@@ -28,8 +30,8 @@ public class Button extends InteractableEntity implements IShootable {
     private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.5F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
-    public  PlayerParticle particle;
-    private Node           rootNode;
+    public  Particle particle;
+    private Node     rootNode;
 
     public Button(){}
 
@@ -49,7 +51,7 @@ public class Button extends InteractableEntity implements IShootable {
 
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection
 
-        this.particle = new PlayerParticle();
+        this.particle = new ButtonParticle();
 
         this.particle.init(assetManager);
 
