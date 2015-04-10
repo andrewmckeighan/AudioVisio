@@ -207,16 +207,17 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private void createEditMenu(){
         this.edit = new JMenu("Edit");
         this.edit.setMnemonic(KeyEvent.VK_E);
+        this.edit.setEnabled(false);
 
         this.edit_regen_id = new JMenuItem("Regenerate Ids");
         this.edit_regen_id.addActionListener(this);
         this.edit.add(this.edit_regen_id);
 
-        this.edit_set_p1_spawn = new JMenuItem("Set Player 1 Spawn");
+        this.edit_set_p1_spawn = new JMenuItem("Set Visual Spawn");
         this.edit_set_p1_spawn.addActionListener(this);
         this.edit.add(this.edit_set_p1_spawn);
 
-        this.edit_set_p2_spawn = new JMenuItem("Set Player 2 Spawn");
+        this.edit_set_p2_spawn = new JMenuItem("Set Audio Spawn");
         this.edit_set_p2_spawn.addActionListener(this);
         this.edit.add(this.edit_set_p2_spawn);
 
@@ -319,6 +320,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
 
             this.add.setEnabled(true);
             this.create.setEnabled(true);
+            this.edit.setEnabled(true);
         }
     }
 
@@ -337,6 +339,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.ctxDelete.setEnabled(true);
             this.add.setEnabled(true);
             this.create.setEnabled(true);
+            this.edit.setEnabled(true);
         }
     }
 
@@ -397,8 +400,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // EDIT ACTIONS
-
     private void actionClose(){
         this.tree.setEditable(false);
         this.file_save.setEnabled(false);
@@ -407,7 +408,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
 
         this.add.setEnabled(false);
         this.create.setEnabled(false);
-        this.ctxDelete.setEnabled(true);
+        this.edit.setEnabled(false);
+        this.ctxDelete.setEnabled(false);
 
         DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("RSLE");
         this.treeModel.setRoot(newRoot);
@@ -418,7 +420,33 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.loadedFile = null;
     }
 
-    // ADD ACTIONS
+    private void actionEditP1Spawn(){
+        SetSpawnDialog setSpawn = new SetSpawnDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        setSpawn.setTitle("Set Visual Spawn");
+        setSpawn.setVisible(true);
+
+        if (setSpawn.getStatus()){
+            Vector3f loc = setSpawn.getLocationVector();
+            float rotation = setSpawn.getRotation();
+
+            this.currentLevel.setVisualSpawn(loc, rotation);
+            this.buildTree();
+        }
+    }
+
+    private void actionEditP2Spawn(){
+        SetSpawnDialog setSpawn = new SetSpawnDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        setSpawn.setTitle("Set Visual Spawn");
+        setSpawn.setVisible(true);
+
+        if (setSpawn.getStatus()){
+            Vector3f loc = setSpawn.getLocationVector();
+            float rotation = setSpawn.getRotation();
+
+            this.currentLevel.setAudioSpawn(loc, rotation);
+            this.buildTree();
+        }
+    }
 
     private void actionEditRegenId(){
         if (this.currentLevel == null){
@@ -439,8 +467,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             JOptionPane.showMessageDialog(this, "IDs will not be re-generated.", "Regenerate IDs", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
-    // ADD > ENTITY ACTIONS
 
     private void actionAddTrigger(){
         NewTriggerDialog triggerDialog = new NewTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -511,8 +537,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.treeModel.insertNodeInto(door.getLevelNode(), this.entities, 0);
         }
     }
-
-    // ADD > PANEL ACTIONS
 
     private void actionAddLever(){
         NewLeverDialog leverDialog = new NewLeverDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
@@ -603,8 +627,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // CREATE ACTIONS
-
     private void actionCreateLink(){
         CreateLinkDialog linkDialog = new CreateLinkDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         linkDialog.setValidIds(this.currentLevel.getLinkables());
@@ -678,8 +700,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    // OTHER ACTIONS
-
     @Override
     public void actionPerformed( ActionEvent e ){
         if (e.getSource() == this.file_exit){
@@ -696,6 +716,10 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.actionClose();
         } else if (e.getSource() == this.edit_regen_id){
             this.actionEditRegenId();
+        } else if (e.getSource() == this.edit_set_p1_spawn){
+            this.actionEditP1Spawn();
+        } else if (e.getSource() == this.edit_set_p2_spawn){
+            this.actionEditP2Spawn();
         } else if (e.getSource() == this.add_trigger){
             this.actionAddTrigger();
         } else if (e.getSource() == this.add_box){

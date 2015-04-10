@@ -527,12 +527,32 @@ public class Level {
     }
 
     /**
+     * Set the spawn location and rotation of the audio player.
+     *
+     * @param loc Spawn location
+     * @param rotation rotation
+     */
+    public void setAudioSpawn( Vector3f loc, float rotation ){
+        this.pAudioSpawn = loc;
+    }
+
+    /**
      * Get the spawn location set by the level for the Visual player.
      *
      * @return spawn location
      */
     public Vector3f getVisualSpawn(){
         return this.pVisualSpawn;
+    }
+
+    /**
+     * Set the spawn location and rotation of the Visual player.
+     *
+     * @param loc Spawn location
+     * @param rotation Rotation
+     */
+    public void setVisualSpawn( Vector3f loc, float rotation ){
+        this.pVisualSpawn = loc;
     }
 
     /**

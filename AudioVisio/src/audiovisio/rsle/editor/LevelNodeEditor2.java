@@ -34,7 +34,6 @@ public class LevelNodeEditor2 implements TreeCellEditor {
 
     @Override
     public Component getTreeCellEditorComponent( JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row ){
-        LogHelper.info("getTreeCell");
         if (value instanceof LevelNode){
             if (((LevelNode) value).isPair()){
                 LevelNode node = (LevelNode) value;
@@ -42,7 +41,6 @@ public class LevelNodeEditor2 implements TreeCellEditor {
 
                 // Type based overrides
                 if (value instanceof Boolean){
-                    LogHelper.info("getTreeCell->Bool");
                     this.boolEditor.setNode(node);
                     this.boolEditor.setSelectedItem(value);
                     this.currentEditor = this.boolEditor;
