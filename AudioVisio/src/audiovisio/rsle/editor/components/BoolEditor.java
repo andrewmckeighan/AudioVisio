@@ -35,8 +35,12 @@ public class BoolEditor extends JComboBox<Boolean> implements CellEditor {
         });
     }
 
+    /**
+     * This method is currently a NOP because when this event fires, one of the listeners
+     * will change userObject. Since we handle updating userObject ourselves, we don't
+     * want this to happen.
+     */
     protected void fireEditingStopped(){
-        // NOP
 //        if (this.listeners.size() > 0){
 //            ChangeEvent ce = new ChangeEvent(this);
 //            for (int i = this.listeners.size() - 1; i >= 0; i--){

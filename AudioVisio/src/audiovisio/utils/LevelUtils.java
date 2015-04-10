@@ -24,6 +24,8 @@ public class LevelUtils {
         location.add(y);
         location.add(z);
 
+        location.setSourceVector(vec);
+
         return location;
     }
 

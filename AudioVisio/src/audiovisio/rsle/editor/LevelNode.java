@@ -4,6 +4,7 @@ import audiovisio.level.ILevelItem;
 import audiovisio.level.Level;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.Pair;
+import com.jme3.math.Vector3f;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +27,7 @@ public class LevelNode extends DefaultMutableTreeNode {
     private boolean    container;
     private ILevelItem sourceItem;
     private Level      sourceLevel;
+    private Vector3f   sourceVector;
 
     /**
      * Create a new instance of LevelNode
@@ -127,6 +129,18 @@ public class LevelNode extends DefaultMutableTreeNode {
                         break; // We found the correct setter method
                     }
                 }
+            } else if (parent.sourceVector != null){
+                Vector3f vector = parent.getSourceVector();
+
+                float value = Float.parseFloat((String) obj);
+
+                if (this.getKey().equals("X")){
+                    vector.setX(value);
+                } else if (this.getKey().equals("Y")){
+                    vector.setY(value);
+                } else if (this.getKey().equals("Z")){
+                    vector.setZ(value);
+                }
             }
         } else {
             throw new IllegalStateException("Should not be setting a value that isn't a pair");
@@ -139,6 +153,14 @@ public class LevelNode extends DefaultMutableTreeNode {
 
     public void setSourceLevel( Level level ){
         this.sourceLevel = level;
+    }
+
+    public void setSourceVector( Vector3f vector ){
+        this.sourceVector = vector;
+    }
+
+    public Vector3f getSourceVector(){
+        return this.sourceVector;
     }
 
     public Object getKey(){
