@@ -99,6 +99,7 @@ public class LevelNode extends DefaultMutableTreeNode {
     }
 
     public void setValue( Object obj ){
+        LogHelper.info("Node " + getKey() + " is a pair? " + isPair());
         if (this.isPair()){
             ((Pair) this.userObject).setValue(obj);
             LevelNode parent = (LevelNode) this.parent;

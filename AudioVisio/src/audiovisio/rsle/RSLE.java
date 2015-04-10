@@ -87,7 +87,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
 
     public RSLE(){
         super(new GridLayout(1, 0));
-        this.setSize(600, 400);
+        this.setSize(600, 600);
 
         Items.init(); // Register all ILevelItems with the LevelRegistry
 
@@ -137,7 +137,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     public static void main( String[] args ){
         LogHelper.init();
         LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
-//        LogHelper.setLevel(java.util.logging.Level.FINE);
+        LogHelper.setLevel(java.util.logging.Level.FINE);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

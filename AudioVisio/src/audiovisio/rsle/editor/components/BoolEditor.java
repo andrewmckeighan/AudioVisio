@@ -1,6 +1,7 @@
 package audiovisio.rsle.editor.components;
 
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.utils.LogHelper;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -35,12 +36,13 @@ public class BoolEditor extends JComboBox<Boolean> implements CellEditor {
     }
 
     protected void fireEditingStopped(){
-        if (this.listeners.size() > 0){
-            ChangeEvent ce = new ChangeEvent(this);
-            for (int i = this.listeners.size() - 1; i >= 0; i--){
-                ((CellEditorListener) this.listeners.elementAt(i)).editingStopped(ce);
-            }
-        }
+        // NOP
+//        if (this.listeners.size() > 0){
+//            ChangeEvent ce = new ChangeEvent(this);
+//            for (int i = this.listeners.size() - 1; i >= 0; i--){
+//                ((CellEditorListener) this.listeners.elementAt(i)).editingStopped(ce);
+//            }
+//        }
     }
 
     @Override
@@ -50,11 +52,13 @@ public class BoolEditor extends JComboBox<Boolean> implements CellEditor {
             this.node.setValue(this.value);
             return true;
         } catch (Exception e){
+            LogHelper.warn("There was an error setting the Boolean value", e);
             return false;
         }
     }
 
     public void setNode( LevelNode node ){
+        LogHelper.info("Node set to " + node.getKey());
         this.node = node;
     }
 

@@ -3,6 +3,7 @@ package audiovisio.rsle.editor;
 import audiovisio.rsle.editor.components.BoolEditor;
 import audiovisio.rsle.editor.components.DirectionEditor;
 import audiovisio.rsle.editor.components.TextEditor;
+import audiovisio.utils.LogHelper;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -33,6 +34,7 @@ public class LevelNodeEditor2 implements TreeCellEditor {
 
     @Override
     public Component getTreeCellEditorComponent( JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row ){
+        LogHelper.info("getTreeCell");
         if (value instanceof LevelNode){
             if (((LevelNode) value).isPair()){
                 LevelNode node = (LevelNode) value;
@@ -40,8 +42,9 @@ public class LevelNodeEditor2 implements TreeCellEditor {
 
                 // Type based overrides
                 if (value instanceof Boolean){
-                    this.boolEditor.setSelectedItem(value);
+                    LogHelper.info("getTreeCell->Bool");
                     this.boolEditor.setNode(node);
+                    this.boolEditor.setSelectedItem(value);
                     this.currentEditor = this.boolEditor;
                 } else {
                     // Key based overrides
@@ -58,6 +61,7 @@ public class LevelNodeEditor2 implements TreeCellEditor {
                 }
             }
         } else {
+            LogHelper.info("Non-LevelNode edited");
             this.textEditor.setText(value.toString());
             this.currentEditor = this.textEditor;
         }
