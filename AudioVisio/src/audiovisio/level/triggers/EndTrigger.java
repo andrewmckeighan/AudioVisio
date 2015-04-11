@@ -1,7 +1,10 @@
 package audiovisio.level.triggers;
 
+import audiovisio.AudioVisio;
+import audiovisio.entities.Player;
 import audiovisio.level.Trigger;
 import audiovisio.rsle.editor.LevelNode;
+import audiovisio.utils.LogHelper;
 import com.jme3.math.Vector3f;
 import org.json.simple.JSONObject;
 
@@ -34,5 +37,10 @@ public class EndTrigger extends Trigger {
         parent.insert(subType, 1);
 
         return parent;
+    }
+
+    @Override
+    public void collide( Player player, AudioVisio av ){
+        av.stopGame();
     }
 }

@@ -1,5 +1,6 @@
 package audiovisio.level;
 
+import audiovisio.AudioVisio;
 import audiovisio.entities.Player;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.RSLESetter;
@@ -101,7 +102,7 @@ public class Trigger extends Node implements ILevelItem {
         return this.location;
     }
 
-    public void collide( Player player ){
+    public void collide( Player player, AudioVisio av ){
         LogHelper.info("Collided with trigger");
     }
 

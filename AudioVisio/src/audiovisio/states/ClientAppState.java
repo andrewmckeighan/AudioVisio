@@ -373,7 +373,7 @@ public class ClientAppState extends AbstractAppState implements
             trigger = (Trigger) event.getNodeA();
             player = (Player) event.getNodeB();
 
-            trigger.collide(player);
+            trigger.collide(player, this.audioVisioApp);
         }
         else if (event.getNodeA() instanceof Player && event.getNodeB() instanceof Trigger){
             Trigger trigger;
@@ -382,7 +382,7 @@ public class ClientAppState extends AbstractAppState implements
             trigger = (Trigger) event.getNodeB();
             player = (Player) event.getNodeA();
 
-            trigger.collide(player);
+            trigger.collide(player, this.audioVisioApp);
         }
     }
 

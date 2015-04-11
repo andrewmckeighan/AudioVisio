@@ -129,4 +129,11 @@ public class AudioVisio extends SimpleApplication {
         this.client = new ClientAppState();
         this.stateManager.attach(this.client);
     }
+
+    public void stopGame(){
+        this.stateManager.detach(this.client);
+        this.gui = new GuiAppState();
+        this.gui.setEnabled(true);
+        this.stateManager.attach(this.gui);
+    }
 }
