@@ -29,6 +29,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     AudioVisio      app;
     AppStateManager stateManager;
     NiftyJmeDisplay niftyDisplay;
+	GuiAppState l = this;
     private Nifty nifty;
 
     public GuiAppState(){
@@ -49,10 +50,12 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         this.niftyDisplay = new NiftyJmeDisplay(app.getAssetManager(),
                 app.getInputManager(), app.getAudioRenderer(), app.getGuiViewPort());
         this.nifty = this.niftyDisplay.getNifty();
-        this.nifty.fromXml("Interface/baselayer.xml", "start", this);
+		this.nifty.fromXml("Interface/baselayer.xml", "start", this);
         this.app.getGuiViewPort().addProcessor(this.niftyDisplay);
         this.app.getFlyByCamera().setEnabled(false);
         this.app.getInputManager().setCursorVisible(true);
+
+		this.app.getInputManager().addRawInputListener(l);
     }
 
 	/**
@@ -136,10 +139,14 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 		return temp;
 	}
 	boolean kFlag = false;
+
 	public void setKeyBinding(String butt){
 		kFlag = true;
+
 		Button btn = this.nifty.getScreen("keybindings").findNiftyControl(butt, Button.class);
         btn.setText(Character.toString(keyChar));
+		l.endInput();
+		kFlag = false;
 	}
 
 	/**
@@ -223,11 +230,11 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 	@Override
 	public void onKeyEvent( KeyInputEvent keyInputEvent ){
 
-		if(kFlag = true){
+		//if(kFlag == true){
 			keyChar = keyInputEvent.getKeyChar();
 			keyCode = keyInputEvent.getKeyCode();
-		}
-
+			System.out.println(keyChar);
+		//}
 	}
 
 	@Override
