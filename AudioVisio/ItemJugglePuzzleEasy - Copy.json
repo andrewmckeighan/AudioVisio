@@ -987,6 +987,364 @@
         "x": 9.0
       },
       "type": "wall"
+    },
+    {
+      "id": 116,
+      "edge": "SOUTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 118,
+      "edge": "SOUTH",
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 120,
+      "edge": "SOUTH",
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 122,
+      "edge": "SOUTH",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 123,
+      "edge": "SOUTH",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 124,
+      "edge": "EAST",
+      "location": {
+        "z": 1.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 125,
+      "edge": "EAST",
+      "location": {
+        "z": 2.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 126,
+      "edge": "EAST",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 127,
+      "edge": "EAST",
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 128,
+      "edge": "EAST",
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 129,
+      "edge": "EAST",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 130,
+      "edge": "EAST",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 2.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 131,
+      "edge": "EAST",
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 2.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 132,
+      "edge": "EAST",
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 2.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 133,
+      "edge": "EAST",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 2.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 134,
+      "edge": "SOUTH",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 135,
+      "edge": "SOUTH",
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 136,
+      "edge": "SOUTH",
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 137,
+      "edge": "SOUTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "state": false,
+      "interactionList": [],
+      "type": "door"
+    },
+    {
+      "id": 138,
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "name": "box",
+      "interactionList": [],
+      "type": "box"
+    },
+    {
+      "id": 139,
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "name": "box",
+      "interactionList": [],
+      "type": "box"
+    },
+    {
+      "id": 140,
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "name": "box",
+      "interactionList": [],
+      "type": "box"
+    },
+    {
+      "id": 141,
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "name": "box",
+      "interactionList": [],
+      "type": "box"
+    },
+    {
+      "id": 142,
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "name": "roombutton01",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 143,
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "name": "roombutton02",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 144,
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "name": "roombutton03",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 145,
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "name": "roombutton04",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 146,
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 5.0
+      },
+      "name": "outsideButton0",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 147,
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 6.0
+      },
+      "name": "outsideButton1",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 148,
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 7.0
+      },
+      "name": "outsideButton2",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 149,
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 8.0
+      },
+      "name": "outsideButton3",
+      "interactionList": [
+      ],
+      "type": "button"
+    },
+    {
+      "id": 150,
+      "location": {
+        "z": 2.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "name": "hallButton",
+      "interactionList": [
+      ],
+      "type": "button"
     }
   ],
   "author": "Taylor Premo",
