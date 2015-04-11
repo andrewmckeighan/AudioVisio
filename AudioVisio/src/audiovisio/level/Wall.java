@@ -46,17 +46,8 @@ public class Wall extends Panel {
 
         this.geometry = new Geometry("Wall" + this.ID, shape);
 
-        if (this.direction == Direction.NORTH){
-            this.location = this.location.add(0.5F, 0.0F, 0.0F);
-        } else if (this.direction == Direction.SOUTH){
-            this.location = this.location.add(-0.5F, 0.0F, 0.0F);
-        } else if (this.direction == Direction.EAST){
-            this.location = this.location.add(0.0F, 0.0F, -0.5F);
-            this.geometry.setLocalRotation(Wall.ROTATION);//Probably in Radians
-        } else if (this.direction == Direction.WEST){
-            this.location = this.location.add(0.0F, 0.0F, -0.5F);
-            this.geometry.setLocalRotation(Wall.ROTATION);//Probably in Radians
-        }
+        this.location = LevelUtils.getRotation(this.location, this.direction, Wall.ROTATION, this.geometry);
+
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Wall.OFFSET);
         this.geometry.setLocalTranslation(this.location);
@@ -103,6 +94,6 @@ public class Wall extends Panel {
     }
 
     public Direction getDirection(){
-        return direction;
+        return this.direction;
     }
 }

@@ -1,7 +1,10 @@
 package audiovisio.utils;
 
+import audiovisio.level.ILevelItem;
 import audiovisio.rsle.editor.LevelNode;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 
 import java.util.Set;
 
@@ -38,5 +41,21 @@ public class LevelUtils {
         }
 
         return links;
+    }
+
+    public static Vector3f getRotation( Vector3f location, ILevelItem.Direction direction, Quaternion defaultRotation, Geometry geometry ){
+        if (direction == ILevelItem.Direction.EAST){
+            location = location.add(0.5F, 0.0F, 0.0F);
+        } else if (direction == ILevelItem.Direction.SOUTH){
+            location = location.add(0.0F, 0.0F, -0.5F);
+            geometry.setLocalRotation(defaultRotation);
+        } else if (direction == ILevelItem.Direction.WEST){
+            location = location.add(-0.5F, 0.0F, 0.0F);
+        } else if (direction == ILevelItem.Direction.NORTH){
+            location = location.add(0.0F, 0.0F, -0.5F);
+            geometry.setLocalRotation(defaultRotation);
+        }
+
+        return location;
     }
 }

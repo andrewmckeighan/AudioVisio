@@ -58,17 +58,8 @@ public class Door extends InteractableEntity {
 
         this.geometry = new Geometry(this.name, shape);
 
-        if (this.direction == Direction.NORTH){
-            this.location = this.location.add(0.5F, 0.0F, 0.0F);
-        } else if (this.direction == Direction.SOUTH){
-            this.location = this.location.add(-0.5F, 0.0F, 0.0F);
-        } else if (this.direction == Direction.EAST){
-            this.location = this.location.add(0.0F, 0.0F, 0.5F);
-            this.geometry.setLocalRotation(Door.ROTATION);//Probably in Radians
-        } else if (this.direction == Direction.WEST){
-            this.location = this.location.add(0.0F, 0.0F, -0.5F);
-            this.geometry.setLocalRotation(Door.ROTATION);//Probably in Radians
-        }
+        this.location = LevelUtils.getRotation(this.location, this.direction, ROTATION, this.geometry);
+
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Door.OFFSET);
         this.geometry.setLocalTranslation(this.location);

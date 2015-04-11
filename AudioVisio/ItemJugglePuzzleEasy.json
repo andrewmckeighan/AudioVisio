@@ -1,0 +1,996 @@
+{
+  "spawn": {
+    "p1": {
+      "rotation": 0.0,
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 4.0
+      }
+    },
+    "p2": {
+      "rotation": 0.0,
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 4.0
+      }
+    }
+  },
+  "level": [
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 10,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 11,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 12,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 13,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 14,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 15,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 16,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 17,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 18,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 19,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 20,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 21,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 22,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 23,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 24,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 25,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 26,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 27,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 28,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 29,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 30,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 31,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 32,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 33,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 34,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 35,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 36,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 37,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 38,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 39,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 40,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 41,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 42,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 43,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 44,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 45,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 46,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 47,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 48,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 49,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 50,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 51,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 52,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 53,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 54,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 55,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 56,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 57,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 58,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 59,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 60,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 61,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 62,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 63,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 64,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 65,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 66,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 67,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 68,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 69,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 70,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 71,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 72,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 73,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 74,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 75,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 76,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 77,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 78,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 79,
+      "type": "panel"
+    },
+    {
+      "id": 80,
+      "edge": "WEST",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 81,
+      "edge": "WEST",
+      "location": {
+        "z": 1.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 82,
+      "edge": "WEST",
+      "location": {
+        "z": 2.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 83,
+      "edge": "WEST",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 84,
+      "edge": "WEST",
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 85,
+      "edge": "WEST",
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 86,
+      "edge": "WEST",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 87,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 96,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 97,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 2.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 90,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 3.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 91,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 4.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 92,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 5.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 93,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 6.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 94,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 7.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 95,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 8.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 98,
+      "edge": "SOUTH",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 99,
+      "edge": "EAST",
+      "location": {
+        "z": 0.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 100,
+      "edge": "EAST",
+      "location": {
+        "z": 1.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 101,
+      "edge": "EAST",
+      "location": {
+        "z": 2.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 102,
+      "edge": "EAST",
+      "location": {
+        "z": 3.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 103,
+      "edge": "EAST",
+      "location": {
+        "z": 4.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 104,
+      "edge": "EAST",
+      "location": {
+        "z": 5.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 105,
+      "edge": "EAST",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 106,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 0.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 107,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 1.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 108,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 2.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 109,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 3.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 110,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 4.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 111,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 5.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 112,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 6.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 113,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 7.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 114,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 8.0
+      },
+      "type": "wall"
+    },
+    {
+      "id": 115,
+      "edge": "NORTH",
+      "location": {
+        "z": 6.0,
+        "y": 0.0,
+        "x": 9.0
+      },
+      "type": "wall"
+    }
+  ],
+  "author": "Taylor Premo",
+  "name": "ItemJuggleEasy",
+  "format": "0.5",
+  "version": "1.0"
+}
