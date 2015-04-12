@@ -1,6 +1,8 @@
 package audiovisio.states;
 
 import audiovisio.AudioVisio;
+import audiovisio.level.Level;
+import audiovisio.level.LevelLoader;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
@@ -11,7 +13,10 @@ import com.jme3.input.event.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -22,6 +27,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class GuiAppState extends AbstractAppState implements ScreenController, RawInputListener {
@@ -92,6 +99,13 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 	public void initHost(){
 		this.nifty.gotoScreen("host");
 		AudioVisio.main(new String[]{ "-server" });
+
+		ListBox listBox = this.nifty.getScreen("host").findNiftyControl("levelList", ListBox.class);
+		Collection<Level> levels = LevelLoader.getLevelList().values();
+		listBox.addAllItems(Arrays.asList(levels.toArray()));
+
+		Element continueButton = this.nifty.getScreen("host").findElementByName("ContButton");
+		continueButton.setVisible(false);
 	}
 
 	/**
@@ -243,5 +257,15 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 	@Override
 	public void onTouchEvent( TouchEvent touchEvent ){
 
+	}
+
+	@NiftyEventSubscriber(id="levelList")
+	public void onLevelListSelectionChanged(final String id, final ListBoxSelectionChangedEvent<Level> event){
+		Level lvl = event.getSelection().get(0);
+
+		LogHelper.info("Selected level: " + lvl.toString());
+
+		Element continueButton = this.nifty.getScreen("host").findElementByName("ContButton");
+		continueButton.setVisible(true);
 	}
 }
