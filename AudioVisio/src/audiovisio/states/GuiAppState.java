@@ -29,7 +29,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     AudioVisio      app;
     AppStateManager stateManager;
     NiftyJmeDisplay niftyDisplay;
-	GuiAppState l = this;
 	Button btn;
     private Nifty nifty;
 
@@ -56,7 +55,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         this.app.getFlyByCamera().setEnabled(false);
         this.app.getInputManager().setCursorVisible(true);
 
-		this.app.getInputManager().addRawInputListener(l);
+		this.app.getInputManager().addRawInputListener(this);
 
     }
 
@@ -67,6 +66,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 	public void cleanup(){
 		this.app.getGuiViewPort().removeProcessor(this.niftyDisplay);
 		this.app.getInputManager().setCursorVisible(false);
+		this.app.getInputManager().removeRawInputListener(this);
 	}
 
 	/**
@@ -144,11 +144,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 
 	public void setKeyBinding(String butt){
 		kFlag = true;
-
 		btn = this.nifty.getScreen("keybindings").findNiftyControl(butt, Button.class);
-
-
-		l.endInput();
 		kFlag = false;
 	}
 

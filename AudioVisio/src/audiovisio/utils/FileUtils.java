@@ -1,7 +1,13 @@
 package audiovisio.utils;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -10,6 +16,28 @@ public class FileUtils {
     public static String dataDir;
     public static String levelDir;
     public static String metaDir;
+
+    public static JSONObject loadJSONFile( File file ){
+        JSONParser parser = new JSONParser();
+
+        FileReader fileReader;
+        JSONObject obj = null;
+
+        try{
+            fileReader = new FileReader(file);
+
+            obj = (JSONObject) parser.parse(fileReader);
+            fileReader.close();
+        } catch (FileNotFoundException ex){
+            LogHelper.warn("Bad JSON file", ex);
+        } catch (IOException ex){
+            LogHelper.warn("Bad JSON file", ex);
+        } catch (ParseException ex){
+            LogHelper.warn("Error parsing JSON file", ex);
+        }
+
+        return obj;
+    }
 
     /**
      * Get the extension of the file.
@@ -91,9 +119,13 @@ public class FileUtils {
 
                 File meta = new File(FileUtils.metaDir);
 
-                if (!meta.mkdir()){
-                    LogHelper.warn("Could not create meta directory");
-                    return false;
+                if (!meta.exists() && !meta.isDirectory()){
+                    if (!meta.mkdir()){
+                        LogHelper.warn("Could not create meta directory");
+                        return false;
+                    }
+
+                    populateDefaultMeta(meta);
                 }
 
             } else {
@@ -105,14 +137,25 @@ public class FileUtils {
         return true;
     }
 
-    public static void populateDefaultLevels(File levelDir){
-        File demo_level = new File(FileUtils.class.getResource("/DefaultLevels/demo_level.json").getPath());
+    private static void populateDefaultLevels(File levelDir){
+        File demo_level = new File(FileUtils.class.getResource("/Default/Levels/demo_level.json").getPath());
         File dest = new File(levelDir.toString() + "/demo_level.json");
 
         try{
             Files.copy(demo_level.toPath(), dest.toPath());
         } catch (IOException e){
             LogHelper.warn("There was an error populating the default levels", e);
+        }
+    }
+
+    private static void populateDefaultMeta(File metaDir){
+        File defaultConfig = new File(FileUtils.class.getResource("/Default/Configuration/config.json").getPath());
+        File dest = new File(metaDir.toString() + "/config.json");
+
+        try{
+            Files.copy(defaultConfig.toPath(), dest.toPath());
+        } catch (IOException e){
+            LogHelper.warn("There was an error populating the default metadata", e);
         }
     }
 }

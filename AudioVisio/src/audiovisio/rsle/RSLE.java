@@ -1,9 +1,10 @@
 package audiovisio.rsle;
 
 import audiovisio.Items;
-import audiovisio.entities.*;
 import audiovisio.entities.Box;
 import audiovisio.entities.Button;
+import audiovisio.entities.Door;
+import audiovisio.entities.Lever;
 import audiovisio.level.*;
 import audiovisio.level.Panel;
 import audiovisio.level.triggers.EndTrigger;
@@ -127,7 +128,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
      */
     public void load( File file ){
         try{
-            this.currentLevel = LevelReader.read(file);
+            this.currentLevel = LevelLoader.read(file);
             this.currentLevel.loadLevel();
             this.buildTree();
 
@@ -785,7 +786,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         try{
             this.currentLevel.setFile(this.loadedFile);
             this.currentLevel.saveLevel();
-            LevelWriter.write(this.currentLevel);
+            LevelLoader.write(this.currentLevel);
         } catch (Exception ex){
             JOptionPane.showMessageDialog(this, "There was an error saving the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LogHelper.severe("Error saving level file!", ex);

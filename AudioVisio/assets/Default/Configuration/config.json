@@ -1,0 +1,13 @@
+{
+  "keybinding":{
+    "Forward": "0x11",
+    "Backward": "0x1F",
+    "Left": "0x1E",
+    "Right": "0x20",
+    "Jump": "0x39",
+    "Shoot": "0",
+    "Debug": "0x3D",
+    "ReleaseMouse": "0x3E",
+    "NoClip": "0x3C"
+  }
+}

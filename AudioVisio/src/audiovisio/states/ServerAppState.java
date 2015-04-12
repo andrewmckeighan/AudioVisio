@@ -3,12 +3,10 @@ package audiovisio.states;
 import audiovisio.AudioVisio;
 import audiovisio.Items;
 import audiovisio.WorldManager;
-import audiovisio.entities.Button;
 import audiovisio.entities.Entity;
-import audiovisio.entities.Lever;
 import audiovisio.entities.Player;
 import audiovisio.level.Level;
-import audiovisio.level.LevelReader;
+import audiovisio.level.LevelLoader;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.*;
 import audiovisio.utils.LogHelper;
@@ -71,7 +69,7 @@ public class ServerAppState extends AbstractAppState implements
         LogHelper.info("Starting server...");
 
         Items.init();
-        this.currentLevel = LevelReader.read(AudioVisio.level);
+        this.currentLevel = LevelLoader.read(AudioVisio.level);
         this.currentLevel.loadLevel();
 
         this.AV = (SimpleApplication) app;

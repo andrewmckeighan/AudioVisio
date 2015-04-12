@@ -8,7 +8,7 @@ import audiovisio.entities.InteractableEntity;
 import audiovisio.entities.Player;
 import audiovisio.level.ILevelItem;
 import audiovisio.level.Level;
-import audiovisio.level.LevelReader;
+import audiovisio.level.LevelLoader;
 import audiovisio.level.Trigger;
 import audiovisio.networking.CollisionEvent;
 import audiovisio.networking.SyncManager;
@@ -110,7 +110,7 @@ public class ClientAppState extends AbstractAppState implements
         Items.init();
 
         try{
-            this.level = LevelReader.read(AudioVisio.level);
+            this.level = LevelLoader.read(AudioVisio.level);
             this.level.loadLevel();
         } catch (Exception e){
             LogHelper.info("exception: ", e);
