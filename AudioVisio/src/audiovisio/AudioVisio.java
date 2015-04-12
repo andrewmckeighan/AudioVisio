@@ -1,6 +1,7 @@
 package audiovisio;
 
 
+import audiovisio.level.LevelLoader;
 import audiovisio.rsle.RSLE;
 import audiovisio.states.ClientAppState;
 import audiovisio.states.GuiAppState;
@@ -40,6 +41,7 @@ public class AudioVisio extends SimpleApplication {
 
         JSONObject confObj = FileUtils.loadJSONFile(FileUtils.getMetaFile("config.json"));
         Config.init(confObj);
+        LevelLoader.initLevelList();
 
         Calendar cal = Calendar.getInstance();
         cal.getTime();

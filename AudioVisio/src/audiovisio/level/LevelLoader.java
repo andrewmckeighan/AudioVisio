@@ -9,6 +9,9 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Responsible for loading/saving level files. Also manages the internal
@@ -17,6 +20,8 @@ import java.io.IOException;
  * @author Matt Gerst
  */
 public class LevelLoader {
+    private static Map<String, Level> levels = new HashMap<String, Level>();
+
     /**
      * Read the given filename into a level
      *
@@ -70,7 +75,7 @@ public class LevelLoader {
     /**
      * Write a JSONObject to a file.
      *
-     * @param obj The JSONObject to write
+     * @param obj  The JSONObject to write
      * @param file The file to write to
      */
     public static void writeJson( JSONObject obj, File file ){
@@ -82,5 +87,35 @@ public class LevelLoader {
         } catch (IOException e){
             LogHelper.severe("Could not save level file", e);
         }
+    }
+
+    public static void initLevelList(){
+        File levelDir = FileUtils.getLevelDirectory();
+
+        File levels[] = levelDir.listFiles();
+        if (levels == null) {
+            LogHelper.warn("No Level Files Found");
+        }
+        for (File level : levels){
+            Level lvl = read(level);
+
+            LevelLoader.levels.put(lvl.getName(), lvl);
+        }
+    }
+
+    public static Map<String, Level> getLevelList(){
+        return LevelLoader.levels;
+    }
+
+    public static Set<String> getLevelNames(){
+        return LevelLoader.levels.keySet();
+    }
+
+    public static void addLevel( Level level ){
+        LevelLoader.levels.put(level.getName(), level);
+    }
+
+    public static Level getLevel( String name ){
+        return LevelLoader.levels.get(name);
     }
 }
