@@ -77,7 +77,7 @@ public class FileUtils {
         }
     }
 
-    public static String getDataDirectory(){
+    public static File getDataDirectory(){
         String directory;
         if(System.getProperty("os.name").toUpperCase().contains("WIN")){
             directory = System.getenv("AppData");
@@ -89,11 +89,27 @@ public class FileUtils {
             directory += "/.audiovisio";
         }
 
-        return directory;
+        return new File(directory);
+    }
+
+    public static File getLevelDirectory(){
+        return new File(FileUtils.levelDir);
+    }
+
+    public static File getMetaDirectory(){
+        return new File(FileUtils.metaDir);
+    }
+
+    public static File getMetaFile( String file ){
+        return new File(FileUtils.metaDir + "/" + file);
+    }
+
+    public static File getLevelFile( String file ){
+        return new File(FileUtils.levelDir + "/" + file);
     }
 
     public static boolean dataDirectorySanityCheck(){
-        File dataDir = new File(getDataDirectory());
+        File dataDir = getDataDirectory();
         FileUtils.dataDir = dataDir.toString();
         FileUtils.levelDir = dataDir.toString() + "/levels";
         FileUtils.metaDir = dataDir.toString() + "/data";

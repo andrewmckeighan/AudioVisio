@@ -13,6 +13,7 @@ import audiovisio.level.Trigger;
 import audiovisio.networking.CollisionEvent;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.*;
+import audiovisio.utils.Config;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
@@ -26,8 +27,6 @@ import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -205,18 +204,18 @@ public class ClientAppState extends AbstractAppState implements
      * @param player The player entity that is affected by this clients inputs.
      */
     public void initKeys( final Player player ){
-        this.inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        this.inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        this.inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        this.inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        this.inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+        this.inputManager.addMapping("Up", new KeyTrigger(Config.getKeyMapping(Config.KEY_FORWARD)));
+        this.inputManager.addMapping("Down", new KeyTrigger(Config.getKeyMapping(Config.KEY_BACKWARD)));
+        this.inputManager.addMapping("Left", new KeyTrigger(Config.getKeyMapping(Config.KEY_LEFT)));
+        this.inputManager.addMapping("Right", new KeyTrigger(Config.getKeyMapping(Config.KEY_RIGHT)));
+        this.inputManager.addMapping("Jump", new KeyTrigger(Config.getKeyMapping(Config.KEY_JUMP)));
 
         this.inputManager.addMapping("Shoot", new MouseButtonTrigger(
-                MouseInput.BUTTON_LEFT));
+                Config.getKeyMapping(Config.KEY_SHOOT)));
 
-        this.inputManager.addMapping("Debug", new KeyTrigger(KeyInput.KEY_F3));
-        this.inputManager.addMapping("ReleaseMouse", new KeyTrigger(KeyInput.KEY_F4));
-        this.inputManager.addMapping("NoClip", new KeyTrigger(KeyInput.KEY_F2));
+        this.inputManager.addMapping("Debug", new KeyTrigger(Config.getKeyMapping(Config.KEY_DEBUG)));
+        this.inputManager.addMapping("ReleaseMouse", new KeyTrigger(Config.getKeyMapping(Config.KEY_RELEASE_MOUSE)));
+        this.inputManager.addMapping("NoClip", new KeyTrigger(Config.getKeyMapping(Config.KEY_NO_CLIP)));
 
         this.inputManager.addListener(player, "Up");
         this.inputManager.addListener(player, "Down");

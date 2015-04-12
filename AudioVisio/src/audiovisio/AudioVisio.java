@@ -5,12 +5,14 @@ import audiovisio.rsle.RSLE;
 import audiovisio.states.ClientAppState;
 import audiovisio.states.GuiAppState;
 import audiovisio.states.ServerAppState;
+import audiovisio.utils.Config;
 import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
+import org.json.simple.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +37,9 @@ public class AudioVisio extends SimpleApplication {
 
     public static void main( String[] args ){
         FileUtils.dataDirectorySanityCheck();
+
+        JSONObject confObj = FileUtils.loadJSONFile(FileUtils.getMetaFile("config.json"));
+        Config.init(confObj);
 
         Calendar cal = Calendar.getInstance();
         cal.getTime();
