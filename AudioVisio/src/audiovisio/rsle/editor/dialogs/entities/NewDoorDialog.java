@@ -1,6 +1,7 @@
-package audiovisio.rsle.editor.dialogs;
+package audiovisio.rsle.editor.dialogs.entities;
 
 import audiovisio.rsle.editor.components.LocationField;
+import audiovisio.rsle.editor.dialogs.NewDialog;
 import com.jme3.math.Vector3f;
 
 import javax.swing.*;
@@ -9,15 +10,15 @@ import java.awt.*;
 /**
  * @author Matt Gerst
  */
-public class NewLeverDialog extends NewDialog {
+public class NewDoorDialog extends NewDialog {
     JLabel        lblName       = new JLabel("Name");
-    JLabel        lblState      = new JLabel("Is On");
+    JLabel        lblState      = new JLabel("State");
     JLabel        lblLocation   = new JLabel("Location");
     JTextField    nameField     = new JTextField();
     JCheckBox     stateField    = new JCheckBox();
     LocationField locationField = new LocationField();
 
-    public NewLeverDialog( Frame owner, boolean modal ){
+    public NewDoorDialog( Frame owner, boolean modal ){
         super(owner, modal);
         this.init();
     }
@@ -50,15 +51,18 @@ public class NewLeverDialog extends NewDialog {
         }
     }
 
+    @Override
+    protected void cancelClicked(){}
+
     public Vector3f getLevelLocation(){
         return this.locationField.getLocationVector();
     }
 
-    public String getName(){
-        return this.nameField.getText();
-    }
-
     public boolean getState(){
         return this.stateField.isSelected();
+    }
+
+    public String getName(){
+        return this.nameField.getText();
     }
 }

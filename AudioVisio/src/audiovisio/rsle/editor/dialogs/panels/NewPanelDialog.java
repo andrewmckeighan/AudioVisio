@@ -1,5 +1,6 @@
-package audiovisio.rsle.editor.dialogs;
+package audiovisio.rsle.editor.dialogs.panels;
 
+import audiovisio.rsle.editor.dialogs.NewDialog;
 import com.jme3.math.Vector3f;
 
 import javax.swing.*;

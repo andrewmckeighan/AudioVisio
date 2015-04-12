@@ -1,6 +1,7 @@
-package audiovisio.rsle.editor.dialogs;
+package audiovisio.rsle.editor.dialogs.entities;
 
 import audiovisio.rsle.editor.components.LocationField;
+import audiovisio.rsle.editor.dialogs.NewDialog;
 import com.jme3.math.Vector3f;
 
 import javax.swing.*;
@@ -9,31 +10,36 @@ import java.awt.*;
 /**
  * @author Matt Gerst
  */
-public class NewButtonDialog extends NewDialog {
+public class NewLeverDialog extends NewDialog {
     JLabel        lblName       = new JLabel("Name");
+    JLabel        lblState      = new JLabel("Is On");
     JLabel        lblLocation   = new JLabel("Location");
     JTextField    nameField     = new JTextField();
+    JCheckBox     stateField    = new JCheckBox();
     LocationField locationField = new LocationField();
 
-    public NewButtonDialog( Frame owner, boolean modal ){
+    public NewLeverDialog( Frame owner, boolean modal ){
         super(owner, modal);
         this.init();
     }
 
     @Override
     protected void init(){
-        this.setTitle("New Button");
-        this.setLayout(new GridLayout(3, 2));
+        this.setTitle("New Door");
+        this.setLayout(new GridLayout(4, 2));
 
         this.add(this.lblName);
         this.add(this.nameField);
+
+        this.add(this.lblState);
+        this.add(this.stateField);
 
         this.add(this.lblLocation);
         this.add(this.locationField);
 
         super.init();
 
-        this.setSize(250, 90);
+        this.setSize(250, 120);
     }
 
     @Override
@@ -51,5 +57,9 @@ public class NewButtonDialog extends NewDialog {
 
     public String getName(){
         return this.nameField.getText();
+    }
+
+    public boolean getState(){
+        return this.stateField.isSelected();
     }
 }

@@ -8,11 +8,22 @@ import audiovisio.entities.Lever;
 import audiovisio.level.*;
 import audiovisio.level.Panel;
 import audiovisio.level.triggers.EndTrigger;
+import audiovisio.level.triggers.LevelTrigger;
 import audiovisio.level.triggers.TextTrigger;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor2;
 import audiovisio.rsle.editor.LevelNodeRenderer;
 import audiovisio.rsle.editor.dialogs.*;
+import audiovisio.rsle.editor.dialogs.entities.NewBoxDialog;
+import audiovisio.rsle.editor.dialogs.entities.NewButtonDialog;
+import audiovisio.rsle.editor.dialogs.entities.NewDoorDialog;
+import audiovisio.rsle.editor.dialogs.entities.NewLeverDialog;
+import audiovisio.rsle.editor.dialogs.panels.NewPanelDialog;
+import audiovisio.rsle.editor.dialogs.panels.NewStairDialog;
+import audiovisio.rsle.editor.dialogs.panels.NewWallDialog;
+import audiovisio.rsle.editor.dialogs.triggers.NewEndTriggerDialog;
+import audiovisio.rsle.editor.dialogs.triggers.NewLevelTriggerDialog;
+import audiovisio.rsle.editor.dialogs.triggers.NewTextTriggerDialog;
 import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import com.jme3.math.Vector3f;
@@ -62,6 +73,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private JMenu      add;
     private JMenu      add_trigger;
     private JMenuItem  add_trigger_end;
+    private JMenuItem  add_trigger_level;
     private JMenuItem  add_trigger_text;
     private JMenu      add_panels;
     private JMenuItem  add_panels_panel;
@@ -156,7 +168,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
      * Create and show the JFrame that contains the editor
      */
     private static void createAndShowGUI(){
-        JFrame frame = new JFrame("Really Simple Level Editor");
+        JFrame frame = new JFrame("Really Simple Level Editor (v0.1)");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         RSLE rsle = new RSLE();
         frame.add(rsle);
@@ -239,6 +251,10 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.add_trigger_end = new JMenuItem("End");
         this.add_trigger_end.addActionListener(this);
         this.add_trigger.add(this.add_trigger_end);
+
+        this.add_trigger_level = new JMenuItem("Level");
+        this.add_trigger_level.addActionListener(this);
+        this.add_trigger.add(this.add_trigger_level);
 
         this.add_trigger_text = new JMenuItem("Text");
         this.add_trigger_text.addActionListener(this);
@@ -513,6 +529,23 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
+    private void actionAddLevelTrigger(){
+        NewLevelTriggerDialog triggerDialog = new NewLevelTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
+        triggerDialog.setVisible(true);
+
+        if(triggerDialog.getStatus()){
+            Vector3f loc = triggerDialog.getLevelLocation();
+            String levelFile = triggerDialog.getLevelFile();
+
+            LevelTrigger trigger = new LevelTrigger(loc);
+            trigger.setLevelFile(levelFile);
+            trigger.setID(this.currentLevel.getNextId());
+            this.currentLevel.addItem(trigger);
+
+            this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
+        }
+    }
+
     private void actionAddBox(){
         NewBoxDialog boxDialog = new NewBoxDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
         boxDialog.setVisible(true);
@@ -752,6 +785,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.actionEditP2Spawn();
         } else if (e.getSource() == this.add_trigger_end){
             this.actionAddEndTrigger();
+        } else if (e.getSource() == this.add_trigger_level){
+            this.actionAddLevelTrigger();
         } else if (e.getSource() == this.add_trigger_text){
             this.actionAddTextTrigger();
         } else if (e.getSource() == this.add_box){
