@@ -1,7 +1,6 @@
 package audiovisio;
 
 import audiovisio.entities.AudioPlayer;
-import audiovisio.entities.InteractableEntity;
 import audiovisio.entities.Player;
 import audiovisio.entities.VisualPlayer;
 import audiovisio.level.Level;
@@ -18,13 +17,12 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.math.Vector3f;
 import com.jme3.network.Server;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class manages the list of players between servers and clients.
@@ -91,7 +89,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         player.load(level);
         player.setID(playerID);
         if (this.isServer()){
-            this.syncManager.broadcast(new PlayerJoinMessage(playerID));
+            this.syncManager.broadcast(new PlayerJoinMessage(playerID, player.getLocalTranslation()));
             player.setServer(true);
         } else {
             if (this.client != null){
@@ -108,6 +106,14 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         this.syncManager.addObject(playerID, player);
         LogHelper.info(playerID + ":" + player);
         this.players.put(playerID, player);
+
+        return player;
+    }
+
+    public Player addPlayer( long playerID, Vector3f location ){
+        Player player = this.addPlayer(playerID);
+
+        player.setLocalTranslation(location);
 
         return player;
     }

@@ -1,6 +1,7 @@
 package audiovisio.networking.messages;
 
 import audiovisio.WorldManager;
+import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -11,6 +12,7 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class PlayerJoinMessage extends PhysicsSyncMessage {
     private long playerID;
+    private Vector3f location;
 
     public PlayerJoinMessage(){
         this.setReliable(true);
@@ -19,9 +21,10 @@ public class PlayerJoinMessage extends PhysicsSyncMessage {
     /**
      * @param playerID The ID of the player who has just connected
      */
-    public PlayerJoinMessage( long playerID ){
+    public PlayerJoinMessage( long playerID, Vector3f location ){
         this.syncId = -1;
         this.playerID = playerID;
+        this.location = location;
 
         this.setReliable(true);
     }
@@ -33,6 +36,6 @@ public class PlayerJoinMessage extends PhysicsSyncMessage {
     @Override
     public void applyData( Object object ){
         WorldManager manager = (WorldManager) object;
-        manager.addPlayer(this.playerID);
+        manager.addPlayer(this.playerID, this.location);
     }
 }

@@ -108,21 +108,29 @@ public class Player extends MovingEntity implements ActionListener {
      */
     public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
 
-        this.characterControl.setWalkDirection(direction);
+        if (!this.hasSpawned){
+            this.warp(this.spawn);
+            if (this.getLocalTranslation().distance(this.spawn) <= 3){
+                this.hasSpawned = true;
+            }
+        } else {
+
+            this.characterControl.setWalkDirection(direction);
 //        if(this.characterControl.getWalkDirection().length() == 0){
 //            this.characterControl.warp(location);
 //        }
 //        this.characterControl.setWalkDirection(direction);
 
-        if (this.playerCamera != null){
-            if (!this.isDebug()){
-                this.playerCamera.setLocation(this.getLocalTranslation().add(
-                        Player.CAMERA_OFFSET));
-            }
-            //TODO remove
-            if (this.model != null){
-                this.model.removeFromParent();
-                this.model = null;
+            if (this.playerCamera != null){
+                if (!this.isDebug()){
+                    this.playerCamera.setLocation(this.getLocalTranslation().add(
+                            Player.CAMERA_OFFSET));
+                }
+                //TODO remove
+                if (this.model != null){
+                    this.model.removeFromParent();
+                    this.model = null;
+                }
             }
         }
     }
@@ -299,4 +307,5 @@ public class Player extends MovingEntity implements ActionListener {
 
     private boolean debug;
     private static final float MASS = 8.0F;
+    private boolean hasSpawned;
 }
