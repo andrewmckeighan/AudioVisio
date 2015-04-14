@@ -44,11 +44,11 @@ public class Trigger extends Node implements ILevelItem {
 
     @Override
     public void init( AssetManager assetManager ){
-        this.ghost = new GhostControl(new BoxCollisionShape(Level.SCALE.divide(2)));
+        this.ghost = new GhostControl(new BoxCollisionShape(Level.SCALE.divide(3f)));
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(0F, Level.SCALE.getY() / 2, 0F);
         this.setLocalTranslation(this.location);
-        this.addControl(ghost);
+        this.addControl(this.ghost);
     }
 
     @Override

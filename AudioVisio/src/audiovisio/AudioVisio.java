@@ -25,7 +25,7 @@ public class AudioVisio extends SimpleApplication {
     public static final int     difficulty = 0;
     public static final int     FPS        = 100;
     public static AudioVisio serverInstance;
-    public static String level = "ItemJugglePuzzleEasy.json";
+    public static String level = "ItemJugglePuzzleHard.json";
     static        JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
