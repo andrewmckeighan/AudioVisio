@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 public class JSONHelper {
     public static final String KEY_ID   = "id";
     public static final String KEY_TYPE = "type";
+    public static final String KEY_COLOR = "color";
 
     // Keys for the location node
     public static final String KEY_LOCATION   = "location";
@@ -72,5 +73,4 @@ public class JSONHelper {
     public static int getInt( JSONObject obj, String key ){
         return ((Long) obj.get(key)).intValue();
     }
-
 }

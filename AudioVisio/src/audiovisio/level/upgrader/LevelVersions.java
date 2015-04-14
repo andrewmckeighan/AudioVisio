@@ -18,6 +18,7 @@ public class LevelVersions {
         LevelVersions.addVersion("0.2", new Level03Upgrader());
         LevelVersions.addVersion("0.3", new Level04Upgrader());
         LevelVersions.addVersion("0.4", new Level05Upgrader());
+        LevelVersions.addVersion("0.5", new Level06Upgrader());
     }
 
     /**
