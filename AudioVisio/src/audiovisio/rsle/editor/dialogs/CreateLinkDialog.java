@@ -51,6 +51,6 @@ public class CreateLinkDialog extends NewDialog {
     }
 
     public Long getTo(){
-        return (Long) this.from.getSelectedItem();
+        return (Long) this.to.getSelectedItem();
     }
 }

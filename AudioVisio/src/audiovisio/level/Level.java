@@ -391,16 +391,32 @@ public class Level {
     public void regenIds(){
         this.resetNextId();
 
-        // This is used to keep track of old->new IDs. It is intended
-        // to be used to fix linked objects
+        // This is used to keep track of old->new IDs. It is used
+        // to fix linked objects
         HashMap<Long, Long> remappedIds = new HashMap<Long, Long>();
 
         for (ILevelItem item : this.levelItems.values()){
             long oldId = item.getID();
             long newId = this.getNextId();
 
-            remappedIds.put(newId, oldId);
+            remappedIds.put(oldId, newId);
             item.setID(newId);
+        }
+
+        // Fix linked objects
+        for (ILevelItem item : this.levelItems.values()){
+            if (item instanceof ITriggerable){
+                ITriggerable trig = (ITriggerable) item;
+
+                Set<Long> ids = trig.getLinked();
+                Set<Long> newIds = new HashSet<Long>();
+
+                for (Long id : ids){
+                    newIds.add(remappedIds.get(id));
+                }
+
+                trig.setLinks(newIds);
+            }
         }
     }
 

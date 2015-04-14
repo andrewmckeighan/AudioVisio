@@ -11,12 +11,15 @@ import java.awt.*;
  * @author Matt Gerst
  */
 public class NewLeverDialog extends NewDialog {
-    JLabel        lblName       = new JLabel("Name");
-    JLabel        lblState      = new JLabel("Is On");
-    JLabel        lblLocation   = new JLabel("Location");
-    JTextField    nameField     = new JTextField();
-    JCheckBox     stateField    = new JCheckBox();
-    LocationField locationField = new LocationField();
+    JLabel lblName     = new JLabel("Name");
+    JLabel lblState    = new JLabel("Is On");
+    JLabel lblEdge     = new JLabel("Edge");
+    JLabel lblLocation = new JLabel("Location");
+
+    JTextField        nameField     = new JTextField();
+    JCheckBox         stateField    = new JCheckBox();
+    JComboBox<String> edgeField     = new JComboBox<String>();
+    LocationField     locationField = new LocationField();
 
     public NewLeverDialog( Frame owner, boolean modal ){
         super(owner, modal);
@@ -33,6 +36,14 @@ public class NewLeverDialog extends NewDialog {
 
         this.add(this.lblState);
         this.add(this.stateField);
+
+        this.edgeField.addItem("NORTH");
+        this.edgeField.addItem("SOUTH");
+        this.edgeField.addItem("EAST");
+        this.edgeField.addItem("WEST");
+
+        this.add(this.lblEdge);
+        this.add(this.edgeField);
 
         this.add(this.lblLocation);
         this.add(this.locationField);
@@ -61,5 +72,9 @@ public class NewLeverDialog extends NewDialog {
 
     public boolean getState(){
         return this.stateField.isSelected();
+    }
+
+    public String getEdge(){
+        return (String) this.edgeField.getSelectedItem();
     }
 }

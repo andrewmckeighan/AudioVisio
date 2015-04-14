@@ -483,15 +483,18 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             return;
         }
 
-        int option = JOptionPane.showConfirmDialog(this, "This will save all changes, and will break object links.\nAre you sure you want to do this?", "Regenerate IDs", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(this, "This will save all changes, and might break object links.\nAre you sure you want to do this?", "Regenerate IDs", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (option == JOptionPane.YES_OPTION){
-            this.write();
+            if (this.currentLevel.getFileName() != null)
+                this.write();
+
             this.currentLevel.regenIds();
             this.buildTree();
 
             JOptionPane.showMessageDialog(this, "IDs have ben regenerated.", "Regenerate IDs", JOptionPane.INFORMATION_MESSAGE);
-            this.write();
+            if (this.currentLevel.getFileName() != null)
+                this.write();
         } else {
             JOptionPane.showMessageDialog(this, "IDs will not be re-generated.", "Regenerate IDs", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -608,11 +611,13 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         if (leverDialog.getStatus()){
             Vector3f loc = leverDialog.getLevelLocation();
             String name = leverDialog.getName();
+            String edge = leverDialog.getEdge();
             boolean state = leverDialog.getState();
 
             Lever lever = new Lever(loc);
             lever.setName(name);
             lever.setOn(state);
+            lever.setDirection(edge);
             lever.setID(this.currentLevel.getNextId());
             this.currentLevel.addItem(lever);
 

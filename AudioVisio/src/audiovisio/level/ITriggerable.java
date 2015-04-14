@@ -37,4 +37,12 @@ public interface ITriggerable {
      */
     void link( Long id );
 
+    /**
+     * Set the list of linked ids. This is meant to be used when
+     * regenerating ids
+     *
+     * @param ids A set containing the new ids.
+     */
+    void setLinks(Set<Long> ids);
+
 }

@@ -151,12 +151,14 @@ public class Lever extends InteractableEntity implements IShootable {
         LevelNode typeNode = new LevelNode("Type", "lever", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
         LevelNode nameNode = new LevelNode("Name", this.name, false);
+        LevelNode dirNode = new LevelNode("Edge", this.direction, false);
         LevelNode stateNode = new LevelNode("Is On", this.state, false);
         LevelNode locationNode = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
         root.add(idNode);
         root.add(nameNode);
+        root.add(dirNode);
         root.add(stateNode);
         root.add(locationNode);
 
@@ -173,6 +175,11 @@ public class Lever extends InteractableEntity implements IShootable {
     @RSLESetter("Is On")
     public void setState( boolean state ){
         this.state = state;
+    }
+
+    @RSLESetter("Edge")
+    public void setDirection( String direction ){
+        this.direction = Direction.valueOf(direction);
     }
 
     @Override

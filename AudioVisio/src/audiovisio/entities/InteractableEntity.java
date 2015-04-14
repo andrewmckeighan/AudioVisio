@@ -90,9 +90,15 @@ public class InteractableEntity extends Entity implements ITriggerable {
     }
 
     @Override
+    public void setLinks( Set<Long> ids ){
+        this.linkedIds = ids;
+    }
+
+    @Override
     public void resolveLinks( Map<Long, ITriggerable> links ){
         if (this.interactionMap != null){ throw new IllegalStateException("Links have already been resolved!"); }
         this.interactionMap = links;
+        this.linkedIds = links.keySet();
     }
 
     @Override
