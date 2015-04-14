@@ -2,7 +2,6 @@ package audiovisio.entities;
 
 import audiovisio.entities.particles.ButtonParticle;
 import audiovisio.entities.particles.Particle;
-import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.networking.messages.TriggerActionMessage;
@@ -44,10 +43,10 @@ public class Button extends InteractableEntity implements IShootable {
         this.location = this.location.mult(Level.SCALE);
         this.geometry.setLocalTranslation(this.location);
 
-        Material randomMaterial = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Button.COLOR);
-        this.geometry.setMaterial(randomMaterial);
+        Material material = new Material(assetManager,
+                this.materialString);
+        material.setColor("Color", Button.COLOR);
+        this.geometry.setMaterial(material);
 
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection
 

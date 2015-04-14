@@ -81,7 +81,8 @@ public class Lever extends InteractableEntity implements IShootable {
         this.onGeometry.setLocalRotation(Lever.ON_ANGLE);
         this.offGeometry.setLocalRotation(Lever.OFF_ANGLE);
 
-        this.location = LevelUtils.getRotation(this.location, this.direction, ROTATION, this.geometry);
+        this.location = LevelUtils.getRotation(this.location, this.direction, Lever.ROTATION, this.onGeometry);
+        this.location = LevelUtils.getRotation(this.location, this.direction, Lever.ROTATION, this.offGeometry);
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Lever.OFFSET);
 

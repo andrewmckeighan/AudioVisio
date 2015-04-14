@@ -42,7 +42,7 @@ public class Entity extends Node implements ILevelItem {
     protected RigidBodyControl physics;
     //read from files
     protected String modelFile      = "";
-    protected String materialString = "";
+    protected String materialString = "Common/MatDefs/Misc/Unshaded.j3md";
     protected Material  material;
     protected ColorRGBA color;
 
