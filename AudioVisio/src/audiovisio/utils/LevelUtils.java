@@ -52,7 +52,7 @@ public class LevelUtils {
         } else if (direction == ILevelItem.Direction.WEST){
             location = location.add(-0.5F, 0.0F, 0.0F);
         } else if (direction == ILevelItem.Direction.NORTH){
-            location = location.add(0.0F, 0.0F, -0.5F);
+            location = location.add(0.0F, 0.0F, 0.5F);
             geometry.setLocalRotation(defaultRotation);
         }
 

@@ -1059,7 +1059,7 @@
       "type": "wall"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "location": {
         "x": 9.0,
         "y": 0.0,
@@ -1069,7 +1069,7 @@
       "type": "wall"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "location": {
         "x": 9.0,
         "y": 0.0,
@@ -1079,7 +1079,7 @@
       "type": "wall"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "location": {
         "x": 9.0,
         "y": 0.0,
@@ -1089,7 +1089,7 @@
       "type": "wall"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "location": {
         "x": 9.0,
         "y": 0.0,
@@ -1099,7 +1099,7 @@
       "type": "wall"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "interactionList": [],
       "name": null,
       "location": {
@@ -1112,7 +1112,7 @@
       "type": "door"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "interactionList": [],
       "name": null,
       "location": {
@@ -1125,7 +1125,7 @@
       "type": "door"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "interactionList": [],
       "name": null,
       "location": {
@@ -1138,7 +1138,7 @@
       "type": "door"
     },
     {
-      "edge": "EAST",
+      "edge": "WEST",
       "interactionList": [],
       "name": null,
       "location": {
@@ -1247,7 +1247,9 @@
       "type": "box"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        125
+      ],
       "name": "roombutton01",
       "location": {
         "x": 0.0,
@@ -1258,7 +1260,9 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        126
+      ],
       "name": "roombutton02",
       "location": {
         "x": 0.0,
@@ -1269,7 +1273,9 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        127
+      ],
       "name": "roombutton03",
       "location": {
         "x": 0.0,
@@ -1280,7 +1286,9 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        128
+      ],
       "name": "roombutton04",
       "location": {
         "x": 0.0,
@@ -1291,7 +1299,10 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        129,
+        125
+      ],
       "name": "outsideButton0",
       "location": {
         "x": 5.0,
@@ -1302,7 +1313,10 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        130,
+        126
+      ],
       "name": "outsideButton1",
       "location": {
         "x": 6.0,
@@ -1313,7 +1327,10 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        131,
+        127
+      ],
       "name": "outsideButton2",
       "location": {
         "x": 7.0,
@@ -1324,7 +1341,10 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        128,
+        132
+      ],
       "name": "outsideButton3",
       "location": {
         "x": 8.0,
@@ -1335,7 +1355,9 @@
       "type": "button"
     },
     {
-      "interactionList": [],
+      "interactionList": [
+        129
+      ],
       "name": "hallButton",
       "location": {
         "x": 9.0,
@@ -1344,6 +1366,46 @@
       },
       "id": 145,
       "type": "button"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 146,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 147,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 148,
+      "type": "wall"
+    },
+    {
+      "subtype": "end",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 149,
+      "type": "trigger"
     }
   ],
   "author": "Taylor Premo",

@@ -649,702 +649,763 @@
       "type": "panel"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
       "id": 80,
-      "edge": "WEST",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 1.0
+      },
       "id": 81,
-      "edge": "WEST",
-      "location": {
-        "z": 1.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 2.0
+      },
       "id": 82,
-      "edge": "WEST",
-      "location": {
-        "z": 2.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.0
+      },
       "id": 83,
-      "edge": "WEST",
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 4.0
+      },
       "id": 84,
-      "edge": "WEST",
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.0
+      },
       "id": 85,
-      "edge": "WEST",
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
       "id": 86,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 87,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 88,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 89,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 90,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 91,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 92,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 93,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 94,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 95,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 96,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 97,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 98,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 99,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 100,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 101,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 102,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 103,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 104,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 105,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 106,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 107,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 108,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 109,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 110,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 111,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 112,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 113,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 114,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 115,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 116,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 117,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 118,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 119,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 120,
+      "type": "wall"
+    },
+    {
       "edge": "WEST",
       "location": {
-        "z": 6.0,
+        "x": 9.0,
         "y": 0.0,
-        "x": 0.0
+        "z": 3.0
       },
+      "id": 121,
       "type": "wall"
     },
     {
-      "id": 87,
-      "edge": "SOUTH",
+      "edge": "WEST",
       "location": {
-        "z": 0.0,
+        "x": 9.0,
         "y": 0.0,
-        "x": 0.0
+        "z": 4.0
       },
-      "type": "wall"
-    },
-    {
-      "id": 96,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 1.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 97,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 2.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 90,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 3.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 91,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 4.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 92,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 5.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 93,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 6.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 94,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 7.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 95,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 8.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 98,
-      "edge": "SOUTH",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 99,
-      "edge": "EAST",
-      "location": {
-        "z": 0.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 100,
-      "edge": "EAST",
-      "location": {
-        "z": 1.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 101,
-      "edge": "EAST",
-      "location": {
-        "z": 2.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 102,
-      "edge": "EAST",
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 103,
-      "edge": "EAST",
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 104,
-      "edge": "EAST",
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 105,
-      "edge": "EAST",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 106,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 107,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 1.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 108,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 2.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 109,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 3.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 110,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 4.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 111,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 5.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 112,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 6.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 113,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 7.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 114,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 8.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 115,
-      "edge": "NORTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 116,
-      "edge": "SOUTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 118,
-      "edge": "SOUTH",
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "type": "wall"
-    },
-    {
-      "id": 120,
-      "edge": "SOUTH",
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "type": "wall"
-    },
-    {
       "id": 122,
-      "edge": "SOUTH",
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 0.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
       "id": 123,
-      "edge": "SOUTH",
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 1.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
       "id": 124,
-      "edge": "EAST",
-      "location": {
-        "z": 1.0,
-        "y": 0.0,
-        "x": 9.0
-      },
       "type": "wall"
     },
     {
+      "edge": "WEST",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 3.0
+      },
       "id": 125,
-      "edge": "EAST",
-      "location": {
-        "z": 2.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
+      "state": false,
+      "type": "door"
     },
     {
+      "edge": "WEST",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 4.0
+      },
       "id": 126,
-      "edge": "EAST",
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
+      "state": false,
+      "type": "door"
     },
     {
+      "edge": "WEST",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 5.0
+      },
       "id": 127,
-      "edge": "EAST",
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
+      "state": false,
+      "type": "door"
     },
     {
+      "edge": "WEST",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 6.0
+      },
       "id": 128,
-      "edge": "EAST",
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "type": "wall"
+      "state": false,
+      "type": "door"
     },
     {
+      "edge": "SOUTH",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 3.0
+      },
       "id": 129,
-      "edge": "EAST",
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "SOUTH",
+      "interactionList": [],
+      "name": null,
       "location": {
-        "z": 6.0,
+        "x": 9.0,
         "y": 0.0,
-        "x": 9.0
+        "z": 4.0
       },
+      "id": 130,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "SOUTH",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 131,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "SOUTH",
+      "interactionList": [],
+      "name": null,
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 132,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 133,
+      "type": "box"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 134,
+      "type": "box"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 135,
+      "type": "box"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 136,
+      "type": "box"
+    },
+    {
+      "interactionList": [
+        125
+      ],
+      "name": "roombutton01",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 137,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        126
+      ],
+      "name": "roombutton02",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 138,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        127
+      ],
+      "name": "roombutton03",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 139,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        128
+      ],
+      "name": "roombutton04",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 140,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        129,
+        125
+      ],
+      "name": "outsideButton0",
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 141,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        130,
+        126
+      ],
+      "name": "outsideButton1",
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 142,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        131,
+        127
+      ],
+      "name": "outsideButton2",
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 143,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        128,
+        132
+      ],
+      "name": "outsideButton3",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 144,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        129
+      ],
+      "name": "hallButton",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 145,
+      "type": "button"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 146,
       "type": "wall"
     },
     {
-      "id": 130,
-      "edge": "EAST",
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 2.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 131,
-      "edge": "EAST",
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 2.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 132,
-      "edge": "EAST",
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 2.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 133,
-      "edge": "EAST",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 2.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 134,
       "edge": "SOUTH",
       "location": {
-        "z": 3.0,
+        "x": 1.0,
         "y": 0.0,
-        "x": 9.0
+        "z": 5.0
       },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 135,
-      "edge": "SOUTH",
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 136,
-      "edge": "SOUTH",
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 137,
-      "edge": "SOUTH",
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "state": false,
-      "interactionList": [],
-      "type": "door"
-    },
-    {
-      "id": 138,
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 1.0
-      },
-      "name": "box",
-      "interactionList": [],
-      "type": "box"
-    },
-    {
-      "id": 139,
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 1.0
-      },
-      "name": "box",
-      "interactionList": [],
-      "type": "box"
-    },
-    {
-      "id": 140,
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 1.0
-      },
-      "name": "box",
-      "interactionList": [],
-      "type": "box"
-    },
-    {
-      "id": 141,
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 1.0
-      },
-      "name": "box",
-      "interactionList": [],
-      "type": "box"
-    },
-    {
-      "id": 142,
-      "location": {
-        "z": 3.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "name": "roombutton01",
-      "interactionList": [
-      ],
-      "type": "button"
-    },
-    {
-      "id": 143,
-      "location": {
-        "z": 4.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "name": "roombutton02",
-      "interactionList": [
-      ],
-      "type": "button"
-    },
-    {
-      "id": 144,
-      "location": {
-        "z": 5.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "name": "roombutton03",
-      "interactionList": [
-      ],
-      "type": "button"
-    },
-    {
-      "id": 145,
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 0.0
-      },
-      "name": "roombutton04",
-      "interactionList": [
-      ],
-      "type": "button"
-    },
-    {
-      "id": 146,
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 5.0
-      },
-      "name": "outsideButton0",
-      "interactionList": [
-      ],
-      "type": "button"
-    },
-    {
       "id": 147,
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 6.0
-      },
-      "name": "outsideButton1",
-      "interactionList": [
-      ],
-      "type": "button"
+      "type": "wall"
     },
     {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
       "id": 148,
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 7.0
-      },
-      "name": "outsideButton2",
-      "interactionList": [
-      ],
-      "type": "button"
+      "type": "wall"
     },
     {
+      "subtype": "end",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
       "id": 149,
-      "location": {
-        "z": 6.0,
-        "y": 0.0,
-        "x": 8.0
-      },
-      "name": "outsideButton3",
-      "interactionList": [
-      ],
-      "type": "button"
-    },
-    {
-      "id": 150,
-      "location": {
-        "z": 2.0,
-        "y": 0.0,
-        "x": 9.0
-      },
-      "name": "hallButton",
-      "interactionList": [
-      ],
-      "type": "button"
+      "type": "trigger"
     }
   ],
   "author": "Taylor Premo",
