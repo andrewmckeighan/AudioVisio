@@ -40,8 +40,8 @@ public class LevelVersions {
         String currentVersion = oldVersion;
 
         while (LevelVersions.upgraders.containsKey(currentVersion)){
-            ILevelUpgrader upgrader = LevelVersions.upgraders.get(oldVersion);
-            LogHelper.info(String.format("Upgrading %s -> %s", oldVersion, upgrader.newVersion()));
+            ILevelUpgrader upgrader = LevelVersions.upgraders.get(currentVersion);
+            LogHelper.info(String.format("Upgrading %s -> %s", currentVersion, upgrader.newVersion()));
             upgrader.upgrade(object);
 
             currentVersion = upgrader.newVersion().toString();

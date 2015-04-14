@@ -157,20 +157,16 @@
                    childLayout="center">
                 <text text="Host" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000"/>
             </panel>
-            <panel id="panelmid" height="20%" width="100%" align="center" backgroundColor="#FFFFFF"
+            <panel id="panelmid" height="10%" width="100%" align="center" backgroundColor="#FFFFFF"
                    childLayout="center">
                 <control name="button" label="Continue" id="ContButton" height="50%" width="50%" align="center"
                          valign="center">
                     <interact onClick="clientAndServerInit()"/>
                 </control>
             </panel>
-            <panel id="panel_fill" height="20%" width="100%" align="center" childLayout="center"
+            <panel id="panel_fill" height="50%" width="100%" align="center" childLayout="center"
                    backgroundColor="#FFFFFF">
-
-            </panel>
-            <panel id="panel_mid_low" height="20%" width="100%" align="center" childLayout="center"
-                   backgroundColor="#FFFFFF">
-
+                <control name="listBox" id="levelList" vertical="optional" horizontal="optional" displayItems="10" />
             </panel>
             <panel id="panel" height="20%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
                 <control name="button" label="Back" id="BackButton" height="50%" width="50%" align="center"

@@ -62,9 +62,9 @@ public class JSONHelper {
      */
     public static JSONObject saveVector3f( Vector3f vec ){
         JSONObject loc = new JSONObject();
-        loc.put(JSONHelper.KEY_LOCATION_X, vec.x);
-        loc.put(JSONHelper.KEY_LOCATION_Y, vec.y);
-        loc.put(JSONHelper.KEY_LOCATION_Z, vec.z);
+        loc.put(JSONHelper.KEY_LOCATION_X, ((Float) vec.x).doubleValue());
+        loc.put(JSONHelper.KEY_LOCATION_Y, ((Float) vec.y).doubleValue());
+        loc.put(JSONHelper.KEY_LOCATION_Z, ((Float) vec.z).doubleValue());
 
         return loc;
     }

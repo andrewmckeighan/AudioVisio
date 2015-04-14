@@ -1,6 +1,7 @@
-package audiovisio.rsle.editor.dialogs;
+package audiovisio.rsle.editor.dialogs.entities;
 
 import audiovisio.rsle.editor.components.LocationField;
+import audiovisio.rsle.editor.dialogs.NewDialog;
 import com.jme3.math.Vector3f;
 
 import javax.swing.*;
@@ -9,21 +10,20 @@ import java.awt.*;
 /**
  * @author Matt Gerst
  */
-public class NewBoxDialog extends NewDialog {
-    JLabel lblName     = new JLabel("Name");
-    JLabel lblLocation = new JLabel("Location");
-
+public class NewButtonDialog extends NewDialog {
+    JLabel        lblName       = new JLabel("Name");
+    JLabel        lblLocation   = new JLabel("Location");
     JTextField    nameField     = new JTextField();
     LocationField locationField = new LocationField();
 
-    public NewBoxDialog( Frame owner, boolean modal ){
+    public NewButtonDialog( Frame owner, boolean modal ){
         super(owner, modal);
         this.init();
     }
 
     @Override
     protected void init(){
-        this.setTitle("New Box");
+        this.setTitle("New Button");
         this.setLayout(new GridLayout(3, 2));
 
         this.add(this.lblName);

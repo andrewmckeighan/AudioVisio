@@ -573,4 +573,9 @@ public class Level {
     public Node getShootables(){
         return this.shootables;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s by %s (%s)", this.name, this.author, this.version);
+    }
 }

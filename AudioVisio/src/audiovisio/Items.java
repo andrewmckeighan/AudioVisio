@@ -6,6 +6,7 @@ import audiovisio.entities.Door;
 import audiovisio.entities.Lever;
 import audiovisio.level.*;
 import audiovisio.level.triggers.EndTrigger;
+import audiovisio.level.triggers.LevelTrigger;
 import audiovisio.level.triggers.TextTrigger;
 
 /**
@@ -26,6 +27,7 @@ public class Items {
 
         LevelRegistry.registerItem("trigger", Trigger.class);
         LevelRegistry.registerItemSubType("trigger", "end", EndTrigger.class);
+        LevelRegistry.registerItemSubType("trigger", "level", LevelTrigger.class);
         LevelRegistry.registerItemSubType("trigger", "text", TextTrigger.class);
     }
 }
