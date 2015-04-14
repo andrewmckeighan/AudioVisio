@@ -13,10 +13,40 @@ import java.nio.file.Files;
 
 public class FileUtils {
     public static final String json = "json";
+    /**
+     * The location of the data directory. This directory
+     * contains files related to an specific instance of
+     * AudioVisio. This includes levels, user data, and
+     * similar things.
+     */
     public static String dataDir;
+
+    /**
+     * The location of the level directory. This directory
+     * contains all the level files that AudioVisio knows
+     * about.
+     */
     public static String levelDir;
+
+    /**
+     * The location of the metadata directory. This directory
+     * contains mainly configuration files as well as files
+     * containing user data.
+     */
     public static String metaDir;
 
+    private static final String[] DEFAULT_LEVELS = {"demo_level.json"};
+    private static final String[] META_FILES = {"config.json"};
+
+    /**
+     * Load a json file from disk. This takes in a
+     * reference to a file and returns the JSONObject
+     * representing its contents.
+     *
+     * @param file The file to load
+     *
+     * @return The jsonobject found, null otherwise
+     */
     public static JSONObject loadJSONFile( File file ){
         JSONParser parser = new JSONParser();
 
@@ -55,6 +85,9 @@ public class FileUtils {
         return ext;
     }
 
+    /**
+     * A file filter for the level file types.
+     */
     public static class LevelFileFilter extends FileFilter {
 
         @Override
@@ -77,14 +110,17 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Get a File object that points to the data directory
+     *
+     * @return The data directory object
+     */
     public static File getDataDirectory(){
         String directory;
-        if(System.getProperty("os.name").toUpperCase().contains("WIN")){
+        if (System.getProperty("os.name").toUpperCase().contains("WIN")){
             directory = System.getenv("AppData");
             directory += "/AudioVisio";
-        }
-        else
-        {
+        } else {
             directory = System.getProperty("user.home");
             directory += "/.audiovisio";
         }
@@ -92,86 +128,132 @@ public class FileUtils {
         return new File(directory);
     }
 
+    /**
+     * Get the File object that points to the location of
+     * the level directory.
+     *
+     * @return The level directory object
+     */
     public static File getLevelDirectory(){
         return new File(FileUtils.levelDir);
     }
 
+    /**
+     * Get the File object that points to the location of
+     * the metadata directory.
+     *
+     * @return The meta directory object
+     */
     public static File getMetaDirectory(){
         return new File(FileUtils.metaDir);
     }
 
+    /**
+     * Get a metadata file
+     *
+     * @param file The file to get a reference to
+     *
+     * @return The requested file
+     */
     public static File getMetaFile( String file ){
         return new File(FileUtils.metaDir + "/" + file);
     }
 
+    /**
+     * Get a level file
+     *
+     * @param file The file to get a reference t
+     *
+     * @return The requested level file
+     */
     public static File getLevelFile( String file ){
         return new File(FileUtils.levelDir + "/" + file);
     }
 
+    /**
+     * Perform a sanity check on the data directory. This will
+     * attempt to create the data directory structure if it
+     * does not already exist.
+     *
+     * @return true if successful, false otherwise
+     */
     public static boolean dataDirectorySanityCheck(){
         File dataDir = getDataDirectory();
         FileUtils.dataDir = dataDir.toString();
         FileUtils.levelDir = dataDir.toString() + "/levels";
         FileUtils.metaDir = dataDir.toString() + "/data";
 
-        if (dataDir.exists() && dataDir.isDirectory()){
-            LogHelper.fine("Data directory exists");
-            return true;
-        } else if (dataDir.exists() && !dataDir.isDirectory()){
+        if (dataDir.exists() && !dataDir.isDirectory()){
             LogHelper.warn("Data directory is not a directory");
             return false;
         } else if (!dataDir.exists()){
-            if(dataDir.mkdir()){
-                File lvl = new File(FileUtils.levelDir);
-
-                if (!lvl.exists() && !lvl.isDirectory()){
-                    if (!lvl.mkdir()){
-                        LogHelper.warn("Could not create level directory");
-                        return false;
-                    }
-
-                    populateDefaultLevels(lvl);
-                }
-
-                File meta = new File(FileUtils.metaDir);
-
-                if (!meta.exists() && !meta.isDirectory()){
-                    if (!meta.mkdir()){
-                        LogHelper.warn("Could not create meta directory");
-                        return false;
-                    }
-
-                    populateDefaultMeta(meta);
-                }
-
-            } else {
+            if (!dataDir.mkdir()){
                 LogHelper.warn("There was an error creating the data directory");
                 return false;
             }
         }
 
+        File lvl = new File(FileUtils.levelDir);
+
+        if (!lvl.exists() && !lvl.isDirectory()){
+            if (!lvl.mkdir()){
+                LogHelper.warn("Could not create level directory");
+                return false;
+            }
+        }
+        FileUtils.populateDefaultLevels(lvl);
+
+        File meta = new File(FileUtils.metaDir);
+
+        if (!meta.exists() && !meta.isDirectory()){
+            if (!meta.mkdir()){
+                LogHelper.warn("Could not create meta directory");
+                return false;
+            }
+        }
+        FileUtils.populateDefaultMeta(meta);
+
         return true;
     }
 
-    private static void populateDefaultLevels(File levelDir){
-        File demo_level = new File(FileUtils.class.getResource("/Default/Levels/demo_level.json").getPath());
-        File dest = new File(levelDir.toString() + "/demo_level.json");
+    /**
+     * Populate the level directory with the default levels
+     *
+     * @param levelDir A reference to the level directory object
+     */
+    private static void populateDefaultLevels( File levelDir ){
+        File lvlFile, dest;
+        for (String level : DEFAULT_LEVELS){
+            lvlFile = new File(FileUtils.class.getResource("/Default/Levels/" + level).getPath());
+            dest = new File(levelDir.toString() + "/" + level);
 
-        try{
-            Files.copy(demo_level.toPath(), dest.toPath());
-        } catch (IOException e){
-            LogHelper.warn("There was an error populating the default levels", e);
+            FileUtils.createFileIfNotExists(lvlFile, dest);
         }
     }
 
-    private static void populateDefaultMeta(File metaDir){
-        File defaultConfig = new File(FileUtils.class.getResource("/Default/Configuration/config.json").getPath());
-        File dest = new File(metaDir.toString() + "/config.json");
+    /**
+     * Populate the metadata directory with the default levels
+     *
+     * @param metaDir A reference to the metadata directory object
+     */
+    private static void populateDefaultMeta( File metaDir ){
+        File metaFile, dest;
+        for (String file : META_FILES){
+            metaFile = new File(FileUtils.class.getResource("/Default/Configuration/" + file).getPath());
+            dest = new File(metaDir.toString() + "/" + file);
 
-        try{
-            Files.copy(defaultConfig.toPath(), dest.toPath());
-        } catch (IOException e){
-            LogHelper.warn("There was an error populating the default metadata", e);
+            FileUtils.createFileIfNotExists(metaFile, dest);
+        }
+    }
+
+    private static void createFileIfNotExists( File toCheck, File toCreate ){
+        if (!toCreate.exists()){
+            try{
+                LogHelper.info("Creating file " + toCreate);
+                Files.copy(toCheck.toPath(), toCreate.toPath());
+            } catch (IOException e){
+                LogHelper.warn("There was an error populating the default metadata", e);
+            }
         }
     }
 }
