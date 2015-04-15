@@ -53,7 +53,7 @@ public class LevelLoader {
         VersionString formatVersion = new VersionString((String) obj.get(Level.KEY_FORMAT));
         if (Level.CURRENT_LEVEL_FORMAT.compareTo(formatVersion) > 0){
             LevelVersions.upgrade(formatVersion.getVersion(), obj);
-            LevelLoader.writeJson(obj, file);
+            FileUtils.saveJSONFile(file, obj);
         }
 
         return new Level(obj, file.getName());
@@ -69,24 +69,7 @@ public class LevelLoader {
         levelFile.setReadable(true);
         levelFile.setWritable(true);
         level.saveLevel();
-        LevelLoader.writeJson(level.levelData, levelFile);
-    }
-
-    /**
-     * Write a JSONObject to a file.
-     *
-     * @param obj  The JSONObject to write
-     * @param file The file to write to
-     */
-    public static void writeJson( JSONObject obj, File file ){
-        try{
-            FileWriter saveFile = new FileWriter(file);
-            obj.writeJSONString(saveFile);
-            saveFile.flush();
-            saveFile.close();
-        } catch (IOException e){
-            LogHelper.severe("Could not save level file", e);
-        }
+        FileUtils.saveJSONFile(levelFile, level.levelData);
     }
 
     public static void initLevelList(){
