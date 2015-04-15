@@ -118,25 +118,25 @@
                 <panel id="midright" height="100%" width="50%" childLayout="vertical" align="right" backgroundColor="#43f9" >
 
                     <panel id="forward" height="25%" width="100%" align="center" backgroundColor="#FFFFFF" childLayout="center">
-                        <control name="button" label="Forwards" id="fw" height="50%" width="95%" align="center" valign="center">
-                            <interact onClick="setKeyBinding(fw)"/>
+                        <control name="button" label="Forwards" id="Forward" height="50%" width="95%" align="center" valign="center">
+                            <interact onClick="setKeyBinding(Forward)"/>
                         </control>
                     </panel>
                     <panel id="backwards" height="25%" width="100%" align="center" childLayout="center"
                            backgroundColor="#FFFFFF">
-                        <control name="button" label="Backwards" id="bw" height="50%" width="95%" align="center"
+                        <control name="button" label="Backwards" id="Backward" height="50%" width="95%" align="center"
                                  valign="center">
-                            <interact onClick="setKeyBinding(bw)"/>
+                            <interact onClick="setKeyBinding(Backward)"/>
                         </control>
                     </panel>
                     <panel id="left" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-                        <control name="button" label="Left" id="lb" height="50%" width="95%" align="center" valign="center">
-                            <interact onClick="setKeyBinding(lb)"/>
+                        <control name="button" label="Left" id="Left" height="50%" width="95%" align="center" valign="center">
+                            <interact onClick="setKeyBinding(Left)"/>
                         </control>
                     </panel>
                     <panel id="right" height="25%" width="100%" align="center" childLayout="center" backgroundColor="#FFFFFF">
-                        <control name="button" label="Right" id="rb" height="50%" width="95%" align="center" valign="center">
-                            <interact onClick="setKeyBinding(rb)"/>
+                        <control name="button" label="Right" id="Right" height="50%" width="95%" align="center" valign="center">
+                            <interact onClick="setKeyBinding(Right)"/>
                         </control>
                     </panel>
 
