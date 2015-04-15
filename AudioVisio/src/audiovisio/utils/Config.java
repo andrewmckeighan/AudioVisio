@@ -27,15 +27,15 @@ public final class Config {
 
         JSONObject bindings = (JSONObject) obj.get("keybinding");
 
-        keyMap.put(KEY_FORWARD, Integer.decode((String) bindings.get(KEY_FORWARD)));
-        keyMap.put(KEY_BACKWARD, Integer.decode((String) bindings.get(KEY_BACKWARD)));
-        keyMap.put(KEY_LEFT, Integer.decode((String) bindings.get(KEY_LEFT)));
-        keyMap.put(KEY_RIGHT, Integer.decode((String) bindings.get(KEY_RIGHT)));
-        keyMap.put(KEY_JUMP, Integer.decode((String) bindings.get(KEY_JUMP)));
-        keyMap.put(KEY_SHOOT, Integer.decode((String) bindings.get(KEY_SHOOT)));
-        keyMap.put(KEY_DEBUG, Integer.decode((String) bindings.get(KEY_DEBUG)));
-        keyMap.put(KEY_RELEASE_MOUSE, Integer.decode((String) bindings.get(KEY_RELEASE_MOUSE)));
-        keyMap.put(KEY_NO_CLIP, Integer.decode((String) bindings.get(KEY_NO_CLIP)));
+        Config.keyMap.put(Config.KEY_FORWARD, Integer.decode((String) bindings.get(Config.KEY_FORWARD)));
+        Config.keyMap.put(Config.KEY_BACKWARD, Integer.decode((String) bindings.get(Config.KEY_BACKWARD)));
+        Config.keyMap.put(Config.KEY_LEFT, Integer.decode((String) bindings.get(Config.KEY_LEFT)));
+        Config.keyMap.put(Config.KEY_RIGHT, Integer.decode((String) bindings.get(Config.KEY_RIGHT)));
+        Config.keyMap.put(Config.KEY_JUMP, Integer.decode((String) bindings.get(Config.KEY_JUMP)));
+        Config.keyMap.put(Config.KEY_SHOOT, Integer.decode((String) bindings.get(Config.KEY_SHOOT)));
+        Config.keyMap.put(Config.KEY_DEBUG, Integer.decode((String) bindings.get(Config.KEY_DEBUG)));
+        Config.keyMap.put(Config.KEY_RELEASE_MOUSE, Integer.decode((String) bindings.get(Config.KEY_RELEASE_MOUSE)));
+        Config.keyMap.put(Config.KEY_NO_CLIP, Integer.decode((String) bindings.get(Config.KEY_NO_CLIP)));
     }
 
     /**
@@ -48,7 +48,7 @@ public final class Config {
      * @return The keycode of the mapping
      */
     public static int getKeyMapping( String map ){
-        return keyMap.get(map);
+        return Config.keyMap.get(map);
     }
 
     /**
@@ -60,6 +60,25 @@ public final class Config {
      * @param keycode The keycode to set the mapping to
      */
     public static void setKeyMapping( String map, int keycode ){
-        keyMap.put(map, keycode);
+        Config.keyMap.put(map, keycode);
+    }
+
+    public static JSONObject getJsonObject(){
+        JSONObject jsonObject = new JSONObject();
+        JSONObject bindings = new JSONObject();
+
+        bindings.put(Config.KEY_FORWARD, Config.keyMap.get(Config.KEY_FORWARD));
+        bindings.put(Config.KEY_BACKWARD, Config.keyMap.get(Config.KEY_BACKWARD));
+        bindings.put(Config.KEY_LEFT, Config.keyMap.get(Config.KEY_LEFT));
+        bindings.put(Config.KEY_RIGHT, Config.keyMap.get(Config.KEY_RIGHT));
+        bindings.put(Config.KEY_JUMP, Config.keyMap.get(Config.KEY_JUMP));
+        bindings.put(Config.KEY_SHOOT, Config.keyMap.get(Config.KEY_SHOOT));
+        bindings.put(Config.KEY_DEBUG, Config.keyMap.get(Config.KEY_DEBUG));
+        bindings.put(Config.KEY_RELEASE_MOUSE, Config.keyMap.get(Config.KEY_RELEASE_MOUSE));
+        bindings.put(Config.KEY_NO_CLIP, Config.keyMap.get(Config.KEY_NO_CLIP));
+
+        jsonObject.put("keybinding", bindings);
+
+        return jsonObject;
     }
 }

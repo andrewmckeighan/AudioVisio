@@ -1,5 +1,6 @@
 package audiovisio.utils;
 
+import audiovisio.level.LevelLoader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -67,6 +68,13 @@ public class FileUtils {
         }
 
         return obj;
+    }
+
+    public static void saveJSONFile( JSONObject jsonObject, File file ){
+        file.setReadable(true);
+        file.setWritable(true);
+
+        LevelLoader.writeJson(jsonObject, file);
     }
 
     /**
@@ -178,10 +186,10 @@ public class FileUtils {
      * @return true if successful, false otherwise
      */
     public static boolean dataDirectorySanityCheck(){
-        File dataDir = getDataDirectory();
+        File dataDir = FileUtils.getDataDirectory();
         FileUtils.dataDir = dataDir.toString();
-        FileUtils.levelDir = dataDir.toString() + "/levels";
-        FileUtils.metaDir = dataDir.toString() + "/data";
+        FileUtils.levelDir = dataDir + "/levels";
+        FileUtils.metaDir = dataDir + "/data";
 
         if (dataDir.exists() && !dataDir.isDirectory()){
             LogHelper.warn("Data directory is not a directory");
@@ -223,9 +231,9 @@ public class FileUtils {
      */
     private static void populateDefaultLevels( File levelDir ){
         File lvlFile, dest;
-        for (String level : DEFAULT_LEVELS){
+        for (String level : FileUtils.DEFAULT_LEVELS){
             lvlFile = new File(FileUtils.class.getResource("/Default/Levels/" + level).getPath());
-            dest = new File(levelDir.toString() + "/" + level);
+            dest = new File(levelDir + "/" + level);
 
             FileUtils.createFileIfNotExists(lvlFile, dest);
         }
@@ -238,9 +246,9 @@ public class FileUtils {
      */
     private static void populateDefaultMeta( File metaDir ){
         File metaFile, dest;
-        for (String file : META_FILES){
+        for (String file : FileUtils.META_FILES){
             metaFile = new File(FileUtils.class.getResource("/Default/Configuration/" + file).getPath());
-            dest = new File(metaDir.toString() + "/" + file);
+            dest = new File(metaDir + "/" + file);
 
             FileUtils.createFileIfNotExists(metaFile, dest);
         }
