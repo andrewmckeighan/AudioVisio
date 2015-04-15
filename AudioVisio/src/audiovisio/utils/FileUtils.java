@@ -6,10 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.filechooser.FileFilter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 
 public class FileUtils {
@@ -75,6 +72,25 @@ public class FileUtils {
         file.setWritable(true);
 
         LevelLoader.writeJson(jsonObject, file);
+    }
+
+    /**
+     * Save a json file to disk. This takes in a
+     * reference to a file and the JSON object to
+     * save.
+     *
+     * @param file The file to save to
+     * @param object The object to save
+     */
+    public static void saveJSONFile( File file, JSONObject object ){
+        try{
+            FileWriter saveFile = new FileWriter(file);
+            object.writeJSONString(saveFile);
+            saveFile.flush();
+            saveFile.close();
+        } catch (IOException e){
+            LogHelper.severe("There was an error saving the file", e);
+        }
     }
 
     /**

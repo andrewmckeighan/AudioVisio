@@ -20,7 +20,7 @@ import com.jme3.scene.Spatial;
 
 /**
  * TODO: make sure all parameters of Player are children of player, and handled entirely within player.
- * TODO: format this to work with matt's level file reading system. (new, load, init, start).
+ * TODO: format this to work with matt's level file reading system. (new, load, load, start).
  */
 
 

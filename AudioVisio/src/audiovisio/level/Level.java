@@ -27,7 +27,7 @@ import java.util.*;
  * JSON files.
  */
 public class Level {
-    public static final VersionString CURRENT_LEVEL_FORMAT = new VersionString("0.5");
+    public static final VersionString CURRENT_LEVEL_FORMAT = new VersionString("0.6");
     public static final Vector3f      SCALE                = new Vector3f(5.2F, 10.2F, 5.2F);
 
     public static final String KEY_NAME       = "name";

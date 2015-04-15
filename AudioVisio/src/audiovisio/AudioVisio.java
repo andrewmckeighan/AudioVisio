@@ -13,7 +13,6 @@ import audiovisio.utils.NetworkUtils;
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
-import org.json.simple.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,15 +38,14 @@ public class AudioVisio extends SimpleApplication {
     public static void main( String[] args ){
         FileUtils.dataDirectorySanityCheck();
 
-        JSONObject confObj = FileUtils.loadJSONFile(FileUtils.getMetaFile("config.json"));
-        Config.init(confObj);
+        Config.load();
         LevelLoader.initLevelList();
 
         Calendar cal = Calendar.getInstance();
         cal.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("HH.mm.ss");
         LogHelper.init();
-//        LogHelper.init("Log_" + sdf.format(cal.getTime()) + ".log");
+//        LogHelper.load("Log_" + sdf.format(cal.getTime()) + ".log");
         LogHelper.setLevel(Level.INFO);
         AppSettings settings = new AppSettings(true);
         settings.setFrameRate(AudioVisio.FPS);

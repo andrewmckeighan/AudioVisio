@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Holds the configuration options for the game. These options
+ * are stored in the config.json meta file. It contains information
+ * such as keybindings and user preferences.
+ *
  * @author Matt Gerst
  */
 public final class Config {
@@ -22,7 +26,11 @@ public final class Config {
     private static JSONObject jsonObject;
     private static Map<String, Integer> keyMap = new HashMap<String, Integer>();
 
-    public static void init( JSONObject obj ){
+    /**
+     * Load the configuration from config.json
+     */
+    public static void load(){
+        JSONObject obj = FileUtils.loadJSONFile(FileUtils.getMetaFile("config.json"));
         Config.jsonObject = obj;
 
         JSONObject bindings = (JSONObject) obj.get("keybinding");
@@ -80,5 +88,26 @@ public final class Config {
         jsonObject.put("keybinding", bindings);
 
         return jsonObject;
+    }
+
+    /**
+     * Save the current state of the configuration to the config file.
+     */
+    public static void save(){
+        JSONObject bindings = (JSONObject) jsonObject.get("keybinding");
+
+        bindings.put(KEY_FORWARD, Integer.toHexString(keyMap.get(KEY_FORWARD)));
+        bindings.put(KEY_BACKWARD, Integer.toHexString(keyMap.get(KEY_BACKWARD)));
+        bindings.put(KEY_LEFT, Integer.toHexString(keyMap.get(KEY_LEFT)));
+        bindings.put(KEY_RIGHT, Integer.toHexString(keyMap.get(KEY_RIGHT)));
+        bindings.put(KEY_JUMP, Integer.toHexString(keyMap.get(KEY_JUMP)));
+        bindings.put(KEY_SHOOT, Integer.toHexString(keyMap.get(KEY_SHOOT)));
+        bindings.put(KEY_DEBUG, Integer.toHexString(keyMap.get(KEY_DEBUG)));
+        bindings.put(KEY_RELEASE_MOUSE, Integer.toHexString(keyMap.get(KEY_RELEASE_MOUSE)));
+        bindings.put(KEY_NO_CLIP, Integer.toHexString(keyMap.get(KEY_NO_CLIP)));
+
+        jsonObject.put("keybinding", bindings);
+
+        FileUtils.saveJSONFile(FileUtils.getMetaFile("config.json"), jsonObject);
     }
 }
