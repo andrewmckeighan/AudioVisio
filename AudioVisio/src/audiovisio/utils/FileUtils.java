@@ -1,6 +1,5 @@
 package audiovisio.utils;
 
-import audiovisio.level.LevelLoader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -65,13 +64,6 @@ public class FileUtils {
         }
 
         return obj;
-    }
-
-    public static void saveJSONFile( JSONObject jsonObject, File file ){
-        file.setReadable(true);
-        file.setWritable(true);
-
-        LevelLoader.writeJson(jsonObject, file);
     }
 
     /**
