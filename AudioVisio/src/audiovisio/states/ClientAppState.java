@@ -96,7 +96,7 @@ public class ClientAppState extends AbstractAppState implements
             try{
                 Thread.sleep(100);
             } catch (InterruptedException e){
-                LogHelper.warn("Thread.sleep interuppted in client init, ", e);
+                LogHelper.warn("Thread.sleep interuppted in client load, ", e);
             }
         }
         ClientAppState.isAudio = this.myClient.getId() % 2 == 1;

@@ -36,7 +36,7 @@ public class Lever extends InteractableEntity implements IShootable {
     public  PlayerParticle particle;
     private Geometry       onGeometry;
     //    @Override
-//    public void init( boolean isAudio ){
+//    public void load( boolean isAudio ){
 //        if(isAudio){
 //            this.model.removeFromParent();
 //        } else {
