@@ -3,8 +3,10 @@ package audiovisio.states;
 import audiovisio.AudioVisio;
 import audiovisio.level.Level;
 import audiovisio.level.LevelLoader;
+import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
+import audiovisio.utils.Config;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -120,7 +122,10 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
  	 */
 	public void initSettings(){
 		this.nifty.gotoScreen("settings");
+        FileUtils.saveJSONFile(FileUtils.getMetaFile("config.json", Config.getJSONObj()));
 	}
+
+
 
 	/**
 	 * Switches the settings screen to the "Keybindings" screen.
@@ -155,11 +160,13 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 		return temp;
 	}
 	boolean kFlag;
-
+        String Butt = "";
 	public void setKeyBinding(String butt){
+        Butt = butt;
 		kFlag = true;
 		btn = this.nifty.getScreen("keybindings").findNiftyControl(butt, Button.class);
 		kFlag = false;
+
 	}
 
 	/**
@@ -247,6 +254,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 			keyCode = keyInputEvent.getKeyCode();
 			if (keyInputEvent.isPressed()){
 				btn.setText(Character.toString(keyChar));
+                Config.setKeyMapping(Butt, keyCode);
 				System.out.println(keyChar);
 				return;
 			}
