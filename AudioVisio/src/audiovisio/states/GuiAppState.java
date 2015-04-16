@@ -4,7 +4,6 @@ import audiovisio.AudioVisio;
 import audiovisio.level.Level;
 import audiovisio.level.LevelLoader;
 import audiovisio.utils.Config;
-import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
@@ -119,7 +118,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
      */
     public void initSettings(){
         this.nifty.gotoScreen("settings");
-        FileUtils.saveJSONFile(FileUtils.getMetaFile("config.json"), Config.getJsonObject());
+        Config.save();
     }
 
 

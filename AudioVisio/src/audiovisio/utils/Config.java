@@ -71,43 +71,24 @@ public final class Config {
         Config.keyMap.put(map, keycode);
     }
 
-    public static JSONObject getJsonObject(){
-        JSONObject jsonObject = new JSONObject();
-        JSONObject bindings = new JSONObject();
-
-        bindings.put(Config.KEY_FORWARD, Config.keyMap.get(Config.KEY_FORWARD));
-        bindings.put(Config.KEY_BACKWARD, Config.keyMap.get(Config.KEY_BACKWARD));
-        bindings.put(Config.KEY_LEFT, Config.keyMap.get(Config.KEY_LEFT));
-        bindings.put(Config.KEY_RIGHT, Config.keyMap.get(Config.KEY_RIGHT));
-        bindings.put(Config.KEY_JUMP, Config.keyMap.get(Config.KEY_JUMP));
-        bindings.put(Config.KEY_SHOOT, Config.keyMap.get(Config.KEY_SHOOT));
-        bindings.put(Config.KEY_DEBUG, Config.keyMap.get(Config.KEY_DEBUG));
-        bindings.put(Config.KEY_RELEASE_MOUSE, Config.keyMap.get(Config.KEY_RELEASE_MOUSE));
-        bindings.put(Config.KEY_NO_CLIP, Config.keyMap.get(Config.KEY_NO_CLIP));
-
-        jsonObject.put("keybinding", bindings);
-
-        return jsonObject;
-    }
-
     /**
      * Save the current state of the configuration to the config file.
      */
     public static void save(){
-        JSONObject bindings = (JSONObject) jsonObject.get("keybinding");
+        JSONObject bindings = (JSONObject) Config.jsonObject.get("keybinding");
 
-        bindings.put(KEY_FORWARD, Integer.toHexString(keyMap.get(KEY_FORWARD)));
-        bindings.put(KEY_BACKWARD, Integer.toHexString(keyMap.get(KEY_BACKWARD)));
-        bindings.put(KEY_LEFT, Integer.toHexString(keyMap.get(KEY_LEFT)));
-        bindings.put(KEY_RIGHT, Integer.toHexString(keyMap.get(KEY_RIGHT)));
-        bindings.put(KEY_JUMP, Integer.toHexString(keyMap.get(KEY_JUMP)));
-        bindings.put(KEY_SHOOT, Integer.toHexString(keyMap.get(KEY_SHOOT)));
-        bindings.put(KEY_DEBUG, Integer.toHexString(keyMap.get(KEY_DEBUG)));
-        bindings.put(KEY_RELEASE_MOUSE, Integer.toHexString(keyMap.get(KEY_RELEASE_MOUSE)));
-        bindings.put(KEY_NO_CLIP, Integer.toHexString(keyMap.get(KEY_NO_CLIP)));
+        bindings.put(Config.KEY_FORWARD, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_FORWARD)));
+        bindings.put(Config.KEY_BACKWARD, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_BACKWARD)));
+        bindings.put(Config.KEY_LEFT, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_LEFT)));
+        bindings.put(Config.KEY_RIGHT, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_RIGHT)));
+        bindings.put(Config.KEY_JUMP, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_JUMP)));
+        bindings.put(Config.KEY_SHOOT, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_SHOOT)));
+        bindings.put(Config.KEY_DEBUG, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_DEBUG)));
+        bindings.put(Config.KEY_RELEASE_MOUSE, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_RELEASE_MOUSE)));
+        bindings.put(Config.KEY_NO_CLIP, "0x" + Integer.toHexString(Config.keyMap.get(Config.KEY_NO_CLIP)));
 
-        jsonObject.put("keybinding", bindings);
+        Config.jsonObject.put("keybinding", bindings);
 
-        FileUtils.saveJSONFile(FileUtils.getMetaFile("config.json"), jsonObject);
+        FileUtils.saveJSONFile(FileUtils.getMetaFile("config.json"), Config.jsonObject);
     }
 }
