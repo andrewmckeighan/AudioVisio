@@ -28,7 +28,7 @@ import java.util.*;
  */
 public class Level {
     public static final VersionString CURRENT_LEVEL_FORMAT = new VersionString("0.6");
-    public static final Vector3f      SCALE                = new Vector3f(5.2F, 10.2F, 5.2F);
+    public static final Vector3f SCALE = new Vector3f(8.2F, 10.2F, 8.2F);
 
     public static final String KEY_NAME       = "name";
     public static final String KEY_AUTHOR     = "author";
@@ -93,49 +93,6 @@ public class Level {
     // LIFECYCLE
 
     /**
-     * Load the level from the levelData JSON object. The method creates
-     * and loads all the ILevelItems in the level.
-     */
-    public void loadLevel(){
-        JSONObject spawns = (JSONObject) this.levelData.get(Level.KEY_SPAWN);
-
-        JSONObject audio = (JSONObject) spawns.get(Level.KEY_AUDIO_SPAWN);
-        float pAudioRotation = ((Double) audio.get(Level.KEY_SPAWN_ROTATION)).floatValue();
-        this.pAudioSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
-
-        JSONObject visual = (JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN);
-        float pVisualRotation = ((Double) visual.get(Level.KEY_SPAWN_ROTATION)).floatValue();
-        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) visual.get(Level.KEY_SPAWN_LOCATION));
-
-        JSONArray level = (JSONArray) this.levelData.get(Level.KEY_LEVEL_DATA);
-        LogHelper.info(String.format("Loading level '%s'", this.name));
-
-        for (Object item : level){
-            JSONObject itemJson = (JSONObject) item;
-            String type = (String) itemJson.get("type");
-
-            // Start the ID counter at the next available ID.
-            // This is mainly used in the level editors
-            this.NEXT_ID = Math.max(this.NEXT_ID, ((Long) itemJson.get("id")).intValue() + 1);
-
-            ILevelItem lvlItem;
-            if (LevelRegistry.typeHasSubTypes(type) && itemJson.containsKey("subtype")){
-                String subtype = (String) itemJson.get("subtype");
-
-                lvlItem = LevelRegistry.getItemForSubType(type, subtype);
-                lvlItem.load(itemJson);
-                this.levelItems.put(lvlItem.getID(), lvlItem);
-                LogHelper.fine(String.format("Load item of type: %s:%s", type, subtype));
-            } else {
-                lvlItem = LevelRegistry.getItemForType(type);
-                lvlItem.load(itemJson);
-                this.levelItems.put(lvlItem.getID(), lvlItem);
-                LogHelper.fine("Load item of type: " + type);
-            }
-        }
-    }
-
-    /**
      * Initialize the items in the level. It gives the items a reference
      * to the asset manager to allow them to load things like models and
      * meshes.
@@ -195,6 +152,85 @@ public class Level {
     }
 
     /**
+     * Get the root {@link audiovisio.rsle.editor.LevelNode} for
+     * the level.
+     *
+     * @return The root LevelNode
+     */
+    public LevelNode getLevelNode() {
+        LevelNode root = new LevelNode(this.name, true);
+        root.setSourceLevel(this);
+
+        LevelNode lvlName = new LevelNode("Name", this.name, false);
+        LevelNode lvlAuthor = new LevelNode("Author", this.author, false);
+        LevelNode lvlVersion = new LevelNode("Version", this.version, false);
+
+        LevelNode lvlSpawn = new LevelNode("Spawns", true);
+        LevelNode lvlAudio = LevelUtils.vector2node("Audio", this.pAudioSpawn);
+        LevelNode lvlAudioRot = new LevelNode("Rotation", 0F, false);
+        LevelNode lvlVisual = LevelUtils.vector2node("Visual", this.pVisualSpawn);
+        LevelNode lvlVisualRot = new LevelNode("Rotation", 0F, false);
+
+        lvlAudio.add(lvlAudioRot);
+        lvlVisual.add(lvlVisualRot);
+
+        lvlSpawn.add(lvlAudio);
+        lvlSpawn.add(lvlVisual);
+
+        root.add(lvlName);
+        root.add(lvlAuthor);
+        root.add(lvlVersion);
+        root.add(lvlSpawn);
+
+        return root;
+    }
+
+    /**
+     * Load the level from the levelData JSON object. The method creates
+     * and loads all the ILevelItems in the level.
+     */
+    public void loadLevel() {
+        JSONObject spawns = (JSONObject) this.levelData.get(Level.KEY_SPAWN);
+
+        JSONObject audio = (JSONObject) spawns.get(Level.KEY_AUDIO_SPAWN);
+        float pAudioRotation = ((Double) audio.get(Level.KEY_SPAWN_ROTATION)).floatValue();
+        this.pAudioSpawn = JSONHelper.readVector3f((JSONObject) audio.get(Level.KEY_SPAWN_LOCATION));
+
+        JSONObject visual = (JSONObject) spawns.get(Level.KEY_VISUAL_SPAWN);
+        float pVisualRotation = ((Double) visual.get(Level.KEY_SPAWN_ROTATION)).floatValue();
+        this.pVisualSpawn = JSONHelper.readVector3f((JSONObject) visual.get(Level.KEY_SPAWN_LOCATION));
+
+        JSONArray level = (JSONArray) this.levelData.get(Level.KEY_LEVEL_DATA);
+        LogHelper.info(String.format("Loading level '%s'", this.name));
+
+        for (Object item : level) {
+            JSONObject itemJson = (JSONObject) item;
+            String type = (String) itemJson.get("type");
+
+            // Start the ID counter at the next available ID.
+            // This is mainly used in the level editors
+            this.NEXT_ID = Math.max(this.NEXT_ID, ((Long) itemJson.get("id")).intValue() + 1);
+
+            ILevelItem lvlItem;
+            if (LevelRegistry.typeHasSubTypes(type) && itemJson.containsKey("subtype")) {
+                String subtype = (String) itemJson.get("subtype");
+
+                lvlItem = LevelRegistry.getItemForSubType(type, subtype);
+                lvlItem.load(itemJson);
+                this.levelItems.put(lvlItem.getID(), lvlItem);
+                LogHelper.fine(String.format("Load item of type: %s:%s", type, subtype));
+            } else {
+                lvlItem = LevelRegistry.getItemForType(type);
+                lvlItem.load(itemJson);
+                this.levelItems.put(lvlItem.getID(), lvlItem);
+                LogHelper.fine("Load item of type: " + type);
+            }
+        }
+    }
+
+    // METADATA
+
+    /**
      * Save the level to the levelData JSONObject.
      */
     public void saveLevel(){
@@ -232,74 +268,6 @@ public class Level {
         this.levelData.put(Level.KEY_LEVEL_DATA, level);
     }
 
-    // METADATA
-
-    /**
-     * Get the name of the level
-     */
-    public String getName(){
-        return this.name;
-    }
-
-    /**
-     * Set the name of the level
-     *
-     * @param name The level's new name
-     */
-    public void setName( String name ){
-        this.name = name;
-    }
-
-    /**
-     * Get the author of the level
-     */
-    public String getAuthor(){
-        return this.author;
-    }
-
-    /**
-     * Set the author of the level
-     *
-     * @param author The level's new author
-     */
-    public void setAuthor( String author ){
-        this.author = author;
-    }
-
-    /**
-     * Get the version string of the level
-     */
-    public String getVersion(){
-        return this.version;
-    }
-
-    /**
-     * Set the version number of the level
-     *
-     * @param version The new version number
-     */
-    public void setVersion( String version ){
-        this.version = version;
-    }
-
-    /**
-     * Set the filename of the level's JSON file.
-     *
-     * @param fileName path to the JSON file
-     */
-    protected void setFileName( String fileName ){
-        this.fileName = fileName;
-    }
-    /**
-     * Get the filename of the level's JSON
-     * file.
-     *
-     * @return The filename
-     */
-    public String getFileName(){
-        return this.fileName;
-    }
-
     /**
      * Set the File for the Level
      *
@@ -307,42 +275,6 @@ public class Level {
      */
     public void setFile( File loadedFile ){
         this.fileName = loadedFile.getAbsolutePath();
-    }
-
-    // HELPER METHODS
-
-    /**
-     * Get the root {@link audiovisio.rsle.editor.LevelNode} for
-     * the level.
-     *
-     * @return The root LevelNode
-     */
-    public LevelNode getLevelNode(){
-        LevelNode root = new LevelNode(this.name, true);
-        root.setSourceLevel(this);
-
-        LevelNode lvlName = new LevelNode("Name", this.name, false);
-        LevelNode lvlAuthor = new LevelNode("Author", this.author, false);
-        LevelNode lvlVersion = new LevelNode("Version", this.version, false);
-
-        LevelNode lvlSpawn = new LevelNode("Spawns", true);
-        LevelNode lvlAudio = LevelUtils.vector2node("Audio", this.pAudioSpawn);
-        LevelNode lvlAudioRot = new LevelNode("Rotation", 0F, false);
-        LevelNode lvlVisual = LevelUtils.vector2node("Visual", this.pVisualSpawn);
-        LevelNode lvlVisualRot = new LevelNode("Rotation", 0F, false);
-
-        lvlAudio.add(lvlAudioRot);
-        lvlVisual.add(lvlVisualRot);
-
-        lvlSpawn.add(lvlAudio);
-        lvlSpawn.add(lvlVisual);
-
-        root.add(lvlName);
-        root.add(lvlAuthor);
-        root.add(lvlVersion);
-        root.add(lvlSpawn);
-
-        return root;
     }
 
     /**
@@ -421,25 +353,12 @@ public class Level {
     }
 
     /**
-     * Get the next available ID for level objects.
-     *
-     * @return Next ID
-     */
-    public long getNextId(){
-        long curID = this.NEXT_ID;
-        this.NEXT_ID++;
-        return curID;
-    }
-
-    /**
      * Reset the NEXT_ID counter to the starting ID for
      * level objects.
      */
     public void resetNextId(){
         this.NEXT_ID = Level.STARTING_ID;
     }
-
-    // LEVEL ITEMS
 
     /**
      * Add item to the level.
@@ -463,6 +382,123 @@ public class Level {
         }
 
         return false;
+    }
+
+    /**
+     * Set the spawn location and rotation of the audio player.
+     *
+     * @param loc Spawn location
+     * @param rotation rotation
+     */
+    public void setAudioSpawn(Vector3f loc, float rotation) {
+        this.pAudioSpawn = loc;
+    }
+
+    /**
+     * Set the spawn location and rotation of the Visual player.
+     *
+     * @param loc      Spawn location
+     * @param rotation Rotation
+     */
+    public void setVisualSpawn(Vector3f loc, float rotation) {
+        this.pVisualSpawn = loc;
+    }
+
+    // HELPER METHODS
+
+    /**
+     * Retreive an item by its ID
+     *
+     * @param id The id of the item wanted
+     * @return the item if it exists, null otherwise
+     */
+    public ILevelItem getItem(Long id) {
+        return this.levelItems.get(id);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s by %s (%s)", this.name, this.author, this.version);
+    }
+
+    /**
+     * Get the name of the level
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Set the name of the level
+     *
+     * @param name The level's new name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get the author of the level
+     */
+    public String getAuthor() {
+        return this.author;
+    }
+
+    // LEVEL ITEMS
+
+    /**
+     * Set the author of the level
+     *
+     * @param author The level's new author
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     * Get the version string of the level
+     */
+    public String getVersion() {
+        return this.version;
+    }
+
+    /**
+     * Set the version number of the level
+     *
+     * @param version The new version number
+     */
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    /**
+     * Get the filename of the level's JSON
+     * file.
+     *
+     * @return The filename
+     */
+    public String getFileName() {
+        return this.fileName;
+    }
+
+    /**
+     * Set the filename of the level's JSON file.
+     *
+     * @param fileName path to the JSON file
+     */
+    protected void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    /**
+     * Get the next available ID for level objects.
+     *
+     * @return Next ID
+     */
+    public long getNextId() {
+        long curID = this.NEXT_ID;
+        this.NEXT_ID++;
+        return curID;
     }
 
     /**
@@ -543,16 +579,6 @@ public class Level {
     }
 
     /**
-     * Set the spawn location and rotation of the audio player.
-     *
-     * @param loc Spawn location
-     * @param rotation rotation
-     */
-    public void setAudioSpawn( Vector3f loc, float rotation ){
-        this.pAudioSpawn = loc;
-    }
-
-    /**
      * Get the spawn location set by the level for the Visual player.
      *
      * @return spawn location
@@ -562,36 +588,11 @@ public class Level {
     }
 
     /**
-     * Set the spawn location and rotation of the Visual player.
-     *
-     * @param loc Spawn location
-     * @param rotation Rotation
-     */
-    public void setVisualSpawn( Vector3f loc, float rotation ){
-        this.pVisualSpawn = loc;
-    }
-
-    /**
-     * Retreive an item by its ID
-     *
-     * @param id The id of the item wanted
-     * @return the item if it exists, null otherwise
-     */
-    public ILevelItem getItem( Long id ){
-        return this.levelItems.get(id);
-    }
-
-    /**
      * Get the Node containing the shootables in the level.
      *
      * @return Node containing shootables
      */
     public Node getShootables(){
         return this.shootables;
-    }
-
-    @Override
-    public String toString(){
-        return String.format("%s by %s (%s)", this.name, this.author, this.version);
     }
 }

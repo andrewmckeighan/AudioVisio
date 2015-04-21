@@ -24,7 +24,7 @@ public class AudioVisio extends SimpleApplication {
     public static final int     difficulty = 0;
     public static final int     FPS        = 100;
     public static AudioVisio serverInstance;
-    public static String level = "demo_level.json";
+    public static String level = "differentLocationPuzzle.json";
     static        JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
@@ -138,7 +138,14 @@ public class AudioVisio extends SimpleApplication {
         this.stateManager.attach(this.client);
     }
 
-    public void stopGame(){
+    /**
+     * @return returns the height of for
+     */
+    public int getHeight() {
+        return this.settings.getHeight();
+    }
+
+    public void stopGame() {
         this.stateManager.detach(this.client);
         this.gui = new GuiAppState();
         this.gui.setEnabled(true);

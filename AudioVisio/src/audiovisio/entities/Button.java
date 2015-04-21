@@ -26,7 +26,7 @@ import org.json.simple.JSONObject;
  */
 public class Button extends InteractableEntity implements IShootable {
 
-    private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.5F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
+    private static final Cylinder SHAPE = new Cylinder(8, 8, 0.4F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
     public  Particle particle;
@@ -130,21 +130,6 @@ public class Button extends InteractableEntity implements IShootable {
     @Override
     public void update(){
         LogHelper.fine("button was shot");
-    }
-
-    @Override
-    public Boolean getWasUpdated(){
-        return this.wasUpdated;
-    }
-
-    @Override
-    public void setWasUpdated( boolean wasUpdated ){
-        this.wasUpdated = wasUpdated;
-    }
-
-    @Override
-    public Geometry getGeometry(){
-        return this.geometry;
     }
 
     /**
@@ -254,11 +239,6 @@ public class Button extends InteractableEntity implements IShootable {
         }
     }
 
-    public TriggerActionMessage getTriggerActionMessage(){
-        //TODO
-        return new TriggerActionMessage(this.getID(), this.state, this.location);
-    }
-
     @Override
     public String toString(){
         String s = "Button: " + this.name + "{\n" +
@@ -272,5 +252,25 @@ public class Button extends InteractableEntity implements IShootable {
                 "}\n";
 
         return s;
+    }
+
+    @Override
+    public Boolean getWasUpdated() {
+        return this.wasUpdated;
+    }
+
+    @Override
+    public void setWasUpdated(boolean wasUpdated) {
+        this.wasUpdated = wasUpdated;
+    }
+
+    @Override
+    public Geometry getGeometry() {
+        return this.geometry;
+    }
+
+    public TriggerActionMessage getTriggerActionMessage() {
+        //TODO
+        return new TriggerActionMessage(this.getID(), this.state, this.location);
     }
 }

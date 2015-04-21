@@ -22,7 +22,13 @@ import org.json.simple.JSONObject;
  * Created by Tain on 4/6/2015.
  */
 public class Box extends InteractableEntity implements IShootable {
+    private static final Vector3f                 PLACE_OFFSET = new Vector3f(0.0F, 0.2F * Level.SCALE.getX(), 0.0F);
+    private static final com.jme3.scene.shape.Box SHAPE        = new com.jme3.scene.shape.Box(0.2F * Level.SCALE.getX(),
+            0.2F * Level.SCALE.getX(),
+            0.2F * Level.SCALE.getX());
+    private static final float                    MASS         = 500.0F;
     protected static ColorRGBA COLOR = ColorRGBA.Yellow;
+    private Node shootables;
 
     public Box(){}
 
@@ -170,11 +176,4 @@ public class Box extends InteractableEntity implements IShootable {
     public Geometry getGeometry(){
         return this.geometry;
     }
-
-    private static final Vector3f PLACE_OFFSET = new Vector3f(0.0F, 0.4F * Level.SCALE.getX(), 0.0F);
-    private static final com.jme3.scene.shape.Box SHAPE        = new com.jme3.scene.shape.Box(0.4F * Level.SCALE.getX(),
-            0.4F * Level.SCALE.getX(),
-            0.4F * Level.SCALE.getX());
-    private static final float MASS = 500.0F;
-    private Node shootables;
 }

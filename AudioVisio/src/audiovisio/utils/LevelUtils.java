@@ -44,6 +44,8 @@ public class LevelUtils {
     }
 
     public static Vector3f getRotation( Vector3f location, ILevelItem.Direction direction, Quaternion defaultRotation, Geometry geometry ){
+        Quaternion rotation = geometry.getLocalRotation();
+
         if (direction == ILevelItem.Direction.EAST){
             location = location.add(0.5F, 0.0F, 0.0F);
         } else if (direction == ILevelItem.Direction.SOUTH){

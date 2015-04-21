@@ -81,10 +81,23 @@ public class Lever extends InteractableEntity implements IShootable {
         this.onGeometry.setLocalRotation(Lever.ON_ANGLE);
         this.offGeometry.setLocalRotation(Lever.OFF_ANGLE);
 
-        this.location = LevelUtils.getRotation(this.location, this.direction, Lever.ROTATION, this.onGeometry);
-        this.location = LevelUtils.getRotation(this.location, this.direction, Lever.ROTATION, this.offGeometry);
+        this.location = LevelUtils.getRotation(this.location, this.direction, Lever.ROTATION.mult(this.onGeometry.getLocalRotation()), this.onGeometry);
+        this.location = LevelUtils.getRotation(this.location, this.direction, Lever.ROTATION.mult(this.offGeometry.getLocalRotation()), this.offGeometry);
+
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Lever.OFFSET);
+
+        if (this.direction == Direction.NORTH) {
+            this.location = this.location.add(0, 0, Level.SCALE.getZ() / 2);
+        } else if (this.direction == Direction.SOUTH) {
+            this.location = this.location.add(0, 0, -Level.SCALE.getZ() / 2);
+        } else if (this.direction == Direction.EAST) {
+            this.location = this.location.add(-Level.SCALE.getX() / 2, 0, 0);
+        } else if (this.direction == Direction.WEST) {
+            this.location = this.location.add(Level.SCALE.getX() / 2, 0, 0);
+        } else {
+            LogHelper.warn("Lever " + this.getID() + " has no direction!");
+        }
 
         this.onGeometry.setLocalTranslation(this.location);
         this.offGeometry.setLocalTranslation(this.location);
@@ -247,6 +260,10 @@ public class Lever extends InteractableEntity implements IShootable {
 
     }
 
+    public void setOn(boolean state) {
+        this.state = state;
+    }
+
     @Override
     public Boolean getWasUpdated(){
         return this.wasUpdated;
@@ -260,9 +277,5 @@ public class Lever extends InteractableEntity implements IShootable {
     @Override
     public Geometry getGeometry(){
         return this.geometry;
-    }
-
-    public void setOn( boolean state ){
-        this.state = state;
     }
 }

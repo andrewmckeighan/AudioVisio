@@ -43,10 +43,14 @@ public class Entity extends Node implements ILevelItem {
     //read from files
     protected String modelFile      = "";
     protected String materialString = "Common/MatDefs/Misc/Unshaded.j3md";
-    protected Material  material;
-    protected ColorRGBA color;
+    protected Material       material;
+    protected ColorRGBA      color;
+    protected Node           rootNode;
+    protected PhysicsSpace   physicsSpace;
+    protected PlayerParticle particle;
 
-    public Entity(){}
+    public Entity() {
+    }
 
     /**
      * Create and instance of Entity class,
@@ -54,7 +58,7 @@ public class Entity extends Node implements ILevelItem {
      * @param loadObj the JSON object that is read.
      */
     @Override
-    public void load( JSONObject loadObj ){
+    public void load(JSONObject loadObj) {
         this.ID = (Long) loadObj.get(JSONHelper.KEY_ID);
         this.name = (String) loadObj.get(Entity.KEY_NAME);
 
@@ -68,28 +72,28 @@ public class Entity extends Node implements ILevelItem {
      * @param assetManager A reference to the assetManager to allow
      */
     @Override
-    public void init( AssetManager assetManager ){
-        if (!this.modelFile.isEmpty()){
+    public void init(AssetManager assetManager) {
+        if (!this.modelFile.isEmpty()) {
             assetManager.loadModel(this.modelFile);
         }
-        if (!this.materialString.isEmpty()){
+        if (!this.materialString.isEmpty()) {
             this.material = new Material(assetManager, this.materialString);
             this.material.setColor("Color", this.color);
         }
     }
 
     @Override
-    public void start( Node rootNode, PhysicsSpace physics ){
-        try{
+    public void start(Node rootNode, PhysicsSpace physics) {
+        try {
             LogHelper.finest(this + "has started");
-        } catch (NullPointerException nullException){
+        } catch (NullPointerException nullException) {
             LogHelper.severe("Entity " + this.name + "tried to start without being fully initialized!\n", nullException);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void save( JSONObject codeObj ){
+    public void save(JSONObject codeObj) {
         JSONObject location = JSONHelper.saveVector3f(this.location);
         codeObj.put(JSONHelper.KEY_ID, this.getID());
         codeObj.put(JSONHelper.KEY_LOCATION, location);
@@ -97,7 +101,7 @@ public class Entity extends Node implements ILevelItem {
     }
 
     @Override
-    public LevelNode getLevelNode(){
+    public LevelNode getLevelNode() {
         LevelNode root = new LevelNode(String.format("#%d @ %s - Entity does not define LevelNode structure", this.getID(), this.location), true);
         LevelNode typeNode = new LevelNode("Type", "entity", true);
         LevelNode idNode = new LevelNode("ID", this.getID(), true);
@@ -111,28 +115,11 @@ public class Entity extends Node implements ILevelItem {
     }
 
     /**
-     * @return the iD
-     */
-    @Override
-    public long getID(){
-        return this.ID;
-    }
-
-    /**
-     * @param id the iD to set
-     */
-    @RSLESetter("ID")
-    @Override
-    public void setID( long id ){
-        this.ID = id;
-    }
-
-    /**
      * A shallow toString Method.
      *
      * @return this.name Only return the name of the object on shallowToString
      */
-    public String toStringShort(){
+    public String toStringShort() {
         return this.name;
     }
 
@@ -141,27 +128,41 @@ public class Entity extends Node implements ILevelItem {
      *
      * @param entityB the entity that this is colliding with.
      */
-    public void collisionTrigger( Entity entityB ){
+    public void collisionTrigger(Entity entityB) {
         // TODO Auto-generated method stub
     }
 
-    public void collisionEndTrigger( Entity collisionEntityB ){}
+    public void collisionEndTrigger(Entity collisionEntityB) {
+    }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Entity[" + this.ID + "]";
     }
 
-    public Vector3f getLocation(){
-        return this.location;
-    }
-
     @RSLESetter("Name")
-    public void setName( String name ){
+    public void setName(String name) {
         this.name = name;
     }
 
-    protected Node           rootNode;
-    protected PhysicsSpace   physicsSpace;
-    protected PlayerParticle particle;
+    /**
+     * @return the iD
+     */
+    @Override
+    public long getID() {
+        return this.ID;
+    }
+
+    /**
+     * @param id the iD to set
+     */
+    @RSLESetter("ID")
+    @Override
+    public void setID(long id) {
+        this.ID = id;
+    }
+
+    public Vector3f getLocation() {
+        return this.location;
+    }
 }

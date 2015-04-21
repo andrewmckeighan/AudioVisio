@@ -39,7 +39,7 @@ public class Player extends MovingEntity implements ActionListener {
 
     // Constants
     public static final  Vector3f DEFAULT_SPAWN_LOCATION = new Vector3f(0, 0.5f, 0);
-    public static final Vector3f GRAVITY = new Vector3f(0, -9.81f, 0);
+    public static final  Vector3f GRAVITY                = new Vector3f(0, -9.81f, 0);
     public static final  String   DEFAULT_MODEL          = "Models/Oto/Oto.mesh.xml";
     public static final  Vector3f CAMERA_OFFSET          = new Vector3f(0, 5, 0);
     public static final  Vector3f MODEL_OFFSET           = Player.CAMERA_OFFSET.divide(2);
@@ -47,36 +47,39 @@ public class Player extends MovingEntity implements ActionListener {
     private static final float    MAX_SHOOT_DISTANCE     = 10.0F;
 
     //Children
-
+    private static final float MASS = 8.0F;
     protected Level level;
     protected Node  model;
     protected Vector3f spawn = Player.DEFAULT_SPAWN_LOCATION;
+    protected BetterCharacterControl characterControl;
     //Key Listeners
     private   boolean                up;
     private   boolean                down;
     private   boolean                left;
     private   boolean                right;
-    protected BetterCharacterControl characterControl;
     private   Camera                 playerCamera;
     private Vector3f camDir  = new Vector3f();
     private Vector3f camLeft = new Vector3f();
     private boolean isServer;
     private Vector3f savedLocation = Player.DEFAULT_SPAWN_LOCATION;
-    private Box box;
+    private Box     box;
+    private boolean debug;
+    private boolean hasSpawned;
 
-    public Player(){}
+    public Player() {
+    }
 
     /**
      * TODO
      *
      * @param level [description]
      */
-    public void load( Level level ){
+    public void load(Level level) {
         this.spawn = Player.DEFAULT_SPAWN_LOCATION;
         this.level = level;
     }
 
-    public void init( AssetManager assetManager ){
+    public void init(AssetManager assetManager) {
         //TODO move to subclass
 
         this.characterControl = new BetterCharacterControl(0.4F * Level.SCALE.getX(),
@@ -92,7 +95,7 @@ public class Player extends MovingEntity implements ActionListener {
         this.addControl(this.characterControl);
     }
 
-    public void start( Node rootNode, PhysicsSpace physics ){
+    public void start(Node rootNode, PhysicsSpace physics) {
         //TODO move to subclass
 
         rootNode.attachChild(this);
@@ -116,10 +119,6 @@ public class Player extends MovingEntity implements ActionListener {
         } else {
 
             this.characterControl.setWalkDirection(direction);
-//        if(this.characterControl.getWalkDirection().length() == 0){
-//            this.characterControl.warp(location);
-//        }
-//        this.characterControl.setWalkDirection(direction);
 
             if (this.playerCamera != null){
                 if (!this.isDebug()){
@@ -133,14 +132,6 @@ public class Player extends MovingEntity implements ActionListener {
                 }
             }
         }
-    }
-
-    public boolean isServer(){
-        return this.isServer;
-    }
-
-    public void setServer( boolean isServer ){
-        this.isServer = isServer;
     }
 
     /**
@@ -200,6 +191,50 @@ public class Player extends MovingEntity implements ActionListener {
         }
     }
 
+    @Override
+    public String toString() {
+        String s = "";
+        try {
+
+            String localTrans, walkDir, camDir;
+            if (this.getLocalTranslation() != null) {
+                localTrans = PrintHelper.printVector3f(this.getLocalTranslation());
+            } else {
+                localTrans = "null";
+            }
+            if (this.characterControl.getWalkDirection() != null) {
+                walkDir = PrintHelper.printVector3f(this.characterControl.getWalkDirection());
+            } else {
+                walkDir = "null";
+            }
+            if (this.playerCamera != null && this.playerCamera.getDirection() != null) {
+                camDir = PrintHelper.printVector3f(this.playerCamera.getDirection());
+            } else {
+                camDir = "null";
+            }
+
+            s = "Player[" + this.ID + "]\n" +
+                    "   located: " + localTrans + "\n" +
+                    "   walking: " + walkDir + "\n" +
+                    "   looking: " + camDir;
+        } catch (NullPointerException nullException) {
+            s = "Player has not been fully created yet.";
+        }
+        return s;
+    }
+
+    public void warp(Vector3f location) {
+        this.characterControl.warp(location);
+    }
+
+    public boolean isServer() {
+        return this.isServer;
+    }
+
+    public void setServer(boolean isServer) {
+        this.isServer = isServer;
+    }
+
     /**
      * Generates a message containing all the info needed to update the character on the other server/client.
      *
@@ -253,40 +288,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.playerCamera = cam;
     }
 
-    @Override
-    public String toString(){
-        String s = "";
-        try{
-
-            String localTrans, walkDir, camDir;
-            if (this.getLocalTranslation() != null){
-                localTrans = PrintHelper.printVector3f(this.getLocalTranslation());
-            } else {
-                localTrans = "null";
-            }
-            if (this.characterControl.getWalkDirection() != null){
-                walkDir = PrintHelper.printVector3f(this.characterControl.getWalkDirection());
-            } else {
-                walkDir = "null";
-            }
-            if (this.playerCamera != null && this.playerCamera.getDirection() != null){
-                camDir = PrintHelper.printVector3f(this.playerCamera.getDirection());
-            } else {
-                camDir = "null";
-            }
-
-            s = "Player[" + this.ID + "]\n" +
-                    "   located: " + localTrans + "\n" +
-                    "   walking: " + walkDir + "\n" +
-                    "   looking: " + camDir;
-        } catch (NullPointerException nullException){
-            s = "Player has not been fully created yet.";
-        }
-        return s;
-    }
-
-    public void warp( Vector3f location ){
-        this.characterControl.warp(location);
+    public boolean isDebug() {
+        return this.debug;
     }
 
     public void setDebug( boolean debug ){
@@ -300,12 +303,4 @@ public class Player extends MovingEntity implements ActionListener {
             this.addControl(this.characterControl);
         }
     }
-
-    public boolean isDebug(){
-        return this.debug;
-    }
-
-    private boolean debug;
-    private static final float MASS = 8.0F;
-    private boolean hasSpawned;
 }
