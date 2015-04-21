@@ -9,6 +9,7 @@ import audiovisio.level.Level;
 import audiovisio.level.LevelLoader;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.*;
+import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
@@ -69,7 +70,7 @@ public class ServerAppState extends AbstractAppState implements
         LogHelper.info("Starting server...");
 
         Items.init();
-        this.currentLevel = LevelLoader.read(AudioVisio.level);
+        this.currentLevel = LevelLoader.read(FileUtils.getLevelFile(AudioVisio.level));
         this.currentLevel.loadLevel();
 
         this.AV = (SimpleApplication) app;
