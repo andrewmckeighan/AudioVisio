@@ -8,6 +8,7 @@ import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
@@ -30,6 +31,7 @@ public class Door extends InteractableEntity {
     private Direction direction = Direction.NORTH;
     private Node         rootNode;
     private PhysicsSpace physicsSpace;
+    private AudioNode audio_door;
 
     public Door(){
         this.state = false;
@@ -56,6 +58,8 @@ public class Door extends InteractableEntity {
     public void init( AssetManager assetManager ){
         Box shape = Door.SHAPE;
 
+
+
         this.geometry = new Geometry(this.name, shape);
 
         this.location = LevelUtils.getRotation(this.location, this.direction, ROTATION, this.geometry);
@@ -67,6 +71,9 @@ public class Door extends InteractableEntity {
         this.particle = new PlayerParticle();
 
         this.particle.init(assetManager);
+
+        this.audio_door = new AudioNode(assetManager, "Sound/Effects/Door.wav", false);
+        this.attachChild(this.audio_door);
 
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -145,14 +152,19 @@ public class Door extends InteractableEntity {
 
     @Override
     public void update( Boolean state ){
+        this.audio_door.setLooping(false);
+        this.audio_door.setPositional(true);
+
         if (!this.state){
             if (state){
                 this.state = state;
+                this.audio_door.play();
                 this.open();
             }
         } else {
             if (!state){
                 this.state = state;
+                this.audio_door.play();
                 this.close();
             }
         }
