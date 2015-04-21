@@ -33,10 +33,15 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     AudioVisio      app;
     AppStateManager stateManager;
     NiftyJmeDisplay niftyDisplay;
-    Button btn;
-    private Nifty nifty;
+    Button  btn;
+    boolean kFlag;
+    String Butt = "";
+    char keyChar;
+    int  keyCode;
+    private Nifty   nifty;
+    private boolean listenForKeys;
 
-    public GuiAppState(){
+    public GuiAppState() {
 
     }
 
@@ -47,7 +52,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
      * @param app          A SimpleApplication to implement the AppState in (AudioVisio).
      */
     @Override
-    public void initialize( AppStateManager stateManager, Application app ){
+    public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (AudioVisio) app;
         this.stateManager = stateManager;
@@ -118,16 +123,16 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
      */
     public void initSettings(){
         this.nifty.gotoScreen("settings");
+        this.listenForKeys = false;
         Config.save();
     }
-
-
 
     /**
      * Switches the settings screen to the "Keybindings" screen.
      */
     public void initKeybind(){
         this.nifty.gotoScreen("keybindings");
+        this.listenForKeys = true;
     }
 
     public void initRSLE(){
@@ -142,22 +147,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         this.nifty.fromXml("Interface/baselayer.xml", "start");
     }
 
-    /**
-     * @return Returns the java.net IPv4 IP address of the current user's computer.
-     */
-    public String getIp(){
-        String temp = "";
-        try{
-            System.setProperty("java.net.preferIPv4Stack", "true");
-            temp = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e){
-            LogHelper.warn("UnkownHostException", e);
-        }
-        return temp;
-    }
-
-    boolean kFlag;
-        String Butt = "";
     public void setKeyBinding(String butt){
         this.Butt = butt;
         this.kFlag = true;
@@ -210,9 +199,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         NetworkUtils.attemptConnection(this.app.client.myClient);
     }
 
-
-
-
     @Override
     public void beginInput(){
 
@@ -243,12 +229,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 
     }
 
-    char keyChar;
-    int  keyCode;
-
     @Override
     public void onKeyEvent( KeyInputEvent keyInputEvent ){
-        if (this.kFlag != true){
+        if (this.listenForKeys && !this.kFlag) {
             this.keyChar = keyInputEvent.getKeyChar();
             this.keyCode = keyInputEvent.getKeyCode();
             if (keyInputEvent.isPressed()){
@@ -274,5 +257,19 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 
         Element continueButton = this.nifty.getScreen("host").findElementByName("ContButton");
         continueButton.setVisible(true);
+    }
+
+    /**
+     * @return Returns the java.net IPv4 IP address of the current user's computer.
+     */
+    public String getIp() {
+        String temp = "";
+        try {
+            System.setProperty("java.net.preferIPv4Stack", "true");
+            temp = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            LogHelper.warn("UnkownHostException", e);
+        }
+        return temp;
     }
 }

@@ -52,6 +52,7 @@ public class Player extends MovingEntity implements ActionListener {
     protected Node  model;
     protected Vector3f spawn = Player.DEFAULT_SPAWN_LOCATION;
     protected BetterCharacterControl characterControl;
+    protected boolean hasSpawned;
     //Key Listeners
     private   boolean                up;
     private   boolean                down;
@@ -64,7 +65,6 @@ public class Player extends MovingEntity implements ActionListener {
     private Vector3f savedLocation = Player.DEFAULT_SPAWN_LOCATION;
     private Box     box;
     private boolean debug;
-    private boolean hasSpawned;
 
     public Player() {
     }
@@ -96,15 +96,12 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public void start(Node rootNode, PhysicsSpace physics) {
-        //TODO move to subclass
-
         rootNode.attachChild(this);
         physics.add(this);
     }
 
     /**
      * sets the players location and direction, used to sync a player with a message sent from a different server/client
-     * TODO: see what all this.move can handle.
      *
      * @param location
      * @param direction walkDirection to set
@@ -112,9 +109,11 @@ public class Player extends MovingEntity implements ActionListener {
     public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
 
         if (!this.hasSpawned){
+            LogHelper.fine("trying to spawn");
             this.warp(this.spawn);
             if (this.getLocalTranslation().distance(this.spawn) <= 3){
                 this.hasSpawned = true;
+                LogHelper.fine("has Spawned");
             }
         } else {
 

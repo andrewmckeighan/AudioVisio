@@ -1,0 +1,1452 @@
+{
+  "spawn": {
+    "p1": {
+      "rotation": 0.0,
+      "location": {
+        "x": 7.0,
+        "y": 0.5,
+        "z": 2.0
+      }
+    },
+    "p2": {
+      "rotation": 0.0,
+      "location": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      }
+    }
+  },
+  "level": [
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 10,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 11,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 12,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 13,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 14,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 15,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 16,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 17,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 18,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 19,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 20,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 21,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 22,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 23,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 24,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 25,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 26,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 27,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 28,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 29,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 30,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 31,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 32,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 33,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 34,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 35,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 36,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 37,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 38,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 39,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 40,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 41,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 42,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 43,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 44,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 45,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 46,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 47,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 48,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 49,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 50,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 51,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 52,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 53,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 54,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 55,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 56,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 57,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 58,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 59,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 60,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 61,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 62,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 63,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 64,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 65,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 66,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 67,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 68,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 69,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 70,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 71,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 72,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 73,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 74,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 75,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 76,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 77,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 78,
+      "type": "panel"
+    },
+    {
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 79,
+      "type": "panel"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 80,
+      "type": "box"
+    },
+    {
+      "interactionList": [],
+      "name": "box",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 81,
+      "type": "box"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 100,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 101,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 102,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 103,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 104,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 105,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 106,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 107,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 108,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 109,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 200,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 201,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 202,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 203,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 204,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 5.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 205,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 206,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 207,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 208,
+      "type": "wall"
+    },
+    {
+      "edge": "NORTH",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 209,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 300,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 301,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 302,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 303,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 304,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 305,
+      "type": "wall"
+    },
+    {
+      "edge": "WEST",
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 306,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 400,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 401,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 402,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 403,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 404,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 405,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 406,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 500,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 501,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "Door20",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 5010,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 502,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 503,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "Door10",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 5030,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 504,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "Door00",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 5050,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 2.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 506,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 900,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "door21",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 9010,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 902,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 903,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "door11",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 9030,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 904,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 905,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "door01",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 9050,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 3.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 906,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "id": 600,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "door22",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 6010,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 602,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 603,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "door12",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 3.0
+      },
+      "id": 6030,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 604,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 605,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "interactionList": [],
+      "name": "door02",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 6050,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 4.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 606,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 700,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 701,
+      "type": "wall"
+    },
+    {
+      "edge": "EAST",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 702,
+      "type": "wall"
+    },
+    {
+      "edge": "SOUTH",
+      "interactionList": [],
+      "name": "exitDoor0",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 4.0
+      },
+      "id": 800,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "edge": "SOUTH",
+      "interactionList": [],
+      "name": "exitDoor1",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 5.0
+      },
+      "id": 801,
+      "state": false,
+      "type": "door"
+    },
+    {
+      "interactionList": [
+        5050,
+        9050,
+        6050
+      ],
+      "name": "roombutton0",
+      "location": {
+        "x": 6.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 1100,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        5030,
+        9030,
+        6030
+      ],
+      "name": "roombutton1",
+      "location": {
+        "x": 7.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 1101,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        5010,
+        9010,
+        6010
+      ],
+      "name": "roombutton2",
+      "location": {
+        "x": 8.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 1102,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        800
+      ],
+      "name": "exitButton0",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 1.0
+      },
+      "id": 1103,
+      "type": "button"
+    },
+    {
+      "interactionList": [
+        801
+      ],
+      "name": "exitButton1",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 2.0
+      },
+      "id": 1104,
+      "type": "button"
+    },
+    {
+      "subtype": "end",
+      "location": {
+        "x": 9.0,
+        "y": 0.0,
+        "z": 6.0
+      },
+      "id": 1200,
+      "type": "trigger"
+    }
+  ],
+  "author": "Taylor Premo",
+  "name": "relativeLocationPuzzle",
+  "format": "0.6",
+  "version": "1.0"
+}

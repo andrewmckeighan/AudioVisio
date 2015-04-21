@@ -24,7 +24,7 @@ public class AudioVisio extends SimpleApplication {
     public static final int     difficulty = 0;
     public static final int     FPS        = 100;
     public static AudioVisio serverInstance;
-    public static String level = "differentLocationPuzzle.json";
+    public static String level = "relativeLocationPuzzle.json";
     static        JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
@@ -101,20 +101,6 @@ public class AudioVisio extends SimpleApplication {
     }
 
     /**
-     * @return returns the width of for
-     */
-    public int getWidth(){
-        return this.settings.getWidth();
-    }
-
-    /**
-     * @return returns the height of for
-     */
-    public int getHeight(){
-        return this.settings.getHeight();
-    }
-
-    /**
      * Sets a sequence of characters to display from the server.
      *
      * @param text A char sequence to display from the server.
@@ -138,17 +124,24 @@ public class AudioVisio extends SimpleApplication {
         this.stateManager.attach(this.client);
     }
 
-    /**
-     * @return returns the height of for
-     */
-    public int getHeight() {
-        return this.settings.getHeight();
-    }
-
     public void stopGame() {
         this.stateManager.detach(this.client);
         this.gui = new GuiAppState();
         this.gui.setEnabled(true);
         this.stateManager.attach(this.gui);
+    }
+
+    /**
+     * @return returns the width of for
+     */
+    public int getWidth() {
+        return this.settings.getWidth();
+    }
+
+    /**
+     * @return returns the height of for
+     */
+    public int getHeight() {
+        return this.settings.getHeight();
     }
 }

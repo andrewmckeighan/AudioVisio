@@ -7,6 +7,7 @@ import audiovisio.rsle.editor.RSLESetter;
 import audiovisio.states.ClientAppState;
 import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
+import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
@@ -62,7 +63,7 @@ public class Door extends InteractableEntity {
 
         this.geometry = new Geometry(this.name, shape);
 
-        this.location = LevelUtils.getRotation(this.location, this.direction, ROTATION, this.geometry);
+        this.location = LevelUtils.getRotation(this.location, this.direction, Door.ROTATION, this.geometry);
 
         this.location = this.location.mult(Level.SCALE);
         this.location = this.location.add(Door.OFFSET);
@@ -72,8 +73,11 @@ public class Door extends InteractableEntity {
 
         this.particle.init(assetManager);
 
-        this.audio_door = new AudioNode(assetManager, "Sound/Effects/Door.wav", false);
-        this.attachChild(this.audio_door);
+        String wavString = "Sounds/Effects/Door.wav";
+        LogHelper.info(wavString);
+
+//        this.audio_door = new AudioNode(assetManager, wavString, false);
+//        this.attachChild(this.audio_door);
 
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -152,19 +156,23 @@ public class Door extends InteractableEntity {
 
     @Override
     public void update( Boolean state ){
-        this.audio_door.setLooping(false);
-        this.audio_door.setPositional(true);
+        try {
+            this.audio_door.setLooping(false);
+            this.audio_door.setPositional(true);
+            this.audio_door.play();
+        } catch (NullPointerException nullPointerException) {
+            LogHelper.fine("door does not have audio");
+        }
+
 
         if (!this.state){
             if (state){
                 this.state = state;
-                this.audio_door.play();
                 this.open();
             }
         } else {
             if (!state){
                 this.state = state;
-                this.audio_door.play();
                 this.close();
             }
         }
