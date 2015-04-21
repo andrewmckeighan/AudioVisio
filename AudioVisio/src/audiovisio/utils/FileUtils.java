@@ -32,7 +32,8 @@ public class FileUtils {
      */
     public static String metaDir;
 
-    private static final String[] DEFAULT_LEVELS = {"demo_level.json"};
+    private static final String[] DEFAULT_LEVELS = {"demo_level.json", "differentLocationPuzzle.json",
+            "ItemJugglePuzzleEasy.json", "ItemJugglePuzzleHard.json", "relativeLocationPuzzle.json"};
     private static final String[] META_FILES = {"config.json"};
 
     /**
