@@ -11,6 +11,7 @@ import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
@@ -26,16 +27,18 @@ import org.json.simple.JSONObject;
  */
 public class Button extends InteractableEntity implements IShootable {
 
-    private static final Cylinder SHAPE = new Cylinder(8, 8, 0.4F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
+    private static final Cylinder   SHAPE    = new Cylinder(8, 8, 0.4F * Level.SCALE.getX(), 0.03F * Level.SCALE.getY(), true);
     private static final Quaternion ROTATION = new Quaternion().fromAngles((float) Math.PI / 2, 0, 0);
     private static final float      MASS     = 0.0f;
-    public  Particle particle;
-    private Node     rootNode;
+    public  Particle  particle;
+    private Node      rootNode;
+    private AudioNode button_sound;
 
-    public Button(){}
+    public Button() {
+    }
 
     @Override
-    public void init( AssetManager assetManager ){
+    public void init(AssetManager assetManager) {
         Cylinder shape = Button.SHAPE;
 
         this.geometry = new Geometry(this.name + "testButtonName", shape);
@@ -58,7 +61,15 @@ public class Button extends InteractableEntity implements IShootable {
         this.attachChild(this.particle);
         this.addControl(this.physics);
 
-        if (this.particle != null && this.particle.emitter != null){
+        String wavString = "Sounds/Effects/Click.wav";
+        LogHelper.info(wavString);
+
+        this.button_sound = new AudioNode(assetManager, wavString, false);
+        this.attachChild(this.button_sound);
+        this.button_sound.setLooping(false);
+        this.button_sound.setPositional(true);
+
+        if (this.particle != null && this.particle.emitter != null) {
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
             this.particle.emitter.setNumParticles(35);
@@ -113,6 +124,8 @@ public class Button extends InteractableEntity implements IShootable {
 
     @Override
     public void update( Boolean state ){
+        this.button_sound.play();
+
         if (!this.state){
             if (state){
                 this.startPress();

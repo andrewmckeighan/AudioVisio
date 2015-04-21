@@ -156,13 +156,10 @@ public class Door extends InteractableEntity {
 
     @Override
     public void update( Boolean state ){
-        try {
+
             this.audio_door.setLooping(false);
             this.audio_door.setPositional(true);
             this.audio_door.play();
-        } catch (NullPointerException nullPointerException) {
-            LogHelper.fine("door does not have audio");
-        }
 
 
         if (!this.state){
