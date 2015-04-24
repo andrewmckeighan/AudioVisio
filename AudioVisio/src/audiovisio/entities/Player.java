@@ -124,11 +124,6 @@ public class Player extends MovingEntity implements ActionListener {
                     this.playerCamera.setLocation(this.getLocalTranslation().add(
                             Player.CAMERA_OFFSET));
                 }
-                //TODO remove
-                if (this.model != null){
-                    this.model.removeFromParent();
-                    this.model = null;
-                }
             }
         }
     }
@@ -285,6 +280,10 @@ public class Player extends MovingEntity implements ActionListener {
 
     public void setCam( Camera cam ){
         this.playerCamera = cam;
+        if (this.model != null) {
+            this.model.removeFromParent();
+            this.model = null;
+        }
     }
 
     public boolean isDebug() {

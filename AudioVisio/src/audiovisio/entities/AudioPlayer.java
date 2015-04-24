@@ -20,9 +20,11 @@ public class AudioPlayer extends Player {
     public void init( AssetManager assetManager ){
         super.init(assetManager);
 
-        this.model = (Node) assetManager.loadModel(Player.DEFAULT_MODEL);
-        this.model.setLocalScale(0.5F);
-        this.model.setLocalTranslation(Player.MODEL_OFFSET);
+        if (!this.isServer()) {
+            this.model = (Node) assetManager.loadModel(Player.DEFAULT_MODEL);
+            this.model.setLocalScale(0.5F);
+            this.model.setLocalTranslation(Player.MODEL_OFFSET);
+        }
 
     }
 

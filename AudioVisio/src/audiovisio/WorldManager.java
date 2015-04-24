@@ -81,11 +81,12 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             level = this.client.getLevel();
         }
 
-        if (ClientAppState.isAudio){
+        if (playerID % 2 == 0) {
             player = new VisualPlayer();
         } else {
             player = new AudioPlayer();
         }
+
         player.load(level);
         player.setID(playerID);
         if (this.isServer()){
@@ -118,31 +119,27 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
         return player;
     }
 
-    public boolean isServer(){
-        return this.server != null;
-    }
-
     /**
      * Removes the player from the syncManager.
-     *
+     * <p/>
      * (or why does addPlayer add to players?)
      *
      * @param id ID of the player to remove.
      */
 
-    public void removePlayer( long id ){
+    public void removePlayer(long id) {
         LogHelper.info("removing player: " + id);
-        if (this.isServer()){
+        if (this.isServer()) {
             this.syncManager.broadcast(new PlayerLeaveMessage(id));
         }
         this.syncManager.removeObject(id);
         Player player = this.players.remove(id);
-        if (player == null){
+        if (player == null) {
             LogHelper.warn("tried to remove player who wasn't there: " + id);
             return;
         }
         //TODO?
-        if (!this.isServer()){
+        if (!this.isServer()) {
             //remove player from scene
         }
         player.removeFromParent();
@@ -161,6 +158,10 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
     @Override
     public boolean checkMessage( PhysicsSyncMessage message ){
         return true;
+    }
+
+    public boolean isServer() {
+        return this.server != null;
     }
 
     /**
