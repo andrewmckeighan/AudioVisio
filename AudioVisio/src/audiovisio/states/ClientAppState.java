@@ -14,6 +14,7 @@ import audiovisio.networking.CollisionEvent;
 import audiovisio.networking.SyncManager;
 import audiovisio.networking.messages.*;
 import audiovisio.utils.Config;
+import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
@@ -110,7 +111,7 @@ public class ClientAppState extends AbstractAppState implements
         Items.init();
 
         try{
-            this.level = LevelLoader.read(AudioVisio.level);
+            this.level = LevelLoader.read(FileUtils.getLevelFile(AudioVisio.level));
             this.level.loadLevel();
         } catch (Exception e){
             LogHelper.info("exception: ", e);

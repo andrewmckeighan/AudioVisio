@@ -11,6 +11,7 @@ import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
@@ -20,6 +21,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import org.json.simple.JSONObject;
+import sun.rmi.runtime.Log;
 
 public class Lever extends InteractableEntity implements IShootable {
     public static final  String     KEY_EDGE  = "edge";
@@ -45,7 +47,7 @@ public class Lever extends InteractableEntity implements IShootable {
 //    }
     private Geometry       offGeometry;
     private Direction      direction;
-
+    private AudioNode audio_lever;
 //    private Boolean isOn = false;
 
     public Lever(){
@@ -134,6 +136,13 @@ public class Lever extends InteractableEntity implements IShootable {
             this.particle = null;
         }
 
+        String wavString = "Sounds/Effects/lever.wav";
+        LogHelper.info(wavString);
+
+        this.audio_lever = new AudioNode(assetManager, wavString, false);
+        this.attachChild(this.audio_lever);
+        this.audio_lever.setLooping(false);
+        this.audio_lever.setPositional(true);
     }
 
     @Override
@@ -198,6 +207,8 @@ public class Lever extends InteractableEntity implements IShootable {
 
     @Override
     public void update(){
+        this.audio_lever.play();
+
         if (this.state == null){
             this.state = false;
         }

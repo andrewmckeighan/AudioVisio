@@ -9,6 +9,7 @@ import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+
 import com.jme3.input.RawInputListener;
 import com.jme3.input.event.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
@@ -33,13 +34,14 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     AudioVisio      app;
     AppStateManager stateManager;
     NiftyJmeDisplay niftyDisplay;
-    Button  btn;
-    boolean kFlag;
+    Button          btn;
+    boolean         kFlag;
     String Butt = "";
     char keyChar;
     int  keyCode;
-    private Nifty   nifty;
-    private boolean listenForKeys;
+    private Nifty     nifty;
+    private boolean   listenForKeys;
+
 
     public GuiAppState() {
 
@@ -66,6 +68,8 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         this.app.getInputManager().setCursorVisible(true);
 
         this.app.getInputManager().addRawInputListener(this);
+
+
 
     }
 

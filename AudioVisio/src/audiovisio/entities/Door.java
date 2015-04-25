@@ -73,11 +73,11 @@ public class Door extends InteractableEntity {
 
         this.particle.init(assetManager);
 
-        String wavString = "Sounds/Effects/Door.wav";
+        String wavString = "Sounds/Effects/Door2.wav";
         LogHelper.info(wavString);
 
-//        this.audio_door = new AudioNode(assetManager, wavString, false);
-//        this.attachChild(this.audio_door);
+        this.audio_door = new AudioNode(assetManager, wavString, false);
+        this.attachChild(this.audio_door);
 
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
@@ -156,13 +156,10 @@ public class Door extends InteractableEntity {
 
     @Override
     public void update( Boolean state ){
-        try {
+
             this.audio_door.setLooping(false);
             this.audio_door.setPositional(true);
             this.audio_door.play();
-        } catch (NullPointerException nullPointerException) {
-            LogHelper.fine("door does not have audio");
-        }
 
 
         if (!this.state){
