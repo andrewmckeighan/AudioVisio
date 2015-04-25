@@ -421,6 +421,19 @@ public class Level {
         return String.format("%s by %s (%s)", this.name, this.author, this.version);
     }
 
+    public Vector3f getSpawn(long id) {
+        Vector3f spawn = null;
+        if (id % 2 == 1) {
+            //audio
+            spawn = this.getAudioSpawn();
+        } else {
+            //visual
+            spawn = this.getVisualSpawn();
+        }
+
+        return spawn;
+    }
+
     /**
      * Get the name of the level
      */

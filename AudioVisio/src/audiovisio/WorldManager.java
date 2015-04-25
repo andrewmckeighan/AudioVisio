@@ -81,13 +81,15 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             level = this.client.getLevel();
         }
 
-        if (playerID % 2 == 0) {
+        if (ClientAppState.isAudio) {
             player = new VisualPlayer();
         } else {
             player = new AudioPlayer();
         }
 
-        player.load(level);
+        player.setSpawn(playerID, level);
+
+//        player.load(level);
         player.setID(playerID);
         if (this.isServer()){
             this.syncManager.broadcast(new PlayerJoinMessage(playerID, player.getLocalTranslation()));
@@ -121,7 +123,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
 
     /**
      * Removes the player from the syncManager.
-     * <p/>
+     *
      * (or why does addPlayer add to players?)
      *
      * @param id ID of the player to remove.

@@ -124,6 +124,11 @@ public class Player extends MovingEntity implements ActionListener {
                     this.playerCamera.setLocation(this.getLocalTranslation().add(
                             Player.CAMERA_OFFSET));
                 }
+
+                if (this.model != null) {
+                    this.model.removeFromParent();
+                    this.model = null;
+                }
             }
         }
     }
@@ -219,6 +224,10 @@ public class Player extends MovingEntity implements ActionListener {
 
     public void warp(Vector3f location) {
         this.characterControl.warp(location);
+    }
+
+    public void setSpawn(long ID, Level level) {
+        this.spawn = level.getSpawn(ID);
     }
 
     public boolean isServer() {

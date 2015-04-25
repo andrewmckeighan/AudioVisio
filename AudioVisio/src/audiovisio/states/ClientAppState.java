@@ -96,9 +96,10 @@ public class ClientAppState extends AbstractAppState implements
             try{
                 Thread.sleep(100);
             } catch (InterruptedException e){
-                LogHelper.warn("Thread.sleep interuppted in client load, ", e);
+                LogHelper.warn("Thread.sleep interrupted in client load, ", e);
             }
         }
+
         ClientAppState.isAudio = this.myClient.getId() % 2 == 1;
 
         this.audioVisioApp = (AudioVisio) app;
@@ -246,7 +247,7 @@ public class ClientAppState extends AbstractAppState implements
                         }
                     } else if ("ReleaseMouse".equals(name)){
                         ClientAppState.this.inputManager.setCursorVisible(!ClientAppState.this.inputManager.isCursorVisible());
-                        audioVisioApp.getFlyByCamera().setEnabled(!inputManager.isCursorVisible());
+                        ClientAppState.this.audioVisioApp.getFlyByCamera().setEnabled(!ClientAppState.this.inputManager.isCursorVisible());
                     } else if ("NoClip".equals(name)){
                         LogHelper.info("Toggle NoClip mode on player");
                         player.setDebug(!player.isDebug());
@@ -397,17 +398,7 @@ public class ClientAppState extends AbstractAppState implements
 
     // GETTERS
 
-    public long getId(){
-        return this.myClient.getId();
-    }
-
-    public Level getLevel(){
-        return this.level;
-    }
-
-    // DEBUG METHODS
-
-    public void createCoordinateAxes( Vector3f pos ){
+    public void createCoordinateAxes(Vector3f pos) {
         this.debugNode = new Node("debug arrows");
         Arrow arrow = new Arrow(Vector3f.UNIT_X);
         arrow.setLineWidth(4);
@@ -428,7 +419,7 @@ public class ClientAppState extends AbstractAppState implements
         this.debugNode.attachChild(g);
     }
 
-    private Geometry putShape( Mesh shape, ColorRGBA color ){
+    private Geometry putShape(Mesh shape, ColorRGBA color) {
         Geometry g = new Geometry("coordinate axis", shape);
         Material mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
@@ -436,5 +427,15 @@ public class ClientAppState extends AbstractAppState implements
         g.setMaterial(mat);
         this.rootNode.attachChild(g);
         return g;
+    }
+
+    // DEBUG METHODS
+
+    public long getId() {
+        return this.myClient.getId();
+    }
+
+    public Level getLevel() {
+        return this.level;
     }
 }
