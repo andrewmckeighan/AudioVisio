@@ -228,6 +228,7 @@ public class Player extends MovingEntity implements ActionListener {
 
     public void setSpawn(long ID, Level level) {
         this.spawn = level.getSpawn(ID);
+        this.level = level;
     }
 
     public boolean isServer() {
