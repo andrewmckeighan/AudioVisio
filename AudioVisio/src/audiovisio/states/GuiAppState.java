@@ -42,7 +42,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     int  keyCode;
     private Nifty     nifty;
     private boolean   listenForKeys;
-    Screen         scn;
     Element        pnl;
 
     public GuiAppState() {
@@ -283,7 +282,6 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     }
 
     public void setIp(){
-        //this.scn = this.nifty.getScreen("host");
         this.pnl = this.nifty.getScreen("host").findElementByName("background").findElementByName("paneltop3").findElementByName("panText");
         this.pnl.getRenderer(TextRenderer.class).setText("Your IPv4 is: " + getIp());
 
