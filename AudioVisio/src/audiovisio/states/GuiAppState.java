@@ -21,6 +21,7 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -41,7 +42,8 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     int  keyCode;
     private Nifty     nifty;
     private boolean   listenForKeys;
-
+    Screen         scn;
+    Element        pnl;
 
     public GuiAppState() {
 
@@ -105,14 +107,15 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
      */
     public void initHost(){
         this.nifty.gotoScreen("host");
-        AudioVisio.main(new String[]{ "-server" });
-
+        AudioVisio.main(new String[]{"-server"});
+        this.setIp();
         ListBox listBox = this.nifty.getScreen("host").findNiftyControl("levelList", ListBox.class);
         Collection<Level> levels = LevelLoader.getLevelList().values();
         listBox.addAllItems(Arrays.asList(levels.toArray()));
 
         Element continueButton = this.nifty.getScreen("host").findElementByName("ContButton");
         continueButton.setVisible(false);
+
     }
 
     /**
@@ -140,7 +143,7 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     }
 
     public void initRSLE(){
-        AudioVisio.main(new String[]{ "-rsle" });
+        AudioVisio.main(new String[]{"-rsle"});
         this.app.stop();
     }
 
@@ -274,6 +277,16 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         } catch (UnknownHostException e) {
             LogHelper.warn("UnkownHostException", e);
         }
+
+
         return temp;
     }
+
+    public void setIp(){
+        //this.scn = this.nifty.getScreen("host");
+        this.pnl = this.nifty.getScreen("host").findElementByName("background").findElementByName("paneltop3").findElementByName("panText");
+        this.pnl.getRenderer(TextRenderer.class).setText("Your IPv4 is: " + getIp());
+
+    }
+
 }

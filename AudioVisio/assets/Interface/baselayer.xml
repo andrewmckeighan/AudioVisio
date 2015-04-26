@@ -155,7 +155,7 @@
         <layer id="background" backgroundColor="#FFFFFF" childLayout="vertical">
             <panel id="paneltop3" height="20%" width="100%" align="center" backgroundColor="#FFFFFF"
                    childLayout="center">
-                <text text="Host" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000"/>
+                <text id="panText" text="Host" font="Interface/Fonts/Default.fnt" width="100%" height="100%" color="#000000"/>
             </panel>
             <panel id="panelmid" height="10%" width="100%" align="center" backgroundColor="#FFFFFF"
                    childLayout="center">
