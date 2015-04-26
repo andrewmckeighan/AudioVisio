@@ -1,5 +1,6 @@
 package audiovisio.utils;
 
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import org.json.simple.JSONObject;
 
@@ -72,5 +73,22 @@ public class JSONHelper {
 
     public static int getInt( JSONObject obj, String key ){
         return ((Long) obj.get(key)).intValue();
+    }
+
+    public static ColorRGBA readColor(String colorString) {
+        ColorRGBA returnColor = ColorRGBA.LightGray;
+        if (colorString == "lightGrey") {
+            returnColor = ColorRGBA.LightGray;
+        } else if (colorString == "red") {
+            returnColor = ColorRGBA.Red;
+        } else if (colorString == "blue") {
+            returnColor = ColorRGBA.Blue;
+        } else if (colorString == "green") {
+            returnColor = ColorRGBA.Green;
+        } else {
+            LogHelper.warn("color: " + colorString + " is not supported! defaulting to lightGrey.");
+        }
+
+        return returnColor;
     }
 }

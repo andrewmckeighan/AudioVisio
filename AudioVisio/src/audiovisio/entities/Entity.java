@@ -64,6 +64,8 @@ public class Entity extends Node implements ILevelItem {
 
         JSONObject location = (JSONObject) loadObj.get(JSONHelper.KEY_LOCATION);
         this.location = JSONHelper.readVector3f(location);
+
+        this.color = JSONHelper.readColor((String) loadObj.get(JSONHelper.KEY_COLOR));
     }
 
     /**
