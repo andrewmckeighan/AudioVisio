@@ -9,6 +9,7 @@ import audiovisio.utils.JSONHelper;
 import audiovisio.utils.LevelUtils;
 import audiovisio.utils.LogHelper;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
@@ -29,7 +30,8 @@ public class Box extends InteractableEntity implements IShootable {
     private static final float                    MASS         = 500.0F;
     protected static ColorRGBA COLOR = ColorRGBA.Yellow;
     private Node shootables;
-
+    private AudioNode audio_place;
+    private AudioNode audio_pick;
     public Box(){}
 
     @Override
@@ -66,6 +68,17 @@ public class Box extends InteractableEntity implements IShootable {
             this.particle.emitter.setNumParticles(35);
             this.particle.emitter.setEnabled(true);
         }
+        this.audio_pick = new AudioNode(assetManager, "Sounds/Effects/pickupBox.wav", false);
+        this.attachChild(this.audio_pick);
+        this.audio_pick.setLooping(false);
+        this.audio_pick.setPositional(true);
+
+        this.audio_place = new AudioNode(assetManager, "Sounds/Effects/placebox.wav", false);
+        this.attachChild(this.audio_place);
+        this.audio_place.setLooping(false);
+        this.audio_place.setPositional(true);
+
+
     }
 
     @Override
@@ -121,10 +134,12 @@ public class Box extends InteractableEntity implements IShootable {
     public void update( Boolean state ){
         if (!this.state){
             if (state){
+                this.audio_pick.play();
                 this.pickUp();
             }
         } else {
             if (!state){
+                this.audio_place.play();
                 this.putDown(this.shootables, this.location);
             }
         }
