@@ -265,25 +265,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
         continueButton.setVisible(true);
     }
 
-    /**
-     * @return Returns the java.net IPv4 IP address of the current user's computer.
-     */
-    public String getIp() {
-        String temp = "";
-        try {
-            System.setProperty("java.net.preferIPv4Stack", "true");
-            temp = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            LogHelper.warn("UnkownHostException", e);
-        }
-
-
-        return temp;
-    }
-
     public void setIp(){
         this.pnl = this.nifty.getScreen("host").findElementByName("background").findElementByName("paneltop3").findElementByName("panText");
-        this.pnl.getRenderer(TextRenderer.class).setText("Your IPv4 is: " + getIp());
+        this.pnl.getRenderer(TextRenderer.class).setText("Your IPv4 is: " + NetworkUtils.getIP());
 
     }
 

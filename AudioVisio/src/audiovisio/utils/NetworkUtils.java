@@ -64,7 +64,7 @@ public class NetworkUtils {
                         if (ipv4.isLoopbackAddress()){ continue; }
                         if (ipv4.isLinkLocalAddress()){ continue; }
                         if (ipv4.isMulticastAddress()){ continue; }
-                        if (ipv4.isSiteLocalAddress()){ return ipv4.getHostAddress(); }
+                        return ipv4.getHostAddress();
                     }
                 }
             }
