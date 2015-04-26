@@ -23,12 +23,14 @@ public class Particle extends Entity {
     protected Vector3f  velocity = new Vector3f(0, 2, 0);
     protected Float     lowLife  = 2.0F;
     protected Float     highLife = 3.0F;
+    private ParticleEmitter fire;
 
     public Particle(){}
 
+
     @Override
     public void init( AssetManager assetManager ){
-        ParticleEmitter fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 300);
+        fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 300);
         Material mat_red = new Material(assetManager,
                 this.material);
         mat_red.setTexture("Texture", assetManager.loadTexture(
@@ -37,8 +39,10 @@ public class Particle extends Entity {
         fire.setMaterial(mat_red);
         fire.setImagesX(2);
         fire.setImagesY(2);
-        fire.setEndColor(this.color);
-        fire.setStartColor(this.color);
+        if(fire.getStartColor() == null || fire.getEndColor() == null){
+            fire.setEndColor(this.color);
+            fire.setStartColor(this.color);
+        }
         fire.getParticleInfluencer().setInitialVelocity(this.velocity);
         fire.setStartSize(1.5f);
         fire.setEndSize(0.1f);
@@ -61,4 +65,9 @@ public class Particle extends Entity {
             this.emitter.setEnabled(false);
         }
     }
+    public void setParticleColor(ColorRGBA value){
+        fire.setStartColor(value);
+        fire.setEndColor(value);
+    }
+
 }

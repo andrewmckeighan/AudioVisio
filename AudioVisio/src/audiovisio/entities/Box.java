@@ -46,7 +46,7 @@ public class Box extends InteractableEntity implements IShootable {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Box.COLOR);
+        randomMaterial.setColor("Color", this.color);
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(Box.MASS);
@@ -55,6 +55,7 @@ public class Box extends InteractableEntity implements IShootable {
         this.particle = new PlayerParticle();
 
         this.particle.init(assetManager);
+
 
         this.attachChild(this.geometry);
         this.attachChild(this.particle);
@@ -88,9 +89,10 @@ public class Box extends InteractableEntity implements IShootable {
 
         this.rootNode = rootNode;
         this.physicsSpace = physics;
-        if (ClientAppState.isAudio){
+        if (ClientAppState.isAudio) {
             this.rootNode.attachChild(this.particle);
             this.particle.start(rootNode, physics);
+
 
         } else {
             this.particle.removeFromParent();
