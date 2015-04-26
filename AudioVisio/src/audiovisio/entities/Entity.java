@@ -38,7 +38,6 @@ public class Entity extends Node implements ILevelItem {
     //Read from JSON
     protected long ID = Long.MIN_VALUE;
     protected Geometry         geometry;
-    //TODO are the below needed?
     protected RigidBodyControl physics;
     //read from files
     protected String modelFile      = "";
@@ -69,8 +68,6 @@ public class Entity extends Node implements ILevelItem {
     }
 
     /**
-     * TODO
-     *
      * @param assetManager A reference to the assetManager to allow
      */
     @Override
@@ -131,7 +128,6 @@ public class Entity extends Node implements ILevelItem {
      * @param entityB the entity that this is colliding with.
      */
     public void collisionTrigger(Entity entityB) {
-        // TODO Auto-generated method stub
     }
 
     public void collisionEndTrigger(Entity collisionEntityB) {

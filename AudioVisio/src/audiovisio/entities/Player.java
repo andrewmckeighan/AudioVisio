@@ -19,22 +19,11 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 /**
- * TODO: make sure all parameters of Player are children of player, and handled entirely within player.
- * TODO: format this to work with matt's level file reading system. (new, load, load, start).
- */
-
-
-/**
  * This class defines the player object and contains all methods to manage the
  * player as an entity.
  *
  * @author Taylor Premo
  */
-
-//TODO FIX GRAVITY
-//Does the online model move with the camera or actual location?
-
-
 public class Player extends MovingEntity implements ActionListener {
 
     // Constants
@@ -70,8 +59,6 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     /**
-     * TODO
-     *
      * @param level [description]
      */
     public void load(Level level) {
@@ -80,8 +67,6 @@ public class Player extends MovingEntity implements ActionListener {
     }
 
     public void init(AssetManager assetManager) {
-        //TODO move to subclass
-
         this.characterControl = new BetterCharacterControl(0.4F * Level.SCALE.getX(),
                 0.7F * Level.SCALE.getY(),
                 Player.MASS);
@@ -156,7 +141,6 @@ public class Player extends MovingEntity implements ActionListener {
             }
         }
         if (binding.equals("Shoot") && !isPressed){
-            //TODO
             CollisionResults results = new CollisionResults();
 
             Ray ray = new Ray(this.playerCamera.getLocation(), this.playerCamera.getDirection());
@@ -248,7 +232,7 @@ public class Player extends MovingEntity implements ActionListener {
         SyncCharacterMessage syncCharacterMessage;
         Quaternion q = new Quaternion(0, 0, 0, 0);
 
-        //TODO: determine if this if is needed.
+        //TODO: Taylor, determine if this if is needed.
         if (this.isServer()){
             syncCharacterMessage = new SyncCharacterMessage(this.getID(),
                     this.savedLocation, //this.getLocalTranslation(),

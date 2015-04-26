@@ -54,12 +54,8 @@ public class Button extends InteractableEntity implements IShootable {
         this.physics = new RigidBodyControl(Button.MASS);//TODO: this might not be needed if we don't want collision detection
 
         this.particle = new ButtonParticle();
-
-        this.particle.setParticleColor(this.color);
-
         this.particle.init(assetManager);
-
-
+        this.particle.setParticleColor(this.color);
 
         this.attachChild(this.geometry);
         this.attachChild(this.particle);
@@ -169,7 +165,6 @@ public class Button extends InteractableEntity implements IShootable {
     }
 
     private void updateVisuals(){
-        //TODO
         try{
             if (this.geometry.getMaterial() != null){
                 this.geometry.getMaterial().setColor("updatedColor", ColorRGBA.randomColor());
@@ -288,7 +283,6 @@ public class Button extends InteractableEntity implements IShootable {
     }
 
     public TriggerActionMessage getTriggerActionMessage() {
-        //TODO
         return new TriggerActionMessage(this.getID(), this.state, this.location);
     }
 }

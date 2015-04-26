@@ -39,9 +39,7 @@ public class InteractableEntity extends Entity implements ITriggerable {
     public void load( JSONObject loadObj ){
         super.load(loadObj);
 
-        // TODO: Figure out how to get a reference to linked entities
         JSONArray interactionList = (JSONArray) loadObj.get("interactionList");
-
         for (Object oItem : interactionList){
             this.linkedIds.add((Long) oItem);
         }
@@ -51,9 +49,7 @@ public class InteractableEntity extends Entity implements ITriggerable {
     public void save( JSONObject codeObj ){
         super.save(codeObj);
 
-        // TODO: Figure out how to deal with linked entities
         JSONArray linked = new JSONArray();
-
         for (Long id : this.linkedIds){
             linked.add(id);
         }
@@ -106,11 +102,6 @@ public class InteractableEntity extends Entity implements ITriggerable {
         if (this.linkedIds != null){ this.linkedIds.add(id); }
     }
 
-//    public void addToScene( Node root, PhysicsSpace physics ){
-//        this.addToScene(root);
-//        physics.add(this.physics);
-//    }
-
     public Entity getLinkedEntity(){
         return this.linkedEntity;
     }
@@ -119,21 +110,11 @@ public class InteractableEntity extends Entity implements ITriggerable {
         this.linkedEntity = entity;
     }
 
-    //TODO remove this
-    public void createMaterial( AssetManager assetManager ){
-        Material randomMaterial = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", ColorRGBA.randomColor());
-        this.material = randomMaterial;
-        this.geometry.setMaterial(randomMaterial);
-    }
-
     public TriggerActionMessage getTriggerActionMessage(){
         return new TriggerActionMessage(this.getID(), this.state, this.location);
     }
 
     public Set<Long> getIDList( Boolean state ){
-
         return this.linkedIds;
     }
 }
