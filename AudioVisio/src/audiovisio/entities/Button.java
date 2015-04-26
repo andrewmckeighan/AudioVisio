@@ -128,7 +128,7 @@ public class Button extends InteractableEntity implements IShootable {
 
     @Override
     public void update( Boolean state ){
-        this.button_sound.play();
+        //this.button_sound.play();
 
         if (!this.state){
             if (state){
@@ -164,7 +164,8 @@ public class Button extends InteractableEntity implements IShootable {
     }
 
     private void playSound(){
-        //TODO
+        if( ClientAppState.isAudio){
+            this.button_sound.play();}
     }
 
     private void updateVisuals(){

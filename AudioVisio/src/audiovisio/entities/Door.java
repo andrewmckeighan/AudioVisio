@@ -206,7 +206,8 @@ public class Door extends InteractableEntity {
     }
 
     private void playSound(){
-        //TODO
+        if( ClientAppState.isAudio){
+            this.audio_door.play();}
     }
 
     private void close(){

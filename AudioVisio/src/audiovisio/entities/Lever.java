@@ -209,7 +209,8 @@ public class Lever extends InteractableEntity implements IShootable {
 
     @Override
     public void update(){
-        this.audio_lever.play();
+        if( ClientAppState.isAudio){
+            this.audio_lever.play();}
 
         if (this.state == null){
             this.state = false;

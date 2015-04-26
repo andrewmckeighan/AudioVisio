@@ -136,7 +136,9 @@ public class Box extends InteractableEntity implements IShootable {
     public void update( Boolean state ){
         if (!this.state){
             if (state){
-                this.audio_pick.play();
+
+               if( ClientAppState.isAudio){
+                this.audio_pick.play();}
                 this.pickUp();
             }
         } else {
