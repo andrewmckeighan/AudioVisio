@@ -114,6 +114,8 @@ public class Lever extends InteractableEntity implements IShootable {
 
         this.particle = new PlayerParticle();
 
+        this.particle.setParticleColor(this.color);
+
         this.particle.init(assetManager);
 
         this.attachChild(this.offGeometry);

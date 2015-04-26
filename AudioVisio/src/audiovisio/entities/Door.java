@@ -70,7 +70,7 @@ public class Door extends InteractableEntity {
         this.geometry.setLocalTranslation(this.location);
 
         this.particle = new PlayerParticle();
-
+        this.particle.setParticleColor(this.color);
         this.particle.init(assetManager);
 
         String wavString = "Sounds/Effects/Door2.wav";
@@ -88,7 +88,7 @@ public class Door extends InteractableEntity {
 
         com.jme3.material.Material randomMaterial = new com.jme3.material.Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Door.COLOR);
+        randomMaterial.setColor("Color", this.color);
         this.material = randomMaterial;
         this.geometry.setMaterial(randomMaterial);
 

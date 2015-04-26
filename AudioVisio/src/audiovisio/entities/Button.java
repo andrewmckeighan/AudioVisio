@@ -55,7 +55,11 @@ public class Button extends InteractableEntity implements IShootable {
 
         this.particle = new ButtonParticle();
 
+        this.particle.setParticleColor(this.color);
+
         this.particle.init(assetManager);
+
+
 
         this.attachChild(this.geometry);
         this.attachChild(this.particle);
