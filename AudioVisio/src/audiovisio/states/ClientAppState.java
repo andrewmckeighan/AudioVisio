@@ -38,6 +38,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Network;
 import com.jme3.network.NetworkClient;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.CartoonEdgeFilter;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -156,6 +158,11 @@ public class ClientAppState extends AbstractAppState implements
         directionalLight.setColor(ColorRGBA.White);
         directionalLight.setDirection(new Vector3f(2.8f, -2.8f, -2.8f)
                 .normalizeLocal());
+
+        FilterPostProcessor fpp = new FilterPostProcessor(this.assetManager);
+        CartoonEdgeFilter cartoonEdgeFilter = new CartoonEdgeFilter();
+        fpp.addFilter(cartoonEdgeFilter);
+        this.audioVisioApp.getViewPort().addProcessor(fpp);
 
         // //////////////////////////
         // Initialization Methods //

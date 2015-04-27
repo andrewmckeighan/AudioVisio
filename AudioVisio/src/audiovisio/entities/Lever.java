@@ -15,13 +15,13 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import org.json.simple.JSONObject;
-import sun.rmi.runtime.Log;
 
 public class Lever extends InteractableEntity implements IShootable {
     public static final  String     KEY_EDGE  = "edge";
@@ -128,8 +128,11 @@ public class Lever extends InteractableEntity implements IShootable {
         }
 
         if (ClientAppState.isAudio){
-            this.offGeometry.removeFromParent();
-            this.onGeometry.removeFromParent();
+
+            this.offGeometry.getMaterial().setColor("Color", new ColorRGBA(0f, 0f, 0f, 0f));
+            this.offGeometry.getMaterial().setTransparent(true);
+            this.onGeometry.getMaterial().setColor("Color", new ColorRGBA(0f, 0f, 0f, 0f));
+            this.onGeometry.getMaterial().setTransparent(true);
             this.offGeometry = null;
             this.onGeometry = null;
         } else {

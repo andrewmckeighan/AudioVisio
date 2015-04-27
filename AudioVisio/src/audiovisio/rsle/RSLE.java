@@ -742,8 +742,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
                     face = ILevelItem.Direction.WEST;
                 }
 
-                for (int x = startX; x < size; x++){
-                    Wall wall = new Wall(new Vector3f(x, y, startZ), face);
+                for (int z = startZ; z < size; z++) {
+                    Wall wall = new Wall(new Vector3f(startX, y, z), face);
                     wall.setID(this.currentLevel.getNextId());
 
                     this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
@@ -757,8 +757,9 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
                     face = ILevelItem.Direction.SOUTH;
                 }
 
-                for (int z = startZ; z < size; z++){
-                    Wall wall = new Wall(new Vector3f(startX, y, z), face);
+
+                for (int x = startX; x < size; x++) {
+                    Wall wall = new Wall(new Vector3f(x, y, startZ), face);
                     wall.setID(this.currentLevel.getNextId());
 
                     this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);

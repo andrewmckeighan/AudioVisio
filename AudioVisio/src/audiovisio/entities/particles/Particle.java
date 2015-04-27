@@ -30,27 +30,27 @@ public class Particle extends Entity {
 
     @Override
     public void init( AssetManager assetManager ){
-        fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 300);
+        this.fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 300);
         Material mat_red = new Material(assetManager,
                 this.material);
         mat_red.setTexture("Texture", assetManager.loadTexture(
                 this.texture));
 
-        fire.setMaterial(mat_red);
-        fire.setImagesX(2);
-        fire.setImagesY(2);
-        fire.setEndColor(this.color);
-        fire.setStartColor(this.color);
-        fire.getParticleInfluencer().setInitialVelocity(this.velocity);
-        fire.setStartSize(1.5f);
-        fire.setEndSize(0.1f);
-        fire.setGravity(0, 0, 0);
-        fire.setLowLife(this.lowLife);
-        fire.setHighLife(this.highLife);
-        fire.getParticleInfluencer().setVelocityVariation(0.3f);
-        fire.setInWorldSpace(true);
+        this.fire.setMaterial(mat_red);
+        this.fire.setImagesX(2);
+        this.fire.setImagesY(2);
+        this.fire.setEndColor(this.color);
+        this.fire.setStartColor(this.color);
+        this.fire.getParticleInfluencer().setInitialVelocity(this.velocity);
+        this.fire.setStartSize(1.5f);
+        this.fire.setEndSize(0.1f);
+        this.fire.setGravity(0, 0, 0);
+        this.fire.setLowLife(this.lowLife);
+        this.fire.setHighLife(this.highLife);
+        this.fire.getParticleInfluencer().setVelocityVariation(0.3f);
+        this.fire.setInWorldSpace(true);
 
-        this.emitter = fire;
+        this.emitter = this.fire;
         this.attachChild(this.emitter);
     }
 
@@ -59,13 +59,13 @@ public class Particle extends Entity {
         super.start(rootNode, physics);
 
         if (AudioVisio.difficulty == 0){
-            this.emitter.setParticlesPerSec(PARTICLES_PER_SECOND);
+            this.emitter.setParticlesPerSec(Particle.PARTICLES_PER_SECOND);
             this.emitter.setEnabled(false);
         }
     }
     public void setParticleColor(ColorRGBA value){
-        fire.setStartColor(value);
-        fire.setEndColor(value);
+//        fire.setStartColor(value);
+//        fire.setEndColor(value);
     }
 
 }
