@@ -66,6 +66,7 @@ public class Button extends InteractableEntity implements IShootable {
         this.attachChild(this.button_sound);
         this.button_sound.setLooping(false);
         this.button_sound.setPositional(true);
+        this.button_sound.setVolume(.1f);
 
         if (this.particle != null && this.particle.emitter != null) {
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());

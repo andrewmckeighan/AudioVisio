@@ -159,7 +159,6 @@ public class Door extends InteractableEntity {
 
             this.audio_door.setLooping(false);
             this.audio_door.setPositional(true);
-            this.audio_door.play();
 
 
         if (!this.state){
