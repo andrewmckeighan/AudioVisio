@@ -78,7 +78,7 @@ public class Door extends InteractableEntity {
 
         this.audio_door = new AudioNode(assetManager, wavString, false);
         this.attachChild(this.audio_door);
-
+        this.audio_door.setVolume(0.2f);
         if (this.particle != null && this.particle.emitter != null){
 //          this.footSteps.emitter.setLocalTranslation(this.getLocalTranslation());
             this.particle.emitter.setLocalTranslation(this.location);
