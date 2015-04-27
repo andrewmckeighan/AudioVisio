@@ -22,7 +22,7 @@ public interface IShootable {
     void update();
 
     /**
-     * TODO: What is this used for?
+     * TODO: Taylor, What is this used for?
      * Determine whether the shootable was updated.
      *
      * @return true if updated, false otherwise
@@ -30,7 +30,7 @@ public interface IShootable {
     Boolean getWasUpdated();
 
     /**
-     * TODO: Docs for this method
+     * TODO: Taylor, do this javadoc
      * @param wasUpdated
      */
     void setWasUpdated( boolean wasUpdated );

@@ -46,6 +46,8 @@ public class NetworkUtils {
     /**
      * Get the LAN IP address of the current host.
      *
+     * Based on: http://stackoverflow.com/a/14364233
+     *
      * @return The address of the host if found, null otherwise.
      */
     public static String getIP(){

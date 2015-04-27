@@ -70,8 +70,8 @@ public class Door extends InteractableEntity {
         this.geometry.setLocalTranslation(this.location);
 
         this.particle = new PlayerParticle();
-        this.particle.setParticleColor(this.color);
         this.particle.init(assetManager);
+        this.particle.setParticleColor(this.color);
 
         String wavString = "Sounds/Effects/Door2.wav";
         LogHelper.info(wavString);

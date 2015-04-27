@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
  * ILevelItem is as follows:
  * <p/>
  * <pre>
- *     Constructed -> load() -> load() -> start()
+ *     Constructed -> init() -> load() -> start()
  * </pre>
  * <p/>
  * These methods are meant to be called by
