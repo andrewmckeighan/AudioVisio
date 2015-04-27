@@ -140,10 +140,6 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             LogHelper.warn("tried to remove player who wasn't there: " + id);
             return;
         }
-        //TODO?
-        if (!this.isServer()) {
-            //remove player from scene
-        }
         player.removeFromParent();
         this.space.removeAll(player);
     }

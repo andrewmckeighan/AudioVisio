@@ -160,7 +160,6 @@ public class ClientAppState extends AbstractAppState implements
         // //////////////////////////
         // Initialization Methods //
         // //////////////////////////
-        // TODO may be moved to Player/elsewhere
         this.initCrossHairs(); // a "+" in the middle of the screen to help aiming
 
         // ///////////////////////////
@@ -183,7 +182,7 @@ public class ClientAppState extends AbstractAppState implements
 
     /**
      * Creates a '+' char on the center of the screen and adds it to the
-     * 'guiNode' TODO may be moved
+     * 'guiNode'
      */
     private void initCrossHairs(){
         this.audioVisioApp.setDisplayStatView(false);
@@ -196,7 +195,6 @@ public class ClientAppState extends AbstractAppState implements
                 this.audioVisioApp.getWidth() / 2 - ch.getLineWidth() / 2,
                 this.audioVisioApp.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         this.audioVisioApp.getGuiNode().attachChild(ch);
-
     }
 
     /**
@@ -335,16 +333,14 @@ public class ClientAppState extends AbstractAppState implements
     }
 
     /**
-     * TODO rewrite Handles collisions of entities
+     * TODO rewrite
+     * Handles collisions of entities
      *
      * @param event The collision event containing the two nodes that have
      *              collided.
      */
     @Override
     public void collision( PhysicsCollisionEvent event ){
-        //TODO are these better than node.getParent()?
-        event.getObjectA();
-        event.getObjectB();
         if (event.getNodeA() instanceof Entity && event.getNodeB() instanceof Entity){
             Entity entityA = (Entity) event.getNodeA();
             Entity entityB = (Entity) event.getNodeB();

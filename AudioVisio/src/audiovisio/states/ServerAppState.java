@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-//import audiovisio.networking.utilities.GeneralUtilities; //TODO is this needed?
-
 /**
  * This class manages the server, Addin abd removing players,
  * and all other methods needed to run jmonkeys simpleApplication
@@ -64,7 +62,6 @@ public class ServerAppState extends AbstractAppState implements
      *
      * TODO clean up myServer.addConnectionListener
      */
-
     @Override
     public void initialize( AppStateManager stateManager, Application app ){
         LogHelper.info("Starting server...");
@@ -88,7 +85,7 @@ public class ServerAppState extends AbstractAppState implements
         ////////////
         BulletAppState bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        final PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace(); //TODO why is this final?
+        PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
 
         ////////////////
         // Networking //
@@ -103,8 +100,6 @@ public class ServerAppState extends AbstractAppState implements
         syncManager.setMessageTypes(SyncCharacterMessage.class,
                 SyncRigidBodyMessage.class, PlayerJoinMessage.class, PlayerLeaveMessage.class,
                 TriggerActionMessage.class);
-
-        // TODO: Shouldn't need the rest of this method
 
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
@@ -163,12 +158,11 @@ public class ServerAppState extends AbstractAppState implements
     }
 
     /**
-     * TODO
+     * TODO This should match the server
      * Handles custom collision events, typically between two entities.
      *
      * @param event The Event object, contains both nodes that collided along with other relevant information.
      */
-
     @Override
     public void collision( PhysicsCollisionEvent event ){
         if (event.getNodeA().getParent() instanceof Entity && event.getNodeB().getParent() instanceof Entity){
@@ -182,15 +176,9 @@ public class ServerAppState extends AbstractAppState implements
 
     /**
      * Unimplemented method stub.
-     *
-     * @param arg0
-     * @param arg1
-     * @param arg2
      */
     @Override
-    public void onAction( String arg0, boolean arg1, float arg2 ){
-        // TODO Method is needed in order to implement actionListener.
-    }
+    public void onAction( String arg0, boolean arg1, float arg2 ){}
 
     /**
      * @param id
