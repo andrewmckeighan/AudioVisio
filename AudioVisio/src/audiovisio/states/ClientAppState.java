@@ -40,6 +40,7 @@ import com.jme3.network.Network;
 import com.jme3.network.NetworkClient;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.CartoonEdgeFilter;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -82,8 +83,9 @@ public class ClientAppState extends AbstractAppState implements
     private CopyOnWriteArrayList<CollisionEvent> collisionEvents = new CopyOnWriteArrayList<CollisionEvent>();
     private boolean debug;
     private Node    debugNode;
+    private BulletAppState bulletAppState;
 
-    public ClientAppState(){
+    public ClientAppState() {
     }
 
     /**
@@ -93,12 +95,12 @@ public class ClientAppState extends AbstractAppState implements
      * @param app          A SimpleApplication to implement the AppState in (AudioVisio).
      */
     @Override
-    public void initialize( AppStateManager stateManager, Application app ){
+    public void initialize(AppStateManager stateManager, Application app) {
         LogHelper.info("Starting client: " + this.myClient.getId());
-        while (this.myClient.getId() == -1){
-            try{
+        while (this.myClient.getId() == -1) {
+            try {
                 Thread.sleep(100);
-            } catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 LogHelper.warn("Thread.sleep interrupted in client load, ", e);
             }
         }
@@ -112,17 +114,17 @@ public class ClientAppState extends AbstractAppState implements
 
         Items.init();
 
-        try{
+        try {
             this.level = LevelLoader.read(FileUtils.getLevelFile(AudioVisio.level));
             this.level.loadLevel();
-        } catch (Exception e){
+        } catch (Exception e) {
             LogHelper.info("exception: ", e);
         }
 
         // ///////////
         // Physics //
         // ///////////
-        BulletAppState bulletAppState = new BulletAppState();
+        bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
         this.physicsSpace = bulletAppState.getPhysicsSpace();
@@ -246,10 +248,10 @@ public class ClientAppState extends AbstractAppState implements
                             ClientAppState.this.createCoordinateAxes(loc);
                             ClientAppState.this.rootNode.attachChild(ClientAppState.this.debugNode);
 
-                            ClientAppState.this.physicsSpace.enableDebug(ClientAppState.this.assetManager);
+                            ClientAppState.this.bulletAppState.setDebugEnabled(true);
                         } else {
                             ClientAppState.this.rootNode.detachChild(ClientAppState.this.debugNode);
-                            ClientAppState.this.physicsSpace.disableDebug();
+                            ClientAppState.this.bulletAppState.setDebugEnabled(false);
                         }
                     } else if ("ReleaseMouse".equals(name)){
                         ClientAppState.this.inputManager.setCursorVisible(!ClientAppState.this.inputManager.isCursorVisible());
@@ -290,10 +292,15 @@ public class ClientAppState extends AbstractAppState implements
      * @param tpf time per frame
      */
     @Override
-    public void update( float tpf ){
+    public void update( float tpf ) {
+        if (this.debug) {
+            Camera cam = this.audioVisioApp.getCamera();
+            Vector3f viewDir = cam.getDirection();
+            this.debugNode.setLocalTranslation(this.audioVisioApp.getCamera().getLocation().addLocal(viewDir.mult(2)));
+        }
         LogHelper.divider("Client.update");
         Player player = ((Player) this.worldManager.getPlayer(this.myClient.getId()));
-        if (player != null){
+        if (player != null) {
             this.updateMessage(player);
             SyncCharacterMessage msg = player.getSyncCharacterMessage();
             LogHelper.finer("\nSending syncCharMsg:\n   " + msg);
@@ -301,10 +308,10 @@ public class ClientAppState extends AbstractAppState implements
         }
 
         Collection<ILevelItem> levelItems = this.level.getItems();
-        for (ILevelItem iLevelItem : levelItems){
-            if (iLevelItem instanceof InteractableEntity){
+        for (ILevelItem iLevelItem : levelItems) {
+            if (iLevelItem instanceof InteractableEntity) {
                 InteractableEntity inEnt = (InteractableEntity) iLevelItem;
-                if (inEnt.wasUpdated){
+                if (inEnt.wasUpdated) {
                     TriggerActionMessage msg = inEnt.getTriggerActionMessage();
                     this.myClient.send(msg);
                 }
@@ -312,8 +319,8 @@ public class ClientAppState extends AbstractAppState implements
         }
 
 
-        for (CollisionEvent event : this.collisionEvents){
-            if (event.check(tpf)){
+        for (CollisionEvent event : this.collisionEvents) {
+            if (event.check(tpf)) {
                 this.collisionEvents.remove(event);
                 event.collisionEndTrigger();
             }
