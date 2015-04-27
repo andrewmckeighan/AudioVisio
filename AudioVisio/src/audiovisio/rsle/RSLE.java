@@ -749,7 +749,7 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
                     this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
                     this.currentLevel.addItem(wall);
                 }
-            } else if ("EAST_WEST".equals(direction) || "WEST-EAST".equals(direction)){
+            } else if ("EAST-WEST".equals(direction) || "WEST-EAST".equals(direction)){
                 ILevelItem.Direction face;
                 if ("EAST-WEST".equals(direction)){
                     face = ILevelItem.Direction.NORTH;
