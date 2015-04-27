@@ -138,12 +138,15 @@ public class Box extends InteractableEntity implements IShootable {
             if (state){
 
                if( ClientAppState.isAudio){
-                this.audio_pick.play();}
-                this.pickUp();
+                this.audio_pick.play();
+               }
+               this.pickUp();
             }
         } else {
             if (!state){
-                this.audio_place.play();
+                if (ClientAppState.isAudio) {
+                    this.audio_place.play();
+                }
                 this.putDown(this.shootables, this.location);
             }
         }
