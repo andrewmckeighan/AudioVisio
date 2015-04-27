@@ -301,6 +301,7 @@ public class Player extends MovingEntity implements ActionListener {
         } else {
             LogHelper.info("NoClip off");
             this.addControl(this.characterControl);
+            this.characterControl.warp(this.playerCamera.getLocation());
         }
     }
 }

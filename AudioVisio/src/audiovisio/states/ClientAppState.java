@@ -257,6 +257,13 @@ public class ClientAppState extends AbstractAppState implements
                     } else if ("NoClip".equals(name)){
                         LogHelper.info("Toggle NoClip mode on player");
                         player.setDebug(!player.isDebug());
+
+                        if (!player.isDebug()){
+                            ClientAppState.this.myClient.send(player.getSyncCharacterMessage());
+                            ClientAppState.this.addPlayerKeybinds(player);
+                        } else {
+                            ClientAppState.this.inputManager.removeListener(player);
+                        }
                     }
                 }
             }
@@ -265,6 +272,13 @@ public class ClientAppState extends AbstractAppState implements
         this.inputManager.addListener(debugListener, "Debug");
         this.inputManager.addListener(debugListener, "ReleaseMouse");
         this.inputManager.addListener(debugListener, "NoClip");
+    }
+
+    public void addPlayerKeybinds(Player player){
+        this.inputManager.addListener(player, "Up");
+        this.inputManager.addListener(player, "Down");
+        this.inputManager.addListener(player, "Left");
+        this.inputManager.addListener(player, "Right");
     }
 
     /**
