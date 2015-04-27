@@ -26,7 +26,7 @@ public class CreateWallDialog extends NewDialog {
     @Override
     protected void init(){
         this.setTitle("Create Wall");
-        this.setLayout(new GridLayout(5, 2));
+        this.setLayout(new GridLayout(6, 2));
 
         this.add(this.lblStartX);
         this.add(this.startX);
