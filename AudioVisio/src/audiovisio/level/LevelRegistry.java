@@ -1,5 +1,6 @@
 package audiovisio.level;
 
+import audiovisio.rsle.editor.extensions.IRSLEExtension;
 import audiovisio.utils.LogHelper;
 
 import java.util.HashMap;
@@ -77,6 +78,27 @@ public class LevelRegistry {
         ItemData data = LevelRegistry.items.get(type);
         data.addSubType(subtype, clazz);
         LogHelper.info("Registered subtype " + subtype + " for Item " + type + ": " + clazz.getName());
+    }
+
+    public static void registerItemRSLEExtension( String type, Class<? extends IRSLEExtension> clazz ){
+        if (clazz == null){
+            throw new IllegalArgumentException("RSLE extension for type " + type + " cannot be null");
+        }
+        if (!LevelRegistry.typeExists(type)){
+            throw new IllegalArgumentException("Type " + type + " is not registered!");
+        }
+
+        ItemData data = LevelRegistry.items.get(type);
+        data.rsleExtension = clazz;
+        LogHelper.info("Registered RSLE Extension for Item " + type + ": " + clazz.getName());
+    }
+
+    public static boolean typeExists( String type ){
+        return LevelRegistry.items.containsKey(type);
+    }
+
+    public static boolean hasSubtype( String type, String subtype ){
+        return LevelRegistry.typeExists(type) && LevelRegistry.items.get(type).getSubType(subtype) != null;
     }
 
     /**
@@ -171,6 +193,28 @@ public class LevelRegistry {
         return item;
     }
 
+    public static IRSLEExtension getExtensionForType( String type ){
+        ItemData data = LevelRegistry.items.get(type);
+        if (data == null){ throw new IllegalArgumentException("Invalid type " + type); }
+        Class<? extends IRSLEExtension> clazz = data.rsleExtension;
+        if (clazz == null) return null;
+
+        IRSLEExtension ext;
+        try{
+            ext = clazz.newInstance();
+        } catch (InstantiationException e){
+            throw new RuntimeException("Could not create RSLE extension for type: " + type, e);
+        } catch (IllegalAccessException e){
+            throw new RuntimeException("Could not create RSLE extension for type: " + type, e);
+        }
+
+        return ext;
+    }
+
+    public static Set<String> getRegisteredTypes(){
+        return LevelRegistry.items.keySet();
+    }
+
     /**
      * Get the class registered for the specified type.
      *
@@ -192,6 +236,8 @@ public class LevelRegistry {
         String                      type;
         Class<? extends ILevelItem> itemClass;
         Map<String, Class<? extends ILevelItem>> subTypes = new HashMap<String, Class<? extends ILevelItem>>();
+
+        Class<? extends IRSLEExtension> rsleExtension;
 
         public ItemData( String type, Class<? extends ILevelItem> clazz ){
             this.type = type;

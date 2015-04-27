@@ -1,29 +1,16 @@
 package audiovisio.rsle;
 
 import audiovisio.Items;
-import audiovisio.entities.Box;
-import audiovisio.entities.Button;
-import audiovisio.entities.Door;
-import audiovisio.entities.Lever;
+import audiovisio.RSLEExtensions;
 import audiovisio.level.*;
-import audiovisio.level.Panel;
-import audiovisio.level.triggers.EndTrigger;
-import audiovisio.level.triggers.LevelTrigger;
-import audiovisio.level.triggers.TextTrigger;
 import audiovisio.rsle.editor.LevelNode;
 import audiovisio.rsle.editor.LevelNodeEditor2;
 import audiovisio.rsle.editor.LevelNodeRenderer;
-import audiovisio.rsle.editor.dialogs.*;
-import audiovisio.rsle.editor.dialogs.entities.NewBoxDialog;
-import audiovisio.rsle.editor.dialogs.entities.NewButtonDialog;
-import audiovisio.rsle.editor.dialogs.entities.NewDoorDialog;
-import audiovisio.rsle.editor.dialogs.entities.NewLeverDialog;
-import audiovisio.rsle.editor.dialogs.panels.NewPanelDialog;
-import audiovisio.rsle.editor.dialogs.panels.NewStairDialog;
-import audiovisio.rsle.editor.dialogs.panels.NewWallDialog;
-import audiovisio.rsle.editor.dialogs.triggers.NewEndTriggerDialog;
-import audiovisio.rsle.editor.dialogs.triggers.NewLevelTriggerDialog;
-import audiovisio.rsle.editor.dialogs.triggers.NewTextTriggerDialog;
+import audiovisio.rsle.editor.dialogs.CreateLinkDialog;
+import audiovisio.rsle.editor.dialogs.DefaultDialog;
+import audiovisio.rsle.editor.dialogs.NewLevelDialog;
+import audiovisio.rsle.editor.dialogs.SetSpawnDialog;
+import audiovisio.rsle.editor.extensions.IRSLEExtension;
 import audiovisio.utils.FileUtils;
 import audiovisio.utils.LogHelper;
 import com.jme3.math.Vector3f;
@@ -33,6 +20,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * A VERY simple level editor used to edit the level json files.
@@ -55,41 +43,29 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private JPanel editor = new JPanel();
 
     // MENU ITEMS
-    private JMenu      file;
-    private JMenuItem  file_new;
-    private JMenuItem  file_open;
-    private JMenuItem  file_save;
-    private JMenuItem  file_save_as;
-    private JMenuItem  file_close;
-    private JMenuItem  file_exit;
+    private JMenu     file;
+    private JMenuItem file_new;
+    private JMenuItem file_open;
+    private JMenuItem file_save;
+    private JMenuItem file_save_as;
+    private JMenuItem file_close;
+    private JMenuItem file_exit;
 
     // EDIT ITEMS
-    private JMenu      edit;
-    private JMenuItem  edit_regen_id;
-    private JMenuItem  edit_set_p1_spawn;
-    private JMenuItem  edit_set_p2_spawn;
+    private JMenu     edit;
+    private JMenuItem edit_regen_id;
+    private JMenuItem edit_set_p1_spawn;
+    private JMenuItem edit_set_p2_spawn;
 
     // ADD ITEMS
-    private JMenu      add;
-    private JMenu      add_trigger;
-    private JMenuItem  add_trigger_end;
-    private JMenuItem  add_trigger_level;
-    private JMenuItem  add_trigger_text;
-    private JMenu      add_panels;
-    private JMenuItem  add_panels_panel;
-    private JMenuItem  add_panels_stair;
-    private JMenuItem  add_panels_wall;
-    private JMenu      add_entities;
-    private JMenuItem  add_box;
-    private JMenuItem  add_button;
-    private JMenuItem  add_door;
-    private JMenuItem  add_lever;
+    private JMenu     add;
+    private JMenuItem addPanel;
+    private JMenuItem addTrigger;
+    private JMenuItem addEntity;
 
     // CREATE ITEMS
-    private JMenu      create;
-    private JMenuItem  create_floor;
-    private JMenuItem  create_link;
-    private JMenuItem  create_wall;
+    private JMenu     create;
+    private JMenuItem create_link;
 
     // CONTEXT MENU
     private JPopupMenu ctxMenu;
@@ -99,10 +75,12 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     private LevelNode  entities;
 
     // level STUFF
-    private File       loadedFile;
-    private Level      currentLevel;
+    private File  loadedFile;
+    private Level currentLevel;
 
-    public RSLE(){
+    private HashMap<String, IRSLEExtension> extensions = new HashMap<String, IRSLEExtension>();
+
+    public RSLE() {
         super(new GridLayout(1, 0));
         this.setSize(600, 600);
 
@@ -131,6 +109,45 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.ctxDelete.setMnemonic(KeyEvent.VK_D);
         this.ctxDelete.addActionListener(this);
         this.ctxMenu.add(this.ctxDelete);
+
+        RSLEExtensions.init();
+        this.loadExtensions();
+    }
+
+    public void loadExtensions() {
+        for (String item : LevelRegistry.getRegisteredTypes()) {
+            IRSLEExtension ext = LevelRegistry.getExtensionForType(item);
+            if (ext == null) continue;
+
+            this.extensions.put(item, ext);
+
+            ext.init(this);
+            ext.registerMenuItems();
+        }
+    }
+
+    public void registerAddType( ItemBucket bucket, JMenuItem item ){
+        switch (bucket){
+            case TRIGGERS:
+                this.addTrigger.add(item);
+                break;
+            case PANELS:
+                this.addPanel.add(item);
+                break;
+            case ENTITIES:
+                this.addEntity.add(item);
+                break;
+        }
+    }
+
+    public void registerCreateItem( JMenuItem menuItem ){
+        this.create.add(menuItem);
+    }
+
+    public DefaultDialog getDialog( String action, String type, String subtype){
+        DefaultDialog dialog = new DefaultDialog((Frame) SwingUtilities.getWindowAncestor(this), true);
+        dialog.setExtension(this.extensions.get(type), action, type, subtype);
+        return dialog;
     }
 
     /**
@@ -138,27 +155,27 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
      *
      * @param file The file to load
      */
-    public void load( File file ){
-        try{
+    public void load(File file) {
+        try {
             this.currentLevel = LevelLoader.read(file);
             this.currentLevel.loadLevel();
             this.buildTree();
 
             this.tree.setEditable(true);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "There was an error reading the file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             LogHelper.severe("Error reading level file!", ex);
         }
     }
 
-    public static void main( String[] args ){
+    public static void main(String[] args) {
         LogHelper.init();
         LogHelper.toggleStackDump(); // I don't want to dump stack for warn or severe messages
         LogHelper.setLevel(java.util.logging.Level.INFO);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 RSLE.createAndShowGUI();
             }
         });
@@ -246,55 +263,12 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.add.setMnemonic(KeyEvent.VK_A);
         this.add.setEnabled(false);
 
-        this.add_trigger = new JMenu("Add Trigger...");
-
-        this.add_trigger_end = new JMenuItem("End");
-        this.add_trigger_end.addActionListener(this);
-        this.add_trigger.add(this.add_trigger_end);
-
-        this.add_trigger_level = new JMenuItem("Level");
-        this.add_trigger_level.addActionListener(this);
-        this.add_trigger.add(this.add_trigger_level);
-
-        this.add_trigger_text = new JMenuItem("Text");
-        this.add_trigger_text.addActionListener(this);
-        this.add_trigger.add(this.add_trigger_text);
-
-        this.add.add(this.add_trigger);
-
-        this.add_panels = new JMenu("Add Panel...");
-
-        this.add_panels_panel = new JMenuItem("Panel");
-        this.add_panels_panel.addActionListener(this);
-        this.add_panels.add(this.add_panels_panel);
-
-        this.add_panels_stair = new JMenuItem("Stair");
-        this.add_panels_stair.addActionListener(this);
-        this.add_panels.add(this.add_panels_stair);
-
-        this.add_panels_wall = new JMenuItem("Wall");
-        this.add_panels_wall.addActionListener(this);
-        this.add_panels.add(this.add_panels_wall);
-        this.add.add(this.add_panels);
-
-        this.add_entities = new JMenu("Add Entity...");
-
-        this.add_box = new JMenuItem("Box");
-        this.add_box.addActionListener(this);
-        this.add_entities.add(this.add_box);
-
-        this.add_button = new JMenuItem("Button");
-        this.add_button.addActionListener(this);
-        this.add_entities.add(this.add_button);
-
-        this.add_door = new JMenuItem("Door");
-        this.add_door.addActionListener(this);
-        this.add_entities.add(this.add_door);
-
-        this.add_lever = new JMenuItem("Lever");
-        this.add_lever.addActionListener(this);
-        this.add_entities.add(this.add_lever);
-        this.add.add(this.add_entities);
+        this.addTrigger = new JMenu("Add Trigger...");
+        this.add.add(this.addTrigger);
+        this.addPanel = new JMenu("Add Panel...");
+        this.add.add(this.addPanel);
+        this.addEntity = new JMenu("Add Entity...");
+        this.add.add(this.addEntity);
 
         this.menuBar.add(this.add);
     }
@@ -304,17 +278,9 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         this.create.setMnemonic(KeyEvent.VK_C);
         this.create.setEnabled(false);
 
-        this.create_floor = new JMenuItem("Create Floor");
-        this.create_floor.addActionListener(this);
-        this.create.add(this.create_floor);
-
         this.create_link = new JMenuItem("Create Link");
         this.create_link.addActionListener(this);
         this.create.add(this.create_link);
-
-        this.create_wall = new JMenuItem("Create Wall");
-        this.create_wall.addActionListener(this);
-        this.create.add(this.create_wall);
 
         this.menuBar.add(this.create);
     }
@@ -500,198 +466,20 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    private void actionAddEndTrigger(){
-        NewEndTriggerDialog triggerDialog = new NewEndTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        triggerDialog.setVisible(true);
+    public void addItem(ILevelItem item, ItemBucket bucket){
+        item.setID(this.currentLevel.getNextId());
+        this.currentLevel.addItem(item);
 
-        if (triggerDialog.getStatus()){
-            Vector3f loc = triggerDialog.getLevelLocation();
-
-            EndTrigger trigger = new EndTrigger(loc);
-            trigger.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(trigger);
-
-            this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
-        }
-    }
-
-    private void actionAddTextTrigger(){
-        NewTextTriggerDialog triggerDialog = new NewTextTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        triggerDialog.setVisible(true);
-
-        if(triggerDialog.getStatus()){
-            Vector3f loc = triggerDialog.getLevelLocation();
-            String text = triggerDialog.getText();
-
-            TextTrigger trigger = new TextTrigger(loc);
-            trigger.setText(text);
-            trigger.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(trigger);
-
-            this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
-        }
-    }
-
-    private void actionAddLevelTrigger(){
-        NewLevelTriggerDialog triggerDialog = new NewLevelTriggerDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        triggerDialog.setVisible(true);
-
-        if(triggerDialog.getStatus()){
-            Vector3f loc = triggerDialog.getLevelLocation();
-            String levelFile = triggerDialog.getLevelFile();
-
-            LevelTrigger trigger = new LevelTrigger(loc);
-            trigger.setLevelFile(levelFile);
-            trigger.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(trigger);
-
-            this.treeModel.insertNodeInto(trigger.getLevelNode(), this.triggers, 0);
-        }
-    }
-
-    private void actionAddBox(){
-        NewBoxDialog boxDialog = new NewBoxDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        boxDialog.setVisible(true);
-
-        if (boxDialog.getStatus()){
-            Vector3f loc = boxDialog.getLevelLocation();
-            String name = boxDialog.getName();
-
-            Box box = new Box();
-            box.location = loc;
-            box.setName(name);
-            box.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(box);
-
-            this.treeModel.insertNodeInto(box.getLevelNode(), this.entities, 0);
-        }
-    }
-
-    private void actionAddButton(){
-        NewButtonDialog buttonDialog = new NewButtonDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        buttonDialog.setVisible(true);
-
-        if (buttonDialog.getStatus()){
-            Vector3f loc = buttonDialog.getLevelLocation();
-            String name = buttonDialog.getName();
-
-            audiovisio.entities.Button button = new Button();
-            button.location = loc;
-            button.setName(name);
-            button.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(button);
-
-            this.treeModel.insertNodeInto(button.getLevelNode(), this.entities, 0);
-        }
-    }
-
-    private void actionAddDoor(){
-        NewDoorDialog doorDialog = new NewDoorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        doorDialog.setVisible(true);
-
-        if (doorDialog.getStatus()){
-            Vector3f loc = doorDialog.getLevelLocation();
-            String name = doorDialog.getName();
-            boolean state = doorDialog.getState();
-
-            Door door = new Door(state);
-            door.setName(name);
-            door.setID(this.currentLevel.getNextId());
-            door.location = loc;
-            this.currentLevel.addItem(door);
-
-            this.treeModel.insertNodeInto(door.getLevelNode(), this.entities, 0);
-        }
-    }
-
-    private void actionAddLever(){
-        NewLeverDialog leverDialog = new NewLeverDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        leverDialog.setVisible(true);
-
-        if (leverDialog.getStatus()){
-            Vector3f loc = leverDialog.getLevelLocation();
-            String name = leverDialog.getName();
-            String edge = leverDialog.getEdge();
-            boolean state = leverDialog.getState();
-
-            Lever lever = new Lever(loc);
-            lever.setName(name);
-            lever.setOn(state);
-            lever.setDirection(edge);
-            lever.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(lever);
-
-            this.treeModel.insertNodeInto(lever.getLevelNode(), this.entities, 0);
-        }
-    }
-
-    private void actionAddPanel(){
-        NewPanelDialog panelDialog = new NewPanelDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        panelDialog.setVisible(true);
-
-        if (panelDialog.getStatus()){
-            Vector3f loc = panelDialog.getLevelLocation();
-
-            Panel panel = new Panel(loc);
-            panel.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(panel);
-
-            this.treeModel.insertNodeInto(panel.getLevelNode(), this.panels, 0);
-        }
-    }
-
-    private void actionAddStair(){
-        NewStairDialog stairDialog = new NewStairDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        stairDialog.setVisible(true);
-
-        if (stairDialog.getStatus()){
-            Vector3f loc = stairDialog.getLevelLocation();
-            String dir = stairDialog.getDirection();
-
-            Stair stair = new Stair(loc, ILevelItem.Direction.valueOf(dir));
-            stair.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(stair);
-
-            this.treeModel.insertNodeInto(stair.getLevelNode(), this.panels, 0);
-        }
-    }
-
-    private void actionAddWall(){
-        NewWallDialog wallDialog = new NewWallDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        wallDialog.setVisible(true);
-
-        if (wallDialog.getStatus()){
-            Vector3f loc = wallDialog.getLevelLocation();
-            String dir = wallDialog.getDirection();
-
-            Wall wall = new Wall(loc, Wall.Direction.valueOf(dir));
-            wall.setID(this.currentLevel.getNextId());
-            this.currentLevel.addItem(wall);
-
-            this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
-        }
-    }
-
-    private void actionCreateFloor(){
-        CreateFloorDialog floorDialog = new CreateFloorDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        floorDialog.setVisible(true);
-
-        if (floorDialog.getStatus()){
-            int startX = floorDialog.getStartX();
-            int startZ = floorDialog.getStartZ();
-            int sizeX = floorDialog.getSizeX();
-            int sizeZ = floorDialog.getSizeZ();
-            int y = floorDialog.getYPlane();
-
-            for (int x = startX; x < startX + sizeX; x++){
-                for (int z = startZ; z < startZ + sizeZ; z++){
-                    Panel panel = new Panel(new Vector3f(x, y, z));
-                    panel.setID(this.currentLevel.getNextId());
-
-                    this.treeModel.insertNodeInto(panel.getLevelNode(), this.panels, 0);
-                    this.currentLevel.addItem(panel);
-                }
-            }
+        switch (bucket){
+            case PANELS:
+                this.treeModel.insertNodeInto(item.getLevelNode(), this.panels, this.panels.getChildCount());
+                break;
+            case TRIGGERS:
+                this.treeModel.insertNodeInto(item.getLevelNode(), this.triggers, this.triggers.getChildCount());
+                break;
+            case ENTITIES:
+                this.treeModel.insertNodeInto(item.getLevelNode(), this.entities, this.entities.getChildCount());
+                break;
         }
     }
 
@@ -722,53 +510,6 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
         }
     }
 
-    private void actionCreateWall(){
-        CreateWallDialog wallDialog = new CreateWallDialog((JFrame) SwingUtilities.getWindowAncestor(this), true);
-        wallDialog.setVisible(true);
-
-        if (wallDialog.getStatus()){
-            int startX = wallDialog.getStartX();
-            int startZ = wallDialog.getStartZ();
-            int size = wallDialog.getWallSize();
-            int y = wallDialog.getYPlane();
-
-            String direction = wallDialog.getDirection();
-
-            if ("NORTH-SOUTH".equals(direction) || "SOUTH-NORTH".equals(direction)){
-                ILevelItem.Direction face;
-                if ("NORTH-SOUTH".equals(direction)){
-                    face = ILevelItem.Direction.EAST;
-                } else {
-                    face = ILevelItem.Direction.WEST;
-                }
-
-                for (int z = startZ; z < size; z++) {
-                    Wall wall = new Wall(new Vector3f(startX, y, z), face);
-                    wall.setID(this.currentLevel.getNextId());
-
-                    this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
-                    this.currentLevel.addItem(wall);
-                }
-            } else if ("EAST-WEST".equals(direction) || "WEST-EAST".equals(direction)){
-                ILevelItem.Direction face;
-                if ("EAST-WEST".equals(direction)){
-                    face = ILevelItem.Direction.NORTH;
-                } else {
-                    face = ILevelItem.Direction.SOUTH;
-                }
-
-
-                for (int x = startX; x < size; x++) {
-                    Wall wall = new Wall(new Vector3f(x, y, startZ), face);
-                    wall.setID(this.currentLevel.getNextId());
-
-                    this.treeModel.insertNodeInto(wall.getLevelNode(), this.panels, 0);
-                    this.currentLevel.addItem(wall);
-                }
-            }
-        }
-    }
-
     @Override
     public void actionPerformed( ActionEvent e ){
         if (e.getSource() == this.file_exit){
@@ -789,32 +530,8 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
             this.actionEditP1Spawn();
         } else if (e.getSource() == this.edit_set_p2_spawn){
             this.actionEditP2Spawn();
-        } else if (e.getSource() == this.add_trigger_end){
-            this.actionAddEndTrigger();
-        } else if (e.getSource() == this.add_trigger_level){
-            this.actionAddLevelTrigger();
-        } else if (e.getSource() == this.add_trigger_text){
-            this.actionAddTextTrigger();
-        } else if (e.getSource() == this.add_box){
-            this.actionAddBox();
-        } else if (e.getSource() == this.add_button){
-            this.actionAddButton();
-        } else if (e.getSource() == this.add_door){
-            this.actionAddDoor();
-        } else if (e.getSource() == this.add_lever){
-            this.actionAddLever();
-        } else if (e.getSource() == this.add_panels_panel){
-            this.actionAddPanel();
-        } else if (e.getSource() == this.add_panels_stair){
-            this.actionAddStair();
-        } else if (e.getSource() == this.add_panels_wall){
-            this.actionAddWall();
-        } else if (e.getSource() == this.create_floor){
-            this.actionCreateFloor();
         } else if (e.getSource() == this.create_link){
             this.actionCreateLink();
-        } else if (e.getSource() == this.create_wall){
-            this.actionCreateWall();
         } else if (e.getSource() == this.ctxDelete){
             this.actionDelete(e);
         }
@@ -864,5 +581,11 @@ public class RSLE extends JPanel implements ActionListener, MouseListener {
     @Override
     public void mouseExited( MouseEvent e ){
         // NO-OP
+    }
+
+    public enum ItemBucket {
+        TRIGGERS,
+        PANELS,
+        ENTITIES
     }
 }

@@ -42,7 +42,7 @@ public class Stair extends Panel {
         LevelNode typeNode = new LevelNode("Type", "stair", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
         LevelNode dirNode = new LevelNode("Direction", this.direction, false);
-        LevelNode colorNode = new LevelNode("Color", this.color, false);
+        LevelNode colorNode = new LevelNode("Color", JSONHelper.writeColor(this.color), false);
         LevelNode location = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
