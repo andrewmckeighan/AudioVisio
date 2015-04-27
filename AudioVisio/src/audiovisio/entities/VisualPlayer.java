@@ -27,9 +27,9 @@ public class VisualPlayer extends Player {
 
         this.audioSteps = new AudioNode(assetManager, "Sound/Effects/Foot steps.ogg", false);
         this.particle = new PlayerParticle();
-        this.particle.setParticleColor(this.color);
-        this.particle.init(assetManager);
 
+        this.particle.init(assetManager);
+        this.particle.setParticleColor(this.color);
         this.attachChild(this.audioSteps);
         this.attachChild(this.particle);
 //        this.particle.emitter.setEnabled(false);
