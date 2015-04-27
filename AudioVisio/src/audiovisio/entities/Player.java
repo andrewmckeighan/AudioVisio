@@ -6,6 +6,7 @@ import audiovisio.networking.messages.SyncCharacterMessage;
 import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.Listener;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResult;
@@ -54,6 +55,7 @@ public class Player extends MovingEntity implements ActionListener {
     private Vector3f savedLocation = Player.DEFAULT_SPAWN_LOCATION;
     private Box     box;
     private boolean debug;
+    private Listener listener;
 
     public Player() {
     }
@@ -114,6 +116,9 @@ public class Player extends MovingEntity implements ActionListener {
                     this.model.removeFromParent();
                     this.model = null;
                 }
+            }
+            if (this.playerCamera != null) {
+                this.listener.setLocation(this.getLocalTranslation().add(Player.CAMERA_OFFSET));
             }
         }
     }
@@ -215,6 +220,10 @@ public class Player extends MovingEntity implements ActionListener {
         this.level = level;
     }
 
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
     public boolean isServer() {
         return this.isServer;
     }
@@ -232,8 +241,7 @@ public class Player extends MovingEntity implements ActionListener {
         SyncCharacterMessage syncCharacterMessage;
         Quaternion q = new Quaternion(0, 0, 0, 0);
 
-        //TODO: Taylor, determine if this if is needed.
-        if (this.isServer()){
+        if (this.isServer()) {
             syncCharacterMessage = new SyncCharacterMessage(this.getID(),
                     this.savedLocation, //this.getLocalTranslation(),
                     this.characterControl.getWalkDirection(), q);

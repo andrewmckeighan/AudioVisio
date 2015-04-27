@@ -98,6 +98,7 @@ public class WorldManager extends AbstractAppState implements SyncMessageValidat
             if (this.client != null){
                 if (this.client.getId() == playerID){
                     player.setCam(this.app.getCamera());
+                    player.setListener(this.app.getListener());
                     this.client.initKeys(player);
                 }
             }

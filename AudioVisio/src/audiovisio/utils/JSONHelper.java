@@ -86,7 +86,7 @@ public class JSONHelper {
         } else if (colorString == "green") {
             returnColor = ColorRGBA.Green;
         } else {
-            LogHelper.warn("color: " + colorString + " is not supported! defaulting to lightGrey.");
+            LogHelper.fine("color: " + colorString + " is not supported! defaulting to lightGrey.");
         }
 
         return returnColor;

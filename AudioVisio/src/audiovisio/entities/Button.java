@@ -62,8 +62,6 @@ public class Button extends InteractableEntity implements IShootable {
         this.addControl(this.physics);
 
         String wavString = "Sounds/Effects/Click.wav";
-        LogHelper.info(wavString);
-
         this.button_sound = new AudioNode(assetManager, wavString, false);
         this.attachChild(this.button_sound);
         this.button_sound.setLooping(false);
@@ -161,7 +159,8 @@ public class Button extends InteractableEntity implements IShootable {
 
     private void playSound(){
         if( ClientAppState.isAudio){
-            this.button_sound.play();}
+            this.button_sound.play();
+        }
     }
 
     private void updateVisuals(){
