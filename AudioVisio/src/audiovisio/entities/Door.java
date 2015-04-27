@@ -179,18 +179,26 @@ public class Door extends InteractableEntity {
         if (ClientAppState.isAudio){
             this.playSound();
             this.emitParticle();
+            this.updateCollision();
         } else {
             this.updateVisuals();
+            this.updateCollision();
+        }
+    }
+
+    private void updateCollision() {
+        if (this.state) {
+            this.physicsSpace.remove(this);
+        } else {
+            this.physicsSpace.add(this);
         }
     }
 
     private void updateVisuals(){
         if (this.state){
             this.rootNode.detachChild(this);
-            this.physicsSpace.remove(this);
         } else {
             this.rootNode.attachChild(this);
-            this.physicsSpace.add(this);
         }
     }
 
@@ -214,8 +222,10 @@ public class Door extends InteractableEntity {
         if (ClientAppState.isAudio){
             this.playSound();
             this.emitParticle();
+            this.updateCollision();
         } else {
             this.updateVisuals();
+            this.updateCollision();
         }
     }
 
