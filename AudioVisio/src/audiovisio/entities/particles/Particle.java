@@ -39,10 +39,8 @@ public class Particle extends Entity {
         fire.setMaterial(mat_red);
         fire.setImagesX(2);
         fire.setImagesY(2);
-        if(fire.getStartColor() == null || fire.getEndColor() == null){
-            fire.setEndColor(this.color);
-            fire.setStartColor(this.color);
-        }
+        fire.setEndColor(this.color);
+        fire.setStartColor(this.color);
         fire.getParticleInfluencer().setInitialVelocity(this.velocity);
         fire.setStartSize(1.5f);
         fire.setEndSize(0.1f);
