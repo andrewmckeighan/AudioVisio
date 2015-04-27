@@ -59,8 +59,6 @@ public class Door extends InteractableEntity {
     public void init( AssetManager assetManager ){
         Box shape = Door.SHAPE;
 
-
-
         this.geometry = new Geometry(this.name, shape);
 
         this.location = LevelUtils.getRotation(this.location, this.direction, Door.ROTATION, this.geometry);
@@ -130,6 +128,7 @@ public class Door extends InteractableEntity {
         LevelNode nameNode = new LevelNode("Name", this.name, false);
         LevelNode stateNode = new LevelNode("State", this.state, false);
         LevelNode edgeNode = new LevelNode("Edge", this.direction, false);
+        LevelNode colorNode = new LevelNode("Color", JSONHelper.writeColor(this.color), false);
         LevelNode locationNode = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
@@ -137,6 +136,7 @@ public class Door extends InteractableEntity {
         root.add(nameNode);
         root.add(stateNode);
         root.add(edgeNode);
+        root.add(colorNode);
         root.add(locationNode);
 
         root.setSourceItem(this);

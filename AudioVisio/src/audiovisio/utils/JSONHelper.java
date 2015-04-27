@@ -77,18 +77,33 @@ public class JSONHelper {
 
     public static ColorRGBA readColor(String colorString) {
         ColorRGBA returnColor = ColorRGBA.LightGray;
-        if (colorString == "lightGrey") {
+        if ("lightGrey".equals(colorString)) {
             returnColor = ColorRGBA.LightGray;
-        } else if (colorString == "red") {
+        } else if ("red".equals(colorString)) {
             returnColor = ColorRGBA.Red;
-        } else if (colorString == "blue") {
+        } else if ("blue".equals(colorString)) {
             returnColor = ColorRGBA.Blue;
-        } else if (colorString == "green") {
+        } else if ("green".equals(colorString)) {
             returnColor = ColorRGBA.Green;
         } else {
             LogHelper.fine("color: " + colorString + " is not supported! defaulting to lightGrey.");
         }
 
         return returnColor;
+    }
+
+    public static String writeColor(ColorRGBA color){
+        if (color == ColorRGBA.LightGray){
+            return "lightGrey";
+        } else if (color == ColorRGBA.Red){
+            return "red";
+        } else if (color == ColorRGBA.Blue){
+            return "blue";
+        } else if (color == ColorRGBA.Green){
+            return "green";
+        } else {
+            LogHelper.fine("defaulting to lightGrey.");
+            return "lightGrey";
+        }
     }
 }

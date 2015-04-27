@@ -54,8 +54,7 @@ public class Wall extends Panel {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Wall.COLOR);
-//        this.material = randomMaterial;
+        randomMaterial.setColor("Color", this.color);
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(0);
@@ -76,11 +75,13 @@ public class Wall extends Panel {
         LevelNode typeNode = new LevelNode("Type", "wall", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
         LevelNode dirNode = new LevelNode("Direction", this.direction, false);
+        LevelNode colorNode = new LevelNode("Color", JSONHelper.writeColor(this.color), false);
         LevelNode location = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
         root.add(idNode);
         root.add(dirNode);
+        root.add(colorNode);
         root.add(location);
 
         root.setSourceItem(this);

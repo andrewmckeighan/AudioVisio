@@ -32,6 +32,7 @@ public class Panel implements ILevelItem {
     protected long ID = -3;
     protected Geometry         geometry;
     protected RigidBodyControl physics;
+    protected ColorRGBA        color;
 
     public Panel(){}
 
@@ -56,6 +57,8 @@ public class Panel implements ILevelItem {
         this.ID = (Long) loadObj.get(JSONHelper.KEY_ID);
         JSONObject location = (JSONObject) loadObj.get(JSONHelper.KEY_LOCATION);
         this.location = JSONHelper.readVector3f(location);
+
+        this.color = JSONHelper.readColor((String) loadObj.get(JSONHelper.KEY_COLOR));
     }
 
     @Override
@@ -76,7 +79,7 @@ public class Panel implements ILevelItem {
 
         Material randomMaterial = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        randomMaterial.setColor("Color", Panel.COLOR);
+        randomMaterial.setColor("Color", this.color);
         this.geometry.setMaterial(randomMaterial);
 
         this.physics = new RigidBodyControl(0);
@@ -101,6 +104,7 @@ public class Panel implements ILevelItem {
         codeObj.put(JSONHelper.KEY_TYPE, "panel");
         JSONObject location = new JSONObject();
         codeObj.put(JSONHelper.KEY_LOCATION, JSONHelper.saveVector3f(this.location));
+        codeObj.put(JSONHelper.KEY_COLOR, JSONHelper.writeColor(this.color));
     }
 
     @Override
@@ -108,10 +112,12 @@ public class Panel implements ILevelItem {
         LevelNode root = new LevelNode(String.format("#%d @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "panel", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
+        LevelNode colorNode = new LevelNode("Color", JSONHelper.writeColor(this.color), false);
         LevelNode location = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
         root.add(idNode);
+        root.add(colorNode);
         root.add(location);
 
         root.setSourceItem(this);
@@ -126,6 +132,11 @@ public class Panel implements ILevelItem {
     @RSLESetter("ID")
     public void setID( long id ){
         this.ID = id;
+    }
+
+    @RSLESetter("Color")
+    public void setColor( String color ){
+        this.color = JSONHelper.readColor(color);
     }
 
     public Vector3f getLocation(){

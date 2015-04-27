@@ -114,12 +114,14 @@ public class Box extends InteractableEntity implements IShootable {
         LevelNode root = new LevelNode(String.format("#%d box @ %s", this.ID, this.location), true);
         LevelNode typeNode = new LevelNode("Type", "box", true);
         LevelNode idNode = new LevelNode("ID", this.ID, false);
-        LevelNode locationNode = LevelUtils.vector2node(this.location);
         LevelNode nameNode = new LevelNode("Name", this.name, false);
+        LevelNode colorNode = new LevelNode("Color", JSONHelper.writeColor(this.color), false);
+        LevelNode locationNode = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
         root.add(idNode);
         root.add(nameNode);
+        root.add(colorNode);
         root.add(locationNode);
 
         if (!this.linkedIds.isEmpty()){

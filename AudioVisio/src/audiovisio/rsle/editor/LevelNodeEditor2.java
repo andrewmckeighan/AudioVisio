@@ -1,6 +1,7 @@
 package audiovisio.rsle.editor;
 
 import audiovisio.rsle.editor.components.BoolEditor;
+import audiovisio.rsle.editor.components.ColorEditor;
 import audiovisio.rsle.editor.components.DirectionEditor;
 import audiovisio.rsle.editor.components.TextEditor;
 import audiovisio.utils.LogHelper;
@@ -22,12 +23,14 @@ public class LevelNodeEditor2 implements TreeCellEditor {
     BoolEditor      boolEditor;
     TextEditor      textEditor;
     DirectionEditor directionEditor;
+    ColorEditor     colorEditor;
     CellEditor      currentEditor;
 
     public LevelNodeEditor2(){
         this.boolEditor = new BoolEditor();
         this.textEditor = new TextEditor();
         this.directionEditor = new DirectionEditor();
+        this.colorEditor = new ColorEditor();
 
         this.currentEditor = this.textEditor;
     }
@@ -46,10 +49,14 @@ public class LevelNodeEditor2 implements TreeCellEditor {
                     this.currentEditor = this.boolEditor;
                 } else {
                     // Key based overrides
-                    if ("Direction".equals(node.getKey())){
+                    if ("Direction".equals(node.getKey())) {
                         this.directionEditor.setSelectedItem(value);
                         this.directionEditor.setNode(node);
                         this.currentEditor = this.directionEditor;
+                    } else if ("Color".equals(node.getKey())){
+                        this.colorEditor.setSelectedItem(value);
+                        this.colorEditor.setNode(node);
+                        this.currentEditor = this.colorEditor;
                     } else {
                         // Everything else
                         this.textEditor.setText(value.toString());

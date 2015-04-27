@@ -96,6 +96,7 @@ public class Entity extends Node implements ILevelItem {
         JSONObject location = JSONHelper.saveVector3f(this.location);
         codeObj.put(JSONHelper.KEY_ID, this.getID());
         codeObj.put(JSONHelper.KEY_LOCATION, location);
+        codeObj.put(JSONHelper.KEY_COLOR, JSONHelper.writeColor(this.color));
         codeObj.put(Entity.KEY_NAME, this.name);
     }
 
@@ -104,10 +105,12 @@ public class Entity extends Node implements ILevelItem {
         LevelNode root = new LevelNode(String.format("#%d @ %s - Entity does not define LevelNode structure", this.getID(), this.location), true);
         LevelNode typeNode = new LevelNode("Type", "entity", true);
         LevelNode idNode = new LevelNode("ID", this.getID(), true);
+        LevelNode colorNode = new LevelNode("Color", JSONHelper.writeColor(this.color), true);
         LevelNode location = LevelUtils.vector2node(this.location);
 
         root.add(typeNode);
         root.add(idNode);
+        root.add(colorNode);
         root.add(location);
 
         return root;
@@ -141,6 +144,11 @@ public class Entity extends Node implements ILevelItem {
     @RSLESetter("Name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    @RSLESetter("Color")
+    public void setColor( String color ){
+        this.color = JSONHelper.readColor(color);
     }
 
     /**
