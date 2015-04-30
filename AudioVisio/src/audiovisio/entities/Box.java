@@ -35,7 +35,7 @@ public class Box extends InteractableEntity implements IShootable {
     private AudioNode audio_pick;
     public Box(){}
     public Particle particle;
-
+    private Geometry        geometry;
     @Override
     public void init(AssetManager assetManager) {
         com.jme3.scene.shape.Box shape = Box.SHAPE;
@@ -72,6 +72,18 @@ public class Box extends InteractableEntity implements IShootable {
             this.particle.emitter.setNumParticles(35);
             this.particle.emitter.setEnabled(true);
         }
+
+        if (ClientAppState.isAudio){
+            this.geometry.getMaterial().setColor("Color", new ColorRGBA(255, 255, 0, 1));
+            this.geometry.getMaterial().setTransparent(true); //THIS IS NOT WORKING FOR SOME REASON
+            this.geometry = null;
+            System.out.println("isAudio++++++++++++++++++++++++");
+        }else{
+            this.particle.removeFromParent();
+            this.particle = null;
+        }
+
+
         this.audio_pick = new AudioNode(assetManager, "Sounds/Effects/pickupBox.wav", false);
         this.attachChild(this.audio_pick);
         this.audio_pick.setLooping(false);
@@ -98,8 +110,8 @@ public class Box extends InteractableEntity implements IShootable {
 
 
         } else {
-            this.particle.removeFromParent();
-            this.particle = null;
+//            this.particle.removeFromParent();
+//            this.particle = null;
 //            rootNode.attachChild(this);
         }
         physics.add(this.physics);
