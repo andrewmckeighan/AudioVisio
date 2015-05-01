@@ -14,11 +14,15 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 
 /**
  * Created by Tain on 4/6/2015.
@@ -74,9 +78,17 @@ public class Box extends InteractableEntity implements IShootable {
         }
 
         if (ClientAppState.isAudio){
-            this.geometry.getMaterial().setColor("Color", new ColorRGBA(255, 255, 0, 1));
-            this.geometry.getMaterial().setTransparent(true); //THIS IS NOT WORKING FOR SOME REASON
-            this.geometry = null;
+            Material cubeMat = new Material(assetManager, "Textures/Unshaded.j3md");
+            cubeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/clear.png"));
+            cubeMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+            this.geometry.setQueueBucket(Bucket.Transparent);
+            this.geometry.setMaterial(cubeMat);
+            //rootNode.attachChild(this.geometry);
+
+            //this.geometry.getMaterial().setColor("Color", new ColorRGBA(0, 0, 0, 1));
+            //this.geometry.getMaterial().setTransparent(true); //THIS IS NOT WORKING FOR SOME REASON
+            //this.geometry = null;
+            //this.geometry.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
             System.out.println("isAudio++++++++++++++++++++++++");
         }else{
             this.particle.removeFromParent();
