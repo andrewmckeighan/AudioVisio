@@ -105,6 +105,7 @@ public class Player extends MovingEntity implements ActionListener {
         } else {
 
             this.characterControl.setWalkDirection(direction);
+//            this.characterControl.setWalkDirection(direction.setY(0.0f)); //TODO uncomment this before final version
 
             if (this.playerCamera != null){
                 if (!this.isDebug()){
