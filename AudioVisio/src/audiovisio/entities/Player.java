@@ -7,6 +7,7 @@ import audiovisio.utils.LogHelper;
 import audiovisio.utils.PrintHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.Listener;
+import com.jme3.bounding.BoundingSphere;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResult;
@@ -80,6 +81,8 @@ public class Player extends MovingEntity implements ActionListener {
         this.characterControl.warp(this.spawn);
 
         this.addControl(this.characterControl);
+
+        this.setModelBound(new BoundingSphere());
     }
 
     public void start(Node rootNode, PhysicsSpace physics) {
@@ -94,7 +97,6 @@ public class Player extends MovingEntity implements ActionListener {
      * @param direction walkDirection to set
      */
     public void update( Vector3f location, Vector3f direction, Quaternion rotation ){
-
         if (!this.hasSpawned){
             LogHelper.fine("trying to spawn");
             this.warp(this.spawn);
@@ -103,7 +105,6 @@ public class Player extends MovingEntity implements ActionListener {
                 LogHelper.fine("has Spawned");
             }
         } else {
-
             this.characterControl.setWalkDirection(direction);
 //            this.characterControl.setWalkDirection(direction.setY(0.0f)); //TODO uncomment this before final version
 
@@ -223,6 +224,10 @@ public class Player extends MovingEntity implements ActionListener {
 
     public void setListener(Listener listener) {
         this.listener = listener;
+    }
+
+    public void respawn() {
+        this.warp(this.spawn);
     }
 
     public boolean isServer() {

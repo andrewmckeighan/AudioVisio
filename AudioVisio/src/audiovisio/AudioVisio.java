@@ -45,7 +45,7 @@ public class AudioVisio extends SimpleApplication {
         SimpleDateFormat sdf = new SimpleDateFormat("HH.mm.ss");
         LogHelper.init();
 //        LogHelper.load("Log_" + sdf.format(cal.getTime()) + ".log");
-        LogHelper.setLevel(Level.FINER);
+        LogHelper.setLevel(Level.FINE);
         AppSettings settings = new AppSettings(true);
         settings.setFrameRate(AudioVisio.FPS);
 

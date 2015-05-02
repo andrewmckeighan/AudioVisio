@@ -1,12 +1,17 @@
 package audiovisio.level;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 
 /**
@@ -44,6 +49,7 @@ public class LevelBox {
     public void setSize( Vector3f min, Vector3f max ){
         min.mult(Level.SCALE);
         this.box.updateGeometry(min, max);
+        this.geometry.setModelBound(new BoundingBox(min, max.add(0, 1.0F, 0)));
     }
 
     /**
@@ -51,7 +57,11 @@ public class LevelBox {
      *
      * @param rootNode The node to attach the box to
      */
-    public void start( Node rootNode ){
+    public void start( Node rootNode, PhysicsSpace physics ){
         rootNode.attachChild(this.geometry);
+    }
+
+    public Geometry getGeometry(){
+        return this.geometry;
     }
 }

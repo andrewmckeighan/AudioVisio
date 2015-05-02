@@ -25,6 +25,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
@@ -326,6 +327,17 @@ public class ClientAppState extends AbstractAppState implements
             }
         }
 
+        // The level box isn't working yet.
+        /*
+        if (player != null && !this.debug) {
+            CollisionResults results = new CollisionResults();
+            this.level.getLevelBox().getGeometry().collideWith(player, results);
+            LogHelper.fine(String.format("Found %d collisions", results.size()));
+            if (results.size() == 0) {
+                player.respawn();
+            }
+        }
+        */
     }
 
     /**
