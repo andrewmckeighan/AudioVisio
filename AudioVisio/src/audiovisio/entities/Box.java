@@ -82,12 +82,6 @@ public class Box extends InteractableEntity implements IShootable {
             this.geometry.setQueueBucket(Bucket.Transparent);
             this.geometry.setMaterial(cubeMat);
             //rootNode.attachChild(this.geometry);
-
-            //this.geometry.getMaterial().setColor("Color", new ColorRGBA(0, 0, 0, 1));
-            //this.geometry.getMaterial().setTransparent(true); //THIS IS NOT WORKING FOR SOME REASON
-            //this.geometry = null;
-            //this.geometry.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-            System.out.println("isAudio++++++++++++++++++++++++");
         }else{
             this.particle.removeFromParent();
             this.particle = null;
