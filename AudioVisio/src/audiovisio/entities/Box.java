@@ -1,7 +1,6 @@
 package audiovisio.entities;
 
 import audiovisio.entities.particles.Particle;
-import audiovisio.entities.particles.PlayerParticle;
 import audiovisio.level.IShootable;
 import audiovisio.level.Level;
 import audiovisio.rsle.editor.LevelNode;
@@ -14,15 +13,13 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import org.json.simple.JSONObject;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 
 /**
  * Created by Tain on 4/6/2015.
@@ -34,12 +31,13 @@ public class Box extends InteractableEntity implements IShootable {
             0.2F * Level.SCALE.getX());
     private static final float                    MASS         = 500.0F;
     protected static ColorRGBA COLOR = ColorRGBA.Yellow;
+    public  Particle particle;
     private Node shootables;
     private AudioNode audio_place;
     private AudioNode audio_pick;
+    private Geometry geometry;
     public Box(){}
-    public Particle particle;
-    private Geometry        geometry;
+
     @Override
     public void init(AssetManager assetManager) {
         com.jme3.scene.shape.Box shape = Box.SHAPE;
@@ -198,7 +196,7 @@ public class Box extends InteractableEntity implements IShootable {
 //        this.physics.setPhysicsLocation(this.location);
         this.setLocalTranslation(this.location);
 
-        toggleParticle();
+        this.toggleParticle();
 
     }
 
@@ -207,7 +205,7 @@ public class Box extends InteractableEntity implements IShootable {
 //        this.removeFromParent();
         this.geometry.removeFromParent();
         this.physicsSpace.remove(this);
-        toggleParticle();
+        this.toggleParticle();
         return this;
     }
 
@@ -215,6 +213,18 @@ public class Box extends InteractableEntity implements IShootable {
     public void update(){
         LogHelper.fine("Box was shot");
         this.wasUpdated = false;
+    }
+
+    private void toggleParticle() {
+        if (this.particle != null) {
+            if (this.particle.emitter.isEnabled()) {
+                this.particle.emitter.setEnabled(false);
+                this.rootNode.detachChild(this.particle);
+            } else {
+                this.rootNode.attachChild(this.particle);
+                this.particle.emitter.setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -230,15 +240,5 @@ public class Box extends InteractableEntity implements IShootable {
     @Override
     public Geometry getGeometry(){
         return this.geometry;
-    }
-
-    private void toggleParticle(){
-        if (this.particle.emitter.isEnabled()){
-            this.particle.emitter.setEnabled(false);
-            this.rootNode.detachChild(this.particle);
-        } else {
-            this.rootNode.attachChild(this.particle);
-            this.particle.emitter.setEnabled(true);
-        }
     }
 }
