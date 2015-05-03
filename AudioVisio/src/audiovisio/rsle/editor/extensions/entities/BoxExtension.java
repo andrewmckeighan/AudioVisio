@@ -65,5 +65,5 @@ public class BoxExtension implements IRSLEExtension {
 
     private JTextField    nameField;
     private LocationField locationField;
-    private JComboBox<String> colorField = new JComboBox<String>(new String[]{"lightGrey", "blue", "red", "blue"});
+    private JComboBox<String> colorField = new JComboBox<String>(new String[]{"lightGrey", "blue", "red", "green"});
 }

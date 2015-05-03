@@ -94,7 +94,6 @@ public class Box extends InteractableEntity implements IShootable {
         this.audio_place.setLooping(false);
         this.audio_place.setPositional(true);
 
-
     }
 
     @Override
@@ -107,7 +106,7 @@ public class Box extends InteractableEntity implements IShootable {
         if (ClientAppState.isAudio) {
             this.rootNode.attachChild(this.particle);
             this.particle.start(rootNode, physics);
-
+            toggleParticle();
 
         } else {
 //            this.particle.removeFromParent();
