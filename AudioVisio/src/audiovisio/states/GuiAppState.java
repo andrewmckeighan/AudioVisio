@@ -9,7 +9,6 @@ import audiovisio.utils.NetworkUtils;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-
 import com.jme3.input.RawInputListener;
 import com.jme3.input.event.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
@@ -25,8 +24,6 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -40,9 +37,9 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
     String Butt = "";
     char keyChar;
     int  keyCode;
+    Element pnl;
     private Nifty     nifty;
     private boolean   listenForKeys;
-    Element        pnl;
 
     public GuiAppState() {
 
@@ -114,6 +111,10 @@ public class GuiAppState extends AbstractAppState implements ScreenController, R
 
         Element continueButton = this.nifty.getScreen("host").findElementByName("ContButton");
         continueButton.setVisible(false);
+
+    }
+
+    public void startServer() {
 
     }
 

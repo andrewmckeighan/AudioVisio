@@ -124,10 +124,10 @@ public class ClientAppState extends AbstractAppState implements
         // ///////////
         // Physics //
         // ///////////
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
+        this.bulletAppState = new BulletAppState();
+        stateManager.attach(this.bulletAppState);
 
-        this.physicsSpace = bulletAppState.getPhysicsSpace();
+        this.physicsSpace = this.bulletAppState.getPhysicsSpace();
 
         // /////////////////
         // Create Camera //
@@ -326,6 +326,17 @@ public class ClientAppState extends AbstractAppState implements
             }
         }
 
+        // The level box isn't working yet.
+        /*
+        if (player != null && !this.debug) {
+            CollisionResults results = new CollisionResults();
+            this.level.getLevelBox().getGeometry().collideWith(player, results);
+            LogHelper.fine(String.format("Found %d collisions", results.size()));
+            if (results.size() == 0) {
+                player.respawn();
+            }
+        }
+        */
     }
 
     /**

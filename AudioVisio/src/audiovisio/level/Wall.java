@@ -38,6 +38,9 @@ public class Wall extends Panel {
         super.load(loadObj);
 
         this.direction = Direction.valueOf((String) loadObj.get(Wall.KEY_EDGE));
+        if (this.color == ColorRGBA.DarkGray) {
+            this.color = ColorRGBA.LightGray;
+        }
     }
 
     @Override
@@ -89,12 +92,12 @@ public class Wall extends Panel {
         return root;
     }
 
+    public Direction getDirection() {
+        return this.direction;
+    }
+
     @RSLESetter("Direction")
     public void setDirection( String direction ){
         this.direction = Direction.valueOf(direction);
-    }
-
-    public Direction getDirection(){
-        return this.direction;
     }
 }

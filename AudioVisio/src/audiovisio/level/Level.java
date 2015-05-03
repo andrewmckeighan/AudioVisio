@@ -147,7 +147,7 @@ public class Level {
         rootNode.attachChild(this.shootables);
 
         if (ClientAppState.isAudio){
-            this.levelBox.start(rootNode);
+            this.levelBox.start(rootNode, physics);
         }
     }
 
@@ -607,5 +607,9 @@ public class Level {
      */
     public Node getShootables(){
         return this.shootables;
+    }
+
+    public LevelBox getLevelBox() {
+        return levelBox;
     }
 }

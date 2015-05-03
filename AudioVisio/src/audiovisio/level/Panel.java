@@ -59,14 +59,9 @@ public class Panel implements ILevelItem {
         this.location = JSONHelper.readVector3f(location);
 
         this.color = JSONHelper.readColor((String) loadObj.get(JSONHelper.KEY_COLOR));
-    }
-
-    @Override
-    public void start( Node rootNode, PhysicsSpace physics ){
-        if (!ClientAppState.isAudio){
-            rootNode.attachChild(this.geometry);
+        if (this.color == ColorRGBA.LightGray) {
+            this.color = ColorRGBA.DarkGray;
         }
-        physics.add(this.physics);
     }
 
     @Override
@@ -84,6 +79,14 @@ public class Panel implements ILevelItem {
 
         this.physics = new RigidBodyControl(0);
         this.geometry.addControl(this.physics);
+    }
+
+    @Override
+    public void start(Node rootNode, PhysicsSpace physics) {
+        if (!ClientAppState.isAudio) {
+            rootNode.attachChild(this.geometry);
+        }
+        physics.add(this.physics);
     }
 
     /**
@@ -125,6 +128,11 @@ public class Panel implements ILevelItem {
         return root;
     }
 
+    @RSLESetter("Color")
+    public void setColor(String color) {
+        this.color = JSONHelper.readColor(color);
+    }
+
     public long getID(){
         return this.ID;
     }
@@ -132,11 +140,6 @@ public class Panel implements ILevelItem {
     @RSLESetter("ID")
     public void setID( long id ){
         this.ID = id;
-    }
-
-    @RSLESetter("Color")
-    public void setColor( String color ){
-        this.color = JSONHelper.readColor(color);
     }
 
     public Vector3f getLocation(){
