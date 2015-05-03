@@ -186,13 +186,16 @@ public class Button extends InteractableEntity implements IShootable {
     private Boolean isTriggeredBy( Entity entity ){
         Boolean rBoolean = false;
         if (entity instanceof Player){
-            rBoolean = true;
-        }
-        if (entity instanceof MovingEntity){
-            rBoolean = true;
-        }
-        if (entity instanceof Box){
-            rBoolean = true;
+            if (((Player) entity).getPlayerCamera() != null) {
+                rBoolean = true;
+            }
+        } else {
+            if (entity instanceof MovingEntity) {
+                rBoolean = true;
+            }
+            if (entity instanceof Box) {
+                rBoolean = true;
+            }
         }
         //add other entities here (eg ball/box/etc..)
         return rBoolean;

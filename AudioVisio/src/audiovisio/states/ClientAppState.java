@@ -25,7 +25,6 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
-import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
@@ -125,10 +124,10 @@ public class ClientAppState extends AbstractAppState implements
         // ///////////
         // Physics //
         // ///////////
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
+        this.bulletAppState = new BulletAppState();
+        stateManager.attach(this.bulletAppState);
 
-        this.physicsSpace = bulletAppState.getPhysicsSpace();
+        this.physicsSpace = this.bulletAppState.getPhysicsSpace();
 
         // /////////////////
         // Create Camera //

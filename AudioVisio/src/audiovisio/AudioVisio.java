@@ -23,7 +23,7 @@ public class AudioVisio extends SimpleApplication {
     public static final int     difficulty = 0;
     public static final int     FPS        = 100;
     public static AudioVisio serverInstance;
-    public static String level = "logicPuzzle.json";
+    public static String level = "theBestLevelEver.json";
     static        JmeContext.Type appType = JmeContext.Type.Display;
     static boolean        startServer;
     public ClientAppState client;
@@ -45,7 +45,7 @@ public class AudioVisio extends SimpleApplication {
         SimpleDateFormat sdf = new SimpleDateFormat("HH.mm.ss");
         LogHelper.init();
 //        LogHelper.load("Log_" + sdf.format(cal.getTime()) + ".log");
-        LogHelper.setLevel(Level.FINE);
+        LogHelper.setLevel(Level.WARNING);
         AppSettings settings = new AppSettings(true);
         settings.setFrameRate(AudioVisio.FPS);
 

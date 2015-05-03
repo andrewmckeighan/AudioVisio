@@ -310,4 +310,8 @@ public class Player extends MovingEntity implements ActionListener {
             this.characterControl.warp(this.playerCamera.getLocation());
         }
     }
+
+    public Camera getPlayerCamera() {
+        return this.playerCamera;
+    }
 }
